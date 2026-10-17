@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>메이플 경매장 시세 · 주간 장비 시세 변동</title>
+<meta name="description" content="메이플스토리 경매장 주간 시세. 드메·여명·보스·칠흑 장신구, 에테르넬·아케인·앱솔랩스·카루타, 보조무기, 캐시아이템, 자석펫 시세와 등락폭, 26주 시세 그래프.">
+<meta name="keywords" content="메이플스토리, 메이플 경매장, 메이플 시세, 경매장 시세, 칠흑 시세, 에테르넬 시세, 드메 시세, 여명 시세">
+<meta property="og:type" content="website">
+<meta property="og:title" content="메이플 경매장 시세">
+<meta property="og:description" content="메이플스토리 경매장 주간 시세와 등락폭, 26주 시세 그래프">
+<meta property="og:locale" content="ko_KR">
+<meta name="robots" content="index,follow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1f3360"/><text x="50" y="64" text-anchor="middle" font-size="40" font-weight="800" fill="#fff" font-family="sans-serif">시세</text></svg></template>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#f4f4f2;color:#1b1c1f;font-family:Pretendard,-apple-system,sans-serif;}
+a{color:oklch(0.48 0.17 255);}a:hover{color:oklch(0.38 0.17 255);}
+input{font-family:inherit;}
+</style>
+</helmet>
+<div style="background:oklch(0.3 0.09 255);color:#fff;">
+  <div style="max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
+    <image-slot id="banner-left" shape="rect" fit="width" placeholder="배너 이미지" compact="" style="display:block;width:100%;height:100%;min-height:140px;"></image-slot>
+    <div style="display:flex;align-items:center;gap:16px;padding:44px 0;">
+      <image-slot id="banner-logo" shape="rounded" radius="12" fit="contain" placeholder="+" compact="" style="width:clamp(48px,6vw,72px);height:clamp(48px,6vw,72px);flex:none;"></image-slot>
+    <h1 style="margin:0;text-align:center;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;text-wrap:balance;">메이플 경매장 시세</h1>
+    </div>
+    <span style="justify-self:start;align-self:center;padding:8px 16px;border-radius:10px;background:oklch(0.4 0.1 255);font-size:clamp(20px,2.6vw,30px);font-weight:700;color:oklch(0.9 0.06 255);white-space:nowrap;font-variant-numeric:tabular-nums;">{{ siteLatest }} 업데이트</span>
+  </div>
+</div>
+
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1320px;margin:0 auto;padding:32px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+    <div style="position:sticky;top:0;z-index:5;background:#f4f4f2;padding:12px 0;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid #e3e3e0;">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <h2 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em;">시세 입력 · 전체</h2>
+          <span style="font-size:13px;color:#6b6d73;">날짜와 주 추가·삭제는 모든 탭에 함께 적용돼요. 엑셀에서 여러 칸을 복사해 시작할 칸에 붙여넣으면 한 번에 채워져요.</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onClick="{{ addWeek }}" style="padding:8px 14px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">+ 새 주 추가</button>
+          <button onClick="{{ removeWeek }}" style="padding:8px 14px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">− 최근 주 삭제</button>
+          <sc-if value="{{ hasTrash }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ undo }}" style="padding:8px 14px;border-radius:8px;border:1px solid oklch(0.48 0.17 255);background:oklch(0.96 0.02 255);color:oklch(0.4 0.17 255);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">{{ undoLabel }}</button>
+          </sc-if>
+          <span style="align-self:center;font-size:12px;font-weight:600;color:#6b6d73;">{{ syncMsg }}</span>
+          <button onClick="{{ syncNow }}" title="모든 탭을 서버에 다시 저장" style="padding:8px 14px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">서버에 저장</button>
+          <button onClick="{{ toggleEdit }}" style="padding:8px 16px;border-radius:8px;border:1px solid #1b1c1f;background:#1b1c1f;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">완료</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <div style="display:flex;gap:6px;align-items:center;min-width:640px;">
+          <div style="flex:2.2;font-size:12px;color:#6b6d73;font-weight:600;">날짜 (전체 공통)</div>
+          <sc-for list="{{ dateEditors }}" as="d" hint-placeholder-count="4">
+            <input value="{{ d.value }}" onChange="{{ d.onChange }}" placeholder="날짜" style="flex:1;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;font-weight:700;text-align:center;background:#fff;">
+          </sc-for>
+          <div style="width:32px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <sc-for list="{{ editSections }}" as="s" hint-placeholder-count="13">
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0;">
+            <strong style="font-size:18px;font-weight:800;">{{ s.tab }}</strong>
+            <input value="{{ s.category }}" onChange="{{ s.onCategory }}" placeholder="분류 입력 (예: 아이템드랍 1줄)" style="width:240px;max-width:100%;padding:6px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;">
+          </div>
+          <button onClick="{{ s.addItem }}" style="padding:7px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">+ 아이템 추가</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:640px;">
+            <div style="display:flex;gap:6px;align-items:center;font-size:12px;color:#9a9ca1;font-weight:600;">
+              <div style="flex:2.2;display:flex;gap:6px;"><span style="flex:2;">아이템명</span><span style="flex:1;">차트 라벨</span></div>
+              <sc-for list="{{ s.dateLabels }}" as="dl" hint-placeholder-count="4">
+                <span style="flex:1;min-width:0;text-align:center;">{{ dl }}</span>
+              </sc-for>
+              <div style="width:32px;"></div>
+            </div>
+            <sc-if value="{{ s.isEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:14px 0;font-size:13px;color:#9a9ca1;">아직 아이템이 없어요.</div>
+            </sc-if>
+            <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="3">
+              <sc-if value="{{ r.groupStart }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:{{ r.gapTop }};padding:6px 0 2px;font-size:13px;font-weight:700;color:oklch(0.4 0.17 255);border-top:{{ r.gapBorder }};">{{ r.group }}</div>
+              </sc-if>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <div style="flex:2.2;display:flex;gap:6px;min-width:0;">
+                  <input value="{{ r.name }}" onChange="{{ r.onName }}" style="flex:2;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;">
+                  <input value="{{ r.short }}" onChange="{{ r.onShort }}" style="flex:1;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;color:#6b6d73;">
+                </div>
+                <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4">
+                  <input value="{{ c.value }}" onChange="{{ c.onChange }}" onPaste="{{ c.onPaste }}" inputMode="decimal" style="flex:1;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;">
+                </sc-for>
+                <button onClick="{{ r.onDelete }}" title="삭제" style="width:32px;height:32px;border:none;background:transparent;color:#9a9ca1;font-size:18px;cursor:pointer;">×</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-for>
+  </div>
+</sc-if>
+
+<sc-if value="{{ viewing }}" hint-placeholder-val="{{ true }}">
+<nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
+  <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
+      <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
+    </sc-for>
+    <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
+    <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
+  </div>
+</nav>
+
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:720px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
+  <div style="display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;">
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">문의</h1>
+    <p style="margin:0;font-size:15px;color:#6b6d73;text-wrap:pretty;">버그, 시세 오류, 추가했으면 하는 아이템 등 무엇이든 남겨주세요.</p>
+  </div>
+  <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:40px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;">
+      <strong style="font-size:20px;font-weight:800;">메시지를 보냈어요</strong>
+      <span style="font-size:14px;color:#6b6d73;">{{ contactSentNote }}</span>
+      <button onClick="{{ contactReset }}" style="padding:9px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">새 메시지 쓰기</button>
+    </section>
+  </sc-if>
+  <sc-if value="{{ contactForm }}" hint-placeholder-val="{{ true }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:18px;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-size:14px;font-weight:700;">유형</span>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ contactTypes }}" as="ct" hint-placeholder-count="4">
+            <button onClick="{{ ct.onClick }}" style="padding:8px 14px;border-radius:999px;border:1px solid {{ ct.border }};background:{{ ct.bg }};color:{{ ct.color }};font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ ct.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <label style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-size:14px;font-weight:700;">닉네임 <span style="font-weight:500;color:#9a9ca1;">(선택)</span></span>
+        <input value="{{ contact.name }}" onChange="{{ onContactName }}" placeholder="예: 스카니아 메린이" style="padding:11px 12px;border:1px solid #d6d6d2;border-radius:8px;font-size:15px;" style-focus="border-color:oklch(0.48 0.17 255);outline:none;">
+      </label>
+      <label style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-size:14px;font-weight:700;">답장 받을 이메일 <span style="font-weight:500;color:#9a9ca1;">(선택)</span></span>
+        <input value="{{ contact.email }}" onChange="{{ onContactEmail }}" type="email" placeholder="you@example.com" style="padding:11px 12px;border:1px solid #d6d6d2;border-radius:8px;font-size:15px;" style-focus="border-color:oklch(0.48 0.17 255);outline:none;">
+      </label>
+      <label style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-size:14px;font-weight:700;">내용</span>
+        <textarea value="{{ contact.body }}" onChange="{{ onContactBody }}" rows="7" placeholder="어떤 탭의 어떤 아이템인지, 무엇이 이상한지 적어주시면 빨리 확인할 수 있어요." style="padding:11px 12px;border:1px solid #d6d6d2;border-radius:8px;font-size:15px;font-family:inherit;resize:vertical;line-height:1.5;" style-focus="border-color:oklch(0.48 0.17 255);outline:none;"></textarea>
+      </label>
+      <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size:13px;font-weight:600;color:oklch(0.5 0.2 25);">{{ contactError }}</span>
+      </sc-if>
+      <button onClick="{{ contactSubmit }}" style="align-self:flex-end;padding:11px 22px;border-radius:8px;border:none;background:oklch(0.3 0.09 255);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;" style-hover="background:oklch(0.36 0.11 255);">{{ contactBtn }}</button>
+    </section>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isData }}" hint-placeholder-val="{{ true }}">
+<div style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:28px;">
+  <header style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+    <div></div>
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #e3e3e0;font-size:14px;font-weight:600;">{{ server }}</span>
+      <span style="font-size:14px;color:#6b6d73;">업데이트 {{ latestDate }}</span>
+      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleEdit }}" style="padding:9px 16px;border-radius:8px;border:1px solid #1b1c1f;background:#1b1c1f;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">시세 입력</button>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ showLine }}" hint-placeholder-val="{{ false }}">
+  <main style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
+    <section style="flex:1.3 1 500px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="height:52px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 22px;background:#f7f7f5;border-bottom:1px solid #ececea;font-size:13px;font-weight:600;color:#6b6d73;">
+        <span style="flex:1;min-width:0;padding:4px 0;font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ categoryLabel }}</span>
+      </div>
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;">아직 등록된 아이템이 없어요.</div>
+      </sc-if>
+      <sc-for list="{{ rowGroups }}" as="rg" hint-placeholder-count="1">
+      <sc-if value="{{ rg.showLabel }}" hint-placeholder-val="{{ false }}">
+        <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+          <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ rg.label }}</span>
+          <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
+            <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
+          </sc-for>
+          <span style="width:68px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
+        </div>
+      </sc-if>
+      <sc-for list="{{ rg.rows }}" as="row" hint-placeholder-count="7">
+        <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+          <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
+            <image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;flex:none;"></image-slot>
+            <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+          </div>
+          <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
+            <span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
+          </sc-for>
+          <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
+        </div>
+      </sc-for>
+      </sc-for>
+    </section>
+    <section style="flex:1 1 340px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <h2 style="margin:0;font-size:18px;font-weight:700;">{{ line.name }}</h2>
+          <span style="font-size:13px;color:#6b6d73;">최근 {{ line.count }}주 시세</span>
+        </div>
+        <button onClick="{{ clearSelect }}" style="padding:7px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">← 전체 보기</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
+          <div style="position:relative;width:100%;aspect-ratio:600/300;">
+            <svg viewBox="0 0 600 300" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+              <path d="{{ line.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+              <path d="{{ line.axisPath }}" stroke="#b9bab6" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+              <polyline points="{{ line.points }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
+            </svg>
+            <sc-for list="{{ line.grid }}" as="gl" hint-placeholder-count="5">
+              <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
+            </sc-for>
+            <sc-for list="{{ line.dots }}" as="p" hint-placeholder-count="12">
+              <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:{{ p.size }};height:{{ p.size }};transform:translate(-50%,-50%);border-radius:50%;background:#fff;border:2.5px solid oklch(0.48 0.17 255);box-sizing:border-box;"></span>
+              <sc-if value="{{ p.showVal }}" hint-placeholder-val="{{ true }}">
+                <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:12px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:18px;">
+            <sc-for list="{{ line.xlabels }}" as="xl" hint-placeholder-count="12">
+              <span style="position:absolute;left:{{ xl.left }};transform:translateX(-50%);font-size:12px;color:#6b6d73;white-space:nowrap;">{{ xl.label }}</span>
+            </sc-for>
+          </div>
+          <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+              <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;gap:4px;">
+                <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
+                <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.minVal }}</span>
+                <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
+              </div>
+              <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;gap:4px;">
+                <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
+                <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.maxVal }}</span>
+                <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ showBars }}" hint-placeholder-val="{{ true }}">
+  <main ref="{{ pairMainRef }}" style="display:flex;flex-direction:column;gap:20px;">
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 등록된 아이템이 없어요.</div>
+    </sc-if>
+    <sc-for list="{{ pairGroups }}" as="pg" hint-placeholder-count="2">
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
+      <section style="flex:1.3 1 500px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
+          <div style="height:52px;box-sizing:border-box;display:flex;align-items:center;padding:0 22px;background:#f7f7f5;border-bottom:1px solid #ececea;">
+            <span style="flex:1;min-width:0;font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ categoryLabel }}</span>
+          </div>
+        </sc-if>
+        <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+          <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ pg.label }}</span>
+          <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
+            <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
+          </sc-for>
+          <span style="width:68px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
+        </div>
+        <sc-for list="{{ pg.rows }}" as="row" hint-placeholder-count="7">
+          <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+            <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
+              <image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;flex:none;"></image-slot>
+              <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+            </div>
+            <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
+              <span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
+            </sc-for>
+            <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
+          </div>
+        </sc-for>
+      </section>
+      <sc-if value="{{ pg.hasLine }}" hint-placeholder-val="{{ false }}">
+      <section style="flex:1 1 340px;min-width:0;margin-top:{{ pg.lineTop }};background:#fff;border:2px solid oklch(0.48 0.17 255);border-radius:14px;padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 24px rgba(20,30,60,.08);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <h2 style="margin:0;font-size:18px;font-weight:700;">{{ line.name }}</h2>
+            <span style="font-size:13px;color:#6b6d73;">최근 {{ line.count }}주 시세</span>
+          </div>
+          <button onClick="{{ clearSelect }}" style="padding:7px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">← 전체 보기</button>
+        </div>
+        <div style="position:relative;width:100%;aspect-ratio:600/300;">
+          <svg viewBox="0 0 600 300" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+            <path d="{{ line.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ line.axisPath }}" stroke="#b9bab6" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+            <polyline points="{{ line.points }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
+          </svg>
+          <sc-for list="{{ line.grid }}" as="gl" hint-placeholder-count="5">
+            <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
+          </sc-for>
+          <sc-for list="{{ line.dots }}" as="p" hint-placeholder-count="12">
+            <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:{{ p.size }};height:{{ p.size }};transform:translate(-50%,-50%);border-radius:50%;background:#fff;border:2.5px solid oklch(0.48 0.17 255);box-sizing:border-box;"></span>
+            <sc-if value="{{ p.showVal }}" hint-placeholder-val="{{ true }}">
+              <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:12px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
+            </sc-if>
+          </sc-for>
+        </div>
+        <div style="position:relative;height:18px;">
+          <sc-for list="{{ line.xlabels }}" as="xl" hint-placeholder-count="12">
+            <span style="position:absolute;left:{{ xl.left }};transform:translateX(-50%);font-size:12px;color:#6b6d73;white-space:nowrap;">{{ xl.label }}</span>
+          </sc-for>
+        </div>
+        <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+            <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;gap:4px;">
+              <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
+              <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.minVal }}</span>
+              <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
+            </div>
+            <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;gap:4px;">
+              <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
+              <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.maxVal }}</span>
+              <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+      </sc-if>
+      <sc-if value="{{ pg.noLine }}" hint-placeholder-val="{{ true }}">
+      <section style="flex:1 1 340px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
+          <div style="height:52px;box-sizing:border-box;padding:0 22px;display:flex;align-items:center;background:#f7f7f5;border-bottom:1px solid #ececea;">
+            <h2 style="margin:0;font-size:17px;font-weight:700;">최근 한 달 변동</h2>
+          </div>
+        </sc-if>
+        <sc-for list="{{ pg.cgs }}" as="cg" hint-placeholder-count="1">
+        <sc-if value="{{ cg.showLabel }}" hint-placeholder-val="{{ false }}">
+          <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 12px 0 16px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+            <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ cg.label }}</span>
+            <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
+              <span style="display:flex;align-items:center;gap:3px;flex:none;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;">
+                <span style="width:8px;height:8px;border-radius:2px;background:{{ l.color }};"></span>{{ l.label }}
+              </span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-for list="{{ cg.chart }}" as="g" hint-placeholder-count="7">
+          <div style="height:66px;box-sizing:border-box;padding:0 22px;border-bottom:1px solid #f0f0ee;display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center;">
+            <span style="font-size:14px;font-weight:600;text-align:right;color:#3a3c41;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ g.short }}</span>
+            <div style="display:flex;flex-direction:column;justify-content:center;gap:2px;border-left:1px solid #d6d6d2;height:56px;">
+              <sc-for list="{{ g.bars }}" as="b" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:6px;height:12px;">
+                  <div style="height:100%;width:{{ b.width }};background:{{ b.color }};border-radius:0 3px 3px 0;"></div>
+                  <sc-if value="{{ showValues }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:11px;font-weight:{{ b.weight }};color:#4a4c52;font-variant-numeric:tabular-nums;">{{ b.value }}</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        </sc-for>
+      </section>
+      </sc-if>
+    </div>
+    </sc-for>
+  </main>
+  </sc-if>
+</div>
+</sc-if>
+<footer style="max-width:1320px;margin:0 auto;padding:0 28px 32px;display:flex;justify-content:center;gap:12px;font-size:12px;color:#9a9ca1;">
+  <sc-if value="{{ isVisitorFooter }}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{ openLogin }}" style="border:none;background:transparent;color:#9a9ca1;font-size:12px;cursor:pointer;font-family:inherit;padding:4px;" style-hover="color:#6b6d73;text-decoration:underline;">관리자</button>
+  </sc-if>
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <span style="padding:4px;">{{ adminEmail }} 로그인됨</span>
+    <button onClick="{{ logout }}" style="border:none;background:transparent;color:#9a9ca1;font-size:12px;cursor:pointer;font-family:inherit;padding:4px;text-decoration:underline;">로그아웃</button>
+  </sc-if>
+</footer>
+</sc-if>
+
+<sc-if value="{{ loginOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeLogin }}" style="position:fixed;inset:0;z-index:50;background:rgba(15,20,35,.45);display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div onClick="{{ stopProp }}" style="width:100%;max-width:360px;background:#fff;border-radius:14px;padding:26px 24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,.25);">
+      <strong style="font-size:20px;font-weight:800;">관리자 로그인</strong>
+      <input value="{{ loginEmail }}" onChange="{{ onLoginEmail }}" onKeyDown="{{ onLoginKey }}" type="email" placeholder="이메일" autoComplete="username" style="padding:11px 12px;border:1px solid #d6d6d2;border-radius:8px;font-size:15px;">
+      <input value="{{ loginPw }}" onChange="{{ onLoginPw }}" onKeyDown="{{ onLoginKey }}" type="password" placeholder="비밀번호" autoComplete="current-password" style="padding:11px 12px;border:1px solid #d6d6d2;border-radius:8px;font-size:15px;">
+      <sc-if value="{{ loginErr }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size:13px;font-weight:600;color:oklch(0.5 0.2 25);">{{ loginErr }}</span>
+      </sc-if>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onClick="{{ closeLogin }}" style="padding:10px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">취소</button>
+        <button onClick="{{ doLogin }}" style="padding:10px 18px;border-radius:8px;border:none;background:oklch(0.3 0.09 255);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">{{ loginBtn }}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;server&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;전서버&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;categoryLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;아이템드랍 1줄&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showValues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;deltaStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;korean&quot;,&quot;western&quot;],&quot;default&quot;:&quot;korean&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;contactEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;}}">
+const KEY = 'maple-auction-prices-v1';
+const SB_URL = 'https://qjldhyiwffeqhzmnppta.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqbGRoeWl3ZmZlcWh6bW5wcHRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNDQ1NjAsImV4cCI6MjEwNzgyMDU2MH0.ELK7nqXHF0iwPkty6B8tROt2lX9Obkx_liKBinVpCGU';
+const SB_SESSION = 'maple-sb-session';
+const DM_NAMES = [['하프 이어링', '하프'], ['미카엘라의 새 안경', '미카'], ['혼테일의 목걸이', '혼테일'], ['베어스 그린 펜던트', '베어스'], ['레드 매지션 마이스터 심볼', '매지션'], ['레드 워리어 마이스터 심볼', '워리어'], ['마이스터링', '마이링'], ['마이스터 올마이티링', '올마링']];
+const dmGroup = (group, prefix, rows) => rows.map((values, i) => ({ id: prefix === 'i' ? 'i' + (i + 1) : prefix + (i + 1), group, name: DM_NAMES[i][0], short: DM_NAMES[i][1], values }));
+const DEFAULT = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버',
+  items: [
+    ...dmGroup('드랍 1줄', 'i', [[13, 15, 17, 17.8], [16, 19, 18.9, 20], [14, 15, 16, 15.5], [15, 17.8, 18.5, 19], [19, 22, 24.5, 24.4], [18, 18.9, 24.7, 22], [14.9, 17.6, 19, 18]]),
+    ...dmGroup('메소 1줄', 'm1_', [[12.9, 16.4, 17.5, 18.5], [14.5, 18.5, 19.8, 20], [13.5, 14, 12, 14.6], [14, 17, 19.7, 19.7], [16.5, 20.8, 24.4, 20], [15, 19, 22.2, 20], [15, 18, 19.2, 18.5]]),
+    ...dmGroup('드랍1 · 메획1', 'dm_', [[43.5, 43.6, 44, 42.1], [62, 63, 62.9, 59], [43, 45.6, 49.3, 43.3], [45.6, 44, 47, 43], [71, 75, 69, 67.8], [65, 65.8, 69, 65], [41.9, 43, 44.4, 41], [71.9, 64, 61.1, 57]]),
+    ...dmGroup('드랍 2줄', 'd2_', [[130, 133, 135, 127], [88, 91, 92, 92], [89, 92, 86, 86], [134, 132, 138, 135], [93, 90, 95, 91], [90, 88, 88, 86], [66, 65, 70, 69], [89, 83, 88, 87]]),
+    ...dmGroup('메소 2줄', 'm2_', [[30, 28, 29.6, 27.8], [36.5, 34.5, 32.3, 32], [29.9, 30, 28.4, 28.5], [30, 28, 29, 28], [43.9, 45.6, 46.9, 44], [40, 42, 43.6, 40], [26, 28.9, 27, 26]]),
+  ],
+};
+const PRESETS = {
+  '기타아이템': {
+    dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '스카니아',
+    items: [
+      { id: 'e1', name: '솔 에르다 조각 (만)', short: '조각', values: [615, 599, 589, 600] },
+      { id: 'e2', name: '소형 재물 획득의 비약 (만)', short: '재획비', values: [409, 416, 408, 400] },
+      { id: 'e3', name: '소형 경험 축적의 비약 (만)', short: '경축비', values: [62, 95, 78, 90] },
+      { id: 'e4', name: '고농축 프리미엄 생명의 물 (만)', short: '고농축', values: [789, 650, 696, 800] },
+      { id: 'e5', name: '대형 보스 명예의 훈장 (만)', short: '명예훈장', values: [339, 298, 370, 190] },
+      { id: 'e6', name: '리스트레인트 링 4레벨 (억)', short: '리레4', values: [44.9, 40, 39.3, 36.4] },
+      { id: 'e7', name: '컨티뉴어스 링 4레벨 (억)', short: '컨티4', values: [30, 27, 26.9, 25.4] },
+      { id: 'e8', name: '생명의 연마석 (억)', short: '생마석', values: [10, 9.4, 9.2, 8.7] },
+      { id: 'e9', name: '신념의 연마석 (억)', short: '신마석', values: [34.2, 30.6, 33, 30.3] },
+    ],
+  },
+};
+PRESETS['자석펫'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버',
+  items: [
+    { id: 'm1', name: '쁘띠 블러드', short: '쁘띠블러드', values: [170, 165, 169, 167] },
+    { id: 'm2', name: '백야', short: '백야', values: [170, 168, 170, 167] },
+    { id: 'm3', name: '설아', short: '설아', values: [177, 167, 169, 171] },
+    { id: 'm4', name: '하츄핑', short: '하츄핑', values: [170, 163, 168, 170] },
+    { id: 'm5', name: '이클립스핑', short: '이클립스핑', values: [170, 162, 169, 165] },
+    { id: 'm6', name: '다이아나핑', short: '다이아나핑', values: [168, 162, 170, 167] },
+    { id: 'm7', name: '자석펫 최저가', short: '최저가', values: [168, 162, 168, 165] },
+    { id: 'm8', name: '루나드림펫', short: '루나드림', values: ['', '', 0.16, 0.19], hideBar: true },
+  ],
+};
+PRESETS['캐시아이템'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버',
+  items: [
+    { id: 'c1', group: '티니핑', name: '일루전링: 하츄핑', short: '하츄핑', values: [18.4, 19, 22.9, 23.5] },
+    { id: 'c2', group: '티니핑', name: '일루전링: 달콤핑', short: '달콤핑', values: [2.4, 2.4, 2.7, 3.2] },
+    { id: 'c3', group: '티니핑', name: '일루전링: 오로라핑', short: '오로라핑', values: [5, 4.3, 3.7, 6] },
+    { id: 'c4', group: '티니핑', name: '일루전링: 새콤핑', short: '새콤핑', values: [1.5, 1.4, 1.1, 1.1] },
+    { id: 'c5', group: '티니핑', name: '일루전링: 뽀송핑', short: '뽀송핑', values: [3.3, 2.7, 3, 2.8] },
+    { id: 'c6', group: '티니핑', name: '하츄핑 명찰', short: '하츄핑명찰', values: [10.2, 8.7, 10, 10.4] },
+    { id: 'c7', group: '티니핑', name: '이클립스핑 명찰', short: '이클핑명찰', values: [1.5, 1.7, 2, 2.3] },
+    { id: 'c8', group: '티니핑', name: '다이아나핑 명찰', short: '다이핑명찰', values: [8.7, 8.1, 11.1, 13] },
+    { id: 'c9', group: '티니핑', name: '솔헤카테 티니핑', short: '솔 헤카테', values: [62, 66.5, 71.2, 80] },
+    { id: 'c10', group: '인기코디템', name: '어비스 헤어', short: '어비스', values: [113, 116, 112, 120] },
+    { id: 'c11', group: '인기코디템', name: '발그레발그레', short: '발그레발그레', values: [5.9, 6.3, 9, 9.8] },
+    { id: 'c12', group: '인기코디템', name: '은은한 발그레', short: '은은한발그레', values: [17, 17, 19.9, 20] },
+    { id: 'c13', group: '인기코디템', name: '매력만쩜', short: '매력만쩜', values: [13.9, 15.6, 16.6, 16.5] },
+    { id: 'c14', group: '인기코디템', name: '사소한변경쩜', short: '사소한변경쩜', values: ['', '', '', 100] },
+    { id: 'c15', group: '인기코디템', name: '부서진 품위', short: '부서진품위', values: [28.2, 28.9, 27.2, 29.9] },
+    { id: 'c16', group: '인기코디템', name: '잊혀진 왈츠', short: '잊혀진왈츠', values: [27, 28.5, 27.7, 27] },
+    { id: 'c17', group: '인기코디템', name: '영원한 공허', short: '영원한공허', values: [28.2, 28.4, 27.8, 32] },
+    { id: 'c18', group: '인기코디템', name: '달빛 눈물', short: '달빛눈물', values: [28.9, 28.5, 27, 29.2] },
+    { id: 'c19', group: '인기코디템', name: '라스트 벤데타', short: '라스트벤데타', values: [28, 28.7, 27, 29.4] },
+  ],
+};
+const YM_NAMES = [['여명의 가디언 엔젤링', '가엔링'], ['에스텔라 이어링', '에스텔라'], ['데이브레이크 펜던트', '데브펜'], ['트와일라이트 마크', '트왈마']];
+const ymGroup = (group, prefix, rows) => rows.map((values, i) => ({ id: prefix + (i + 1), group, name: YM_NAMES[i][0], short: YM_NAMES[i][1], values }));
+PRESETS['여명장신구'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버 · 가횟 4이상 · INT 기준',
+  items: [
+    ...ymGroup('17성 · 유에 19%', 'y17_', [[8.9, 7, 8, 9], [7, 6, 8, 6.3], [7.9, 8, 8, 7], [5, 5.5, 4.5, 5]]),
+    ...ymGroup('18성 · 유에 21%', 'y18_', [[9, 10, 10, 9], [9.6, 9, 8, 9.5], [12, 9.6, 9.3, 8.6], [6, 5.9, 6, 6.7]]),
+    ...ymGroup('22성 · 레에 35%', 'y22a_', [[132, 156, 155, 145], [112, 115, 110, 110], [112, 130, 110, 115], [84, 78, 91, 73]]),
+    ...ymGroup('22성 · 레레 40%', 'y22b_', [[270, 260, 270, 260], [165, 165, 140, 140], [222, 240, 230, 230], [156, 153, 122, 122]]),
+  ],
+};
+const grp = (group, prefix, names, rows) => rows.map((values, i) => values && ({ id: prefix + i, group, name: names[i][0], short: names[i][1], values })).filter(Boolean);
+const BS = { de: ['데아시두스 이어링', '데아'], gc: ['골든 클로버 벨트', '골클벨'], bj: ['분노한 자쿰의 벨트', '분자벨'], bb: ['블랙빈 마크', '블빈마'], pp: ['파풀라투스 마크', '파풀마'], dm: ['도미네이트 펜던트', '도미펜'], mr: ['마이스터링', '마이링'] };
+PRESETS['보스장신구'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버 · 가횟 4이상 · INT 기준',
+  items: [
+    ...grp('17성 · 유에 19%', 'b17_', [BS.de, BS.gc, BS.bj, BS.bb, BS.pp, BS.dm], [[3.4, 3.5, 3.4, 4.6], [10.5, 9, 9, 9], [6, 8.6, 9, 6.7], [8, 9, 9, 8], [12, 9.6, 10, 9], [31, 23.3, 24, 22]]),
+    ...grp('18성 · 유에 21%', 'b18_', [BS.de, BS.gc, BS.bj, BS.bb, BS.pp, BS.dm], [['', '', 3.4, 4.6], ['', '', 9, 9], ['', '', 10, 10], ['', '', 10, 9.9], ['', '', 11, 11], ['', '', 34, 30]]),
+    ...grp('22성 · 레에 35%', 'b22a_', [BS.gc, BS.bj, BS.pp, BS.dm, BS.mr], [[89, 95, 91, 87.8], [111, 119, 100, 105], [100, 93, 102, 95], [140, 145, 130, 130], [100, 110, 116, 100]]),
+    ...grp('22성 · 쌍레 40%', 'b22b_', [BS.gc, BS.bj, BS.pp, BS.dm, BS.mr], [[189, 136, 189, 120], ['', '', 180, ''], [133, 150, 144, 136], [164, 183, 177, 168], [250, 260, 260, 220]]),
+  ],
+};
+const CH = [['루즈 컨트롤 머신 마크', '루컨마'], ['마력이 깃든 안대', '마깃안'], ['몽환의 벨트', '몽벨'], ['커맨더 포스 이어링', '커포링'], ['거대한 공포', '거공'], ['고통의 근원', '고근'], ['컴플리트 언더컨트롤', '언컨'], ['저주받은 마도서', '마도서'], ['창세의 뱃지', '창뱃']];
+const MT = [['미트라의 분노 (전사)', '전사'], ['미트라의 분노 (궁수)', '궁수'], ['미트라의 분노 (도적)', '도적'], ['미트라의 분노 (해적)', '해적'], ['미트라의 분노 (마법사)', '법사']];
+PRESETS['칠흑장신구'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버 · 가횟 2이상 · INT 기준',
+  items: [
+    ...grp('노작', 'cn_', CH, [[13, 12.7, 11.9, 11.9], [30, 27, 28, 27.9], [41.6, 37.9, 37, 39], [11.5, 12.9, 13, 13.3], [46.9, 41, 42, 41.8], [55.6, 51.7, 49, 49], [229, 211, 205, 200], [43.8, 39.7, 39.9, 38.9], [208, 182, 188, 192]]),
+    ...grp('18성 · 유에 21%', 'c18a_', CH, [[39, 35.6, 31.1, 25], [60, 50, 48, 46], [97, 84, 100, 86], [55, 73, 59, 60], [130, 97, 120, 88], [96, 95, 93, 81]]),
+    ...grp('18성 · 레에 35%', 'c18b_', CH, [['', '', 73.3, 73.3], ['', '', 116, 110], ['', '', 140, 145], ['', '', 110, 89], ['', '', 160, 138], ['', '', 140, 124]]),
+    ...grp('22성 · 쌍레 40% (억)', 'c22_', CH, [[378, 422, 400, 389], [550, 520, 480, 500], [650, 635, 620, 630], [570, 475, 512, 489], [610, 590, 575, 570], [620, 610, 600, 590]]),
+    ...grp('미트라의 분노 · 노작', 'mtn_', MT, [[11.1, 8.8, 8.5, 12.1], [11.6, 8.9, 8.9, 11.7], [11.8, 8.9, 8.6, 11.9], [11.7, 9, 8.7, 12], [11, 8.6, 8.5, 11.4]]),
+    ...grp('미트라의 분노 · 공공방공공', 'mtg_', MT, [['', '', 230, 227], ['', '', 230, 222], ['', '', 198, 198], ['', '', 240, 215], ['', '', 246, 233]]),
+    ...grp('미트라의 분노 · 공 51%', 'mt51_', MT, [[550, 496, 549, 515], [510, 455, 498, 480], [570, 530, 575, 520], [550, 580, 540, 530], [520, 498, 470, 430]]),
+  ],
+};
+const _ = '';
+const INT4 = '전서버 · 가횟 4이상 · INT 기준';
+const D4 = ['9/27', '10/03', '10/10', '10/16'];
+const KR = [['카루타 모자', '모자'], ['카루타 상의', '상의'], ['카루타 하의', '하의']];
+PRESETS['카루타'] = { dates: D4.slice(), categoryLabel: INT4, items: [
+  ...grp('17성 · 유에 19%', 'k17_', KR, [[11, 13, 11, 15.6], [8.5, 7.6, 12.5, 14], [9, 9, 12, 17.5]]),
+  ...grp('18성 · 유에 21%', 'k18_', KR, [[13.3, 13, 13, 15.6], [9, 10, 12.5, 14.4], [10, 11.4, 12, 17]]),
+  ...grp('22성 · 레에 35%', 'k22a_', KR, [[62, 58.5, 55, 70], [100, 105, 96, 102], [96, 90, 116, 120]]),
+  ...grp('22성 · 쌍레 40%', 'k22b_', KR, [[79, 75, 85, 80], [187, _, 135, 211], [160, 226, 200, 180]]),
+] };
+const BJ = [['렌', '렌'], ['보우마스터', '보마'], ['아델', '아델'], ['아란', '아란'], ['캡틴', '캡틴'], ['시그너스 기사단(공)', '시그너스'], ['나이트로드', '나로'], ['썬콜', '썬콜'], ['레테', '레테'], ['비숍', '비숍']];
+PRESETS['보조무기'] = { dates: D4.slice(), categoryLabel: '전서버', items: [
+  ...grp('쌍레 5줄', 'bj5_', BJ, [[259, 250, 229, 220], [280, 270, 310, 275], [236, 230, 226, 220], [276, 244, 260, 258], [266, 260, 230, 250], [220, 214, 210, 240], [190, 190, 183, 180], [280, 260, 246, 250], [270, 256, 255, 250], [164, 173, 171, 175]]),
+  ...grp('쌍레 5줄 · 방무 포함', 'bjb_', BJ, [[_, _, 158, 155], [_, _, 186, 180], [_, _, 123, 135], [_, _, 145, 152], [_, _, 160, 180], [_, _, 135, 137], [_, _, 97, 102], [_, _, 169, 170], [_, _, 167, 190], [_, _, 125, 125]]),
+] };
+const ET = [['에테르넬 모자', '모자'], ['에테르넬 상의', '상의'], ['에테르넬 하의', '하의'], ['에테르넬 장갑', '장갑'], ['에테르넬 신발', '신발'], ['에테르넬 망토', '망토'], ['에테르넬 어깨장식', '어깨']];
+const ET6 = [ET[0], ET[1], ET[2], ET[4], ET[5], ET[6]];
+PRESETS['에테르넬'] = { dates: D4.slice(), categoryLabel: '전서버', items: [
+  ...grp('노작', 'en_', ET, [[0.29, 0.24, 0.19, 0.2], [0.31, 0.3, 0.18, 0.28], [0.28, 0.29, 0.19, 0.24], [17.9, 16.7, 17.8, 18.4], [19, 17.7, 18.7, 19], [19.5, 17.8, 18.8, 19], [0.27, 0.31, 0.2, 0.22]]),
+  ...grp('17성 · 유에 22%', 'e17_', ET, [[_, _, 60, 40], [_, _, 44, 50], [_, _, 44, 44], null, [_, _, 92, 100], [_, _, 89.6, 87.6], [_, _, 65.2, 42.2]]),
+  ...grp('18성 · 레에 38%', 'e18_', ET6, [[80, 70, 98, 81.1], [194, 208, 205, 192], [190, 165, 170, 175], [289, 255, 228, 200], [230, 250, 195, 177], [210, 155, 155, 158]]),
+  ...grp('22성 · 레레 48%', 'e22_', ET6, [[_, _, 460, 500], [_, _, 900, 850], [_, _, 770, 769], [_, _, 911, 900], [_, _, 849, 849], [_, _, 770, 780]]),
+] };
+const CM = [['에테르넬 모자', '에테모자'], ['카루타 모자', '카루타모자'], ['앱솔랩스 모자', '앱솔모자']];
+const CG = [['에테르넬 장갑', '에테장갑'], ['앱솔랩스 장갑', '앱솔장갑'], ['아케인셰이드 장갑', '아케인장갑']];
+PRESETS['쿨뚝크뎀장갑'] = { dates: D4.slice(), categoryLabel: INT4, items: [
+  ...grp('쿨뚝 · 18성 2초+15%', 'q18_', CM, [[110, 114, 114, 110], [49, 56.7, 48.2, 63], [26, _, 27, _]]),
+  ...grp('쿨뚝 · 22성 5초', 'q22_', CM, [[_, _, 778, 778], [_, _, 272, 296], [_, _, _, _]]),
+  ...grp('크뎀장갑 · 18성 크1+15%', 'g18_', CG, [[95, 99, 104, 105], [27, 23, 25.4, 23], [65, 60, 70, 65]]),
+  ...grp('크뎀장갑 · 22성 크2', 'g22_', CG, [[_, _, 740, 720], [_, _, 166, 174], [_, _, 240, 225]]),
+] };
+const AK = [['아케인셰이드 장갑', '장갑'], ['아케인셰이드 신발', '신발'], ['아케인셰이드 망토', '망토'], ['아케인셰이드 어깨장식', '견장']];
+const AK3 = AK.slice(1);
+PRESETS['아케인'] = { dates: D4.slice(), categoryLabel: INT4, items: [
+  ...grp('17성 · 유에 19%', 'a17_', AK, [[30, 15.5, 18.9, 22.9], [20, 20.6, 20, 17], [23.3, 18, 17.8, 19], [21.1, 16.7, 18.8, 17]]),
+  ...grp('18성 · 유에 21%', 'a18_', AK, [[82, 27.4, 27, 30], [26, 23.9, 25.5, 20], [23.3, 24, 19, 19.6], [26, 21, 24.6, 22]]),
+  ...grp('22성 · 레에 35%', 'a22a_', AK3, [[298, 300, 290, 268], [275, 275, 275, 245], [265, 260, 253, 245]]),
+  ...grp('22성 · 쌍레 40%', 'a22b_', AK3, [[410, 390, 450, 483], [407, 390, 380, 371], [400, 378, 400, 429]]),
+] };
+const AB = [['앱솔랩스 모자', '모자'], ['앱솔랩스 장갑', '장갑'], ['앱솔랩스 신발', '신발'], ['앱솔랩스 망토', '망토'], ['앱솔랩스 어깨장식', '견장']];
+const AB4 = [AB[0], AB[2], AB[3], AB[4]];
+PRESETS['앱솔랩스'] = { dates: D4.slice(), categoryLabel: INT4, items: [
+  ...grp('17성 · 유에 19%', 'ab17_', AB, [[4.7, 5.6, 4.5, 7.8], [14.4, 13.8, 9.3, 13.4], [8, 8.5, 10.5, 11.6], [6.5, 9, 10, 12], [7.5, 7.6, 5.8, 8.9]]),
+  ...grp('18성 · 유에 21%', 'ab18_', AB, [[4.7, 5.6, 6, 7.8], [19, 10, 15.6, 13.4], [11, 12, 16.7, 13], [10, 12, 10, 15], [8, 7.8, 8, 13]]),
+  ...grp('22성 · 레에 35%', 'ab22a_', AB4, [[45.6, 43.3, 46, 73], [155, 155, 146, 158], [146, 146, 160, 146], [90, 86, 96, 93.6]]),
+  ...grp('22성 · 쌍레 40%', 'ab22b_', AB4, [[80, _, _, 90], [_, 190, 250, 220], [230, _, 214, 212], [130, 125, 165, 160]]),
+] };
+const KT = [['여명의 가디언 엔젤링', '가엔링'], ['에스텔라 이어링', '에스텔라'], ['데이브레이크 펜던트', '데브펜'], ['트와일라이트 마크', '트왈마'], ['골든 클로버 벨트', '골클벨'], ['파풀라투스 마크', '파풀마'], ['도미네이터 펜던트', '도미펜'], ['마이스터링', '마이링'],
+  ['루즈 컨트롤 머신 마크', '루컨마'], ['마력이 깃든 안대', '마깃안'], ['몽환의 벨트', '몽벨'], ['커맨더 포스 이어링', '커포링'], ['거대한 공포', '거공'], ['고통의 근원', '고근'], ['컴플리트 언더컨트롤', '언컨']];
+const ktCol = (stat, prefix, col) => grp(stat, prefix, KT, col.map(v => [_, _, _, v]));
+PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%', items: [
+  ...ktCol('STR', 'kts_', [47.8, 32, 54, 25, 37.8, 32, 50, 43.3, 61.1, 97.5, 116, 81.1, 114, 124, 299]),
+  ...ktCol('DEX', 'ktd_', [30, 20, 30.8, 22.4, 44, 29, 44, 28, 42.9, 69, 82, 48, 84, 90.8, 254]),
+  ...ktCol('INT', 'kti_', [39, 36.5, 47.4, 25, 40, 33, 45, 40, 67.7, 82, 110, 74, 104, 118, 264]),
+  ...ktCol('LUK', 'ktl_', [25, 26, 29.9, 19, 28, 31, 34.4, 25, 44, 63.3, 81, 48.9, 83, 91.1, 255]),
+] };
+const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
+const REF = '드메아이템';
+const RAMP = ['oklch(0.89 0.035 255)', 'oklch(0.78 0.075 255)', 'oklch(0.64 0.12 255)', 'oklch(0.48 0.17 255)'];
+const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
+const fmt = v => { const n = num(v); return n === null ? '–' : String(Math.round(n * 100) / 100); };
+const clone = o => JSON.parse(JSON.stringify(o));
+const keyFor = tab => tab === REF ? KEY : KEY + ':' + tab;
+const pushWeek = (x, date, valsById) => {
+  x.dates.push(date); x.items.forEach(it => it.values.push(valsById ? (valsById[it.id] ?? '') : ''));
+  if (x.dates.length > 4) {
+    const vals = {}; x.items.forEach(it => { vals[it.id] = it.values.shift(); });
+    x.removed = x.removed || []; x.removed.push({ date: x.dates.shift(), vals });
+  }
+};
+
+class Component extends DCLogic {
+  state = (() => {
+    let tab = REF;
+    try { const t = localStorage.getItem(KEY + ':tab'); if (TABS.includes(t)) tab = t; } catch (e) {}
+    let trash = [];
+    try { trash = JSON.parse(localStorage.getItem(KEY + ':trash')) || []; } catch (e) {}
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem(SB_SESSION)); } catch (e) {}
+    let wantLogin = false;
+    try { wantLogin = new URLSearchParams(location.search).has('admin'); } catch (e) {}
+    return { tab, all: this.loadAll(), trash, editing: false, session, admin: !!session, selected: null,
+      loginOpen: wantLogin && !session, loginEmail: '', loginPw: '', loginErr: '', syncMsg: '' };
+  })();
+  componentDidMount() {
+    this.fetchRemote();
+    if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
+  }
+  async fetchRemote() {
+    try {
+      const r = await fetch(SB_URL + '/rest/v1/prices?select=tab,data', { headers: { apikey: SB_KEY } });
+      if (!r.ok) throw new Error();
+      const rows = await r.json();
+      if (!rows.length) { this.setState({ remoteEmpty: true }); if (this.state.admin) this.pushAll(); return; }
+      const all = clone(this.state.all);
+      rows.forEach(row => { if (TABS.includes(row.tab) && row.data && row.data.dates) all[row.tab] = row.data; });
+      this.setState({ all, remoteEmpty: false });
+      try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
+    } catch (e) {}
+  }
+  saveSession(s) {
+    const session = s ? { access_token: s.access_token, refresh_token: s.refresh_token, expires_at: Date.now() + (s.expires_in || 3600) * 1000, email: s.user && s.user.email } : null;
+    try { session ? localStorage.setItem(SB_SESSION, JSON.stringify(session)) : localStorage.removeItem(SB_SESSION); } catch (e) {}
+    this.setState({ session, admin: !!session });
+    return session;
+  }
+  async ensureToken() {
+    const s = this.state.session; if (!s) return null;
+    if (s.expires_at - Date.now() > 60000) return s.access_token;
+    try {
+      const r = await fetch(SB_URL + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: s.refresh_token }) });
+      if (!r.ok) throw new Error();
+      return this.saveSession(await r.json()).access_token;
+    } catch (e) { return null; }
+  }
+  async login() {
+    this.setState({ loginErr: '', loginBusy: true });
+    try {
+      const r = await fetch(SB_URL + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: this.state.loginEmail.trim(), password: this.state.loginPw }) });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error_description || j.msg || '');
+      this.saveSession(j);
+      this.setState({ loginOpen: false, loginPw: '', loginBusy: false });
+      if (this.state.remoteEmpty) this.pushAll();
+    } catch (e) { this.setState({ loginBusy: false, loginErr: '이메일 또는 비밀번호가 맞지 않아요.' }); }
+  }
+  logout() { this.saveSession(null); this.setState({ editing: false }); }
+  async pushTabs(tabs) {
+    const token = await this.ensureToken();
+    if (!token) { this.setState({ syncMsg: '로그인이 만료됐어요. 다시 로그인해 주세요.' }); return false; }
+    try {
+      const now = new Date().toISOString();
+      const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(tabs.map(t => ({ tab: t, data: this.state.all[t], updated_at: now }))) });
+      if (!r.ok) throw new Error();
+      this.setState({ syncMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }), remoteEmpty: false });
+      return true;
+    } catch (e) { this.setState({ syncMsg: '서버 저장 실패 — 잠시 후 다시 시도해 주세요.' }); return false; }
+  }
+  pushAll() { return this.pushTabs(TABS); }
+  queuePush(tabs) {
+    if (!this.state.admin) return;
+    this._dirty = this._dirty || new Set(); tabs.forEach(t => this._dirty.add(t));
+    this.setState({ syncMsg: '저장 중…' });
+    clearTimeout(this._pushT);
+    this._pushT = setTimeout(() => { const t = [...this._dirty]; this._dirty.clear(); this.pushTabs(t); }, 800);
+  }
+  loadOne(tab) {
+    try { const s = JSON.parse(localStorage.getItem(keyFor(tab))); if (s && s.dates && s.items) return s; } catch (e) {}
+    if (PRESETS[tab]) return clone(PRESETS[tab]);
+    return tab === REF ? clone(DEFAULT) : { dates: [''], items: [], categoryLabel: '' };
+  }
+  loadAll() {
+    const all = {}; TABS.forEach(t => { all[t] = this.loadOne(t); });
+    const ref = all[REF];
+    TABS.forEach(t => {
+      const x = all[t];
+      if (t !== REF && x.items.length === 0) {
+        x.dates = ref.dates.slice();
+        x.removed = (ref.removed || []).map(r => ({ date: r.date, vals: {} }));
+      }
+    });
+    return all;
+  }
+  commit(all, tabs, trash) {
+    const st = { all };
+    if (trash) st.trash = trash;
+    this.setState(st);
+    try {
+      tabs.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t])));
+      if (trash) localStorage.setItem(KEY + ':trash', JSON.stringify(trash));
+    } catch (e) {}
+    this.queuePush(tabs);
+  }
+  updateTab(tab, fn) { const all = { ...this.state.all }; all[tab] = clone(all[tab]); fn(all[tab]); this.commit(all, [tab]); }
+  updateAll(fn) { const all = clone(this.state.all); TABS.forEach(t => fn(all[t], t)); this.commit(all, TABS); }
+  switchTab(tab) {
+    if (tab !== '문의') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
+    this.setState({ tab, selected: null });
+    window.scrollTo(0, 0);
+  }
+  pasteGrid(e, tab, r0, c0) {
+    const text = (e.clipboardData || window.clipboardData).getData('text');
+    if (!/[\t\n]/.test(text.trim())) return;
+    e.preventDefault();
+    const grid = text.replace(/\r/g, '').replace(/\n+$/, '').split('\n').map(l => l.split('\t'));
+    this.updateTab(tab, x => {
+      let r = r0;
+      grid.forEach(row => {
+        const blank = row.every(c => c.trim() === '');
+        const atBoundary = r > r0 && r < x.items.length && x.items[r].group !== x.items[r - 1].group;
+        if (blank && (atBoundary || r >= x.items.length)) return;
+        const it = x.items[r]; r++; if (!it) return;
+        row.forEach((cell, j) => { const c = c0 + j; if (c < x.dates.length) it.values[c] = cell.trim().replace(/,/g, ''); });
+      });
+    });
+  }
+  addWeek() { this.updateAll(x => pushWeek(x, '')); }
+  removeWeek() {
+    if (this.state.all[REF].dates.length <= 1) return;
+    const all = clone(this.state.all), per = {};
+    TABS.forEach(t => {
+      const x = all[t]; if (x.dates.length <= 1) return;
+      const vals = {}; x.items.forEach(it => { vals[it.id] = it.values.pop(); });
+      per[t] = { date: x.dates.pop(), vals };
+      const r = x.removed && x.removed.pop();
+      if (r) { x.dates.unshift(r.date); x.items.forEach(it => it.values.unshift(r.vals[it.id] ?? '')); }
+    });
+    this.commit(all, TABS, [...this.state.trash, { type: 'week', date: per[REF] ? per[REF].date : '', per }]);
+  }
+  deleteItem(tab, r) {
+    const all = { ...this.state.all }; all[tab] = clone(all[tab]);
+    const x = all[tab]; const [it] = x.items.splice(r, 1);
+    this.commit(all, [tab], [...this.state.trash, { type: 'item', tab, index: r, item: it, dates: x.dates.slice() }]);
+  }
+  undo() {
+    const trash = this.state.trash.slice(); const t = trash.pop(); if (!t) return;
+    const all = clone(this.state.all);
+    if (t.type === 'item') {
+      const x = all[t.tab]; const it = t.item;
+      it.values = x.dates.map(d => { const i = t.dates.indexOf(d); return i >= 0 ? it.values[i] : ''; });
+      x.items.splice(Math.min(t.index, x.items.length), 0, it);
+      this.commit(all, [t.tab], trash);
+    } else {
+      Object.keys(t.per).forEach(tab => { if (all[tab]) pushWeek(all[tab], t.per[tab].date, t.per[tab].vals); });
+      this.commit(all, TABS, trash);
+    }
+  }
+
+  pairMainRef = el => {
+    if (this._pairEl === el) return;
+    if (this._pairRO) { this._pairRO.disconnect(); this._pairRO = null; }
+    this._pairEl = el;
+    if (!el) return;
+    const check = () => { const narrow = el.clientWidth < 860; if (narrow !== this.state.narrow) this.setState({ narrow }); };
+    this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
+  };
+  componentWillUnmount() { if (this._pairRO) this._pairRO.disconnect(); }
+  async sendContact() {
+    const c = this.state.contact || {};
+    if (!(c.body || '').trim()) { this.setState({ contactError: '내용을 입력해 주세요.' }); return; }
+    const type = c.type || '버그';
+    const endpoint = this.props.contactEndpoint || 'https://formspree.io/f/meaendvk';
+    const email = this.props.contactEmail;
+    const subject = '[메이플 경매장 시세] ' + type + (c.name ? ' - ' + c.name : '');
+    const text = '유형: ' + type + '\n닉네임: ' + (c.name || '-') + '\n이메일: ' + (c.email || '-') + '\n\n' + c.body;
+    if (endpoint) {
+      this.setState({ contactSending: true, contactError: '' });
+      try {
+        const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(Object.assign({ type, name: c.name || '', message: c.body, _subject: subject }, c.email ? { email: c.email, _replyto: c.email } : {})) });
+        if (!r.ok) { let m = ''; try { const j = await r.json(); m = (j.errors || []).map(x => x.message).join(' '); } catch (e2) {} throw new Error(m); }
+        this.setState({ contactSending: false, contactSent: 'api', contact: { type } });
+      } catch (e) { this.setState({ contactSending: false, contactError: '보내지 못했어요. 잠시 후 다시 시도해 주세요.' }); }
+    } else if (email) {
+      location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+      this.setState({ contactSent: 'mail', contactError: '' });
+    } else {
+      this.setState({ contactError: '아직 받을 주소가 설정되지 않았어요.' });
+    }
+  }
+  renderVals() {
+    const { all, editing, admin, trash } = this.state;
+    const isContact = this.state.tab === '문의';
+    const tab = isContact ? REF : this.state.tab;
+    const data = all[tab];
+    const contact = this.state.contact || {};
+    const cType = contact.type || '버그';
+    const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
+    const contactVals = {
+      isContact, isData: !isContact,
+      contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isContact ? 700 : 500, border: isContact ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
+      contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
+      onContactName: e => setC('name', e.target.value),
+      onContactEmail: e => setC('email', e.target.value),
+      onContactBody: e => setC('body', e.target.value),
+      contactError: this.state.contactError || '',
+      contactBtn: this.state.contactSending ? '보내는 중…' : '보내기',
+      contactSubmit: () => { if (!this.state.contactSending) this.sendContact(); },
+      contactSent: !!this.state.contactSent, contactForm: !this.state.contactSent,
+      contactSentNote: this.state.contactSent === 'mail' ? '메일 앱이 열렸다면 그 창에서 보내기를 눌러주세요.' : '확인 후 답변드릴게요. 감사합니다!',
+      contactReset: () => this.setState({ contactSent: null, contact: { type: cType } }),
+    };
+    const n = data.dates.length;
+    const last4 = Math.max(0, n - 4);
+    const upColor = this.props.deltaStyle === 'western' ? 'oklch(0.55 0.15 150)' : 'oklch(0.56 0.2 25)';
+    const downColor = this.props.deltaStyle === 'western' ? 'oklch(0.56 0.2 25)' : 'oklch(0.5 0.18 260)';
+    const isEditing = editing && admin;
+
+    const UNIT_RE = /\s*\((만|억)\)\s*$/;
+    const unitOf = it => { if (it.group) return it.group; const m = (it.name || '').match(UNIT_RE); return m ? m[1] + ' 단위' : ''; };
+    const rows = data.items.map(it => {
+      const cur = num(it.values[n - 1]), prev = num(it.values[n - 2]);
+      let deltaText = '–', deltaColor = '#9a9ca1';
+      if (cur !== null && prev !== null) {
+        const d = Math.round((cur - prev) * 100) / 100;
+        if (d > 0) { deltaText = '▲ ' + d.toFixed(1); deltaColor = upColor; }
+        else if (d < 0) { deltaText = '▼ ' + Math.abs(d).toFixed(1); deltaColor = downColor; }
+        else deltaText = '0.0';
+      }
+      const vs = it.values.slice(last4);
+      const vals = vs.map((v, i) => {
+        const latest = i === vs.length - 1;
+        return { text: fmt(v), size: latest ? '18px' : '15px', weight: latest ? 700 : 500, color: latest ? '#1b1c1f' : '#6b6d73' };
+      });
+      const sel = this.state.selected === it.id;
+      const nk = (it.name || '').replace(UNIT_RE, '').replace(/\s+/g, '');
+      return { id: it.id, unit: unitOf(it), slotId: 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk || it.id), name: (it.name || '').replace(UNIT_RE, ''), vals, deltaText, deltaColor,
+        bg: sel ? 'oklch(0.96 0.02 255)' : 'transparent', nameColor: sel ? 'oklch(0.4 0.17 255)' : '#1b1c1f',
+        onSelect: () => this.setState(s => ({ selected: s.selected === it.id ? null : it.id })) };
+    });
+
+    const selItem = data.items.find(it => it.id === this.state.selected);
+    let line = { name: '', count: 0, grid: [], points: '', dots: [], xlabels: [] };
+    if (selItem) {
+      const hist = (data.removed || []).map(r => ({ date: r.date, v: r.vals[selItem.id] }))
+        .concat(data.dates.map((d, i) => ({ date: d, v: selItem.values[i] }))).slice(-26);
+      const nums = hist.map(h => num(h.v)).filter(v => v !== null);
+      let lo = nums.length ? Math.min(...nums) : 0, hi = nums.length ? Math.max(...nums) : 1;
+      if (hi === lo) { hi += 1; lo -= 1; }
+      const pad = (hi - lo) * 0.15; lo -= pad; hi += pad;
+      const X0 = 80, X1 = 575, Y0 = 24, Y1 = 290, AX = 56;
+      const pct = (v, t) => (v / t * 100).toFixed(2) + '%';
+      const xAt = i => hist.length === 1 ? (X0 + X1) / 2 : X0 + (X1 - X0) * i / (hist.length - 1);
+      const yAt = v => Y1 - (v - lo) / (hi - lo) * (Y1 - Y0);
+      const dots = [];
+      const many = hist.length > 13;
+      const maxV = nums.length ? Math.max(...nums) : null, minV = nums.length ? Math.min(...nums) : null;
+      const step = Math.ceil(hist.length / 13);
+      hist.forEach((h, i) => { const v = num(h.v); if (v !== null) { const last = i === hist.length - 1; const showVal = !many || last || v === maxV || v === minV; dots.push({ showVal, x: xAt(i).toFixed(1), y: yAt(v).toFixed(1), left: pct(xAt(i), 600), top: pct(yAt(v), 300), value: fmt(v), size: last ? '12px' : '9px', weight: last ? 700 : 500 }); } });
+      const ticks = [0, 1, 2, 3, 4].map(k => lo + (hi - lo) * k / 4);
+      line = {
+        ...(() => {
+          let mi = -1, ma = -1;
+          hist.forEach((h, i) => { const v = num(h.v); if (v === null) return; if (mi < 0 || v < num(hist[mi].v)) mi = i; if (ma < 0 || v >= num(hist[ma].v)) ma = i; });
+          const show = mi >= 0;
+          const um = (selItem.name || '').match(UNIT_RE); const u = um ? ' ' + um[1] + ' 메소' : '';
+          return { showRange: show, minVal: mi >= 0 ? fmt(hist[mi].v) + u : '–', maxVal: ma >= 0 ? fmt(hist[ma].v) + u : '–', minDate: mi >= 0 ? (hist[mi].date || '') : '', maxDate: ma >= 0 ? (hist[ma].date || '') : '' };
+        })(),
+        name: selItem.name, count: hist.length,
+        grid: ticks.map(v => ({ top: pct(yAt(v), 300), w: pct(AX, 600), label: String(Math.round(v * 10) / 10) })),
+        gridPath: ticks.map(v => 'M' + AX + ' ' + yAt(v).toFixed(1) + 'H595').join(' '),
+        axisPath: 'M' + AX + ' ' + Y0 + 'V300H595',
+        points: dots.map(d => d.x + ',' + d.y).join(' '),
+        dots,
+        xlabels: hist.map((h, i) => ({ left: pct(xAt(i), 600), label: h.date || '–', i })).filter(l => (hist.length - 1 - l.i) % step === 0),
+      };
+    }
+
+    const chartDates = data.dates.slice(last4);
+    const colors = RAMP.slice(4 - chartDates.length);
+    const units = [];
+    data.items.forEach(it => { const u = unitOf(it); if (!units.includes(u)) units.push(u); });
+    const multi = units.length > 1;
+    const unitLabel = u => u || (multi ? '기타' : '');
+    const rowGroups = units.map(u => ({ label: unitLabel(u), showLabel: true, rows: rows.filter(r => r.unit === u) }));
+    const chartGroups = units.map((u, gi) => {
+      const its = data.items.filter(it => unitOf(it) === u);
+      let max = 0;
+      its.filter(it => !it.hideBar).forEach(it => it.values.slice(last4).forEach(v => { const x = num(v); if (x !== null && x > max) max = x; }));
+      max = max * 1.12 || 1;
+      return {
+        label: unitLabel(u), showLabel: true,
+        pad: gi > 0 ? '18px' : '0', border: gi > 0 ? '1px solid #ececea' : 'none',
+        chart: its.map(it => ({
+          short: it.short || it.name,
+          bars: it.hideBar ? [] : it.values.slice(last4).map((v, i) => {
+            const x = num(v);
+            return { width: x === null ? '0%' : (x / max * 100).toFixed(2) + '%', color: colors[i], value: fmt(v), weight: i === chartDates.length - 1 ? 700 : 500 };
+          }),
+        })),
+      };
+    });
+
+    const refDates = all[REF].dates;
+    const lastTrash = trash[trash.length - 1];
+
+    return {
+      siteLatest: (() => { const ds = all[REF].dates.filter(Boolean); return ds[ds.length - 1] || '–'; })(),
+      ...contactVals,
+      loginOpen: !!this.state.loginOpen,
+      stopProp: e => e.stopPropagation(),
+      openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
+      closeLogin: () => this.setState({ loginOpen: false }),
+      loginEmail: this.state.loginEmail, loginPw: this.state.loginPw,
+      onLoginEmail: e => this.setState({ loginEmail: e.target.value }),
+      onLoginPw: e => this.setState({ loginPw: e.target.value }),
+      onLoginKey: e => { if (e.key === 'Enter') this.login(); },
+      doLogin: () => { if (!this.state.loginBusy) this.login(); },
+      loginBtn: this.state.loginBusy ? '로그인 중…' : '로그인',
+      loginErr: this.state.loginErr || '',
+      logout: () => this.logout(),
+      isVisitorFooter: !admin,
+      adminEmail: (this.state.session && this.state.session.email) || '',
+      syncMsg: this.state.syncMsg || '',
+      syncNow: () => this.pushAll(),
+      title: tab,
+      tabs: TABS.map(t => { const on = !isContact && t === tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
+      isEmpty: data.items.length === 0,
+      server: this.props.server ?? '전서버',
+      categoryLabel: data.categoryLabel ?? this.props.categoryLabel ?? '아이템드랍 1줄',
+      showValues: this.props.showValues ?? true,
+      latestDate: data.dates[n - 1] || '',
+      prevDate: data.dates[n - 2] || '',
+      rowGroups, chartGroups, line, pairMainRef: this.pairMainRef,
+      pairGroups: rowGroups.map((rg, i) => {
+        const idx = selItem ? rg.rows.findIndex(r => r.id === selItem.id) : -1;
+        const has = idx >= 0;
+        return { label: rg.label, rows: rg.rows, first: i === 0, cgs: [chartGroups[i]], hasLine: has, noLine: !has,
+          lineTop: has && !this.state.narrow && i === 0 ? '52px' : '0' };
+      }),
+      showLine: false, showBars: true,
+      clearSelect: () => this.setState({ selected: null }),
+      tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
+      legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
+      editing: isEditing, viewing: !isEditing,
+      isAdmin: admin,
+      toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
+      dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
+      editSections: TABS.map(t => {
+        const x = all[t];
+        return {
+          tab: t,
+          category: x.categoryLabel ?? (t === REF ? (this.props.categoryLabel ?? '아이템드랍 1줄') : ''),
+          onCategory: e => { const v = e.target.value; this.updateTab(t, y => { y.categoryLabel = v; }); },
+          addItem: () => this.updateTab(t, y => { y.items.push({ id: 'i' + Date.now(), name: '새 아이템', short: '새 아이템', values: y.dates.map(() => '') }); }),
+          dateLabels: x.dates.map(d => d || '–'),
+          isEmpty: x.items.length === 0,
+          rows: x.items.map((it, r) => ({
+            groupStart: !!it.group && (r === 0 || x.items[r - 1].group !== it.group),
+            group: it.group || '',
+            gapTop: r === 0 ? '0' : '14px',
+            gapBorder: r === 0 ? 'none' : '1px dashed #e3e3e0',
+            name: it.name, short: it.short,
+            onName: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].name = v; }); },
+            onShort: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].short = v; }); },
+            onDelete: () => this.deleteItem(t, r),
+            cells: it.values.map((v, c) => ({ value: v ?? '', onPaste: e => this.pasteGrid(e, t, r, c), onChange: e => { const val = e.target.value; this.updateTab(t, y => { y.items[r].values[c] = val; }); } })),
+          })),
+        };
+      }),
+      addWeek: () => this.addWeek(),
+      removeWeek: () => this.removeWeek(),
+      hasTrash: trash.length > 0,
+      undoLabel: !lastTrash ? '' : '↶ 복원: ' + (lastTrash.type === 'week' ? (lastTrash.date || '빈 날짜') + ' 주' : lastTrash.tab + ' · ' + lastTrash.item.name),
+      undo: () => this.undo(),
+    };
+  }
+}
+</script>
+</body>
+</html>
