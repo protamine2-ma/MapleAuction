@@ -253,8 +253,96 @@ input{font-family:inherit;}
     </sc-for>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
+    </sc-if>
   </div>
 </nav>
+
+<sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;">
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">방문자 통계</h1>
+      <span style="font-size:13px;color:#6b6d73;">관리자에게만 보여요 · 최근 30일 · {{ statsUpdated }}</span>
+    </div>
+    <button onClick="{{ reloadStats }}" style="padding:9px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ statsBtn }}</button>
+  </div>
+
+  <sc-if value="{{ statsSetup }}" hint-placeholder-val="{{ false }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;">
+      <strong style="font-size:17px;">방문 기록 테이블이 아직 없어요</strong>
+      <span style="font-size:14px;color:#6b6d73;">Supabase → SQL Editor에 아래를 붙여넣고 Run을 눌러주세요.</span>
+      <pre style="margin:0;padding:14px;background:#f7f7f5;border-radius:8px;font-size:13px;line-height:1.5;overflow-x:auto;white-space:pre;">create table visits (
+  id bigint generated always as identity primary key,
+  created_at timestamptz default now(),
+  vid text, kind text, tab text, ref text
+);
+alter table visits enable row level security;
+create policy "누구나 기록" on visits for insert to anon, authenticated with check (true);
+create policy "관리자만 보기" on visits for select to authenticated using (true);</pre>
+    </section>
+  </sc-if>
+  <sc-if value="{{ statsFail }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 18px;border-radius:10px;background:oklch(0.96 0.03 25);color:oklch(0.45 0.17 25);font-size:14px;font-weight:600;">통계를 불러오지 못했어요. 다시 로그인하거나 잠시 후 새로고침해 주세요.</div>
+  </sc-if>
+  <sc-if value="{{ statsEmpty }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 18px;border-radius:10px;background:oklch(0.96 0.02 255);color:oklch(0.4 0.17 255);font-size:14px;font-weight:600;">아직 기록된 방문이 없어요. mapleauction.kr에 들어온 방문자부터 기록돼요.</div>
+  </sc-if>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;">
+    <sc-for list="{{ statsKpis }}" as="k" hint-placeholder-count="4">
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;">
+        <span style="font-size:14px;font-weight:700;color:#6b6d73;">{{ k.label }}</span>
+        <span style="font-size:32px;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;">{{ k.n }}</span>
+        <span style="font-size:13px;color:#9a9ca1;">{{ k.sub }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+    <h2 style="margin:0;font-size:17px;font-weight:700;">일별 방문자</h2>
+    <div style="height:200px;display:flex;align-items:flex-end;gap:3px;border-bottom:1px solid #d6d6d2;">
+      <sc-for list="{{ statsBars }}" as="b" hint-placeholder-count="30">
+        <div title="{{ b.title }}" style="flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;">
+          <span style="font-size:10px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ b.n }}</span>
+          <div style="width:100%;height:{{ b.h }};min-height:2px;background:{{ b.color }};border-radius:3px 3px 0 0;"></div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:3px;">
+      <sc-for list="{{ statsLabels }}" as="l" hint-placeholder-count="30">
+        <span style="flex:1;min-width:0;text-align:center;font-size:11px;color:#6b6d73;white-space:nowrap;overflow:visible;">{{ l.label }}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;align-items:start;">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <h2 style="margin:0;font-size:17px;font-weight:700;">많이 본 탭</h2>
+      <sc-if value="{{ statsNoTabs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
+      <sc-for list="{{ statsTabs }}" as="s" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:10px;align-items:center;">
+          <span style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.label }}</span>
+          <div style="height:12px;background:#f0f0ee;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ s.w }};background:oklch(0.64 0.12 255);"></div></div>
+          <span style="font-size:13px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;">{{ s.n }}</span>
+        </div>
+      </sc-for>
+    </section>
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <h2 style="margin:0;font-size:17px;font-weight:700;">유입 경로</h2>
+      <sc-if value="{{ statsNoRefs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
+      <sc-for list="{{ statsRefs }}" as="s" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:136px minmax(0,1fr) 44px;gap:10px;align-items:center;">
+          <span style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.label }}</span>
+          <div style="height:12px;background:#f0f0ee;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ s.w }};background:oklch(0.64 0.12 255);"></div></div>
+          <span style="font-size:13px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;">{{ s.n }}</span>
+        </div>
+      </sc-for>
+    </section>
+  </div>
+</div>
+</sc-if>
 
 <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:720px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
@@ -737,8 +825,70 @@ class Component extends DCLogic {
     return { tab, all: this.loadAll(), trash, editing: false, session, admin: !!session, selected: null,
       loginOpen: wantLogin && !session, loginEmail: '', loginPw: '', loginErr: '', syncMsg: '' };
   })();
+  logVisit(kind, tab) {
+    if (this.state.admin) return;
+    if (!/(^|\.)mapleauction\.kr$/.test(location.hostname)) return;
+    let vid = 'anon';
+    try { vid = localStorage.getItem('maple-vid'); if (!vid) { vid = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('maple-vid', vid); } } catch (e) {}
+    let ref = '';
+    try { if (document.referrer) { const u = new URL(document.referrer); if (u.hostname !== location.hostname) ref = u.hostname.replace(/^www\./, ''); } } catch (e) {}
+    fetch(SB_URL + '/rest/v1/visits', { method: 'POST', keepalive: true, headers: { apikey: SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ vid, kind, tab: tab || '', ref: kind === 'visit' ? ref : '' }) }).catch(() => {});
+  }
+  async loadStats() {
+    const token = await this.ensureToken();
+    if (!token) { this.setState({ statsErr: 'fail' }); return; }
+    this.setState({ statsLoading: true, statsErr: '' });
+    const since = new Date(); since.setHours(0, 0, 0, 0); since.setTime(since.getTime() - 29 * 864e5);
+    let rows = [], from = 0;
+    try {
+      while (true) {
+        const r = await fetch(SB_URL + '/rest/v1/visits?select=created_at,vid,kind,tab,ref&order=created_at.asc&created_at=gte.' + encodeURIComponent(since.toISOString()), { headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, Range: from + '-' + (from + 999), 'Range-Unit': 'items' } });
+        if (!r.ok) throw new Error(r.status === 404 ? 'setup' : 'fail');
+        const part = await r.json(); rows = rows.concat(part);
+        if (part.length < 1000 || rows.length >= 50000) break;
+        from += 1000;
+      }
+      this.setState({ stats: rows, statsLoading: false, statsAt: Date.now() });
+    } catch (e) { this.setState({ statsLoading: false, statsErr: e.message === 'setup' ? 'setup' : 'fail' }); }
+  }
+  statsVals(isStats) {
+    const rows = this.state.stats || [];
+    const dayKey = d => { const x = new Date(d); return x.getFullYear() + '-' + (x.getMonth() + 1) + '-' + x.getDate(); };
+    const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+    const days = [];
+    for (let i = 29; i >= 0; i--) { const d = new Date(t0.getTime() - i * 864e5); days.push({ key: dayKey(d), label: (d.getMonth() + 1) + '/' + d.getDate(), vids: new Set(), visits: 0 }); }
+    const map = {}; days.forEach(d => { map[d.key] = d; });
+    const tabCount = {}, refCount = {};
+    rows.forEach(r => {
+      const d = map[dayKey(r.created_at)]; if (!d) return;
+      d.vids.add(r.vid);
+      if (r.kind === 'visit') { d.visits++; const k = r.ref || '직접 방문 · 북마크'; refCount[k] = (refCount[k] || 0) + 1; }
+      if (r.tab) tabCount[r.tab] = (tabCount[r.tab] || 0) + 1;
+    });
+    const uniq = arr => { const s = new Set(); arr.forEach(d => d.vids.forEach(v => s.add(v))); return s.size; };
+    const visitsOf = arr => arr.reduce((a, d) => a + d.visits, 0);
+    const max = Math.max(1, ...days.map(d => d.vids.size));
+    const top = obj => { const arr = Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, 8); const m = Math.max(1, ...arr.map(a => a[1])); return arr.map(([k, v]) => ({ label: k, n: v, w: (v / m * 100).toFixed(1) + '%' })); };
+    const kpi = (label, arr) => ({ label, n: uniq(arr) + '명', sub: '방문 ' + visitsOf(arr) + '회' });
+    const err = this.state.statsErr;
+    return {
+      isStats,
+      statsTab: { onClick: () => this.switchTab('방문자'), color: isStats ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isStats ? 700 : 500, border: isStats ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      statsKpis: [kpi('오늘', days.slice(-1)), kpi('어제', days.slice(-2, -1)), kpi('최근 7일', days.slice(-7)), kpi('최근 30일', days)],
+      statsBars: days.map((d, i) => ({ h: (d.vids.size / max * 100).toFixed(1) + '%', n: d.vids.size || '', title: d.label + ' · 방문자 ' + d.vids.size + '명 · 방문 ' + d.visits + '회', color: i === 29 ? 'oklch(0.48 0.17 255)' : 'oklch(0.78 0.075 255)' })),
+      statsLabels: days.map((d, i) => ({ label: (29 - i) % 5 === 0 ? d.label : '' })),
+      statsTabs: top(tabCount), statsRefs: top(refCount),
+      statsNoTabs: !Object.keys(tabCount).length, statsNoRefs: !Object.keys(refCount).length,
+      statsEmpty: !!this.state.statsAt && !rows.length && !err,
+      statsSetup: err === 'setup', statsFail: err === 'fail',
+      statsBtn: this.state.statsLoading ? '불러오는 중…' : '새로고침',
+      reloadStats: () => { if (!this.state.statsLoading) this.loadStats(); },
+      statsUpdated: this.state.statsAt ? new Date(this.state.statsAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) + ' 기준' : '',
+    };
+  }
   componentDidMount() {
     this.fetchRemote();
+    try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
   }
   async fetchRemote() {
@@ -779,7 +929,7 @@ class Component extends DCLogic {
       if (this.state.remoteEmpty) this.pushAll();
     } catch (e) { this.setState({ loginBusy: false, loginErr: '이메일 또는 비밀번호가 맞지 않아요.' }); }
   }
-  logout() { this.saveSession(null); this.setState({ editing: false }); }
+  logout() { this.saveSession(null); this.setState(s => ({ editing: false, tab: s.tab === '방문자' ? REF : s.tab })); }
   async pushTabs(tabs) {
     const token = await this.ensureToken();
     if (!token) { this.setState({ syncMsg: '로그인이 만료됐어요. 다시 로그인해 주세요.' }); return false; }
@@ -829,9 +979,11 @@ class Component extends DCLogic {
   updateTab(tab, fn) { const all = { ...this.state.all }; all[tab] = clone(all[tab]); fn(all[tab]); this.commit(all, [tab]); }
   updateAll(fn) { const all = clone(this.state.all); TABS.forEach(t => fn(all[t], t)); this.commit(all, TABS); }
   switchTab(tab) {
-    if (tab !== '문의') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
+    if (tab !== '문의' && tab !== '방문자') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
     this.setState({ tab, selected: null });
     window.scrollTo(0, 0);
+    if (tab === '방문자') this.loadStats();
+    else if (tab !== this.state.tab) this.logVisit('tab', tab);
   }
   pasteGrid(e, tab, r0, c0) {
     const text = (e.clipboardData || window.clipboardData).getData('text');
@@ -914,14 +1066,15 @@ class Component extends DCLogic {
   }
   renderVals() {
     const { all, editing, admin, trash } = this.state;
+    const isStats = this.state.tab === '방문자' && admin;
     const isContact = this.state.tab === '문의';
-    const tab = isContact ? REF : this.state.tab;
+    const tab = (isContact || this.state.tab === '방문자') ? REF : this.state.tab;
     const data = all[tab];
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact,
+      isContact, isData: !isContact && !isStats,
       contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isContact ? 700 : 500, border: isContact ? 'oklch(0.48 0.17 255)' : 'transparent' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
@@ -1034,6 +1187,7 @@ class Component extends DCLogic {
       ...contactVals,
       loginOpen: !!this.state.loginOpen,
       stopProp: e => e.stopPropagation(),
+      ...this.statsVals(isStats),
       openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
       closeLogin: () => this.setState({ loginOpen: false }),
       loginEmail: this.state.loginEmail, loginPw: this.state.loginPw,
@@ -1049,7 +1203,7 @@ class Component extends DCLogic {
       syncMsg: this.state.syncMsg || '',
       syncNow: () => this.pushAll(),
       title: tab,
-      tabs: TABS.map(t => { const on = !isContact && t === tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
+      tabs: TABS.map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
       isEmpty: data.items.length === 0,
       server: this.props.server ?? '전서버',
       categoryLabel: data.categoryLabel ?? this.props.categoryLabel ?? '아이템드랍 1줄',
