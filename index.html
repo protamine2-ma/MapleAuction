@@ -165,14 +165,10 @@ input{font-family:inherit;}
 </helmet>
 <div style="background:oklch(0.3 0.09 255);color:#fff;">
   <div style="position:relative;max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(250px,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
-    <div style="min-height:140px;min-width:250px;display:flex;">
-      <sc-if value="{{ sundayHide }}" hint-placeholder-val="{{ true }}">
-        <image-slot id="banner-left" shape="rect" fit="width" placeholder="배너 이미지" compact="" style="display:block;width:100%;height:100%;min-height:140px;"></image-slot>
-      </sc-if>
-    </div>
+    <div style="min-height:140px;min-width:250px;"></div>
     <sc-if value="{{ sundayShow }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ sundayTab.onClick }}" title="썬데이 메이플 보기" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};padding:0;border:none;background:transparent;cursor:pointer;" style-hover="opacity:0.92;">
-        <img src="{{ sunday.img }}" alt="이번 주 썬데이 메이플" style="display:block;width:100%;height:100%;object-fit:contain;object-position:left center;">
+        {{ sundayBannerImg }}
       </button>
     </sc-if>
     <div style="display:flex;align-items:center;gap:16px;padding:44px 0;">
@@ -399,7 +395,12 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <a href="{{ sunday.url }}" target="_blank" rel="noopener" style="font-size:13px;font-weight:700;color:oklch(0.4 0.17 255);text-decoration:none;" style-hover="text-decoration:underline;">공식 홈페이지에서 보기 →</a>
     </div>
     <div style="padding:18px;display:flex;justify-content:center;background:#fafaf8;">
-      <img src="{{ sunday.img }}" alt="썬데이 메이플 혜택" style="display:block;width:100%;max-width:620px;height:auto;border-radius:10px;">
+      <sc-if value="{{ sundayHasImg }}" hint-placeholder-val="{{ false }}">
+        {{ sundayTabImg }}
+      </sc-if>
+      <sc-if value="{{ sundayNoImg }}" hint-placeholder-val="{{ true }}">
+        <span style="padding:40px 0;font-size:14px;color:#6b6d73;">썬데이 메이플은 금요일에 자동으로 올라와요.</span>
+      </sc-if>
     </div>
   </section>
   <span style="text-align:center;font-size:12px;color:#9a9ca1;">이미지 출처: 메이플스토리 공식 홈페이지 · Data based on NEXON Open API</span>
@@ -1156,7 +1157,8 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._onResize); this._onResize();
     this.loadAdsense();
     this.fetchRemote();
-    fetch('sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
+    const sBase = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? '' : 'https://mapleauction.kr/';
+    fetch(sBase + 'sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
     if (this.state.tab === '인구수') this.loadPop();
     try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
@@ -1470,22 +1472,25 @@ class Component extends DCLogic {
         const mock = !pub;
         const wide = !!this.state.wide;
         const topAd = !isEditing && ((real && !!slotTop) || mock);
-        const sd = this.state.sundayData || (pub ? null : { start: '2026-10-18T00:00+09:00', url: 'https://maplestory.nexon.com/News/Event', test: true });
+        const sd = this.state.sundayData || null;
+        const sBase = pub ? '' : 'https://mapleauction.kr/';
         const kstDay = s => { const d = new Date(new Date(s).getTime() + 9 * 3600e3); return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
         const nowK = new Date(Date.now() + 9 * 3600e3);
         const today = Date.UTC(nowK.getUTCFullYear(), nowK.getUTCMonth(), nowK.getUTCDate());
         const sun = sd ? kstDay(sd.start) : 0;
         const inWindow = !!sd && today >= sun - 2 * 864e5 && today <= sun;
-        const show = !!sd && (sd.test || inWindow);
+        const show = inWindow;
         const sdD = sd ? new Date(sun) : null;
         const sunday = sd ? {
-          img: sd.test ? 'sunday-test.png' : 'sunday.png?v=' + encodeURIComponent(sd.notice_id || sd.start),
+          img: sBase + 'sunday.png?v=' + encodeURIComponent(sd.notice_id || sd.start),
           url: sd.url || 'https://maplestory.nexon.com/News/Event',
           dateLabel: sdD.getUTCFullYear() + '년 ' + (sdD.getUTCMonth() + 1) + '월 ' + sdD.getUTCDate() + '일(일)',
-          badge: inWindow || sd.test ? '이번 주' : '지난 썬데이', badgeBg: inWindow || sd.test ? 'oklch(0.8 0.15 85)' : '#e3e3e0',
+          badge: inWindow ? '이번 주' : '지난 썬데이', badgeBg: inWindow ? 'oklch(0.8 0.15 85)' : '#e3e3e0',
         } : { img: '', url: 'https://maplestory.nexon.com/News/Event', dateLabel: '아직 받아온 썬데이 메이플이 없어요', badge: '준비 중', badgeBg: '#e3e3e0' };
         return {
-          sunday, sundayShow: show, sundayHide: !show,
+          sunday, sundayShow: show, sundayHide: !show, sundayHasImg: !!sd, sundayNoImg: !sd,
+          sundayTabImg: sd ? React.createElement('img', { src: sunday.img, alt: '썬데이 메이플 혜택', style: { display: 'block', width: '100%', maxWidth: 620, height: 'auto', borderRadius: 10 } }) : null,
+          sundayBannerImg: sd ? React.createElement('img', { src: sunday.img, alt: '이번 주 썬데이 메이플', style: { display: 'block', width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left center' } }) : null,
           adPadL: show ? '282px' : '28px',
           sundayImgH: topAd ? 'calc(100% + 95px)' : 'calc(100% - 16px)',
           adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
