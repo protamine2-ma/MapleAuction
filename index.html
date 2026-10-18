@@ -378,7 +378,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수</h1>
-    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 등록 계정 = 유니온 랭킹에 있는 모든 계정(휴면 포함) · 활동 = 최근 7일 접속 또는 유니온·아티팩트·본캐 성장 계정</span>
+    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 기준 · 매주 목요일 집계 · 활동 계정 = 최근 7일 접속 또는 유니온·아티팩트·본캐가 성장한 계정</span>
   </div>
 
   <sc-if value="{{ popLoading }}" hint-placeholder-val="{{ false }}">
@@ -391,7 +391,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <div style="padding:14px 18px;border-radius:10px;background:oklch(0.96 0.03 25);color:oklch(0.45 0.17 25);font-size:14px;font-weight:600;">인구수를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</div>
   </sc-if>
   <sc-if value="{{ popNone }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 집계된 주가 없어요. 첫 집계가 끝나면 여기에 나와요.</div>
+    <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 집계된 주가 없어요. 첫 활동 계정 집계가 끝나면 여기에 나와요.</div>
   </sc-if>
 
   <sc-if value="{{ popHas }}" hint-placeholder-val="{{ false }}">
@@ -399,13 +399,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">월드별 비율 · {{ popB }}</h2>
         <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-          <sc-if value="{{ popActShow }}" hint-placeholder-val="{{ false }}">
-            <span style="font-size:22px;font-weight:800;color:oklch(0.5 0.18 25);font-variant-numeric:tabular-nums;">활동 {{ popActTotal }}명</span>
-            <span style="font-size:14px;font-weight:600;color:#6b6d73;font-variant-numeric:tabular-nums;">등록 계정 {{ popTotal }}개</span>
-          </sc-if>
-          <sc-if value="{{ popNoActShow }}" hint-placeholder-val="{{ true }}">
-            <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">등록 계정 {{ popTotal }}개</span>
-          </sc-if>
+          <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">활동 {{ popTotal }}명</span>
         </div>
       </div>
       <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;background:#f0f0ee;">
@@ -426,7 +420,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-        <h2 style="margin:0;font-size:17px;font-weight:700;">인구수 추이 · {{ popWeeks }}주</h2>
+        <h2 style="margin:0;font-size:17px;font-weight:700;">활동 계정 추이 · {{ popWeeks }}주</h2>
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.48 0.17 255);"></span>전체 {{ popLatest.tot }}</span>
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.7 0.15 65);"></span>그룹1 {{ popLatest.g1 }}</span>
@@ -470,19 +464,17 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </select>
       </div>
       <div style="overflow-x:auto;">
-        <div style="min-width:700px;">
-          <div style="display:grid;grid-template-columns:minmax(0,1.2fr) repeat(6,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
-            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span><span style="text-align:right;">활동</span><span style="text-align:right;">활동률</span>
+        <div style="min-width:520px;">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
+            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span>
           </div>
           <sc-for list="{{ popTable }}" as="r" hint-placeholder-count="17">
-            <div style="display:grid;grid-template-columns:minmax(0,1.2fr) repeat(6,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
+            <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
               <span style="display:flex;align-items:center;gap:8px;font-weight:{{ r.weight }};min-width:0;"><span style="width:10px;height:10px;border-radius:2px;background:{{ r.dot }};flex:none;"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.label }}</span></span>
               <span style="text-align:right;color:#6b6d73;">{{ r.a }}</span>
               <span style="text-align:right;font-weight:{{ r.weight }};">{{ r.b }}</span>
               <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.diff }}</span>
               <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.pct }}</span>
-              <span style="text-align:right;font-weight:{{ r.weight }};color:oklch(0.5 0.18 25);">{{ r.act }}</span>
-              <span style="text-align:right;color:#6b6d73;">{{ r.rate }}</span>
             </div>
           </sc-for>
         </div>
@@ -1002,7 +994,7 @@ class Component extends DCLogic {
   popVals(isPop, up, down) {
     const rows = this.state.pop || [];
     const by = {}, act = {};
-    rows.forEach(r => { (by[r.date] = by[r.date] || {})[r.world] = r.count; if (r.active != null) (act[r.date] = act[r.date] || {})[r.world] = r.active; });
+    rows.forEach(r => { if (r.active != null) (by[r.date] = by[r.date] || {})[r.world] = r.active; });
     const sumAct = (d, ws) => act[d] && ws.every(w => act[d][w] != null) ? ws.reduce((a, w) => a + act[d][w], 0) : null;
     const dates = Object.keys(by).filter(d => POP_ALL.every(w => by[d][w] != null)).sort();
     const n = dates.length;
