@@ -9,7 +9,7 @@ const SK = process.env.SUPABASE_SERVICE_KEY;
 const RPS = Number(process.env.RPS || 480);
 const CONC = Number(process.env.CONCURRENCY || 120);
 const FORCE = process.env.FORCE === '1';
-const WORLDS = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바', '에오스', '헬리오스'];
+const WORLDS = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바', '에오스', '핼리오스'];
 const KEYS = ['ulevel', 'upower', 'alevel', 'aexp', 'apoint', 'clevel', 'cexp', 'cpower'];
 
 if (!NX || !SK) { console.error('NEXON_API_KEY / SUPABASE_SERVICE_KEY 가 필요해요'); process.exit(1); }

@@ -276,11 +276,12 @@ input{font-family:inherit;}
 </sc-if>
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
+    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
+    <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
       <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
     </sc-for>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
-    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
     <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
@@ -377,7 +378,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수</h1>
-    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 활동 = 최근 7일 접속 또는 유니온·아티팩트·본캐 성장 계정</span>
+    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 등록 계정 = 유니온 랭킹에 있는 모든 계정(휴면 포함) · 활동 = 최근 7일 접속 또는 유니온·아티팩트·본캐 성장 계정</span>
   </div>
 
   <sc-if value="{{ popLoading }}" hint-placeholder-val="{{ false }}">
@@ -398,9 +399,12 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">월드별 비율 · {{ popB }}</h2>
         <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-          <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">전체 {{ popTotal }}명</span>
           <sc-if value="{{ popActShow }}" hint-placeholder-val="{{ false }}">
-            <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.18 25);font-variant-numeric:tabular-nums;">활동 {{ popActTotal }}명</span>
+            <span style="font-size:22px;font-weight:800;color:oklch(0.5 0.18 25);font-variant-numeric:tabular-nums;">활동 {{ popActTotal }}명</span>
+            <span style="font-size:14px;font-weight:600;color:#6b6d73;font-variant-numeric:tabular-nums;">등록 계정 {{ popTotal }}개</span>
+          </sc-if>
+          <sc-if value="{{ popNoActShow }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">등록 계정 {{ popTotal }}개</span>
           </sc-if>
         </div>
       </div>
@@ -785,7 +789,7 @@ const SB_URL = 'https://qjldhyiwffeqhzmnppta.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqbGRoeWl3ZmZlcWh6bW5wcHRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNDQ1NjAsImV4cCI6MjEwNzgyMDU2MH0.ELK7nqXHF0iwPkty6B8tROt2lX9Obkx_liKBinVpCGU';
 const SB_SESSION = 'maple-sb-session';
 const POP_W1 = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바'];
-const POP_W2 = ['에오스', '헬리오스'];
+const POP_W2 = ['에오스', '핼리오스'];
 const POP_ALL = POP_W1.concat(POP_W2);
 const POP_COLORS = ['oklch(0.55 0.17 255)', 'oklch(0.6 0.19 25)', 'oklch(0.72 0.15 75)', 'oklch(0.62 0.13 200)', 'oklch(0.6 0.12 150)', 'oklch(0.58 0.15 300)', 'oklch(0.7 0.12 100)', 'oklch(0.55 0.1 50)', 'oklch(0.5 0.18 10)', 'oklch(0.7 0.1 230)', 'oklch(0.55 0.08 180)', 'oklch(0.65 0.06 280)', 'oklch(0.5 0.15 280)', 'oklch(0.75 0.14 60)'];
 const DM_NAMES = [['하프 이어링', '하프'], ['미카엘라의 새 안경', '미카'], ['혼테일의 목걸이', '혼테일'], ['베어스 그린 펜던트', '베어스'], ['레드 매지션 마이스터 심볼', '매지션'], ['레드 워리어 마이스터 심볼', '워리어'], ['마이스터링', '마이링'], ['마이스터 올마이티링', '올마링']];
@@ -962,8 +966,7 @@ const pushWeek = (x, date, valsById) => {
 
 class Component extends DCLogic {
   state = (() => {
-    let tab = REF;
-    try { const t = localStorage.getItem(KEY + ':tab'); if (TABS.includes(t)) tab = t; } catch (e) {}
+    let tab = '인구수';
     let trash = [];
     try { trash = JSON.parse(localStorage.getItem(KEY + ':trash')) || []; } catch (e) {}
     let session = null;
@@ -1067,6 +1070,7 @@ class Component extends DCLogic {
       popHasAct: !!latest.act,
       popActTotal: B ? fmtN(sumAct(B, POP_ALL)) : '',
       popActShow: B ? sumAct(B, POP_ALL) != null : false,
+      popNoActShow: B ? sumAct(B, POP_ALL) == null : true,
     };
   }
   async loadStats() {
@@ -1141,6 +1145,7 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._onResize); this._onResize();
     this.loadAdsense();
     this.fetchRemote();
+    if (this.state.tab === '인구수') this.loadPop();
     try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
   }
