@@ -13,13 +13,19 @@ async function api(path, params = {}) {
   return r.json();
 }
 
+const TEST = process.env.TEST === '1';
+const KEYWORD = process.env.KEYWORD || '썬데이';
 const list = await api('/notice-event');
-const items = (list.event_notice || []).filter(n => /썬데이/.test(n.title));
+const all = list.event_notice || [];
+console.log('현재 이벤트 공지 ' + all.length + '개');
+all.forEach(n => console.log(' - ' + n.title + ' (' + (n.date_event_start || '').slice(0, 10) + ')'));
+let items = all.filter(n => n.title.includes(KEYWORD));
+if (!items.length && TEST) { console.log('[테스트] "' + KEYWORD + '" 공지가 없어서 가장 최근 이벤트로 테스트해요.'); items = all.slice(0, 1); }
 if (!items.length) { console.log('썬데이 메이플 공지가 아직 없어요.'); process.exit(0); }
 items.sort((a, b) => String(b.date_event_start || b.date).localeCompare(String(a.date_event_start || a.date)));
 const n = items[0];
 const old = fs.existsSync('sunday.json') ? JSON.parse(fs.readFileSync('sunday.json', 'utf8')) : null;
-if (old && old.notice_id === n.notice_id && fs.existsSync('sunday.png') && process.env.FORCE !== '1') { console.log('이미 받아온 썬데이예요.'); process.exit(0); }
+if (!TEST && old && old.notice_id === n.notice_id && fs.existsSync('sunday.png') && process.env.FORCE !== '1') { console.log('이미 받아온 썬데이예요.'); process.exit(0); }
 
 const detail = await api('/notice-event/detail', { notice_id: n.notice_id });
 const srcs = [...String(detail.contents || '').matchAll(/<img[^>]+src=["']([^"']+)["']/gi)].map(m => m[1].replace(/&amp;/g, '&'));
@@ -56,7 +62,14 @@ for (const src of srcs) {
 }
 if (!best) { console.log('이미지를 찾지 못했어요.'); process.exit(0); }
 
-fs.writeFileSync('sunday.png', best);
 const out = { notice_id: n.notice_id, title: n.title, url: n.url, start: detail.date_event_start || n.date_event_start, end: detail.date_event_end || n.date_event_end, fetched: new Date().toISOString() };
-fs.writeFileSync('sunday.json', JSON.stringify(out, null, 2));
-console.log('저장 완료', out);
+if (TEST) {
+  fs.mkdirSync('test', { recursive: true });
+  fs.writeFileSync('test/sunday.png', best);
+  fs.writeFileSync('test/sunday.json', JSON.stringify(out, null, 2));
+  console.log('[테스트] test/sunday.png 저장 완료', out);
+} else {
+  fs.writeFileSync('sunday.png', best);
+  fs.writeFileSync('sunday.json', JSON.stringify(out, null, 2));
+  console.log('저장 완료', out);
+}
