@@ -13,6 +13,7 @@
 <meta name="robots" content="index,follow">
 <meta name="google-site-verification" content="pj_pOtf7Lvvwk_36sjs84ZsvfNtZSn1RR3sAVocxfVw">
 <meta name="naver-site-verification" content="a8f36ba8f5f782f78b855c224e8308bdc430fb83">
+<meta name="google-adsense-account" content="ca-pub-2498294774607074">
 <link rel="canonical" href="https://mapleauction.kr/">
 <meta property="og:url" content="https://mapleauction.kr/">
 <script src="./support.js"></script>
@@ -246,6 +247,32 @@ input{font-family:inherit;}
 </sc-if>
 
 <sc-if value="{{ viewing }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ adRealTop }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#f4f4f2;border-bottom:1px solid #e3e3e0;">
+    <div style="max-width:1320px;margin:0 auto;padding:10px 28px;box-sizing:border-box;">
+      <ins class="adsbygoogle" ref="{{ adRef }}" data-ad-client="{{ adClient }}" data-ad-slot="{{ adSlotTop }}" data-ad-format="horizontal" data-full-width-responsive="true" style="display:block;width:100%;height:90px;"></ins>
+    </div>
+  </div>
+</sc-if>
+<sc-if value="{{ adMockTop }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#f4f4f2;border-bottom:1px solid #e3e3e0;">
+    <div style="max-width:1320px;margin:0 auto;padding:10px 28px;box-sizing:border-box;">
+      <div style="height:90px;border:1.5px dashed #c9cac6;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:600;color:#9a9ca1;">광고 자리 · 가로형 728×90 (반응형) · 미리보기에서만 보여요</div>
+    </div>
+  </div>
+</sc-if>
+<sc-if value="{{ adRealSide }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;top:50%;transform:translateY(-50%);left:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;">
+    <ins class="adsbygoogle" ref="{{ adRef }}" data-ad-client="{{ adClient }}" data-ad-slot="{{ adSlotSide }}" style="display:inline-block;width:160px;height:600px;"></ins>
+  </div>
+  <div style="position:fixed;top:50%;transform:translateY(-50%);right:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;">
+    <ins class="adsbygoogle" ref="{{ adRef }}" data-ad-client="{{ adClient }}" data-ad-slot="{{ adSlotSide }}" style="display:inline-block;width:160px;height:600px;"></ins>
+  </div>
+</sc-if>
+<sc-if value="{{ adMockSide }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;top:50%;transform:translateY(-50%);left:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;border:1.5px dashed #c9cac6;border-radius:8px;background:#f4f4f2;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;color:#9a9ca1;line-height:1.5;">광고 자리<br>세로형<br>160×600</div>
+  <div style="position:fixed;top:50%;transform:translateY(-50%);right:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;border:1.5px dashed #c9cac6;border-radius:8px;background:#f4f4f2;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;color:#9a9ca1;line-height:1.5;">광고 자리<br>세로형<br>160×600</div>
+</sc-if>
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
@@ -635,7 +662,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </div>
 </sc-if>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;server&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;전서버&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;categoryLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;아이템드랍 1줄&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showValues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;deltaStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;korean&quot;,&quot;western&quot;],&quot;default&quot;:&quot;korean&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;contactEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;server&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;전서버&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;categoryLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;아이템드랍 1줄&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showValues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;deltaStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;korean&quot;,&quot;western&quot;],&quot;default&quot;:&quot;korean&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;contactEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;adsenseClient&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;},&quot;adSlotTop&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;},&quot;adSlotSide&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;}}">
 const KEY = 'maple-auction-prices-v1';
 const SB_URL = 'https://qjldhyiwffeqhzmnppta.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqbGRoeWl3ZmZlcWh6bW5wcHRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNDQ1NjAsImV4cCI6MjEwNzgyMDU2MH0.ELK7nqXHF0iwPkty6B8tROt2lX9Obkx_liKBinVpCGU';
@@ -886,7 +913,25 @@ class Component extends DCLogic {
       statsUpdated: this.state.statsAt ? new Date(this.state.statsAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) + ' 기준' : '',
     };
   }
+  adRef = el => {
+    if (!el || el.getAttribute('data-pushed')) return;
+    el.setAttribute('data-pushed', '1');
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+  };
+  adClientId() { return (this.props.adsenseClient || 'ca-pub-2498294774607074').trim(); }
+  loadAdsense() {
+    const c = this.adClientId();
+    if (!c || this.state.admin || document.getElementById('adsbygoogle-js')) return;
+    if (!/(^|\.)mapleauction\.kr$/.test(location.hostname)) return;
+    const s = document.createElement('script');
+    s.id = 'adsbygoogle-js'; s.async = true; s.crossOrigin = 'anonymous';
+    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(c);
+    document.head.appendChild(s);
+  }
   componentDidMount() {
+    this._onResize = () => { const wide = window.innerWidth >= 1700; if (wide !== this.state.wide) this.setState({ wide }); };
+    window.addEventListener('resize', this._onResize); this._onResize();
+    this.loadAdsense();
     this.fetchRemote();
     try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
@@ -1041,7 +1086,7 @@ class Component extends DCLogic {
     const check = () => { const narrow = el.clientWidth < 860; if (narrow !== this.state.narrow) this.setState({ narrow }); };
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
-  componentWillUnmount() { if (this._pairRO) this._pairRO.disconnect(); }
+  componentWillUnmount() { if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
   async sendContact() {
     const c = this.state.contact || {};
     if (!(c.body || '').trim()) { this.setState({ contactError: '내용을 입력해 주세요.' }); return; }
@@ -1187,6 +1232,19 @@ class Component extends DCLogic {
       ...contactVals,
       loginOpen: !!this.state.loginOpen,
       stopProp: e => e.stopPropagation(),
+      ...(() => {
+        const pub = /(^|\.)mapleauction\.kr$/.test(location.hostname);
+        const client = this.adClientId();
+        const slotTop = (this.props.adSlotTop || '').trim(), slotSide = (this.props.adSlotSide || '').trim();
+        const real = pub && !!client && !admin;
+        const mock = !pub;
+        const wide = !!this.state.wide;
+        return {
+          adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
+          adRealTop: real && !!slotTop, adMockTop: mock,
+          adRealSide: real && !!slotSide && wide, adMockSide: mock && wide,
+        };
+      })(),
       ...this.statsVals(isStats),
       openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
       closeLogin: () => this.setState({ loginOpen: false }),
