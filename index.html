@@ -164,8 +164,17 @@ input{font-family:inherit;}
 </style>
 </helmet>
 <div style="background:oklch(0.3 0.09 255);color:#fff;">
-  <div style="max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
-    <image-slot id="banner-left" shape="rect" fit="width" placeholder="배너 이미지" compact="" style="display:block;width:100%;height:100%;min-height:140px;"></image-slot>
+  <div style="position:relative;max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(250px,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
+    <div style="min-height:140px;min-width:250px;display:flex;">
+      <sc-if value="{{ sundayHide }}" hint-placeholder-val="{{ true }}">
+        <image-slot id="banner-left" shape="rect" fit="width" placeholder="배너 이미지" compact="" style="display:block;width:100%;height:100%;min-height:140px;"></image-slot>
+      </sc-if>
+    </div>
+    <sc-if value="{{ sundayShow }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ sundayTab.onClick }}" title="썬데이 메이플 보기" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};padding:0;border:none;background:transparent;cursor:pointer;" style-hover="opacity:0.92;">
+        <img src="{{ sunday.img }}" alt="이번 주 썬데이 메이플" style="display:block;width:100%;height:100%;object-fit:contain;object-position:left center;">
+      </button>
+    </sc-if>
     <div style="display:flex;align-items:center;gap:16px;padding:44px 0;">
       <image-slot id="banner-logo" shape="rounded" radius="12" fit="contain" placeholder="+" compact="" style="width:clamp(48px,6vw,72px);height:clamp(48px,6vw,72px);flex:none;"></image-slot>
     <h1 style="margin:0;text-align:center;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;text-wrap:balance;">메이플 경매장 시세</h1>
@@ -250,14 +259,14 @@ input{font-family:inherit;}
 <sc-if value="{{ viewing }}" hint-placeholder-val="{{ true }}">
 <sc-if value="{{ adRealTop }}" hint-placeholder-val="{{ false }}">
   <div style="background:#f4f4f2;border-bottom:1px solid #e3e3e0;">
-    <div style="max-width:1320px;margin:0 auto;padding:10px 28px;box-sizing:border-box;">
+    <div style="max-width:1320px;margin:0 auto;padding:10px 28px 10px {{ adPadL }};box-sizing:border-box;">
       <ins class="adsbygoogle" ref="{{ adRef }}" data-ad-client="{{ adClient }}" data-ad-slot="{{ adSlotTop }}" data-ad-format="horizontal" data-full-width-responsive="true" style="display:block;width:100%;height:90px;"></ins>
     </div>
   </div>
 </sc-if>
 <sc-if value="{{ adMockTop }}" hint-placeholder-val="{{ false }}">
   <div style="background:#f4f4f2;border-bottom:1px solid #e3e3e0;">
-    <div style="max-width:1320px;margin:0 auto;padding:10px 28px;box-sizing:border-box;">
+    <div style="max-width:1320px;margin:0 auto;padding:10px 28px 10px {{ adPadL }};box-sizing:border-box;">
       <div style="height:90px;border:1.5px dashed #c9cac6;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:600;color:#9a9ca1;">광고 자리 · 가로형 728×90 (반응형) · 미리보기에서만 보여요</div>
     </div>
   </div>
@@ -277,6 +286,7 @@ input{font-family:inherit;}
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
     <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
+    <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ sundayTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">썬데이</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
       <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
@@ -374,6 +384,28 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </div>
 </sc-if>
 
+<sc-if value="{{ isSunday }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:760px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">썬데이 메이플</h1>
+    <span style="font-size:13px;color:#6b6d73;">이번 주 썬데이 메이플 혜택</span>
+  </div>
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 20px;background:oklch(0.94 0.035 255);">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="padding:4px 10px;border-radius:999px;background:{{ sunday.badgeBg }};color:#3a2a00;font-size:13px;font-weight:800;">{{ sunday.badge }}</span>
+        <strong style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">{{ sunday.dateLabel }}</strong>
+      </div>
+      <a href="{{ sunday.url }}" target="_blank" rel="noopener" style="font-size:13px;font-weight:700;color:oklch(0.4 0.17 255);text-decoration:none;" style-hover="text-decoration:underline;">공식 홈페이지에서 보기 →</a>
+    </div>
+    <div style="padding:18px;display:flex;justify-content:center;background:#fafaf8;">
+      <img src="{{ sunday.img }}" alt="썬데이 메이플 혜택" style="display:block;width:100%;max-width:620px;height:auto;border-radius:10px;">
+    </div>
+  </section>
+  <span style="text-align:center;font-size:12px;color:#9a9ca1;">이미지 출처: 메이플스토리 공식 홈페이지 · Data based on NEXON Open API</span>
+</div>
+</sc-if>
+
 <sc-if value="{{ isPop }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
@@ -423,23 +455,13 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         <h2 style="margin:0;font-size:17px;font-weight:700;">활동 계정 추이 · {{ popWeeks }}주</h2>
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.48 0.17 255);"></span>전체 {{ popLatest.tot }}</span>
-          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.7 0.15 65);"></span>그룹1 {{ popLatest.g1 }}</span>
-          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.6 0.1 195);"></span>그룹2 {{ popLatest.g2 }}</span>
-          <sc-if value="{{ popHasAct }}" hint-placeholder-val="{{ false }}">
-            <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.56 0.2 25);"></span>활동 {{ popLatest.act }}</span>
-          </sc-if>
         </div>
       </div>
       <div style="position:relative;width:100%;aspect-ratio:600/280;">
         <svg viewBox="0 0 600 280" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
           <path d="{{ popChart.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
           <path d="{{ popChart.totA }}" fill="oklch(0.48 0.17 255 / 0.12)"></path>
-          <path d="{{ popChart.g1A }}" fill="oklch(0.7 0.15 65 / 0.18)"></path>
-          <path d="{{ popChart.g2A }}" fill="oklch(0.6 0.1 195 / 0.2)"></path>
-          <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
-          <polyline points="{{ popChart.g1P }}" fill="none" stroke="oklch(0.7 0.15 65)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
-          <polyline points="{{ popChart.g2P }}" fill="none" stroke="oklch(0.6 0.1 195)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
-          <polyline points="{{ popChart.actP }}" fill="none" stroke="oklch(0.56 0.2 25)" stroke-width="2.5" stroke-dasharray="5 3" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+          <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
         </svg>
         <sc-for list="{{ popChart.grid }}" as="g" hint-placeholder-count="5">
           <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:11px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
@@ -1015,11 +1037,8 @@ class Component extends DCLogic {
     let table = [], bar = [], legend = [], total = '', chart = { grid: [], xl: [], totP: '', g1P: '', g2P: '', totA: '', g1A: '', g2A: '' }, latest = { tot: '', g1: '', g2: '' };
     if (B) {
       table = [
-        ...POP_W1.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w), act: act[B] ? act[B][w] : null })),
-        mk('그룹1 전체', sum(A, POP_W1), sum(B, POP_W1), { total: 1, bg: '#f7f7f5', act: sumAct(B, POP_W1) }),
-        ...POP_W2.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w), act: act[B] ? act[B][w] : null })),
-        mk('그룹2 전체', sum(A, POP_W2), sum(B, POP_W2), { total: 1, bg: '#f7f7f5', act: sumAct(B, POP_W2) }),
-        mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)', act: sumAct(B, POP_ALL) }),
+        ...POP_ALL.slice().sort((x, y) => by[B][y] - by[B][x]).map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
+        mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)' }),
       ];
       const tot = sum(B, POP_ALL) || 1;
       total = fmtN(sum(B, POP_ALL));
@@ -1137,6 +1156,7 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._onResize); this._onResize();
     this.loadAdsense();
     this.fetchRemote();
+    fetch('sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
     if (this.state.tab === '인구수') this.loadPop();
     try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
@@ -1320,13 +1340,16 @@ class Component extends DCLogic {
     const isStats = this.state.tab === '방문자' && admin;
     const isContact = this.state.tab === '문의';
     const isPop = this.state.tab === '인구수';
-    const tab = (isContact || isPop || this.state.tab === '방문자') ? REF : this.state.tab;
+    const isSunday = this.state.tab === '썬데이';
+    const tab = (isContact || isPop || isSunday || this.state.tab === '방문자') ? REF : this.state.tab;
     const data = all[tab];
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats && !isPop,
+      isContact, isData: !isContact && !isStats && !isPop && !isSunday,
+      isSunday,
+      sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isSunday ? 700 : 500, border: isSunday ? 'oklch(0.48 0.17 255)' : 'transparent' },
       contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isContact ? 700 : 500, border: isContact ? 'oklch(0.48 0.17 255)' : 'transparent' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
@@ -1446,7 +1469,25 @@ class Component extends DCLogic {
         const real = pub && !!client && !admin;
         const mock = !pub;
         const wide = !!this.state.wide;
+        const topAd = !isEditing && ((real && !!slotTop) || mock);
+        const sd = this.state.sundayData || (pub ? null : { start: '2026-10-18T00:00+09:00', url: 'https://maplestory.nexon.com/News/Event', test: true });
+        const kstDay = s => { const d = new Date(new Date(s).getTime() + 9 * 3600e3); return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
+        const nowK = new Date(Date.now() + 9 * 3600e3);
+        const today = Date.UTC(nowK.getUTCFullYear(), nowK.getUTCMonth(), nowK.getUTCDate());
+        const sun = sd ? kstDay(sd.start) : 0;
+        const inWindow = !!sd && today >= sun - 2 * 864e5 && today <= sun;
+        const show = !!sd && (sd.test || inWindow);
+        const sdD = sd ? new Date(sun) : null;
+        const sunday = sd ? {
+          img: sd.test ? 'sunday-test.png' : 'sunday.png?v=' + encodeURIComponent(sd.notice_id || sd.start),
+          url: sd.url || 'https://maplestory.nexon.com/News/Event',
+          dateLabel: sdD.getUTCFullYear() + '년 ' + (sdD.getUTCMonth() + 1) + '월 ' + sdD.getUTCDate() + '일(일)',
+          badge: inWindow || sd.test ? '이번 주' : '지난 썬데이', badgeBg: inWindow || sd.test ? 'oklch(0.8 0.15 85)' : '#e3e3e0',
+        } : { img: '', url: 'https://maplestory.nexon.com/News/Event', dateLabel: '아직 받아온 썬데이 메이플이 없어요', badge: '준비 중', badgeBg: '#e3e3e0' };
         return {
+          sunday, sundayShow: show, sundayHide: !show,
+          adPadL: show ? '282px' : '28px',
+          sundayImgH: topAd ? 'calc(100% + 95px)' : 'calc(100% - 16px)',
           adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
           adRealTop: real && !!slotTop, adMockTop: mock,
           adRealSide: real && !!slotSide && wide, adMockSide: mock && wide,
