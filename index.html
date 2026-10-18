@@ -23,7 +23,7 @@
 <div id="seo-static" style="max-width:960px;margin:0 auto;padding:24px;font-family:sans-serif;">
 <h1>메이플 경매장 시세</h1>
 <p>메이플스토리 경매장 주간 시세 (10/16 업데이트). 드메아이템, 깡통 30%, 여명·보스·칠흑 장신구, 보조무기, 에테르넬, 쿨뚝·크뎀장갑, 아케인, 앱솔랩스, 카루타, 캐시아이템, 자석펫, 기타아이템의 주간 시세와 등락폭, 26주 시세 그래프를 제공합니다.</p>
-<nav><ul><li>기타아이템 시세</li><li>자석펫 시세</li><li>캐시아이템 시세</li><li>드메아이템 시세</li><li>깡통30% 시세</li><li>여명장신구 시세</li><li>보스장신구 시세</li><li>칠흑장신구 시세</li><li>보조무기 시세</li><li>에테르넬 시세</li><li>쿨뚝크뎀장갑 시세</li><li>아케인 시세</li><li>앱솔랩스 시세</li><li>카루타 시세</li></ul></nav>
+<nav><ul><li>기타아이템 시세</li><li>자석펫 시세</li><li>캐시아이템 시세</li><li>드메아이템 시세</li><li>깡통30% 시세</li><li>여명장신구 시세</li><li>보스장신구 시세</li><li>칠흑장신구 시세</li><li>보조무기 시세</li><li>에테르넬 시세</li><li>쿨뚝크뎀장갑 시세</li><li>아케인 시세</li><li>앱솔랩스 시세</li><li>카루타 시세</li><li>월드별 인구수</li></ul></nav>
 <section><h2>기타아이템 시세 · 스카니아</h2>
 <ul><li>솔 에르다 조각 (만): 600 (▲11)</li><li>소형 재물 획득의 비약 (만): 400 (▼8)</li><li>소형 경험 축적의 비약 (만): 90 (▲12)</li><li>고농축 프리미엄 생명의 물 (만): 800 (▲104)</li><li>대형 보스 명예의 훈장 (만): 190 (▼180)</li><li>리스트레인트 링 4레벨 (억): 36.4 (▼2.9)</li><li>컨티뉴어스 링 4레벨 (억): 25.4 (▼1.5)</li><li>생명의 연마석 (억): 8.7 (▼0.5)</li><li>신념의 연마석 (억): 30.3 (▼2.7)</li></ul>
 </section>
@@ -280,6 +280,7 @@ input{font-family:inherit;}
       <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
     </sc-for>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
+    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
     <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
@@ -369,6 +370,110 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </sc-for>
     </section>
   </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPop }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수</h1>
+    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 실제 인구가 아닌 활동 계정 추정치예요</span>
+  </div>
+
+  <sc-if value="{{ popLoading }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:48px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">불러오는 중…</div>
+  </sc-if>
+  <sc-if value="{{ popSetup }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:20px 22px;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">인구수 데이터 테이블이 아직 없어요. Supabase에 population 테이블을 만들어 주세요.</div>
+  </sc-if>
+  <sc-if value="{{ popFail }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 18px;border-radius:10px;background:oklch(0.96 0.03 25);color:oklch(0.45 0.17 25);font-size:14px;font-weight:600;">인구수를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</div>
+  </sc-if>
+  <sc-if value="{{ popNone }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 집계된 주가 없어요. 첫 집계가 끝나면 여기에 나와요.</div>
+  </sc-if>
+
+  <sc-if value="{{ popHas }}" hint-placeholder-val="{{ false }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;">
+        <h2 style="margin:0;font-size:17px;font-weight:700;">월드별 비율 · {{ popB }}</h2>
+        <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">전체 {{ popTotal }}명</span>
+      </div>
+      <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;background:#f0f0ee;">
+        <sc-for list="{{ popBar }}" as="s" hint-placeholder-count="14">
+          <div title="{{ s.title }}" style="width:{{ s.w }};background:{{ s.color }};"></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px 16px;">
+        <sc-for list="{{ popLegend }}" as="l" hint-placeholder-count="14">
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#3a3c41;">
+            <span style="width:10px;height:10px;border-radius:2px;background:{{ l.color }};flex:none;"></span>
+            <strong style="font-weight:700;">{{ l.label }}</strong>
+            <span style="color:#6b6d73;font-variant-numeric:tabular-nums;">{{ l.text }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+        <h2 style="margin:0;font-size:17px;font-weight:700;">인구수 추이 · {{ popWeeks }}주</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.48 0.17 255);"></span>전체 {{ popLatest.tot }}</span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.7 0.15 65);"></span>그룹1 {{ popLatest.g1 }}</span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.6 0.1 195);"></span>그룹2 {{ popLatest.g2 }}</span>
+        </div>
+      </div>
+      <div style="position:relative;width:100%;aspect-ratio:600/280;">
+        <svg viewBox="0 0 600 280" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+          <path d="{{ popChart.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+          <path d="{{ popChart.totA }}" fill="oklch(0.48 0.17 255 / 0.12)"></path>
+          <path d="{{ popChart.g1A }}" fill="oklch(0.7 0.15 65 / 0.18)"></path>
+          <path d="{{ popChart.g2A }}" fill="oklch(0.6 0.1 195 / 0.2)"></path>
+          <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+          <polyline points="{{ popChart.g1P }}" fill="none" stroke="oklch(0.7 0.15 65)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+          <polyline points="{{ popChart.g2P }}" fill="none" stroke="oklch(0.6 0.1 195)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+        </svg>
+        <sc-for list="{{ popChart.grid }}" as="g" hint-placeholder-count="5">
+          <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:11px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
+        </sc-for>
+      </div>
+      <div style="position:relative;height:16px;">
+        <sc-for list="{{ popChart.xl }}" as="x" hint-placeholder-count="6">
+          <span style="position:absolute;left:{{ x.left }};transform:translateX(-50%);font-size:12px;color:#6b6d73;white-space:nowrap;">{{ x.label }}</span>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#f7f7f5;border-bottom:1px solid #ececea;">
+        <h2 style="margin:0 auto 0 0;font-size:17px;font-weight:700;">주간 비교</h2>
+        <select value="{{ popA }}" onChange="{{ onPopA }}" style="padding:7px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
+          <sc-for list="{{ popOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+        </select>
+        <span style="color:#9a9ca1;">→</span>
+        <select value="{{ popB }}" onChange="{{ onPopB }}" style="padding:7px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
+          <sc-for list="{{ popOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+        </select>
+      </div>
+      <div style="overflow-x:auto;">
+        <div style="min-width:520px;">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
+            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span>
+          </div>
+          <sc-for list="{{ popTable }}" as="r" hint-placeholder-count="17">
+            <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
+              <span style="display:flex;align-items:center;gap:8px;font-weight:{{ r.weight }};min-width:0;"><span style="width:10px;height:10px;border-radius:2px;background:{{ r.dot }};flex:none;"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.label }}</span></span>
+              <span style="text-align:right;color:#6b6d73;">{{ r.a }}</span>
+              <span style="text-align:right;font-weight:{{ r.weight }};">{{ r.b }}</span>
+              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.diff }}</span>
+              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.pct }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-if>
 </div>
 </sc-if>
 
@@ -668,6 +773,10 @@ const KEY = 'maple-auction-prices-v1';
 const SB_URL = 'https://qjldhyiwffeqhzmnppta.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqbGRoeWl3ZmZlcWh6bW5wcHRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNDQ1NjAsImV4cCI6MjEwNzgyMDU2MH0.ELK7nqXHF0iwPkty6B8tROt2lX9Obkx_liKBinVpCGU';
 const SB_SESSION = 'maple-sb-session';
+const POP_W1 = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바'];
+const POP_W2 = ['에오스', '헬리오스'];
+const POP_ALL = POP_W1.concat(POP_W2);
+const POP_COLORS = ['oklch(0.55 0.17 255)', 'oklch(0.6 0.19 25)', 'oklch(0.72 0.15 75)', 'oklch(0.62 0.13 200)', 'oklch(0.6 0.12 150)', 'oklch(0.58 0.15 300)', 'oklch(0.7 0.12 100)', 'oklch(0.55 0.1 50)', 'oklch(0.5 0.18 10)', 'oklch(0.7 0.1 230)', 'oklch(0.55 0.08 180)', 'oklch(0.65 0.06 280)', 'oklch(0.5 0.15 280)', 'oklch(0.75 0.14 60)'];
 const DM_NAMES = [['하프 이어링', '하프'], ['미카엘라의 새 안경', '미카'], ['혼테일의 목걸이', '혼테일'], ['베어스 그린 펜던트', '베어스'], ['레드 매지션 마이스터 심볼', '매지션'], ['레드 워리어 마이스터 심볼', '워리어'], ['마이스터링', '마이링'], ['마이스터 올마이티링', '올마링']];
 const dmGroup = (group, prefix, rows) => rows.map((values, i) => ({ id: prefix === 'i' ? 'i' + (i + 1) : prefix + (i + 1), group, name: DM_NAMES[i][0], short: DM_NAMES[i][1], values }));
 const DEFAULT = {
@@ -862,6 +971,86 @@ class Component extends DCLogic {
     try { if (document.referrer) { const u = new URL(document.referrer); if (u.hostname !== location.hostname) ref = u.hostname.replace(/^www\./, ''); } } catch (e) {}
     fetch(SB_URL + '/rest/v1/visits', { method: 'POST', keepalive: true, headers: { apikey: SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ vid, kind, tab: tab || '', ref: kind === 'visit' ? ref : '' }) }).catch(() => {});
   }
+  async loadPop() {
+    this.setState({ popLoading: true, popErr: '' });
+    try {
+      let rows = [], from = 0;
+      while (true) {
+        const r = await fetch(SB_URL + '/rest/v1/population?select=date,world,count&order=date.asc', { headers: { apikey: SB_KEY, Range: from + '-' + (from + 999), 'Range-Unit': 'items' } });
+        if (!r.ok) throw new Error(r.status === 404 ? 'setup' : 'fail');
+        const part = await r.json(); rows = rows.concat(part);
+        if (part.length < 1000) break;
+        from += 1000;
+      }
+      this.setState({ pop: rows, popLoading: false });
+    } catch (e) { this.setState({ pop: [], popLoading: false, popErr: e.message === 'setup' ? 'setup' : 'fail' }); }
+  }
+  popVals(isPop, up, down) {
+    const rows = this.state.pop || [];
+    const by = {};
+    rows.forEach(r => { (by[r.date] = by[r.date] || {})[r.world] = r.count; });
+    const dates = Object.keys(by).filter(d => POP_ALL.every(w => by[d][w] != null)).sort();
+    const n = dates.length;
+    const fmtN = v => v == null ? '–' : Number(v).toLocaleString('ko-KR');
+    const sum = (d, ws) => ws.reduce((a, w) => a + (by[d][w] || 0), 0);
+    const B = dates.includes(this.state.popB) ? this.state.popB : dates[n - 1];
+    const A = dates.includes(this.state.popA) ? this.state.popA : (dates[n - 2] || dates[n - 1]);
+    const colorOf = w => POP_COLORS[POP_ALL.indexOf(w)];
+    const short = d => d ? d.slice(2).replace(/-/g, '.') : '';
+    const mk = (label, a, b, o) => {
+      o = o || {};
+      const d = a != null && b != null ? b - a : null;
+      const pct = d != null && a ? d / a * 100 : null;
+      return { label, a: fmtN(a), b: fmtN(b), diff: d == null ? '–' : (d > 0 ? '+' : '') + fmtN(d), pct: pct == null ? '–' : (pct > 0 ? '+' : '') + pct.toFixed(2) + '%',
+        dColor: d > 0 ? up : d < 0 ? down : '#6b6d73', dot: o.color || 'transparent', weight: o.total ? 800 : 600, bg: o.bg || '#fff' };
+    };
+    let table = [], bar = [], legend = [], total = '', chart = { grid: [], xl: [], totP: '', g1P: '', g2P: '', totA: '', g1A: '', g2A: '' }, latest = { tot: '', g1: '', g2: '' };
+    if (B) {
+      table = [
+        ...POP_W1.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
+        mk('그룹1 전체', sum(A, POP_W1), sum(B, POP_W1), { total: 1, bg: '#f7f7f5' }),
+        ...POP_W2.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
+        mk('그룹2 전체', sum(A, POP_W2), sum(B, POP_W2), { total: 1, bg: '#f7f7f5' }),
+        mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)' }),
+      ];
+      const tot = sum(B, POP_ALL) || 1;
+      total = fmtN(sum(B, POP_ALL));
+      const sorted = POP_ALL.slice().sort((x, y) => by[B][y] - by[B][x]);
+      bar = sorted.filter(w => by[B][w] > 0).map(w => ({ w: (by[B][w] / tot * 100).toFixed(3) + '%', color: colorOf(w), title: w + ' ' + fmtN(by[B][w]) + '명' }));
+      legend = sorted.map(w => ({ label: w, color: colorOf(w), text: (by[B][w] / tot * 100).toFixed(1) + '% · ' + fmtN(by[B][w]) + '명' }));
+      const sT = dates.map(d => sum(d, POP_ALL)), s1 = dates.map(d => sum(d, POP_W1)), s2 = dates.map(d => sum(d, POP_W2));
+      const maxV = Math.max(1, ...sT);
+      const raw = maxV / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => s >= raw);
+      const top = Math.ceil(maxV * 1.05 / step) * step;
+      const X0 = 70, X1 = 590, Y0 = 10, Y1 = 270;
+      const xAt = i => n === 1 ? (X0 + X1) / 2 : X0 + (X1 - X0) * i / (n - 1);
+      const yAt = v => Y1 - v / top * (Y1 - Y0);
+      const line = s => s.map((v, i) => xAt(i).toFixed(1) + ',' + yAt(v).toFixed(1)).join(' ');
+      const area = s => 'M' + xAt(0).toFixed(1) + ' ' + Y1 + ' L' + s.map((v, i) => xAt(i).toFixed(1) + ' ' + yAt(v).toFixed(1)).join(' L') + ' L' + xAt(n - 1).toFixed(1) + ' ' + Y1 + ' Z';
+      const pct = (v, t) => (v / t * 100).toFixed(2) + '%';
+      const ticks = []; for (let v = 0; v <= top + 1e-9; v += step) ticks.push(v);
+      const xl = [];
+      dates.forEach((d, i) => { const [y, m] = d.split('-').map(Number); const prev = dates[i - 1]; if (!prev || prev.slice(0, 7) !== d.slice(0, 7)) { if (m === 1) xl.push({ left: pct(xAt(i), 600), label: y + '년' }); else if (m % 3 === 1) xl.push({ left: pct(xAt(i), 600), label: m + '월' }); } });
+      chart = {
+        grid: ticks.map(v => ({ top: pct(yAt(v), 280), label: fmtN(v), w: pct(X0 - 8, 600) })),
+        gridPath: ticks.map(v => 'M' + X0 + ' ' + yAt(v).toFixed(1) + 'H' + X1).join(' '),
+        xl, totP: line(sT), g1P: line(s1), g2P: line(s2), totA: area(sT), g1A: area(s1), g2A: area(s2),
+      };
+      latest = { tot: fmtN(sT[n - 1]), g1: fmtN(s1[n - 1]), g2: fmtN(s2[n - 1]), date: dates[n - 1] };
+    }
+    const opts = dates.slice().reverse().map(d => ({ value: d, label: d }));
+    return {
+      isPop,
+      popTab: { onClick: () => this.switchTab('인구수'), color: isPop ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isPop ? 700 : 500, border: isPop ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      popHas: n > 0, popNone: n === 0 && !this.state.popLoading && !this.state.popErr,
+      popLoading: !!this.state.popLoading, popSetup: this.state.popErr === 'setup', popFail: this.state.popErr === 'fail',
+      popA: A || '', popB: B || '', popAShort: short(A), popBShort: short(B), popOpts: opts,
+      onPopA: e => this.setState({ popA: e.target.value }), onPopB: e => this.setState({ popB: e.target.value }),
+      popTotal: total, popBar: bar, popLegend: legend, popTable: table, popChart: chart, popLatest: latest,
+      popWeeks: n,
+    };
+  }
   async loadStats() {
     const token = await this.ensureToken();
     if (!token) { this.setState({ statsErr: 'fail' }); return; }
@@ -1029,6 +1218,7 @@ class Component extends DCLogic {
     this.setState({ tab, selected: null });
     window.scrollTo(0, 0);
     if (tab === '방문자') this.loadStats();
+    if (tab === '인구수' && !this.state.pop) this.loadPop();
     else if (tab !== this.state.tab) this.logVisit('tab', tab);
   }
   pasteGrid(e, tab, r0, c0) {
@@ -1114,13 +1304,14 @@ class Component extends DCLogic {
     const { all, editing, admin, trash } = this.state;
     const isStats = this.state.tab === '방문자' && admin;
     const isContact = this.state.tab === '문의';
-    const tab = (isContact || this.state.tab === '방문자') ? REF : this.state.tab;
+    const isPop = this.state.tab === '인구수';
+    const tab = (isContact || isPop || this.state.tab === '방문자') ? REF : this.state.tab;
     const data = all[tab];
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats,
+      isContact, isData: !isContact && !isStats && !isPop,
       contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isContact ? 700 : 500, border: isContact ? 'oklch(0.48 0.17 255)' : 'transparent' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
@@ -1247,6 +1438,7 @@ class Component extends DCLogic {
         };
       })(),
       ...this.statsVals(isStats),
+      ...this.popVals(isPop, upColor, downColor),
       openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
       closeLogin: () => this.setState({ loginOpen: false }),
       loginEmail: this.state.loginEmail, loginPw: this.state.loginPw,
