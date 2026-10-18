@@ -377,7 +377,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수</h1>
-    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 실제 인구가 아닌 활동 계정 추정치예요</span>
+    <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 유니온 랭킹 기준 · 매주 목요일 집계 · 활동 = 최근 7일 접속 또는 유니온·아티팩트·본캐 성장 계정</span>
   </div>
 
   <sc-if value="{{ popLoading }}" hint-placeholder-val="{{ false }}">
@@ -397,7 +397,12 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">월드별 비율 · {{ popB }}</h2>
-        <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">전체 {{ popTotal }}명</span>
+        <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
+          <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">전체 {{ popTotal }}명</span>
+          <sc-if value="{{ popActShow }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.18 25);font-variant-numeric:tabular-nums;">활동 {{ popActTotal }}명</span>
+          </sc-if>
+        </div>
       </div>
       <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;background:#f0f0ee;">
         <sc-for list="{{ popBar }}" as="s" hint-placeholder-count="14">
@@ -422,6 +427,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.48 0.17 255);"></span>전체 {{ popLatest.tot }}</span>
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.7 0.15 65);"></span>그룹1 {{ popLatest.g1 }}</span>
           <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.6 0.1 195);"></span>그룹2 {{ popLatest.g2 }}</span>
+          <sc-if value="{{ popHasAct }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:3px;background:oklch(0.56 0.2 25);"></span>활동 {{ popLatest.act }}</span>
+          </sc-if>
         </div>
       </div>
       <div style="position:relative;width:100%;aspect-ratio:600/280;">
@@ -433,6 +441,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
           <polyline points="{{ popChart.g1P }}" fill="none" stroke="oklch(0.7 0.15 65)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
           <polyline points="{{ popChart.g2P }}" fill="none" stroke="oklch(0.6 0.1 195)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+          <polyline points="{{ popChart.actP }}" fill="none" stroke="oklch(0.56 0.2 25)" stroke-width="2.5" stroke-dasharray="5 3" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
         </svg>
         <sc-for list="{{ popChart.grid }}" as="g" hint-placeholder-count="5">
           <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:11px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
@@ -457,17 +466,19 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </select>
       </div>
       <div style="overflow-x:auto;">
-        <div style="min-width:520px;">
-          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
-            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span>
+        <div style="min-width:700px;">
+          <div style="display:grid;grid-template-columns:minmax(0,1.2fr) repeat(6,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
+            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span><span style="text-align:right;">활동</span><span style="text-align:right;">활동률</span>
           </div>
           <sc-for list="{{ popTable }}" as="r" hint-placeholder-count="17">
-            <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
+            <div style="display:grid;grid-template-columns:minmax(0,1.2fr) repeat(6,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
               <span style="display:flex;align-items:center;gap:8px;font-weight:{{ r.weight }};min-width:0;"><span style="width:10px;height:10px;border-radius:2px;background:{{ r.dot }};flex:none;"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.label }}</span></span>
               <span style="text-align:right;color:#6b6d73;">{{ r.a }}</span>
               <span style="text-align:right;font-weight:{{ r.weight }};">{{ r.b }}</span>
               <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.diff }}</span>
               <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.pct }}</span>
+              <span style="text-align:right;font-weight:{{ r.weight }};color:oklch(0.5 0.18 25);">{{ r.act }}</span>
+              <span style="text-align:right;color:#6b6d73;">{{ r.rate }}</span>
             </div>
           </sc-for>
         </div>
@@ -976,7 +987,7 @@ class Component extends DCLogic {
     try {
       let rows = [], from = 0;
       while (true) {
-        const r = await fetch(SB_URL + '/rest/v1/population?select=date,world,count&order=date.asc', { headers: { apikey: SB_KEY, Range: from + '-' + (from + 999), 'Range-Unit': 'items' } });
+        const r = await fetch(SB_URL + '/rest/v1/population?select=date,world,count,active&order=date.asc', { headers: { apikey: SB_KEY, Range: from + '-' + (from + 999), 'Range-Unit': 'items' } });
         if (!r.ok) throw new Error(r.status === 404 ? 'setup' : 'fail');
         const part = await r.json(); rows = rows.concat(part);
         if (part.length < 1000) break;
@@ -987,8 +998,9 @@ class Component extends DCLogic {
   }
   popVals(isPop, up, down) {
     const rows = this.state.pop || [];
-    const by = {};
-    rows.forEach(r => { (by[r.date] = by[r.date] || {})[r.world] = r.count; });
+    const by = {}, act = {};
+    rows.forEach(r => { (by[r.date] = by[r.date] || {})[r.world] = r.count; if (r.active != null) (act[r.date] = act[r.date] || {})[r.world] = r.active; });
+    const sumAct = (d, ws) => act[d] && ws.every(w => act[d][w] != null) ? ws.reduce((a, w) => a + act[d][w], 0) : null;
     const dates = Object.keys(by).filter(d => POP_ALL.every(w => by[d][w] != null)).sort();
     const n = dates.length;
     const fmtN = v => v == null ? '–' : Number(v).toLocaleString('ko-KR');
@@ -1001,24 +1013,25 @@ class Component extends DCLogic {
       o = o || {};
       const d = a != null && b != null ? b - a : null;
       const pct = d != null && a ? d / a * 100 : null;
-      return { label, a: fmtN(a), b: fmtN(b), diff: d == null ? '–' : (d > 0 ? '+' : '') + fmtN(d), pct: pct == null ? '–' : (pct > 0 ? '+' : '') + pct.toFixed(2) + '%',
+      const ac = o.act;
+      return { act: fmtN(ac), rate: ac != null && b ? (ac / b * 100).toFixed(1) + '%' : '–', label, a: fmtN(a), b: fmtN(b), diff: d == null ? '–' : (d > 0 ? '+' : '') + fmtN(d), pct: pct == null ? '–' : (pct > 0 ? '+' : '') + pct.toFixed(2) + '%',
         dColor: d > 0 ? up : d < 0 ? down : '#6b6d73', dot: o.color || 'transparent', weight: o.total ? 800 : 600, bg: o.bg || '#fff' };
     };
     let table = [], bar = [], legend = [], total = '', chart = { grid: [], xl: [], totP: '', g1P: '', g2P: '', totA: '', g1A: '', g2A: '' }, latest = { tot: '', g1: '', g2: '' };
     if (B) {
       table = [
-        ...POP_W1.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
-        mk('그룹1 전체', sum(A, POP_W1), sum(B, POP_W1), { total: 1, bg: '#f7f7f5' }),
-        ...POP_W2.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
-        mk('그룹2 전체', sum(A, POP_W2), sum(B, POP_W2), { total: 1, bg: '#f7f7f5' }),
-        mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)' }),
+        ...POP_W1.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w), act: act[B] ? act[B][w] : null })),
+        mk('그룹1 전체', sum(A, POP_W1), sum(B, POP_W1), { total: 1, bg: '#f7f7f5', act: sumAct(B, POP_W1) }),
+        ...POP_W2.map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w), act: act[B] ? act[B][w] : null })),
+        mk('그룹2 전체', sum(A, POP_W2), sum(B, POP_W2), { total: 1, bg: '#f7f7f5', act: sumAct(B, POP_W2) }),
+        mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)', act: sumAct(B, POP_ALL) }),
       ];
       const tot = sum(B, POP_ALL) || 1;
       total = fmtN(sum(B, POP_ALL));
       const sorted = POP_ALL.slice().sort((x, y) => by[B][y] - by[B][x]);
       bar = sorted.filter(w => by[B][w] > 0).map(w => ({ w: (by[B][w] / tot * 100).toFixed(3) + '%', color: colorOf(w), title: w + ' ' + fmtN(by[B][w]) + '명' }));
       legend = sorted.map(w => ({ label: w, color: colorOf(w), text: (by[B][w] / tot * 100).toFixed(1) + '% · ' + fmtN(by[B][w]) + '명' }));
-      const sT = dates.map(d => sum(d, POP_ALL)), s1 = dates.map(d => sum(d, POP_W1)), s2 = dates.map(d => sum(d, POP_W2));
+      const sT = dates.map(d => sum(d, POP_ALL)), s1 = dates.map(d => sum(d, POP_W1)), s2 = dates.map(d => sum(d, POP_W2)), sA = dates.map(d => sumAct(d, POP_ALL));
       const maxV = Math.max(1, ...sT);
       const raw = maxV / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
       const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => s >= raw);
@@ -1036,8 +1049,10 @@ class Component extends DCLogic {
         grid: ticks.map(v => ({ top: pct(yAt(v), 280), label: fmtN(v), w: pct(X0 - 8, 600) })),
         gridPath: ticks.map(v => 'M' + X0 + ' ' + yAt(v).toFixed(1) + 'H' + X1).join(' '),
         xl, totP: line(sT), g1P: line(s1), g2P: line(s2), totA: area(sT), g1A: area(s1), g2A: area(s2),
+        actP: sA.map((v, i) => v == null ? null : xAt(i).toFixed(1) + ',' + yAt(v).toFixed(1)).filter(Boolean).join(' '),
       };
-      latest = { tot: fmtN(sT[n - 1]), g1: fmtN(s1[n - 1]), g2: fmtN(s2[n - 1]), date: dates[n - 1] };
+      const lastAct = sA.filter(v => v != null).slice(-1)[0];
+      latest = { tot: fmtN(sT[n - 1]), g1: fmtN(s1[n - 1]), g2: fmtN(s2[n - 1]), act: lastAct == null ? '' : fmtN(lastAct), date: dates[n - 1] };
     }
     const opts = dates.slice().reverse().map(d => ({ value: d, label: d }));
     return {
@@ -1049,6 +1064,9 @@ class Component extends DCLogic {
       onPopA: e => this.setState({ popA: e.target.value }), onPopB: e => this.setState({ popB: e.target.value }),
       popTotal: total, popBar: bar, popLegend: legend, popTable: table, popChart: chart, popLatest: latest,
       popWeeks: n,
+      popHasAct: !!latest.act,
+      popActTotal: B ? fmtN(sumAct(B, POP_ALL)) : '',
+      popActShow: B ? sumAct(B, POP_ALL) != null : false,
     };
   }
   async loadStats() {

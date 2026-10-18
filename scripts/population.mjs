@@ -6,7 +6,8 @@ const API = 'https://open.api.nexon.com/maplestory/v1/ranking/union';
 const SB = process.env.SUPABASE_URL || 'https://qjldhyiwffeqhzmnppta.supabase.co';
 const NX = process.env.NEXON_API_KEY;
 const SK = process.env.SUPABASE_SERVICE_KEY;
-const BUDGET = Number(process.env.DAILY_BUDGET || 900);
+const BUDGET = Number(process.env.DAILY_BUDGET || 200000);
+const SLEEP = Number(process.env.SLEEP_MS || 30);
 const START = process.env.START_DATE || '2023-12-21';
 const WORLDS = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바', '에오스', '헬리오스'];
 
@@ -21,7 +22,7 @@ async function pageLen(date, world, p) {
     if (calls >= BUDGET) throw new Budget();
     calls++;
     const r = await fetch(`${API}?date=${date}&world_name=${encodeURIComponent(world)}&page=${p}`, { headers: { 'x-nxopen-api-key': NX } });
-    await sleep(220);
+    await sleep(SLEEP);
     if (r.ok) { const j = await r.json(); return (j.ranking || []).length; }
     const body = await r.text();
     if (r.status === 429 || r.status >= 500) { await sleep(1500 * (t + 1)); continue; }
