@@ -5,6 +5,11 @@ on:
     - cron: '0 8 * * 5'
     - cron: '0 2 * * 6'
   workflow_dispatch:
+    inputs:
+      test:
+        description: '테스트 모드 (썬데이가 없으면 다른 이벤트로 테스트)'
+        type: boolean
+        default: false
 permissions:
   contents: write
 jobs:
@@ -18,8 +23,9 @@ jobs:
       - run: node scripts/sunday.mjs
         env:
           NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+          TEST: ${{ inputs.test && '1' || '' }}
       - run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add sunday.png sunday.json || true
+          git add sunday.png sunday.json test || true
           git diff --cached --quiet || (git commit -m "썬데이 메이플 업데이트" && git push)
