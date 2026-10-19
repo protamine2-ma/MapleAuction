@@ -1740,7 +1740,7 @@ class Component extends DCLogic {
         br /= Math.max(1, bn);
         const dark = D.bright ? br < D.bright * 0.85 : true;
         D.dbg = (D.bright ? Math.round(br / D.bright * 100) : 100) + '% · 숫자 ' + (yel >= 5 ? '있음' : '없음');
-        const cd = yel >= 5 && dark;
+        const cd = yel >= 5 && (dark || yel >= 15);
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
@@ -1756,7 +1756,7 @@ class Component extends DCLogic {
     });
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
-  skillMode(s) { return s.preset === 'yein67' || this.skillIcon(s) === 'qs-janus.png' ? 'count' : 'cd'; }
+  skillMode(s) { return 'cd'; }
   findIcon(v, W, H) {
     if (!this._tpl) {
       if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'skill-yein.png'; }
