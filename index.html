@@ -1612,6 +1612,7 @@ class Component extends DCLogic {
     });
   }
   checkBuffsTimer(now) {
+    if (!this._DIG) this.readCd(new Uint8ClampedArray(4), 1, 1);
     const v = this._video, list = (this.hunt().buffs || []).filter(b => String(b.preset).startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
     if (now - (this._btChk || 0) < 1000) return; this._btChk = now;
     if (now - (this._fadeAt || 0) < 3000) return;
@@ -1630,7 +1631,15 @@ class Component extends DCLogic {
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
       const has = owner.includes(b.preset);
-      if (has) { if (!S.end && now - (S.doneAt || 0) > 60000) { S.end = now + 599000; S.alerted = false; } S.lastSeen = now; }
+      if (has) { if (!S.end && now - (S.doneAt || 0) > 60000) { S.end = now + 599000; S.alerted = false; S.lock = false; S.h = []; } S.lastSeen = now;
+        if (S.end && !S.lock) {
+          const [sx, sy] = slots[owner.indexOf(b.preset)], bw = Math.min(36, rw - sx), bh = Math.min(32, rh - sy), a = new Uint8ClampedArray(bw * bh * 4);
+          for (let y = 0; y < bh; y++) for (let xx = 0; xx < bw; xx++) { const i = ((sy + y) * rw + sx + xx) * 4, o = (y * bw + xx) * 4; a[o] = d[i]; a[o + 1] = d[i + 1]; a[o + 2] = d[i + 2]; }
+          const sec = this.readTime(a, bw, bh);
+          if (sec != null && sec < 600) { const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
+            if (Hh.length >= 3) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
+              if (ok) { S.lock = true; S.end = now + sec * 1000 + 500; S.alerted = false; } } }
+        } }
       else if (S.end && now - (S.lastSeen || 0) > 15000 && S.end - now > 20000) { S.end = 0; }
     });
   }
@@ -1795,9 +1804,15 @@ class Component extends DCLogic {
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
-          const N = this.readCd(a, bw, bh);
-          if (N != null && cd) { D.ocr = N; D.ocrAt = now; if (this._run[s.id]) this._run[s.id] = now + N * 1000 + 500; }
-          else if (!cd && this._run[s.id] && D.ocrAt && now - D.ocrAt < 3000 && this._run[s.id] - now > 2000) { this._run[s.id] = now; }
+          const N = this.readCd(a, bw, bh), extra = s.preset.startsWith('janus') ? 60 : 0;
+          if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
+          if (N != null && cd && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
+            D.ocrLast = now; const H = (D.ocrH = (D.ocrH || []).concat([[now, N]]).slice(-4));
+            if (H.length >= 3) {
+              let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
+              if (ok) { D.ocrLock = true; this._run[s.id] = now + (N + extra) * 1000 + 500; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; }
+            }
+          }
         }
         if (this.skillIcon(s) === 'qs-janus.png') {
           const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
@@ -1822,8 +1837,28 @@ class Component extends DCLogic {
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
+  readTime(a, bw, bh) {
+    const isY = i => a[i] > 200 && a[i + 1] > 180 && a[i + 2] < 90;
+    const cols = []; for (let X = 0; X < bw; X++) { let k = 0; for (let y = 0; y < bh; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
+    const runs = []; let s = -1;
+    for (let X = 0; X <= bw; X++) { const on = X < bw && cols[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
+    const info = runs.map(r => { let y0 = bh, y1 = 0, n = 0; for (let y = 0; y < bh; y++) for (let X = r[0]; X <= r[1]; X++) if (isY((y * bw + X) * 4)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); n++; } return { r, y0, y1, n, w: r[1] - r[0] + 1, h: y1 - y0 + 1 }; }).filter(g => g.n >= 2);
+    if (info.length < 3) return null;
+    const H = Math.max(...info.map(g => g.h));
+    let str = '';
+    for (const g of info) {
+      if (g.h < H * 0.75) { str += ':'; continue; }
+      if (g.w <= Math.max(3, H * 0.34)) { str += '1'; continue; }
+      let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
+      const DIG = this._DIG || {}; let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
+      if (bk == null || bd > 16) return null; str += bk;
+    }
+    const mm = str.match(/^(\d):?(\d\d)$/); if (!mm) return null;
+    return Number(mm[1]) * 60 + Number(mm[2]);
+  }
   readCd(a, bw, bh) {
     const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","6":"011111110000100000100000111110111110100001100001110011011110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
+    this._DIG = DIG;
     const isY = i => a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80;
     const y0 = Math.floor(bh * 0.12), y1 = Math.ceil(bh * 0.78), cols = [];
     for (let X = 0; X < bw; X++) { let k = 0; for (let y = y0; y < y1; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
