@@ -1816,6 +1816,14 @@ class Component extends DCLogic {
             }
           }
         }
+        if (s.preset === 'yein67') {
+          const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
+          const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
+          const lim = Math.max(4, Math.round(mk.length * 0.025));
+          if (!D.ymk) D.ymk = mk;
+          else if (dif(mk, D.ymk) >= lim) { if (D.yc && dif(mk, D.yc) <= 2) { if (++D.yn >= 3) { D.ymk = mk; D.yc = null; if (now - (D.usedAt || 0) > 3000) used = true; } } else { D.yc = mk; D.yn = 1; } }
+          else D.yc = null;
+        }
         if (this.skillIcon(s) === 'qs-janus.png') {
           const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
           const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
