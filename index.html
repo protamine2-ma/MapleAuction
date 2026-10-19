@@ -1468,7 +1468,7 @@ class Component extends DCLogic {
     return null;
   }
   matchIcon(v, W, H, T) {
-    const rx = Math.floor(W * 0.5), ry = Math.floor(H * 0.7), rw = W - rx, rh = H - ry;
+    const rx = Math.floor(W * 0.45), ry = H - Math.max(80, Math.round(H * 0.105)), rw = W - rx, rh = H - ry;
     if (!this._qsImg || this._qsAt !== this._tickNow) {
       const c = this._fc || (this._fc = document.createElement('canvas')); c.width = rw; c.height = rh;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
