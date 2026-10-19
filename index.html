@@ -201,8 +201,8 @@ input{font-family:inherit;}
       <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) 64px minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0ee;">
         <button onClick="{{ s.toggleRun }}" title="스킬 사용 직후에 켜세요" style="width:44px;height:24px;border-radius:999px;border:none;padding:2px;background:{{ s.swBg }};display:flex;justify-content:{{ s.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-          <sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ true }}">
-            <img src="skill-janus.png" alt="" style="width:26px;height:26px;border-radius:5px;flex:none;image-rendering:pixelated;">
+          <sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ s.icon }}" alt="" style="width:26px;height:26px;border-radius:5px;flex:none;image-rendering:pixelated;">
           </sc-if>
           <div style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;">
             <select value="{{ s.presetVal }}" onChange="{{ s.onPreset }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;background:#fff;cursor:pointer;">
@@ -239,17 +239,57 @@ input{font-family:inherit;}
           <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ runeSw.swBg }};display:flex;justify-content:{{ runeSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>룬 감지
         </button>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
-          <span>감지된 룬 색 픽셀</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ runePx }}</span>
+          <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">평소 보라색 픽셀 (기준)<button onClick="{{ resetRuneBase }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">기준 다시 잡기</button></span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ runeBase }}</span>
+          <span>새로 생긴 룬 색 픽셀</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ runePx }}</span>
           <span>감지 기준 (픽셀 이상)</span><input type="number" min="1" value="{{ runeMin }}" onChange="{{ onRuneMin }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>다시 알림 간격 (초)</span><input type="number" min="3" value="{{ runeEvery }}" onChange="{{ onRuneEvery }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">미니맵 영역은 해상도에 맞춰 자동으로 정해져요{{ runeRegion }}. 룬이 있는 동안 '룬 생성'을 다시 알려줘요. 공유할 때는 전체 화면이 아니라 메이플스토리 창을 고르세요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">미니맵의 흰 테두리를 찾아 자동으로 영역을 잡고, 맵을 옮겨 미니맵 크기가 바뀌어도 다시 찾아요. 룬이 있는 동안 '룬 생성'을 다시 알려줘요. 맵을 옮기면 룬이 없을 때 '기준 다시 잡기'를 눌러주세요. 공유할 때는 전체 화면이 아니라 메이플스토리 창을 고르세요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
-        <span style="font-size:12px;font-weight:600;color:#9a9ca1;">미니맵 미리보기 · 감지된 부분은 초록색으로 표시</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:13px;font-weight:700;color:{{ boxMsgColor }};">{{ boxMsg }}</span>
+          <sc-if value="{{ hasMinimapBox }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ resetMinimapBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">영역 초기화</button>
+          </sc-if>
+        </div>
+        <span style="font-size:12px;color:#9a9ca1;">노란 네모 안만 감지해요 · 감지된 부분은 초록색 · 위치가 틀리면 드래그로 직접 지정 (해상도별 저장)</span>
         <div style="min-height:160px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-          <canvas ref="{{ runeCvRef }}" style="display:{{ runeCvDisplay }};max-width:100%;height:auto;image-rendering:pixelated;"></canvas>
+          <canvas ref="{{ runeCvRef }}" onMouseDown="{{ onRuneDown }}" onMouseMove="{{ onRuneMove }}" onMouseUp="{{ onRuneUp }}" onMouseLeave="{{ onRuneUp }}" style="cursor:crosshair;user-select:none;display:{{ runeCvDisplay }};max-width:100%;height:auto;image-rendering:pixelated;"></canvas>
           <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#8a8c92;">화면 공유를 시작하면 여기에 미니맵이 보여요</span></sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
+      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">버프 종료 알림</h2>
+      <span style="padding:5px 12px;border-radius:999px;background:{{ buffStatusBg }};color:{{ buffStatusColor }};font-size:13px;font-weight:700;">{{ buffStatus }}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <button onClick="{{ toggleBuff }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
+          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ buffSw.swBg }};display:flex;justify-content:{{ buffSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>버프 감지
+        </button>
+        <div style="display:grid;grid-template-columns:auto 110px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
+          <span>버프 이름 (읽어줄 이름)</span><input value="{{ buffName }}" onChange="{{ onBuffName }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>지속시간 (초) · 비우면 자동 측정</span><input type="number" min="0" value="{{ buffDur }}" onChange="{{ onBuffDur }}" placeholder="자동" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>알림 시점 (초 전)</span><input type="number" min="0" value="{{ buffBefore }}" onChange="{{ onBuffBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>남은 시간</span><span style="font-size:20px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ buffLeftColor }};">{{ buffLeft }}</span>
+        </div>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">버프가 켜져 있을 때 오른쪽 미리보기에서 버프 아이콘의 숫자 없는 부분(왼쪽 위)을 드래그하세요. 아이콘이 나타나면 시간을 재고, 사라지면 지속시간을 자동으로 기억해요. 다음부터는 끝나기 전에 알려줘요.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <span style="font-size:12px;font-weight:600;color:#9a9ca1;">버프창 미리보기 (화면 오른쪽 위) · 켜짐은 초록 네모</span>
+          <sc-if value="{{ hasBuffBox }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ resetBuffBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">아이콘 다시 지정</button>
+          </sc-if>
+        </div>
+        <div style="min-height:120px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <canvas ref="{{ buffCvRef }}" onMouseDown="{{ onBuffDown }}" onMouseMove="{{ onBuffMove }}" onMouseUp="{{ onBuffUp }}" onMouseLeave="{{ onBuffUp }}" style="cursor:crosshair;user-select:none;display:{{ buffCvDisplay }};max-width:100%;height:auto;image-rendering:pixelated;"></canvas>
+          <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#8a8c92;">화면 공유를 시작하면 여기에 버프창이 보여요</span></sc-if>
         </div>
       </div>
     </div>
@@ -1262,6 +1302,7 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
+    if (this._stream) this.checkBuff(now);
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
     this.forceUpdate();
   }
@@ -1302,9 +1343,35 @@ class Component extends DCLogic {
     this._stream = null; this._video = null; this._rune = {}; this.forceUpdate();
   }
   minimapRegion(W, H) {
-    const P = [[768, 340, 250], [900, 380, 280], [1080, 440, 320], [1440, 560, 410], [2160, 820, 600]];
-    const p = P.find(r => H <= r[0] + 40) || P[P.length - 1];
-    return { x: 0, y: 0, w: Math.min(W, p[1]), h: Math.min(H, p[2]) };
+    return { x: 0, y: 0, w: Math.min(W, Math.round(W * 0.42)), h: Math.min(H, Math.round(H * 0.45)) };
+  }
+  detectMinimap(d, w, h) {
+    const wh = i => Math.abs(d[i] - 228) <= 6 && Math.abs(d[i + 1] - 228) <= 6 && Math.abs(d[i + 2] - 228) <= 6;
+    const darkIn = (x0, y0, x1, y1) => { let n = 0, t = 0; for (let y = y0; y <= y1; y += 2) for (let x = x0; x <= x1; x += 2) { t++; const i = (y * w + x) * 4; if (d[i] > 200 && d[i + 1] > 200 && d[i + 2] > 200) n++; } return t > 0 && n / t < 0.25; };
+    const rows = [];
+    for (let y = 0; y < h; y++) {
+      let best = null, s = -1;
+      for (let x = 0; x <= w; x++) {
+        const on = x < w && wh((y * w + x) * 4);
+        if (on && s < 0) s = x;
+        if (!on && s >= 0) { if (x - s >= 60 && (!best || x - s > best[1] - best[0])) best = [s, x - 1]; s = -1; }
+      }
+      if (best) rows.push({ y, x0: best[0], x1: best[1] });
+    }
+    const colOk = (x, y0, y1) => { let n = 0; for (let y = y0; y <= y1; y++) if (wh((y * w + x) * 4) || wh((y * w + x + 1) * 4) || wh((y * w + x - 1) * 4)) n++; return n >= (y1 - y0 + 1) * 0.7; };
+    let pick = null;
+    for (let i = 0; i < rows.length; i++) for (let j = rows.length - 1; j > i; j--) {
+      const a = rows[i], b = rows[j];
+      if (b.y - a.y < 20) break;
+      if (Math.abs(a.x0 - b.x0) > 6 || Math.abs(a.x1 - b.x1) > 6) continue;
+      const x0 = Math.min(a.x0, b.x0) - 3, x1 = Math.max(a.x1, b.x1) + 3;
+      if (!colOk(Math.max(1, x0 + 1), a.y + 4, b.y - 4) || !colOk(Math.min(w - 2, x1 - 1), a.y + 4, b.y - 4)) continue;
+      if (!darkIn(x0 + 4, a.y + 4, x1 - 4, b.y - 4)) continue;
+      const area = (x1 - x0) * (b.y - a.y);
+      if (!pick || area > pick.area) pick = { area, x: x0 + 3, y: a.y + 3, w: x1 - x0 - 6, h: b.y - a.y - 6 };
+      break;
+    }
+    return pick && pick.w > 20 && pick.h > 12 ? { x: pick.x, y: pick.y, w: pick.w, h: pick.h } : null;
   }
   checkRune() {
     const v = this._video; if (!v || !v.videoWidth) return;
@@ -1312,18 +1379,116 @@ class Component extends DCLogic {
     const c = this._oc || (this._oc = document.createElement('canvas')); c.width = g.w; c.height = g.h;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
     const img = x.getImageData(0, 0, g.w, g.h), d = img.data; let px = 0;
+    const res = W + '×' + H, manual = (this.hunt().mm || {})[res];
+    if (!manual && (!this._autoAt || Date.now() - this._autoAt > 3000 || this._autoRes !== res)) {
+      this._autoAt = Date.now(); this._autoRes = res;
+      const nb = this.detectMinimap(d, g.w, g.h), ob = this._autoBox;
+      if (nb && (!ob || Math.abs(nb.w - ob.w) > 4 || Math.abs(nb.h - ob.h) > 4 || Math.abs(nb.x - ob.x) > 4 || Math.abs(nb.y - ob.y) > 4)) { if (this._rune) { this._rune.base = null; this._rune.streak = 0; } }
+      if (nb || !ob) this._autoBox = nb;
+    }
+    const bx = manual || this._autoBox || { x: 0, y: 0, w: g.w, h: g.h };
+    this._boxMode = manual ? 'manual' : this._autoBox ? 'auto' : 'none';
     for (let i = 0; i < d.length; i += 4) {
+      const p = i / 4, cx = p % g.w, cy = (p / g.w) | 0;
+      if (cx < bx.x || cy < bx.y || cx >= bx.x + bx.w || cy >= bx.y + bx.h) { d[i] *= 0.3; d[i + 1] *= 0.3; d[i + 2] *= 0.3; continue; }
       const r = d[i], gr = d[i + 1], b = d[i + 2], mx = Math.max(r, gr, b), mn = Math.min(r, gr, b);
       if (mx < 160 || (mx - mn) / mx < 0.45 || mx === gr) continue;
       let hue = mx === r ? 60 * ((gr - b) / (mx - mn)) : 60 * ((r - gr) / (mx - mn)) + 240; if (hue < 0) hue += 360;
       if (hue >= 270 && hue <= 325) { px++; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; }
     }
-    const h = this.hunt(), prev = this._rune || {}, hit = h.rune && px >= h.runeMin;
+    const prev0 = this._rune || {};
+    const base = prev0.base == null ? px : Math.min(prev0.base, px);
+    const h = this.hunt(), prev = prev0, hit = h.rune && px - base >= h.runeMin;
     const streak = hit ? (prev.streak || 0) + 1 : 0; let last = hit ? prev.last || 0 : 0;
     if (streak >= 2 && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성'); last = Date.now(); }
-    this._rune = { px, found: streak >= 2, streak, last, res: W + '×' + H, reg: g };
+    this._rune = { px, base, found: streak >= 2, streak, last, res: W + '×' + H, reg: g };
     const cv = this._runeCv && this._runeCv.current;
-    if (cv) { cv.width = g.w; cv.height = g.h; cv.getContext('2d').putImageData(img, 0, 0); }
+    this._rune.box = bx;
+    this._lastImg = img;
+    if (cv) this.drawRunePreview();
+  }
+  drawRunePreview() {
+    const cv = this._runeCv && this._runeCv.current, img = this._lastImg, r = this._rune || {};
+    if (!cv || !img) return;
+    cv.width = img.width; cv.height = img.height;
+    const c = cv.getContext('2d'); c.putImageData(img, 0, 0);
+    c.lineWidth = 2; c.strokeStyle = '#ffd23f';
+    if (r.box) c.strokeRect(r.box.x + 1, r.box.y + 1, r.box.w - 2, r.box.h - 2);
+    const dr = this._drag;
+    if (dr) { c.setLineDash([5, 4]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
+  }
+  runePt(e) {
+    const cv = e.currentTarget, rc = cv.getBoundingClientRect();
+    return { x: Math.max(0, Math.min(cv.width, Math.round((e.clientX - rc.left) * cv.width / rc.width))), y: Math.max(0, Math.min(cv.height, Math.round((e.clientY - rc.top) * cv.height / rc.height))) };
+  }
+  setMinimapBox(box) {
+    const r = this._rune || {}; if (!r.res) return;
+    const h = this.hunt(), mm = { ...(h.mm || {}) };
+    if (box) mm[r.res] = box; else delete mm[r.res];
+    r.base = null; r.streak = 0;
+    this.saveHunt({ ...h, mm });
+  }
+  buffCfg() { return { on: true, name: '예인', dur: 0, before: 2, box: {}, sig: {}, ...(this.hunt().buff || {}) }; }
+  saveBuff(p) { const h = this.hunt(); this.saveHunt({ ...h, buff: { ...this.buffCfg(), ...p } }); }
+  checkBuff(now) {
+    const v = this._video; if (!v || !v.videoWidth) return;
+    const W = v.videoWidth, H = v.videoHeight, res = W + '×' + H, g = { x: Math.round(W * 0.55), y: 0, w: W - Math.round(W * 0.55), h: Math.round(H * 0.22) };
+    const c = this._bc || (this._bc = document.createElement('canvas')), x = c.getContext('2d', { willReadFrequently: true });
+    const b = this.buffCfg(), box = b.box[res], sig = b.sig[res];
+    if (now - (this._buffPrev || 0) >= 1000) {
+      this._buffPrev = now; c.width = g.w; c.height = g.h; x.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
+      this._buffImg = x.getImageData(0, 0, g.w, g.h); this._buffG = g; this._buffRes = res; this.drawBuffPreview();
+    }
+    if (!box || !sig || !b.on) { this._buffOn = false; return; }
+    const t = this._bt || (this._bt = document.createElement('canvas')); t.width = box.w; t.height = box.h;
+    const tx = t.getContext('2d', { willReadFrequently: true }); tx.drawImage(v, g.x + box.x, g.y + box.y, box.w, box.h, 0, 0, box.w, box.h);
+    const m = this.meanRGB(tx.getImageData(0, 0, box.w, box.h).data), dist = Math.hypot(m[0] - sig[0], m[1] - sig[1], m[2] - sig[2]);
+    const on = dist < 38;
+    this._buffMiss = on ? 0 : (this._buffMiss || 0) + 1;
+    if (on && !this._buffOn) { this._buffOn = true; this._buffStart = now; this._buffAlerted = false; }
+    if (this._buffOn && on && b.dur > 0 && !this._buffAlerted && now - this._buffStart >= (b.dur - b.before) * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전'); }
+    if (this._buffOn && this._buffMiss >= 3) {
+      this._buffOn = false; const sec = Math.round((now - 500 - this._buffStart) / 1000);
+      if (sec >= 3 && (!b.dur || Math.abs(sec - b.dur) <= 3 || !b.manual)) this.saveBuff({ dur: sec });
+    }
+  }
+  meanRGB(d) { let r = 0, g = 0, b = 0, n = d.length / 4; for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; } return [r / n, g / n, b / n]; }
+  drawBuffPreview() {
+    const cv = this._buffCv && this._buffCv.current, img = this._buffImg; if (!cv || !img) return;
+    cv.width = img.width; cv.height = img.height; const c = cv.getContext('2d'); c.putImageData(img, 0, 0);
+    const box = this.buffCfg().box[this._buffRes]; c.lineWidth = 2;
+    if (box) { c.strokeStyle = this._buffOn ? '#3dff7a' : '#ffd23f'; c.strokeRect(box.x, box.y, box.w, box.h); }
+    const dr = this._bdrag; if (dr) { c.setLineDash([4, 3]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
+  }
+  setBuffBox(box) {
+    const img = this._buffImg, res = this._buffRes; if (!img || !res) return;
+    const b = this.buffCfg(), boxes = { ...b.box }, sigs = { ...b.sig };
+    if (box) {
+      const d = new Uint8ClampedArray(box.w * box.h * 4);
+      for (let y = 0; y < box.h; y++) for (let x = 0; x < box.w; x++) { const s = ((box.y + y) * img.width + box.x + x) * 4, o = (y * box.w + x) * 4; d[o] = img.data[s]; d[o + 1] = img.data[s + 1]; d[o + 2] = img.data[s + 2]; d[o + 3] = 255; }
+      boxes[res] = box; sigs[res] = this.meanRGB(d);
+    } else { delete boxes[res]; delete sigs[res]; }
+    this._buffOn = false; this.saveBuff({ box: boxes, sig: sigs }); setTimeout(() => this.drawBuffPreview(), 0);
+  }
+  buffVals() {
+    if (!this._buffCv) this._buffCv = React.createRef();
+    const b = this.buffCfg(), res = this._buffRes, box = res && b.box[res], now = Date.now();
+    const sw = on => ({ swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start' });
+    const left = this._buffOn && b.dur ? Math.max(0, b.dur - (now - this._buffStart) / 1000) : null;
+    const st = !b.on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !box ? ['아이콘 지정 필요', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : this._buffOn ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 꺼짐', '#f0f0ee', '#6b6d73'];
+    return {
+      buffSw: sw(b.on), toggleBuff: () => this.saveBuff({ on: !b.on }),
+      buffName: b.name, onBuffName: e => this.saveBuff({ name: e.target.value }),
+      buffDur: b.dur ? String(b.dur) : '', onBuffDur: e => this.saveBuff({ dur: Math.max(0, Number(e.target.value) || 0), manual: true }),
+      buffBefore: String(b.before), onBuffBefore: e => this.saveBuff({ before: Math.max(0, Number(e.target.value) || 0) }),
+      buffLeft: left == null ? '--' : Math.ceil(left) + '초', buffLeftColor: left != null && left <= b.before ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
+      buffStatus: st[0], buffStatusBg: st[1], buffStatusColor: st[2],
+      buffCvRef: this._buffCv, buffCvDisplay: this._stream ? 'block' : 'none', hasBuffBox: !!box,
+      resetBuffBox: () => this.setBuffBox(null),
+      onBuffDown: e => { const p = this.runePt(e); this._bdrag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawBuffPreview(); },
+      onBuffMove: e => { if (!this._bdrag) return; const p = this.runePt(e); this._bdrag.x1 = p.x; this._bdrag.y1 = p.y; this.drawBuffPreview(); },
+      onBuffUp: () => { const d = this._bdrag; this._bdrag = null; if (!d) return; const bx = { x: Math.min(d.x0, d.x1), y: Math.min(d.y0, d.y1), w: Math.abs(d.x1 - d.x0), h: Math.abs(d.y1 - d.y0) }; if (bx.w >= 6 && bx.h >= 6) this.setBuffBox(bx); else this.drawBuffPreview(); },
+    };
   }
   huntVals() {
     const h = this.hunt(), run = this._run || {}, now = Date.now(), r = this._rune || {};
@@ -1334,17 +1499,18 @@ class Component extends DCLogic {
     const num = v => Math.max(0, Number(v) || 0);
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
-    const PRE = [['janus120', '솔 야누스 : 새벽 (2분)', 120], ['janus80', '솔 야누스 : 새벽 (80초)', 80], ['janus70', '솔 야누스 : 새벽 (70초)', 70], ['janus60', '솔 야누스 : 새벽 (1분)', 60]];
-    const presetOf = s => s.preset || (s.name === '솔 야누스 : 새벽' ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
+    const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
+    const PRE = [['janus120', J + ' (2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (1분)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png']];
+    const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
       skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }],
       huntSkills: h.skills.map(s => {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
-          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom',
+          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', icon: (PRE.find(p => p[0] === pv) || [])[4] || '',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
-            this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: '솔 야누스 : 새벽', cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
+            this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
           pct: on && s.cd ? (rem / (s.cd * 1000) * 100).toFixed(1) + '%' : '0%',
           repeatLabel: s.repeat ? '반복' : '1회', repeatBg: s.repeat ? 'oklch(0.94 0.035 255)' : '#f4f4f2', repeatColor: s.repeat ? 'oklch(0.4 0.17 255)' : '#6b6d73',
@@ -1360,10 +1526,21 @@ class Component extends DCLogic {
       sharing: !!this._stream, notSharing: !this._stream, shareErr: this._stream ? '' : this._shareErr || '', hasShareErr: !this._stream && !!this._shareErr, shareRes: r.res || '연결 중', onShare: () => this.startShare(), onStopShare: () => this.stopShare(),
       runeSw: sw(h.rune), toggleRune: () => set('rune', !h.rune),
       runeStatus: st[0], runeStatusBg: st[1], runeStatusColor: st[2],
-      runePx: this._stream && r.res ? String(r.px) : '--', runeMin: String(h.runeMin), runeEvery: String(h.runeEvery),
+      runePx: this._stream && r.res ? String(Math.max(0, r.px - r.base)) : '--',
+      runeBase: this._stream && r.res ? String(r.base) : '--',
+      resetRuneBase: () => { if (this._rune) { this._rune.base = null; this._rune.streak = 0; } this.forceUpdate(); }, runeMin: String(h.runeMin), runeEvery: String(h.runeEvery),
       onRuneMin: e => set('runeMin', Math.max(1, Number(e.target.value) || 1)), onRuneEvery: e => set('runeEvery', Math.max(3, Number(e.target.value) || 3)),
       runeRegion: r.reg ? ' (현재 왼쪽 위 ' + r.reg.w + '×' + r.reg.h + ')' : '',
-      runeCvRef: this._runeCv, runeCvDisplay: this._stream ? 'block' : 'none',
+      runeCvRef: this._runeCv,
+      onRuneDown: e => { const p = this.runePt(e); this._drag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawRunePreview(); },
+      onRuneMove: e => { if (!this._drag) return; const p = this.runePt(e); this._drag.x1 = p.x; this._drag.y1 = p.y; this.drawRunePreview(); },
+      onRuneUp: () => { const d = this._drag; this._drag = null; if (!d) return;
+        const box = { x: Math.min(d.x0, d.x1), y: Math.min(d.y0, d.y1), w: Math.abs(d.x1 - d.x0), h: Math.abs(d.y1 - d.y0) };
+        if (box.w >= 20 && box.h >= 20) this.setMinimapBox(box); else this.drawRunePreview(); },
+      resetMinimapBox: () => this.setMinimapBox(null),
+      hasMinimapBox: !!(r.res && (h.mm || {})[r.res]),
+      boxMsg: !this._stream || !r.res ? '' : this._boxMode === 'manual' ? '직접 지정한 영역 사용 중' : this._boxMode === 'auto' ? '미니맵 자동 인식됨' : '미니맵을 찾지 못했어요 — 마우스로 드래그해 지정하세요',
+      boxMsgColor: this._boxMode === 'none' ? 'oklch(0.5 0.19 25)' : 'oklch(0.45 0.15 150)', runeCvDisplay: this._stream ? 'block' : 'none',
     };
   }
   switchTab(tab) {
@@ -1471,7 +1648,7 @@ class Component extends DCLogic {
         const area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         return {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성',
-          ...(area === '사냥' ? this.huntVals() : {}),
+          ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals() } : {}),
           areas: ['옥션', '사냥', '육성'].map(l => ({ label: l, bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); } })),
         };
