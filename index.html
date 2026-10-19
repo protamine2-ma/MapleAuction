@@ -1794,6 +1794,11 @@ class Component extends DCLogic {
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
+        if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
+          const N = this.readCd(a, bw, bh);
+          if (N != null && cd) { D.ocr = N; D.ocrAt = now; if (this._run[s.id]) this._run[s.id] = now + N * 1000 + 500; }
+          else if (!cd && this._run[s.id] && D.ocrAt && now - D.ocrAt < 3000 && this._run[s.id] - now > 2000) { this._run[s.id] = now; }
+        }
         if (this.skillIcon(s) === 'qs-janus.png') {
           const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
           const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
@@ -1817,6 +1822,27 @@ class Component extends DCLogic {
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
+  readCd(a, bw, bh) {
+    const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
+    const isY = i => a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80;
+    const y0 = Math.floor(bh * 0.12), y1 = Math.ceil(bh * 0.78), cols = [];
+    for (let X = 0; X < bw; X++) { let k = 0; for (let y = y0; y < y1; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
+    const runs = []; let s = -1;
+    for (let X = 0; X <= bw; X++) { const on = X < bw && cols[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
+    const gl = runs.filter(r => r[1] - r[0] >= 0 && cols.slice(r[0], r[1] + 1).reduce((p, q) => p + q, 0) >= 4);
+    if (!gl.length || gl.length > 2) return null;
+    const f = bw / 32; let out = '';
+    for (const r of gl) {
+      const w = r[1] - r[0] + 1;
+      let gy0 = bh, gy1 = 0; for (let y = y0; y < y1; y++) for (let X = r[0]; X <= r[1]; X++) if (isY((y * bw + X) * 4)) { gy0 = Math.min(gy0, y); gy1 = Math.max(gy1, y); }
+      if (gy1 - gy0 < 5 * f) return null;
+      if (w <= 3 * f) { out += '1'; continue; }
+      let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(r[0] + (gx + 0.5) * w / 6), Y = Math.floor(gy0 + (gy + 0.5) * (gy1 - gy0 + 1) / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
+      let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
+      if (bd > 14) return null; out += bk;
+    }
+    return Number(out);
+  }
   findIcon(v, W, H) {
     if (!this._tpl) {
       if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'skill-yein.png'; }
