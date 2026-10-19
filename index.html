@@ -274,11 +274,11 @@ input{font-family:inherit;}
         </button>
         <div style="display:grid;grid-template-columns:auto 110px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>스킬 이름 (읽어줄 이름)</span><input value="{{ buffName }}" onChange="{{ onBuffName }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
-          <span>쿨타임 (초) · 비우면 자동 측정</span><input type="number" min="0" value="{{ buffDur }}" onChange="{{ onBuffDur }}" placeholder="자동" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
-          <span>알림 시점 (초 전)</span><input type="number" min="0" value="{{ buffBefore }}" onChange="{{ onBuffBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
-          <span>남은 시간</span><span style="font-size:20px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ buffLeftColor }};">{{ buffLeft }}</span>
+          <span>시작 숫자 · 비우면 자동 측정</span><input type="number" min="0" value="{{ buffDur }}" onChange="{{ onBuffDur }}" placeholder="자동" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>알림 시점 (숫자가 이만큼 남았을 때)</span><input type="number" min="0" value="{{ buffBefore }}" onChange="{{ onBuffBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>남은 숫자</span><span style="font-size:20px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ buffLeftColor }};">{{ buffLeft }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">스킬을 쓴 뒤 쿨타임 숫자가 보일 때, 아래 미리보기에서 버프 즐겨찾기에 있는 스킬 아이콘의 숫자 없는 부분(왼쪽 위)을 드래그하세요. 아이콘이 나타나면 시간을 재고, 사라지면 쿨타임을 자동으로 기억해요. 다음부터는 쿨타임이 끝나기 전에 알려줘요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">스킬을 쓴 뒤 숫자가 보일 때, 아래 미리보기에서 버프 즐겨찾기에 있는 스킬 아이콘 전체를 테두리에 딱 맞게 드래그하세요. 오른쪽 아래 숫자가 바뀔 때마다 1씩 세고, 아이콘이 사라지면 시작 숫자를 자동으로 기억해요. 다음부터는 숫자가 정한 값만큼 남았을 때 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -1440,14 +1440,26 @@ class Component extends DCLogic {
     if (!box || !sig || !b.on) { this._buffOn = false; return; }
     const t = this._bt || (this._bt = document.createElement('canvas')); t.width = box.w; t.height = box.h;
     const tx = t.getContext('2d', { willReadFrequently: true }); tx.drawImage(v, g.x + box.x, g.y + box.y, box.w, box.h, 0, 0, box.w, box.h);
-    const m = this.meanRGB(tx.getImageData(0, 0, box.w, box.h).data), dist = Math.hypot(m[0] - sig[0], m[1] - sig[1], m[2] - sig[2]);
+    const all = tx.getImageData(0, 0, box.w, box.h).data, pw = Math.ceil(box.w * 0.55), ph = Math.ceil(box.h * 0.55);
+    const part = (x0, y0, x1, y1) => { const o = []; for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const i = (y * box.w + x) * 4; o.push(all[i], all[i + 1], all[i + 2], 255); } return o; };
+    const m = this.meanRGB(part(0, 0, pw, ph)), dist = Math.hypot(m[0] - sig[0], m[1] - sig[1], m[2] - sig[2]);
     const on = dist < 38;
     this._buffMiss = on ? 0 : (this._buffMiss || 0) + 1;
-    if (on && !this._buffOn) { this._buffOn = true; this._buffStart = now; this._buffAlerted = false; }
-    if (this._buffOn && on && b.dur > 0 && !this._buffAlerted && now - this._buffStart >= (b.dur - b.before) * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전'); }
+    if (on && !this._buffOn) { this._buffOn = true; this._buffCount = 0; this._buffLastChg = now; this._buffAlerted = false; this._digPrev = null; }
+    if (this._buffOn && on) {
+      const dg = part(Math.floor(box.w * 0.45), Math.floor(box.h * 0.5), box.w, box.h), pv = this._digPrev;
+      if (pv && pv.length === dg.length) {
+        let diff = 0; for (let i = 0; i < dg.length; i += 4) diff += Math.abs(dg[i] - pv[i]) + Math.abs(dg[i + 1] - pv[i + 1]) + Math.abs(dg[i + 2] - pv[i + 2]);
+        diff /= dg.length / 4 * 3;
+        if (diff > 18 && now - this._buffLastChg > 300) { this._buffCount++; this._buffLastChg = now; }
+      }
+      this._digPrev = dg;
+      const left = b.dur > 0 ? b.dur - this._buffCount : null;
+      if (left != null && !this._buffAlerted && left <= b.before) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + Math.max(left, 0)); }
+    }
     if (this._buffOn && this._buffMiss >= 3) {
-      this._buffOn = false; const sec = Math.round((now - 500 - this._buffStart) / 1000);
-      if (sec >= 3 && (!b.dur || Math.abs(sec - b.dur) <= 3 || !b.manual)) this.saveBuff({ dur: sec });
+      this._buffOn = false; const n = this._buffCount;
+      if (n >= 3 && !b.manual) this.saveBuff({ dur: n });
     }
   }
   meanRGB(d) { let r = 0, g = 0, b = 0, n = d.length / 4; for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; } return [r / n, g / n, b / n]; }
@@ -1463,7 +1475,7 @@ class Component extends DCLogic {
     const b = this.buffCfg(), boxes = { ...b.box }, sigs = { ...b.sig };
     if (box) {
       const d = new Uint8ClampedArray(box.w * box.h * 4);
-      for (let y = 0; y < box.h; y++) for (let x = 0; x < box.w; x++) { const s = ((box.y + y) * img.width + box.x + x) * 4, o = (y * box.w + x) * 4; d[o] = img.data[s]; d[o + 1] = img.data[s + 1]; d[o + 2] = img.data[s + 2]; d[o + 3] = 255; }
+      for (let y = 0; y < Math.ceil(box.h * 0.55); y++) for (let x = 0; x < Math.ceil(box.w * 0.55); x++) { const s = ((box.y + y) * img.width + box.x + x) * 4, o = (y * box.w + x) * 4; d[o] = img.data[s]; d[o + 1] = img.data[s + 1]; d[o + 2] = img.data[s + 2]; d[o + 3] = 255; }
       boxes[res] = box; sigs[res] = this.meanRGB(d);
     } else { delete boxes[res]; delete sigs[res]; }
     this._buffOn = false; this.saveBuff({ box: boxes, sig: sigs }); setTimeout(() => this.drawBuffPreview(), 0);
@@ -1472,14 +1484,14 @@ class Component extends DCLogic {
     if (!this._buffCv) this._buffCv = React.createRef();
     const b = this.buffCfg(), res = this._buffRes, box = res && b.box[res], now = Date.now();
     const sw = on => ({ swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start' });
-    const left = this._buffOn && b.dur ? Math.max(0, b.dur - (now - this._buffStart) / 1000) : null;
+    const left = this._buffOn ? (b.dur ? Math.max(0, b.dur - (this._buffCount || 0)) : null) : null;
     const st = !b.on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !box ? ['아이콘 지정 필요', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : this._buffOn ? ['쿨타임 중', 'oklch(0.48 0.17 255)', '#fff'] : ['사용 가능', '#f0f0ee', '#6b6d73'];
     return {
       buffSw: sw(b.on), toggleBuff: () => this.saveBuff({ on: !b.on }),
       buffName: b.name, onBuffName: e => this.saveBuff({ name: e.target.value }),
-      buffDur: b.dur ? String(b.dur) : '', onBuffDur: e => this.saveBuff({ dur: Math.max(0, Number(e.target.value) || 0), manual: true }),
+      buffDur: b.dur ? String(b.dur) : '', onBuffDur: e => { const v = Math.max(0, Number(e.target.value) || 0); this.saveBuff({ dur: v, manual: v > 0 }); },
       buffBefore: String(b.before), onBuffBefore: e => this.saveBuff({ before: Math.max(0, Number(e.target.value) || 0) }),
-      buffLeft: left == null ? '--' : Math.ceil(left) + '초', buffLeftColor: left != null && left <= b.before ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
+      buffLeft: left == null ? (this._buffOn ? (this._buffCount || 0) + '회 감소' : '--') : left + '회', buffLeftColor: left != null && left <= b.before ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
       buffStatus: st[0], buffStatusBg: st[1], buffStatusColor: st[2],
       buffCvRef: this._buffCv, buffCvDisplay: this._stream ? 'block' : 'none', hasBuffBox: !!box,
       resetBuffBox: () => this.setBuffBox(null),
