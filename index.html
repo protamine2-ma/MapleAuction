@@ -1504,37 +1504,36 @@ class Component extends DCLogic {
     const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, 0, rw, rh, 0, 0, rw, rh);
     const d = x.getImageData(0, 0, rw, rh).data;
-    const sc = Math.round(W / 1366 * 20) / 20, ALL = ['buff-union1.png', 'buff-union2.png', 'buff-union3.png'];
+    const sc = Math.round(W / 1366 * 20) / 20, BP = this.buffPresetList();
+    const ALL = [...new Set(list.map(b => 'buff-' + b.preset + '.png'))], GROUP = { union1: 'u', union2: 'u', union3: 'u', mvpadd: 'm', mvp70: 'm', exp3: 'e', exp4: 'e' };
     const T = {}; for (const f of ALL) { T[f] = this.tplFor(f, sc * 32 / 30); if (!T[f]) return; }
+    for (const g of ['u', 'm', 'e']) for (const k in GROUP) if (GROUP[k] === g && list.some(b => GROUP[b.preset] === g)) { const f = 'buff-' + k + '.png'; if (!T[f]) { T[f] = this.tplFor(f, sc * 32 / 30); if (!T[f]) return; } }
     const n = T[ALL[0]].w, P = this.buffPts(n);
     this._bst = this._bst || {};
-    let found = null;
-    const locate = () => {
-      if (found) return found; found = [];
-      for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) {
-        const s = this.buffScore(d, rw, X, Y, T[ALL[0]], P); if (s < 60) found.push([X, Y]);
-      }
-      return found;
-    };
+    const locate = Tt => { const out = []; let lim = 45;
+      for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) { const s = this.buffScore(d, rw, X, Y, Tt, P); if (s < lim) out.push([X, Y, s]); }
+      return out.sort((a, b) => a[2] - b[2]).slice(0, 6); };
     list.forEach(b => {
-      const src = { union1: 'buff-union1.png', union2: 'buff-union2.png', union3: 'buff-union3.png' }[b.preset]; if (!src) return;
+      if (!BP.some(p => p.key === b.preset)) return;
+      const src = 'buff-' + b.preset + '.png', sib = Object.keys(GROUP).filter(k => k !== b.preset && GROUP[k] === GROUP[b.preset]).map(k => 'buff-' + k + '.png');
       const S = this._bst[b.id] || (this._bst[b.id] = { miss: 0 });
       let best = 1e9;
       const tryAt = (X, Y) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - n || yy > rh - n) continue; const s = this.buffScore(d, rw, xx, yy, T[src], P); if (s < best) { best = s; S.at = [xx, yy]; } } };
       if (S.at) tryAt(S.at[0], S.at[1]);
-      if (best >= 32) { best = 1e9; const prev = S.at; for (const p of locate()) tryAt(p[0], p[1]); if (best >= 32) S.at = prev; }
+      if (best >= 32) { best = 1e9; const prev = S.at; for (const p of locate(T[src])) tryAt(p[0], p[1]); if (best >= 32) S.at = prev; }
       let on = best < 32;
-      if (on) { const [X, Y] = S.at; for (const o of ALL) if (o !== src && this.buffScore(d, rw, X, Y, T[o], P) < best - 2) on = false; }
+      if (on) { const [X, Y] = S.at; for (const o of sib) if (T[o] && this.buffScore(d, rw, X, Y, T[o], P) < best - 2) on = false; }
       if (on) { S.miss = 0; S.on = true; S.seen = now; }
       else if (S.on && ++S.miss >= 3) { S.on = false; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료'); }
     });
     this.forceUpdate();
   }
-  buffName(b) { return { union1: '유니온의 부 1단계', union2: '유니온의 부 2단계', union3: '유니온의 부 3단계' }[b.preset] || '버프'; }
+  buffPresetList() { return [['union1', '유니온의 부 1단계'], ['union2', '유니온의 부 2단계'], ['union3', '유니온의 부 3단계'], ['mvpadd', 'MVP 추가 경험치'], ['mvp70', 'MVP 경험치 70%'], ['vip', 'VIP 경험치'], ['expadd', '추가 경험치'], ['exp3', '경험치 3배'], ['exp4', '경험치 4배'], ['hyeongjae', '형재']].map(p => ({ key: p[0], label: p[1] })); }
+  buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
   buffListVals() {
     const h = this.hunt(), list = h.buffs || [], sv = l => this.saveHunt({ ...h, buffs: l }), st = this._bst || {};
     return {
-      buffPresets: [{ key: 'union1', label: '유니온의 부 1단계' }, { key: 'union2', label: '유니온의 부 2단계' }, { key: 'union3', label: '유니온의 부 3단계' }],
+      buffPresets: this.buffPresetList(),
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
         const t = !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
