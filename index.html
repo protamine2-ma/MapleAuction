@@ -1330,7 +1330,7 @@ class Component extends DCLogic {
   }
   async startShare() {
     try {
-      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5 }, audio: false });
+      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5, displaySurface: 'window' }, audio: false, preferCurrentTab: false, selfBrowserSurface: 'exclude', surfaceSwitching: 'exclude', monitorTypeSurfaces: 'exclude' });
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.srcObject = st; await v.play();
       this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null;
       const bc = this.buffCfg(); if (Object.keys(bc.box || {}).length) this.saveBuff({ box: {}, sig: {} });
@@ -1523,9 +1523,10 @@ class Component extends DCLogic {
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
         const T = this.tplFor(icon); if (!T) return;
+        const cdSrc = { 'qs-janus.png': 'qs-janus-cd.png', 'qs-erda.png': 'qs-erda-cd.png' }[icon], T2 = cdSrc ? this.tplFor(cdSrc) : null;
         searched = true; D.findAt = now;
         if (!this._hp || now - (this._hpAt || 0) > 3000) { this._hp = this.findHP(v, W, H); this._hpAt = now; this._qsAt = null; }
-        D.box = this.matchIcon(v, W, H, T); return;
+        D.box = this.matchIcon(v, W, H, T) || (T2 ? this.matchIcon(v, W, H, T2) : null); return;
       }
       const c = this._bt || (this._bt = document.createElement('canvas')); c.width = D.box.w; c.height = D.box.h;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
