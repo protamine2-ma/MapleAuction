@@ -1663,7 +1663,7 @@ class Component extends DCLogic {
     }
     let searched = false;
     h.skills.forEach(s => {
-      const res = W + 'x' + H, cbox = (s.preset === 'custom' || s.preset === 'erda60') && s.box ? s.box[res] : null;
+      const res = W + 'x' + H, cbox = s.box ? s.box[res] : null;
       if (s.preset === 'erda60' && !cbox) return;
       const icon = cbox ? 'custom:' + cbox.x + ',' + cbox.y + ',' + cbox.w + ',' + cbox.h : this.skillIcon(s); if (!icon) return;
       const D = this._det[s.id] || (this._det[s.id] = { src: icon });
@@ -1793,13 +1793,14 @@ class Component extends DCLogic {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
-          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: pv === 'custom' || pv === 'erda60',
+          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
           ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
             return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
               customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
               customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
               pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
-          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' || pv === 'erda60' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : D.cnt ? ' · ' + D.cnt : '') : '퀵슬롯에서 찾는 중…';
+          ...(() => { const D = (this._det || {})[s.id]; const hasBox = !!(this._video && this._video.videoWidth && s.box && s.box[this._video.videoWidth + 'x' + this._video.videoHeight]);
+            const t = pv === 'custom' || pv === 'erda60' || hasBox ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : D.cnt ? ' · ' + D.cnt : '') : '퀵슬롯에서 찾는 중…';
             return { detMsg: t, hasDet: !!t, thumbBg: 'url(' + ((this._stream && D && D.box && D.thumb) || '') + ')', hasThumb: !!(this._stream && D && D.box && D.thumb),
               refind: () => { if (this._det) delete this._det[s.id]; if (this._run) delete this._run[s.id]; this.forceUpdate(); }, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
