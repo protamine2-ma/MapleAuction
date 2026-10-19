@@ -1625,7 +1625,7 @@ class Component extends DCLogic {
     const P = []; for (let y = 3; y <= 29; y += 2) for (let xx = 3; xx <= 29; xx += 2) { if (y >= 8 && y <= 22) continue; if (xx < 15 && y > 19) continue; P.push([xx, y]); }
     const keys = this.buffPresetList().map(p => p.key), T = {};
     for (const k of keys) { T[k] = this.tplFor(k + '.png', 32 / 30); if (!T[k]) return; }
-    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 55 ? bk : null; });
+    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 55 ? bk : null; });
     this._bst = this._bst || {};
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
@@ -1823,7 +1823,7 @@ class Component extends DCLogic {
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readCd(a, bw, bh) {
-    const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
+    const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","6":"011111110000100000100000111110111110100001100001110011011110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
     const isY = i => a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80;
     const y0 = Math.floor(bh * 0.12), y1 = Math.ceil(bh * 0.78), cols = [];
     for (let X = 0; X < bw; X++) { let k = 0; for (let y = y0; y < y1; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
