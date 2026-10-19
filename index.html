@@ -1560,7 +1560,7 @@ class Component extends DCLogic {
     });
     this.forceUpdate();
   }
-  buffPresetList() { return [['b29-vip', 'VIP 경험치'], ['b29-hj', '형재'], ['b29-exp', '추가 경험치'], ['b29-union', '유니온의 부'], ['b29-mvp', 'MVP 추가 경험치']].map(p => ({ key: p[0], label: p[1] })); }
+  buffPresetList() { return [['b29-vip', 'VIP 경험치'], ['b29-hj', '형재'], ['b29-exp', '추가 경험치'], ['b29-union', '유니온의 부'], ['b29-union1', '유니온의 부 1단계'], ['b29-union2', '유니온의 부 2단계'], ['b29-mvp', 'MVP 추가 경험치']].map(p => ({ key: p[0], label: p[1] })); }
   checkBuffs29(now) {
     const v = this._video, list = (this.hunt().buffs || []).filter(b => b.preset && b.preset.startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
     if (now - (this._b29Chk || 0) < 1000) return; this._b29Chk = now;
@@ -1631,23 +1631,25 @@ class Component extends DCLogic {
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
       const has = owner.includes(b.preset);
-      if (has) { if (!S.end && now - (S.doneAt || 0) > 60000) { S.end = now + 599000; S.alerted = false; S.lock = false; S.h = []; } S.lastSeen = now;
-        if (S.end && !S.lock) {
-          const [sx, sy] = slots[owner.indexOf(b.preset)], bw = Math.min(36, rw - sx), bh = Math.min(32, rh - sy), a = new Uint8ClampedArray(bw * bh * 4);
+      if (has) { if (!S.end && !S.pending && now - (S.doneAt || 0) > 60000) { S.pending = true; S.alerted = false; S.lock = false; S.h = []; S.pendAt = now; } S.lastSeen = now;
+        S.fail = !!(S.pending && !S.end && now - S.pendAt > 8000);
+        if ((S.pending || S.end) && !S.lock) {
+          const [qx, qy] = slots[owner.indexOf(b.preset)], sx = Math.max(0, qx - 6), sy = Math.max(0, qy - 4), bw = Math.min(46, rw - sx), bh = Math.min(38, rh - sy), a = new Uint8ClampedArray(bw * bh * 4);
           for (let y = 0; y < bh; y++) for (let xx = 0; xx < bw; xx++) { const i = ((sy + y) * rw + sx + xx) * 4, o = (y * bw + xx) * 4; a[o] = d[i]; a[o + 1] = d[i + 1]; a[o + 2] = d[i + 2]; }
           const sec = this.readTime(a, bw, bh);
           if (sec != null && sec < 600) { const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
-            if (Hh.length >= 3) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
-              if (ok) { S.lock = true; S.end = now + sec * 1000 + 500; S.alerted = false; } } }
+            if (!S.end || Math.abs((S.end - now) / 1000 - sec) > 3) { S.end = now + sec * 1000 + 500; }
+            if (Hh.length >= 2) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
+              if (ok) { S.lock = true; S.pending = false; S.end = now + sec * 1000 + 500; S.alerted = false; } } }
         } }
-      else if (S.end && now - (S.lastSeen || 0) > 15000 && S.end - now > 20000) { S.end = 0; }
+      else if (S.end && !S.lock && now - (S.lastSeen || 0) > 15000 && S.end - now > 20000) { S.end = 0; S.pending = false; }
     });
   }
   b29Tick(now) {
     const list = this.hunt().buffs || [], st = this._bst || {};
     list.forEach(b => { const S = st[b.id]; if (!S || !S.end) return; const bf = Math.max(0, Number(b.before) || 0);
       if (!S.alerted && now >= S.end - bf * 1000) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + (bf ? ' ' + bf + '초 전' : ' 종료')); }
-      if (now >= S.end) { S.end = 0; S.doneAt = now; } });
+      if (now >= S.end) { S.end = 0; S.pending = false; S.doneAt = now; } });
   }
   buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
   buffListVals() {
@@ -1658,7 +1660,7 @@ class Component extends DCLogic {
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
         const left = S.end && S.end > Date.now() ? S.end - Date.now() : 0, mm = Math.floor(left / 60000), ss = Math.floor(left % 60000 / 1000);
-        const t = left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ['노란 시간 대기 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
+        const t = !left && S.fail && this._stream ? ['인식 실패', 'oklch(0.95 0.04 25)', 'oklch(0.5 0.19 25)'] : left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ['노란 시간 대기 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
         return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2],
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
@@ -1851,9 +1853,9 @@ class Component extends DCLogic {
       if (g.w <= Math.max(3, H * 0.34)) { str += '1'; continue; }
       let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
       const DIG = this._DIG || {}; let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
-      if (bk == null || bd > 16) return null; str += bk;
+      if (bk == null || bd > 16) { str += '?'; continue; } str += bk;
     }
-    const mm = str.match(/^(\d):?(\d\d)$/); if (!mm) return null;
+    const mm = str.match(/(\d):(\d\d)/); if (!mm) return null;
     return Number(mm[1]) * 60 + Number(mm[2]);
   }
   readCd(a, bw, bh) {
