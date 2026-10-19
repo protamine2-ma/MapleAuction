@@ -1547,9 +1547,11 @@ class Component extends DCLogic {
       } else {
         let yel = 0; for (let i = 0; i < a.length; i += 4) if (a[i] > 190 && a[i + 1] > 165 && a[i + 2] < 60 && a[i] - a[i + 2] > 150) yel++;
         const cd = yel >= 5; D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
-        if (D.on === 2 && D.ready !== false && !this._run[s.id]) { used = true; D.ready = false; }
+        if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
         if (D.off >= 3) D.ready = true;
       }
+      if (!D.boxAt) D.boxAt = now;
+      if (now - D.boxAt < 3000) used = false;
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
       if (used && isJanus && (now - (D.usedAt || 0) < 60000 || Math.abs(now - (D.endAt || 0)) < 2500)) used = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.endAt = now - 2250 + s.cd * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; }
