@@ -1557,7 +1557,7 @@ class Component extends DCLogic {
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
         if (cd) D.offSince = 0; else if (!D.offSince) D.offSince = now;
-        const needReady = (this.skillIcon(s) === 'qs-janus.png' || !D.everUsed) ? 3000 : 600;
+        const needReady = ((this.skillIcon(s) === 'qs-janus.png' && s.preset !== 'janus60') || !D.everUsed) ? 3000 : 600;
         if (D.off >= 3 && D.offSince && now - D.offSince >= needReady) D.ready = true;
       }
       if (!D.boxAt) D.boxAt = now;
