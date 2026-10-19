@@ -215,6 +215,10 @@ input{font-family:inherit;}
             </sc-if>
             <sc-if value="{{ s.custom }}" hint-placeholder-val="{{ false }}">
               <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <button onClick="{{ s.pickPos }}" style="padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
+                <span style="font-size:12px;font-weight:600;color:{{ s.customColor }};">{{ s.customMsg }}</span>
+              </div>
             </sc-if>
           </div>
         </div>
@@ -227,6 +231,17 @@ input{font-family:inherit;}
         <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
+    <sc-if value="{{ picking }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:8px;padding:14px 20px;border-top:1px solid #efefec;background:oklch(0.97 0.02 255);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:14px;font-weight:700;color:oklch(0.3 0.09 255);">'{{ pickName }}' 스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)</span>
+          <button onClick="{{ cancelPick }}" style="padding:5px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">취소</button>
+        </div>
+        <div style="border-radius:10px;background:#1d1e22;display:flex;justify-content:center;overflow:hidden;">
+          <canvas ref="{{ pickCvRef }}" onMouseDown="{{ onPickDown }}" onMouseMove="{{ onPickMove }}" onMouseUp="{{ onPickUp }}" onMouseLeave="{{ onPickUp }}" style="display:block;max-width:100%;height:auto;cursor:crosshair;user-select:none;image-rendering:pixelated;"></canvas>
+        </div>
+      </div>
+    </sc-if>
     <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;">화면을 공유하면 퀵슬롯에서 스킬 아이콘을 자동으로 찾아, 스킬을 쓰는 순간 타이머가 시작돼요(예인은 오른쪽 아래 숫자가 바뀔 때). 공유 없이 쓸 때는 스킬을 쓴 직후 스위치를 켜세요.</div>
   </section>
 
@@ -1307,6 +1322,7 @@ class Component extends DCLogic {
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
     if (this._stream) this.detectSkills(now);
+    if (this._pick && this._stream && !this._pdrag && now - (this._pickDrawAt || 0) > 500) { this._pickDrawAt = now; this.drawPick(); }
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
     this.forceUpdate();
   }
@@ -1420,6 +1436,16 @@ class Component extends DCLogic {
     const dr = this._drag;
     if (dr) { c.setLineDash([5, 4]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
   }
+  pickRegion() { const v = this._video; if (!v || !v.videoWidth) return null; const W = v.videoWidth, H = v.videoHeight, x = Math.floor(W * 0.4), y = Math.floor(H * 0.72); return { x, y, w: W - x, h: H - y }; }
+  drawPick() {
+    const cv = this._pickCv && this._pickCv.current, v = this._video, g = this.pickRegion(); if (!cv || !g) return;
+    if (cv.width !== g.w) { cv.width = g.w; cv.height = g.h; }
+    const c = cv.getContext('2d'); c.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
+    const s = this.hunt().skills.find(x => x.id === this._pick), res = v.videoWidth + 'x' + v.videoHeight, b = s && s.box && s.box[res];
+    c.lineWidth = 2;
+    if (b) { c.strokeStyle = '#3dff7a'; c.strokeRect(b.x - g.x, b.y - g.y, b.w, b.h); }
+    const dr = this._pdrag; if (dr) { c.setLineDash([4, 3]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
+  }
   runePt(e) {
     const cv = e.currentTarget, rc = cv.getBoundingClientRect();
     return { x: Math.max(0, Math.min(cv.width, Math.round((e.clientX - rc.left) * cv.width / rc.width))), y: Math.max(0, Math.min(cv.height, Math.round((e.clientY - rc.top) * cv.height / rc.height))) };
@@ -1519,9 +1545,10 @@ class Component extends DCLogic {
     this._det = this._det || {}; this._run = this._run || {}; this._alerted = this._alerted || {};
     let searched = false;
     h.skills.forEach(s => {
-      const icon = this.skillIcon(s); if (!icon) return;
+      const res = W + 'x' + H, cbox = s.preset === 'custom' && s.box ? s.box[res] : null;
+      const icon = cbox ? 'custom:' + cbox.x + ',' + cbox.y + ',' + cbox.w + ',' + cbox.h : this.skillIcon(s); if (!icon) return;
       const D = this._det[s.id] || (this._det[s.id] = { src: icon });
-      if (D.src !== icon || D.res !== W + 'x' + H) { this._det[s.id] = { src: icon, res: W + 'x' + H }; return; }
+      if (D.src !== icon || D.res !== res) { this._det[s.id] = { src: icon, res, box: cbox || undefined }; return; }
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
         const s0 = Math.round(W / 1366 * 20) / 20, SC = [...new Set([s0, 1, 1.4, 1.25, 1.33, 1.5, 0.8])];
@@ -1646,6 +1673,11 @@ class Component extends DCLogic {
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
           presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom',
+          ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
+            return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
+              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
+              customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
+              pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
           ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : '') : '퀵슬롯에서 찾는 중…';
             return { detMsg: t, hasDet: !!t, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
@@ -1657,6 +1689,17 @@ class Component extends DCLogic {
           remove: () => { if (this._run) delete this._run[s.id]; this.saveHunt({ ...h, skills: h.skills.filter(x => x.id !== s.id) }); } };
       }),
       huntNoSkills: !h.skills.length,
+      ...(() => { if (!this._pickCv) this._pickCv = React.createRef(); const ps = this._stream && h.skills.find(x => x.id === this._pick);
+        const pt = e => this.runePt(e);
+        return { picking: !!ps, pickName: ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
+          cancelPick: () => { this._pick = null; this._pdrag = null; this.forceUpdate(); },
+          onPickDown: e => { const p = pt(e); this._pdrag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawPick(); },
+          onPickMove: e => { if (!this._pdrag) return; const p = pt(e); this._pdrag.x1 = p.x; this._pdrag.y1 = p.y; this.drawPick(); },
+          onPickUp: () => { const d = this._pdrag, g = this.pickRegion(), v = this._video; this._pdrag = null; if (!d || !g || !ps) return;
+            const w = Math.abs(d.x1 - d.x0), hh = Math.abs(d.y1 - d.y0); if (w < 8 || hh < 8) { this.drawPick(); return; }
+            const res = v.videoWidth + 'x' + v.videoHeight, box = { x: g.x + Math.min(d.x0, d.x1), y: g.y + Math.min(d.y0, d.y1), w, h: hh };
+            if (this._run) delete this._run[ps.id];
+            this._pick = null; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== ps.id ? x : { ...x, box: { ...(x.box || {}), [res]: box } }) }); } }; })(),
       addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 80, before: 8 }] }),
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
