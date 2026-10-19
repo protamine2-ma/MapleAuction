@@ -1766,6 +1766,16 @@ class Component extends DCLogic {
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
+        if (this.skillIcon(s) === 'qs-janus.png') {
+          const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
+          const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
+          const lim = Math.max(5, Math.round(mk.length * 0.05));
+          if (!D.jmk) D.jmk = mk;
+          else if (dif(mk, D.jmk) >= lim) { if (D.jc && dif(mk, D.jc) <= 2) { if (++D.jn >= 3) { D.jmk = mk; D.jc = null;
+                const wc = m => m.reduce((p, q) => p + q, 0), fewer = wc(mk) !== wc(D.jprev || mk);
+                if (this._run[s.id] && now - (D.usedAt || 0) >= 60000 && now < (D.endAt || 0) - 3000) used = true; } } else { D.jc = mk; D.jn = 1; D.jprev = D.jmk; } }
+          else D.jc = null;
+        }
         if (cd) D.offSince = 0; else if (!D.offSince) D.offSince = now;
         const needReady = ((this.skillIcon(s) === 'qs-janus.png' && s.preset !== 'janus60') || !D.everUsed) ? 3000 : 600;
         if (D.off >= 3 && D.offSince && now - D.offSince >= needReady) D.ready = true;
@@ -1773,7 +1783,7 @@ class Component extends DCLogic {
       if (!D.boxAt) D.boxAt = now;
       if (now - D.boxAt < 3000) used = false;
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
-      if (used && isJanus && (now - (D.usedAt || 0) < 60000 || Math.abs(now - (D.endAt || 0)) < 2500)) used = false;
+      if (used && isJanus && now - (D.usedAt || 0) < 60000) used = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true; D.endAt = now - 2250 + (s.preset === 'yein67' ? 59 : s.cd) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; }
     });
   }
