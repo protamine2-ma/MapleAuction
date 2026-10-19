@@ -264,32 +264,32 @@ input{font-family:inherit;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">버프 종료 알림</h2>
+      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">스킬 쿨타임 자동 감지</h2>
       <span style="padding:5px 12px;border-radius:999px;background:{{ buffStatusBg }};color:{{ buffStatusColor }};font-size:13px;font-weight:700;">{{ buffStatus }}</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <button onClick="{{ toggleBuff }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
-          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ buffSw.swBg }};display:flex;justify-content:{{ buffSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>버프 감지
+          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ buffSw.swBg }};display:flex;justify-content:{{ buffSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>쿨타임 감지
         </button>
         <div style="display:grid;grid-template-columns:auto 110px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
-          <span>버프 이름 (읽어줄 이름)</span><input value="{{ buffName }}" onChange="{{ onBuffName }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
-          <span>지속시간 (초) · 비우면 자동 측정</span><input type="number" min="0" value="{{ buffDur }}" onChange="{{ onBuffDur }}" placeholder="자동" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>스킬 이름 (읽어줄 이름)</span><input value="{{ buffName }}" onChange="{{ onBuffName }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>쿨타임 (초) · 비우면 자동 측정</span><input type="number" min="0" value="{{ buffDur }}" onChange="{{ onBuffDur }}" placeholder="자동" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>알림 시점 (초 전)</span><input type="number" min="0" value="{{ buffBefore }}" onChange="{{ onBuffBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>남은 시간</span><span style="font-size:20px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ buffLeftColor }};">{{ buffLeft }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">버프가 켜져 있을 때 오른쪽 미리보기에서 버프 아이콘의 숫자 없는 부분(왼쪽 위)을 드래그하세요. 아이콘이 나타나면 시간을 재고, 사라지면 지속시간을 자동으로 기억해요. 다음부터는 끝나기 전에 알려줘요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">스킬을 쓴 뒤 쿨타임 숫자가 보일 때, 오른쪽 미리보기에서 스킬 아이콘의 숫자 없는 부분(왼쪽 위)을 드래그하세요. 아이콘이 나타나면 시간을 재고, 사라지면 쿨타임을 자동으로 기억해요. 다음부터는 쿨타임이 끝나기 전에 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-          <span style="font-size:12px;font-weight:600;color:#9a9ca1;">버프창 미리보기 (화면 오른쪽 위) · 켜짐은 초록 네모</span>
+          <span style="font-size:12px;font-weight:600;color:#9a9ca1;">화면 오른쪽 위 미리보기 · 쿨타임 중이면 초록 네모</span>
           <sc-if value="{{ hasBuffBox }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ resetBuffBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">아이콘 다시 지정</button>
           </sc-if>
         </div>
         <div style="min-height:120px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;">
           <canvas ref="{{ buffCvRef }}" onMouseDown="{{ onBuffDown }}" onMouseMove="{{ onBuffMove }}" onMouseUp="{{ onBuffUp }}" onMouseLeave="{{ onBuffUp }}" style="cursor:crosshair;user-select:none;display:{{ buffCvDisplay }};max-width:100%;height:auto;image-rendering:pixelated;"></canvas>
-          <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#8a8c92;">화면 공유를 시작하면 여기에 버프창이 보여요</span></sc-if>
+          <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#8a8c92;">화면 공유를 시작하면 여기에 화면 오른쪽 위가 보여요</span></sc-if>
         </div>
       </div>
     </div>
@@ -1473,7 +1473,7 @@ class Component extends DCLogic {
     const b = this.buffCfg(), res = this._buffRes, box = res && b.box[res], now = Date.now();
     const sw = on => ({ swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start' });
     const left = this._buffOn && b.dur ? Math.max(0, b.dur - (now - this._buffStart) / 1000) : null;
-    const st = !b.on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !box ? ['아이콘 지정 필요', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : this._buffOn ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 꺼짐', '#f0f0ee', '#6b6d73'];
+    const st = !b.on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !box ? ['아이콘 지정 필요', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : this._buffOn ? ['쿨타임 중', 'oklch(0.48 0.17 255)', '#fff'] : ['사용 가능', '#f0f0ee', '#6b6d73'];
     return {
       buffSw: sw(b.on), toggleBuff: () => this.saveBuff({ on: !b.on }),
       buffName: b.name, onBuffName: e => this.saveBuff({ name: e.target.value }),
