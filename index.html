@@ -1524,7 +1524,8 @@ class Component extends DCLogic {
       if (D.src !== icon || D.res !== W + 'x' + H) { this._det[s.id] = { src: icon, res: W + 'x' + H }; return; }
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
-        const COMBO = [[1, 1], [1, 0], [1.25, 1], [1.25, 0], [1.5, 1], [1.5, 0], [0.8, 1], [0.8, 0]];
+        const s0 = Math.round(W / 1366 * 20) / 20, SC = [...new Set([s0, 1, 1.4, 1.25, 1.33, 1.5, 0.8])];
+        const COMBO = SC.flatMap(s => [[s, 1], [s, 0]]);
         const tr = D.tryIdx || 0, cb = COMBO[tr % COMBO.length];
         const T = this.tplFor(icon, cb[0]); if (!T) return;
         const cdSrc = { 'qs-janus.png': 'qs-janus-cd.png', 'qs-erda.png': 'qs-erda-cd.png' }[icon], T2 = cdSrc ? this.tplFor(cdSrc, cb[0]) : null;
