@@ -262,7 +262,7 @@ input{font-family:inherit;}
       <div style="padding:22px 20px;font-size:14px;color:#9a9ca1;text-align:center;">'+ 버프 추가'를 눌러 알림 받을 버프를 고르세요</div>
     </sc-if>
     <sc-for list="{{ buffRows }}" as="b" hint-placeholder-count="1">
-      <div style="display:grid;grid-template-columns:52px minmax(0,1fr) auto 32px;gap:12px;align-items:center;padding:12px 20px;border-top:1px solid #efefec;">
+      <div style="display:grid;grid-template-columns:52px minmax(0,1fr) auto auto 32px;gap:12px;align-items:center;padding:12px 20px;border-top:1px solid #efefec;">
         <button onClick="{{ b.toggle }}" style="width:44px;height:24px;border:none;border-radius:999px;padding:2px;background:{{ b.swBg }};display:flex;justify-content:{{ b.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
           <span style="width:26px;height:26px;border-radius:5px;flex:none;background-size:cover;image-rendering:pixelated;background-image:{{ b.iconBg }};"></span>
@@ -272,6 +272,9 @@ input{font-family:inherit;}
             </sc-for>
           </select>
         </div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#6b6d73;white-space:nowrap;">
+          <input type="number" min="0" value="{{ b.beforeVal }}" onChange="{{ b.onBefore }}" style="box-sizing:border-box;width:60px;padding:6px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;">초 전 알림
+        </label>
         <div style="display:flex;align-items:center;gap:6px;">
           <span style="padding:5px 12px;border-radius:999px;background:{{ b.stBg }};color:{{ b.stColor }};font-size:13px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;">{{ b.stText }}</span>
           <sc-if value="{{ b.hasTimer }}" hint-placeholder-val="{{ false }}">
@@ -281,7 +284,7 @@ input{font-family:inherit;}
         <button onClick="{{ b.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
-    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">화면 오른쪽 위 버프창에서 숫자 '29'가 붙은 아이콘이 보이면 그때부터 30분 타이머가 시작되고, 30분이 지나면 '○○ 종료'라고 알려줘요.</div>
+    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">버프창에서 노란 남은 시간(9:59 이하)이 뜨면 그때부터 10분 타이머가 시작돼요. 기본은 버프가 끝날 때 '○○ 종료'라고 알려주고, '초 전 알림'에 숫자를 넣으면 그만큼 미리 알려줘요(0 = 끝날 때).</div>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
@@ -1361,7 +1364,7 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
-    if (this._stream) { this.detectSkills(now); this.checkBuffs29(now); }
+    if (this._stream) { this.detectSkills(now); this.checkBuffsTimer(now); }
     this.b29Tick(now);
     if (this._pick && this._stream && !this._pdrag && now - (this._pickDrawAt || 0) > 500) { this._pickDrawAt = now; this.drawPick(); }
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
@@ -1608,9 +1611,34 @@ class Component extends DCLogic {
       }
     });
   }
+  checkBuffsTimer(now) {
+    const v = this._video, list = (this.hunt().buffs || []).filter(b => String(b.preset).startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
+    if (now - (this._btChk || 0) < 1000) return; this._btChk = now;
+    if (now - (this._fadeAt || 0) < 3000) return;
+    const W = v.videoWidth, H = v.videoHeight, rx = Math.floor(W * 0.45), rw = W - rx, rh = Math.floor(H * 0.25);
+    const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, 0, rw, rh, 0, 0, rw, rh);
+    const d = x.getImageData(0, 0, rw, rh).data;
+    const yel = (X, Y, n) => { let k = 0, dk = 0; for (let y = 9; y <= 22; y++) for (let xx = 2; xx < n - 2; xx++) { const i = ((Y + y) * rw + X + xx) * 4; if (d[i] > 215 && d[i + 1] > 195 && d[i + 2] < 90) k++; if (d[i] + d[i + 1] + d[i + 2] < 120) dk++; } return dk >= 80 ? k : 0; };
+    const slots = [];
+    for (let Y = 0; Y <= rh - 32; Y++) for (let X = 0; X <= rw - 32; X += 2) { if (slots.some(s => Math.abs(s[0] - X) < 24 && Math.abs(s[1] - Y) < 24)) continue; if (yel(X, Y, 32) >= 35) { let bx = X, by = Y, bk = 0; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { if (X + dx < 0 || Y + dy < 0 || X + dx > rw - 32 || Y + dy > rh - 32) continue; const k = yel(X + dx, Y + dy, 32); if (k > bk) { bk = k; bx = X + dx; by = Y + dy; } } slots.push([bx, by]); } }
+    const P = []; for (let y = 3; y <= 29; y += 2) for (let xx = 3; xx <= 29; xx += 2) { if (y >= 8 && y <= 22) continue; if (xx < 15 && y > 19) continue; P.push([xx, y]); }
+    const keys = this.buffPresetList().map(p => p.key), T = {};
+    for (const k of keys) { T[k] = this.tplFor(k + '.png', 32 / 30); if (!T[k]) return; }
+    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 55 ? bk : null; });
+    this._bst = this._bst || {};
+    list.forEach(b => {
+      const S = this._bst[b.id] || (this._bst[b.id] = {});
+      const has = owner.includes(b.preset);
+      if (has) { if (!S.end && now - (S.doneAt || 0) > 60000) { S.end = now + 599000; S.alerted = false; } S.lastSeen = now; }
+      else if (S.end && now - (S.lastSeen || 0) > 15000 && S.end - now > 20000) { S.end = 0; }
+    });
+  }
   b29Tick(now) {
     const list = this.hunt().buffs || [], st = this._bst || {};
-    list.forEach(b => { const S = st[b.id]; if (S && S.end && !S.alerted && now >= S.end) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료'); S.end = 0; } });
+    list.forEach(b => { const S = st[b.id]; if (!S || !S.end) return; const bf = Math.max(0, Number(b.before) || 0);
+      if (!S.alerted && now >= S.end - bf * 1000) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + (bf ? ' ' + bf + '초 전' : ' 종료')); }
+      if (now >= S.end) { S.end = 0; S.doneAt = now; } });
   }
   buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
   buffListVals() {
@@ -1621,13 +1649,13 @@ class Component extends DCLogic {
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
         const left = S.end && S.end > Date.now() ? S.end - Date.now() : 0, mm = Math.floor(left / 60000), ss = Math.floor(left % 60000 / 1000);
-        const t = left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ["'29' 대기 중", 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
-        return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
+        const t = left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ['노란 시간 대기 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
+        return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2],
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
           onPreset: e => { const k = e.target.value; delete st[b.id]; sv(list.map(x => x.id === b.id ? { ...x, preset: k } : x)); },
           remove: () => { delete st[b.id]; sv(list.filter(x => x.id !== b.id)); } }; }),
-      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'b29-vip', on: true }]),
+      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'b29-vip', on: true, before: 0 }]),
     };
   }
   checkBuff(now) {
