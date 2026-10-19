@@ -1460,11 +1460,11 @@ class Component extends DCLogic {
     this._buffOn = el < keep;
     if (this._buffOn && !this._buffAlerted && el >= keep - b.before * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전'); }
   }
-  tplFor(src) {
-    this._tpls = this._tpls || {};
-    if (this._tpls[src] !== undefined) return this._tpls[src];
-    this._tpls[src] = null;
-    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = 30; c.height = 30; const x = c.getContext('2d'); x.drawImage(im, 0, 0, 30, 30); this._tpls[src] = { w: 30, h: 30, d: x.getImageData(0, 0, 30, 30).data }; }; im.src = src;
+  tplFor(src, sc = 1) {
+    this._tpls = this._tpls || {}; const key = src + '@' + sc;
+    if (this._tpls[key] !== undefined) return this._tpls[key];
+    this._tpls[key] = null; const n = Math.round(30 * sc);
+    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.src = src;
     return null;
   }
   findHP(v, W, H) {
@@ -1486,14 +1486,15 @@ class Component extends DCLogic {
     for (let y = best.y - y0; y >= 0; y--) { const i = (y * W + Math.round((best.x0 + best.x1) / 2)) * 4; if (isHP(i)) best.top = y0 + y; else if (best.y - (y0 + y) > 3) break; }
     return best;
   }
-  matchIcon(v, W, H, T) {
-    const hp = this._hp;
-    let rx = Math.floor(W * 0.45), ry = H - Math.max(80, Math.round(H * 0.105)), rw = W - rx, rh = H - ry;
+  matchIcon(v, W, H, T, useHP) {
+    const hp = useHP ? this._hp : null; if (useHP && !hp) return null;
+    let rx = Math.floor(W * 0.4), ry = H - Math.max(110, Math.round(H * 0.2)), rw = W - rx, rh = H - ry;
     if (hp) { rx = hp.x1 + 2; ry = Math.max(0, hp.top - T.h - 8); rh = Math.min(H - ry, 2 * T.h + 22); rw = W - rx; }
-    if (!this._qsImg || this._qsAt !== this._tickNow) {
+    const rk = this._tickNow + ':' + rx + ',' + ry + ',' + rw + ',' + rh;
+    if (!this._qsImg || this._qsAt !== rk) {
       const c = this._fc || (this._fc = document.createElement('canvas')); c.width = rw; c.height = rh;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
-      this._qsImg = x.getImageData(0, 0, rw, rh).data; this._qsAt = this._tickNow;
+      this._qsImg = x.getImageData(0, 0, rw, rh).data; this._qsAt = rk;
     }
     if (rw < T.w || rh < T.h) return null;
     const d = this._qsImg, pts = [];
@@ -1501,6 +1502,7 @@ class Component extends DCLogic {
     for (let y = 11; y <= 25; y += 2) for (const X of [5, 7]) pts.push([X, y]);
     for (let y = 11; y <= 17; y += 2) for (const X of [23, 25]) pts.push([X, y]);
     for (let X = 9; X <= 17; X += 2) pts.push([X, 25]);
+    const f = T.w / 30; for (const p of pts) { p[0] = Math.min(T.w - 1, Math.round(p[0] * f)); p[1] = Math.min(T.h - 1, Math.round(p[1] * f)); }
     let st = 0; for (const p of pts) { const t = (p[1] * T.w + p[0]) * 4; st += T.d[t] + T.d[t + 1] + T.d[t + 2]; }
     let best = 1e9, bx = 0, by = 0;
     for (let y = 0; y <= rh - T.h; y++) for (let X = 0; X <= rw - T.w; X++) {
@@ -1522,11 +1524,13 @@ class Component extends DCLogic {
       if (D.src !== icon || D.res !== W + 'x' + H) { this._det[s.id] = { src: icon, res: W + 'x' + H }; return; }
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
-        const T = this.tplFor(icon); if (!T) return;
-        const cdSrc = { 'qs-janus.png': 'qs-janus-cd.png', 'qs-erda.png': 'qs-erda-cd.png' }[icon], T2 = cdSrc ? this.tplFor(cdSrc) : null;
-        searched = true; D.findAt = now;
-        if (!this._hp || now - (this._hpAt || 0) > 3000) { this._hp = this.findHP(v, W, H); this._hpAt = now; this._qsAt = null; }
-        D.box = this.matchIcon(v, W, H, T) || (T2 ? this.matchIcon(v, W, H, T2) : null); return;
+        const COMBO = [[1, 1], [1, 0], [1.25, 1], [1.25, 0], [1.5, 1], [1.5, 0], [0.8, 1], [0.8, 0]];
+        const tr = D.tryIdx || 0, cb = COMBO[tr % COMBO.length];
+        const T = this.tplFor(icon, cb[0]); if (!T) return;
+        const cdSrc = { 'qs-janus.png': 'qs-janus-cd.png', 'qs-erda.png': 'qs-erda-cd.png' }[icon], T2 = cdSrc ? this.tplFor(cdSrc, cb[0]) : null;
+        searched = true; D.findAt = now; D.tryIdx = tr + 1;
+        if (!this._hp || now - (this._hpAt || 0) > 3000) { this._hp = this.findHP(v, W, H); this._hpAt = now; }
+        D.box = this.matchIcon(v, W, H, T, cb[1]) || (T2 ? this.matchIcon(v, W, H, T2, cb[1]) : null); return;
       }
       const c = this._bt || (this._bt = document.createElement('canvas')); c.width = D.box.w; c.height = D.box.h;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
