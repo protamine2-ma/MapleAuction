@@ -211,7 +211,13 @@ input{font-family:inherit;}
               </sc-for>
             </select>
             <sc-if value="{{ s.hasDet }}" hint-placeholder-val="{{ false }}">
-              <span style="font-size:12px;font-weight:600;color:{{ s.detColor }};">{{ s.detMsg }}</span>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}">
+                  <img src="{{ s.thumb }}" alt="" title="지금 보고 있는 칸" style="width:28px;height:28px;border-radius:4px;border:1px solid #e3e3e0;image-rendering:pixelated;">
+                  <button onClick="{{ s.refind }}" style="padding:3px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">다시 찾기</button>
+                </sc-if>
+                <span style="font-size:12px;font-weight:600;color:{{ s.detColor }};">{{ s.detMsg }}</span>
+              </div>
             </sc-if>
             <sc-if value="{{ s.custom }}" hint-placeholder-val="{{ false }}">
               <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
@@ -1487,15 +1493,18 @@ class Component extends DCLogic {
   }
   buffCfg() { return { on: true, name: '예인', keep: 67, before: 2, box: {}, sig: {}, ...(this.hunt().buff || {}) }; }
   saveBuff(p) { const h = this.hunt(); this.saveHunt({ ...h, buff: { ...this.buffCfg(), ...p } }); }
-  buffPts(n) {
+  buffPts(n, union) {
     const f = n / 32, P = [];
-    for (let y = 4; y <= 28; y += 2) for (let x = 4; x <= 28; x += 2) { if (x < 15 && y > 19) continue; P.push([Math.round(x * f), Math.round(y * f)]); }
+    for (let y = 3; y <= 29; y += 2) for (let x = 3; x <= 29; x += 2) { if (y >= 9 && y <= 21) continue; if (!union && x < 15 && y > 19) continue; P.push([Math.round(x * f), Math.round(y * f)]); }
     return P;
   }
   buffScore(d, rw, X, Y, T, P) {
-    let st = 0, sc = 0; for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; st += T.d[t] + T.d[t + 1] + T.d[t + 2]; sc += d[a] + d[a + 1] + d[a + 2]; }
-    const g = Math.max(1, Math.min(2.5, st / Math.max(1, sc))); let good = 0;
-    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; if (Math.abs(d[a] * g - T.d[t]) + Math.abs(d[a + 1] * g - T.d[t + 1]) + Math.abs(d[a + 2] * g - T.d[t + 2]) < 105) good++; }
+    let mc = 0, mt = 0; const N = P.length * 3;
+    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; mc += d[a] + d[a + 1] + d[a + 2]; mt += T.d[t] + T.d[t + 1] + T.d[t + 2]; }
+    mc /= N; mt /= N; let vc = 0, vt = 0;
+    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; for (let k = 0; k < 3; k++) { vc += (d[a + k] - mc) ** 2; vt += (T.d[t + k] - mt) ** 2; } }
+    const g = Math.sqrt(vt / Math.max(1, vc)); let good = 0;
+    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; let e = 0; for (let k = 0; k < 3; k++) e += Math.abs((d[a + k] - mc) * g - (T.d[t + k] - mt)); if (e < 105) good++; }
     return 100 * (1 - good / P.length);
   }
   checkBuffs(now) {
@@ -1510,20 +1519,21 @@ class Component extends DCLogic {
     const ALL = [...new Set(list.map(b => 'buff-' + b.preset + '.png'))], GROUP = { union1: 'u', union2: 'u', union3: 'u', mvpadd: 'm', mvp70: 'm', exp3: 'e', exp4: 'e' };
     const T = {}; for (const f of ALL) { T[f] = this.tplFor(f, 32 / 30); if (!T[f]) return; }
     for (const g of ['u', 'm', 'e']) for (const k in GROUP) if (GROUP[k] === g && list.some(b => GROUP[b.preset] === g)) { const f = 'buff-' + k + '.png'; if (!T[f]) { T[f] = this.tplFor(f, 32 / 30); if (!T[f]) return; } }
-    const n = T[ALL[0]].w, P = this.buffPts(n);
+    const n = T[ALL[0]].w, PU = this.buffPts(n, true), PO = this.buffPts(n, false);
     this._bst = this._bst || {};
-    const locate = Tt => { const out = []; let lim = 50;
+    const locate = (Tt, P) => { const out = []; let lim = 50;
       for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) { const s = this.buffScore(d, rw, X, Y, Tt, P); if (s < lim) out.push([X, Y, s]); }
       return out.sort((a, b) => a[2] - b[2]).slice(0, 6); };
     list.forEach(b => {
       if (!BP.some(p => p.key === b.preset)) return;
       const src = 'buff-' + b.preset + '.png', sib = Object.keys(GROUP).filter(k => k !== b.preset && GROUP[k] === GROUP[b.preset]).map(k => 'buff-' + k + '.png');
       const S = this._bst[b.id] || (this._bst[b.id] = { miss: 0 });
+      const P = b.preset.startsWith('union') ? PU : PO;
       let best = 1e9;
       const tryAt = (X, Y) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - n || yy > rh - n) continue; const s = this.buffScore(d, rw, xx, yy, T[src], P); if (s < best) { best = s; S.at = [xx, yy]; } } };
       if (S.at) tryAt(S.at[0], S.at[1]);
       const keepLim = S.on ? 66 : 40;
-      if (best >= keepLim) { best = 1e9; const prev = S.at; for (const p of locate(T[src])) tryAt(p[0], p[1]); if (best >= 40) S.at = prev; }
+      if (best >= keepLim) { best = 1e9; const prev = S.at; for (const p of locate(T[src], P)) tryAt(p[0], p[1]); if (best >= 40) S.at = prev; }
       let on = best < (S.on ? 66 : 40);
       if (on) { const [X, Y] = S.at; for (const o of sib) if (T[o] && this.buffScore(d, rw, X, Y, T[o], P) < best - 2) on = false; }
       if (on) { S.miss = 0; S.on = true; S.seen = now; }
@@ -1661,24 +1671,26 @@ class Component extends DCLogic {
       const c = this._bt || (this._bt = document.createElement('canvas')); c.width = D.box.w; c.height = D.box.h;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
       const a = x.getImageData(0, 0, D.box.w, D.box.h).data, bw = D.box.w, bh = D.box.h;
+      if (now - (D.thumbAt || 0) > 800) { D.thumbAt = now; try { D.thumb = c.toDataURL(); } catch (e) {} }
       let used = false;
       if (this.skillMode(s) === 'count') {
         const mk = [];
         for (let y = Math.floor(bh * 0.6); y < bh; y++) for (let X = Math.floor(bw * 0.5); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
         const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let n = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) n++; return n; };
+        D.dbg = null; D.cnt = '숫자 변화 ' + (D.mk ? dif(mk, D.mk) : 0);
         if (!D.mk) D.mk = mk;
-        else if (dif(mk, D.mk) >= Math.max(6, Math.round(mk.length * 0.06))) { if (D.cand && dif(mk, D.cand) <= 2) { if (++D.n >= 2) { D.mk = mk; D.cand = null; used = true; } } else { D.cand = mk; D.n = 1; } }
+        else if (dif(mk, D.mk) >= Math.max(6, Math.round(mk.length * 0.06))) { if (D.cand && dif(mk, D.cand) <= 2) { if (++D.n >= 3) { D.mk = mk; D.cand = null; used = true; } } else { D.cand = mk; D.n = 1; } }
         else D.cand = null;
       } else {
         let yel = 0;
-        for (let y = Math.floor(bh * 0.18); y < Math.ceil(bh * 0.66); y++) for (let X = Math.floor(bw * 0.15); X < Math.ceil(bw * 0.62); X++) { const i = (y * bw + X) * 4; if (a[i] > 190 && a[i + 1] > 165 && a[i + 2] < 60 && a[i] - a[i + 2] > 150) yel++; }
+        for (let y = Math.floor(bh * 0.18); y < Math.ceil(bh * 0.64); y++) for (let X = Math.floor(bw * 0.1); X < Math.ceil(bw * 0.8); X++) { const i = (y * bw + X) * 4; if (a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80 && a[i] - a[i + 2] > 150) yel++; }
         let br = 0, bn = 0;
         for (let y = 2; y < bh - 2; y += 2) for (let X = 2; X < bw - 2; X += 2) { if (y > bh * 0.15 && y < bh * 0.7 && X > bw * 0.12 && X < bw * 0.65) continue; const i = (y * bw + X) * 4; br += a[i] + a[i + 1] + a[i + 2]; bn++; }
         br /= Math.max(1, bn);
         const dark = D.bright ? br < D.bright * 0.85 : true;
         D.dbg = (D.bright ? Math.round(br / D.bright * 100) : 100) + '% · 숫자 ' + (yel >= 5 ? '있음' : '없음');
         const cd = yel >= 5 && dark;
-        if (!cd && yel < 3) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
+        if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
         if (cd) D.offSince = 0; else if (!D.offSince) D.offSince = now;
@@ -1776,8 +1788,9 @@ class Component extends DCLogic {
               customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
               customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
               pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
-          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : '') : '퀵슬롯에서 찾는 중…';
-            return { detMsg: t, hasDet: !!t, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
+          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : D.cnt ? ' · ' + D.cnt : '') : '퀵슬롯에서 찾는 중…';
+            return { detMsg: t, hasDet: !!t, thumb: (this._stream && D && D.box && D.thumb) || '', hasThumb: !!(this._stream && D && D.box && D.thumb),
+              refind: () => { if (this._det) delete this._det[s.id]; if (this._run) delete this._run[s.id]; this.forceUpdate(); }, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
