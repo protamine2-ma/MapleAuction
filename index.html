@@ -1550,7 +1550,8 @@ class Component extends DCLogic {
         let br = 0, bn = 0;
         for (let y = 2; y < bh - 2; y += 2) for (let X = 2; X < bw - 2; X += 2) { if (y > bh * 0.15 && y < bh * 0.7 && X > bw * 0.12 && X < bw * 0.65) continue; const i = (y * bw + X) * 4; br += a[i] + a[i + 1] + a[i + 2]; bn++; }
         br /= Math.max(1, bn);
-        const dark = D.bright ? br < D.bright * 0.78 : false;
+        const dark = D.bright ? br < D.bright * 0.85 : true;
+        D.dbg = (D.bright ? Math.round(br / D.bright * 100) : 100) + '% · 숫자 ' + (yel >= 5 ? '있음' : '없음');
         const cd = yel >= 5 && dark;
         if (!cd && yel < 3) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
@@ -1643,7 +1644,7 @@ class Component extends DCLogic {
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
           presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom',
-          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' : '퀵슬롯에서 찾는 중…';
+          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : '') : '퀵슬롯에서 찾는 중…';
             return { detMsg: t, hasDet: !!t, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
