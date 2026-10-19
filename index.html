@@ -1467,22 +1467,49 @@ class Component extends DCLogic {
     const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = 30; c.height = 30; const x = c.getContext('2d'); x.drawImage(im, 0, 0, 30, 30); this._tpls[src] = { w: 30, h: 30, d: x.getImageData(0, 0, 30, 30).data }; }; im.src = src;
     return null;
   }
+  findHP(v, W, H) {
+    const y0 = Math.floor(H * 0.5), hh = H - y0;
+    const c = this._hc || (this._hc = document.createElement('canvas')); c.width = W; c.height = hh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, 0, y0, W, hh, 0, 0, W, hh);
+    const d = x.getImageData(0, 0, W, hh).data, isHP = i => d[i] > 195 && d[i + 1] > 45 && d[i + 1] < 110 && d[i + 2] > 90 && d[i + 2] < 175;
+    let best = null;
+    for (let y = hh - 1; y >= 0; y--) {
+      let s = -1;
+      for (let X = 0; X <= W; X++) {
+        const on = X < W && isHP((y * W + X) * 4);
+        if (on && s < 0) s = X;
+        if (!on && s >= 0) { if (X - s >= 50 && (!best || y0 + y >= best.y - 25)) best = { x0: s, x1: X - 1, y: y0 + y, top: y0 + y }; s = -1; }
+      }
+      if (best && y0 + y < best.y - 25) break;
+    }
+    if (!best) return null;
+    for (let y = best.y - y0; y >= 0; y--) { const i = (y * W + Math.round((best.x0 + best.x1) / 2)) * 4; if (isHP(i)) best.top = y0 + y; else if (best.y - (y0 + y) > 3) break; }
+    return best;
+  }
   matchIcon(v, W, H, T) {
-    const rx = Math.floor(W * 0.45), ry = H - Math.max(80, Math.round(H * 0.105)), rw = W - rx, rh = H - ry;
+    const hp = this._hp;
+    let rx = Math.floor(W * 0.45), ry = H - Math.max(80, Math.round(H * 0.105)), rw = W - rx, rh = H - ry;
+    if (hp) { rx = hp.x1 + 2; ry = Math.max(0, hp.top - T.h - 8); rh = Math.min(H - ry, 2 * T.h + 22); rw = W - rx; }
     if (!this._qsImg || this._qsAt !== this._tickNow) {
       const c = this._fc || (this._fc = document.createElement('canvas')); c.width = rw; c.height = rh;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
       this._qsImg = x.getImageData(0, 0, rw, rh).data; this._qsAt = this._tickNow;
     }
+    if (rw < T.w || rh < T.h) return null;
     const d = this._qsImg, pts = [];
-    for (let j = 0; j < 7; j++) for (let i = 0; i < 7; i++) { const px = Math.round(10 + i * 2.5), py = Math.round(9 + j * 2.2); if (px < 19 || py < 18) pts.push([px, py]); }
+    for (let X = 11; X <= 25; X += 2) for (const y of [6, 8]) pts.push([X, y]);
+    for (let y = 11; y <= 25; y += 2) for (const X of [5, 7]) pts.push([X, y]);
+    for (let y = 11; y <= 17; y += 2) for (const X of [23, 25]) pts.push([X, y]);
+    for (let X = 9; X <= 17; X += 2) pts.push([X, 25]);
+    let st = 0; for (const p of pts) { const t = (p[1] * T.w + p[0]) * 4; st += T.d[t] + T.d[t + 1] + T.d[t + 2]; }
     let best = 1e9, bx = 0, by = 0;
     for (let y = 0; y <= rh - T.h; y++) for (let X = 0; X <= rw - T.w; X++) {
-      let s = 0;
-      for (let k = 0; k < pts.length; k++) { const p = pts[k], a = ((y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; s += Math.abs(d[a] - T.d[t]) + Math.abs(d[a + 1] - T.d[t + 1]) + Math.abs(d[a + 2] - T.d[t + 2]); if (s > best) break; }
+      let sc = 0; for (const p of pts) { const a = ((y + p[1]) * rw + X + p[0]) * 4; sc += d[a] + d[a + 1] + d[a + 2]; }
+      const g = Math.max(1, Math.min(3, st / Math.max(1, sc))); let s = 0;
+      for (let k = 0; k < pts.length; k++) { const p = pts[k], a = ((y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; s += Math.abs(d[a] * g - T.d[t]) + Math.abs(d[a + 1] * g - T.d[t + 1]) + Math.abs(d[a + 2] * g - T.d[t + 2]); if (s > best) break; }
       if (s < best) { best = s; bx = X; by = y; }
     }
-    return best / (pts.length * 3) < 40 ? { x: rx + bx, y: ry + by, w: T.w, h: T.h } : null;
+    return best / (pts.length * 3) < 30 ? { x: rx + bx, y: ry + by, w: T.w, h: T.h } : null;
   }
   detectSkills(now) {
     const v = this._video; if (!v || !v.videoWidth) return;
@@ -1496,7 +1523,9 @@ class Component extends DCLogic {
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
         const T = this.tplFor(icon); if (!T) return;
-        searched = true; D.findAt = now; D.box = this.matchIcon(v, W, H, T); return;
+        searched = true; D.findAt = now;
+        if (!this._hp || now - (this._hpAt || 0) > 3000) { this._hp = this.findHP(v, W, H); this._hpAt = now; this._qsAt = null; }
+        D.box = this.matchIcon(v, W, H, T); return;
       }
       const c = this._bt || (this._bt = document.createElement('canvas')); c.width = D.box.w; c.height = D.box.h;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
@@ -1516,8 +1545,8 @@ class Component extends DCLogic {
         if (D.off >= 3) D.ready = true;
       }
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
-      if (used && isJanus && (this._run[s.id] || now - (D.usedAt || 0) < 60000)) used = false;
-      if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; this._run[s.id] = now - 250 + s.cd * 1000; this._alerted[s.id] = false; }
+      if (used && isJanus && (now - (D.usedAt || 0) < 60000 || Math.abs(now - (D.endAt || 0)) < 2500)) used = false;
+      if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.endAt = now - 2250 + s.cd * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; }
     });
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
