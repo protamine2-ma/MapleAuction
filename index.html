@@ -1543,6 +1543,15 @@ class Component extends DCLogic {
     const v = this._video; if (!v || !v.videoWidth) return;
     const W = v.videoWidth, H = v.videoHeight, h = this.hunt(); this._tickNow = now;
     this._det = this._det || {}; this._run = this._run || {}; this._alerted = this._alerted || {};
+    const sc = this._sc || (this._sc = document.createElement('canvas')); sc.width = 48; sc.height = 27;
+    const sx = sc.getContext('2d', { willReadFrequently: true }); sx.drawImage(v, 0, 0, 48, 27);
+    const sd = sx.getImageData(0, 0, 48, 27).data; let lum = 0; for (let i = 0; i < sd.length; i += 4) lum += sd[i] + sd[i + 1] + sd[i + 2]; lum /= sd.length / 4 * 3;
+    const avg = this._lumAvg || lum, fading = lum < 25 || lum < avg * 0.6;
+    if (fading) this._fadeAt = now; else this._lumAvg = avg * 0.9 + lum * 0.1;
+    if (now - (this._fadeAt || 0) < 3000) {
+      Object.values(this._det).forEach(D => { D.boxAt = now; D.mk = null; D.cand = null; D.on = 0; D.off = 0; D.offSince = 0; if (D.ready === true) D.ready = undefined; });
+      return;
+    }
     let searched = false;
     h.skills.forEach(s => {
       const res = W + 'x' + H, cbox = s.preset === 'custom' && s.box ? s.box[res] : null;
