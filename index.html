@@ -1328,7 +1328,8 @@ class Component extends DCLogic {
     try {
       const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5 }, audio: false });
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.srcObject = st; await v.play();
-      this._stream = st; this._video = v; this._rune = {};
+      this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null;
+      const bc = this.buffCfg(); if (Object.keys(bc.box || {}).length) this.saveBuff({ box: {}, sig: {} });
       st.getVideoTracks()[0].onended = () => this.stopShare();
       this._shareErr = ''; this.ensureTick(); this.forceUpdate();
     } catch (e) {
@@ -1433,6 +1434,7 @@ class Component extends DCLogic {
     const W = v.videoWidth, H = v.videoHeight, res = W + '×' + H, g = { x: 0, y: 0, w: W, h: H };
     const c = this._bc || (this._bc = document.createElement('canvas')), x = c.getContext('2d', { willReadFrequently: true });
     const b = this.buffCfg(); let box = b.box[res];
+    if (box && (box.w > 50 || box.h > 50)) box = null;
     if (now - (this._buffPrev || 0) >= 1000) {
       this._buffPrev = now; c.width = g.w; c.height = g.h; x.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
       this._buffImg = x.getImageData(0, 0, g.w, g.h); this._buffG = g; this._buffRes = res; this.drawBuffPreview();
@@ -1471,13 +1473,14 @@ class Component extends DCLogic {
       if (s < best) { best = s; bx = X; by = y; }
     }
     const score = best / (pts.length * 3);
-    this._autoIcon = score < 28 ? { x: rx + bx, y: ry + by, w: T.w, h: T.h } : null;
+    this._iconScore = Math.round(score);
+    this._autoIcon = score < 45 ? { x: rx + bx, y: ry + by, w: T.w, h: T.h } : null;
   }
   meanRGB(d) { let r = 0, g = 0, b = 0, n = d.length / 4; for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; } return [r / n, g / n, b / n]; }
   drawBuffPreview() {
     const cv = this._buffCv && this._buffCv.current, img = this._buffImg; if (!cv || !img) return;
     cv.width = img.width; cv.height = img.height; const c = cv.getContext('2d'); c.putImageData(img, 0, 0);
-    const box = this.buffCfg().box[this._buffRes] || this._autoIcon; c.lineWidth = 3;
+    let box = this.buffCfg().box[this._buffRes]; if (box && (box.w > 50 || box.h > 50)) box = null; box = box || this._autoIcon; c.lineWidth = 3;
     if (box) { c.strokeStyle = this._buffOn ? '#3dff7a' : '#ffd23f'; c.strokeRect(box.x, box.y, box.w, box.h); }
     const dr = this._bdrag; if (dr) { c.setLineDash([4, 3]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
   }
