@@ -210,6 +210,9 @@ input{font-family:inherit;}
                 <option value="{{ p.key }}">{{ p.label }}</option>
               </sc-for>
             </select>
+            <sc-if value="{{ s.hasDet }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12px;font-weight:600;color:{{ s.detColor }};">{{ s.detMsg }}</span>
+            </sc-if>
             <sc-if value="{{ s.custom }}" hint-placeholder-val="{{ false }}">
               <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
             </sc-if>
@@ -225,7 +228,7 @@ input{font-family:inherit;}
         <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
-    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;">게임에서 스킬을 쓴 직후 스위치를 켜면 쿨타임이 시작돼요. 반복을 켜두면 쿨타임마다 계속 알려줘요.</div>
+    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;">화면을 공유하면 퀵슬롯에서 스킬 아이콘을 자동으로 찾아, 스킬을 쓰는 순간 타이머가 시작돼요(예인은 오른쪽 아래 숫자가 바뀔 때). 공유 없이 쓸 때는 스킬을 쓴 직후 스위치를 켜세요.</div>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
@@ -262,6 +265,7 @@ input{font-family:inherit;}
     </div>
   </section>
 
+  <sc-if value="{{ showOldBuff }}" hint-placeholder-val="{{ false }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
       <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">스킬 쿨타임 자동 감지</h2>
@@ -294,6 +298,7 @@ input{font-family:inherit;}
       </div>
     </div>
   </section>
+  </sc-if>
 </div>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
@@ -1302,7 +1307,7 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
-    if (this._stream) this.checkBuff(now);
+    if (this._stream) this.detectSkills(now);
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
     this.forceUpdate();
   }
@@ -1456,6 +1461,66 @@ class Component extends DCLogic {
     this._buffOn = el < keep;
     if (this._buffOn && !this._buffAlerted && el >= keep - b.before * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전'); }
   }
+  tplFor(src) {
+    this._tpls = this._tpls || {};
+    if (this._tpls[src] !== undefined) return this._tpls[src];
+    this._tpls[src] = null;
+    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = 32; c.height = 32; const x = c.getContext('2d'); x.drawImage(im, 0, 0, 32, 32); this._tpls[src] = { w: 32, h: 32, d: x.getImageData(0, 0, 32, 32).data }; }; im.src = src;
+    return null;
+  }
+  matchIcon(v, W, H, T) {
+    const rx = Math.floor(W * 0.5), ry = Math.floor(H * 0.7), rw = W - rx, rh = H - ry;
+    if (!this._qsImg || this._qsAt !== this._tickNow) {
+      const c = this._fc || (this._fc = document.createElement('canvas')); c.width = rw; c.height = rh;
+      const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
+      this._qsImg = x.getImageData(0, 0, rw, rh).data; this._qsAt = this._tickNow;
+    }
+    const d = this._qsImg, pts = [];
+    for (let j = 0; j < 6; j++) for (let i = 0; i < 6; i++) pts.push([Math.round(3 + i * T.w * 0.5 / 6), Math.round(3 + j * T.h * 0.5 / 6)]);
+    let best = 1e9, bx = 0, by = 0;
+    for (let y = 0; y <= rh - T.h; y++) for (let X = 0; X <= rw - T.w; X++) {
+      let s = 0;
+      for (let k = 0; k < pts.length; k++) { const p = pts[k], a = ((y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; s += Math.abs(d[a] - T.d[t]) + Math.abs(d[a + 1] - T.d[t + 1]) + Math.abs(d[a + 2] - T.d[t + 2]); if (s > best) break; }
+      if (s < best) { best = s; bx = X; by = y; }
+    }
+    return best / (pts.length * 3) < 45 ? { x: rx + bx, y: ry + by, w: T.w, h: T.h } : null;
+  }
+  detectSkills(now) {
+    const v = this._video; if (!v || !v.videoWidth) return;
+    const W = v.videoWidth, H = v.videoHeight, h = this.hunt(); this._tickNow = now;
+    this._det = this._det || {}; this._run = this._run || {}; this._alerted = this._alerted || {};
+    let searched = false;
+    h.skills.forEach(s => {
+      const icon = this.skillIcon(s); if (!icon) return;
+      const D = this._det[s.id] || (this._det[s.id] = { src: icon });
+      if (D.src !== icon || D.res !== W + 'x' + H) { this._det[s.id] = { src: icon, res: W + 'x' + H }; return; }
+      if (!D.box) {
+        if (searched || now - (D.findAt || 0) < 1500) return;
+        const T = this.tplFor(icon); if (!T) return;
+        searched = true; D.findAt = now; D.box = this.matchIcon(v, W, H, T); return;
+      }
+      const c = this._bt || (this._bt = document.createElement('canvas')); c.width = D.box.w; c.height = D.box.h;
+      const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
+      const a = x.getImageData(0, 0, D.box.w, D.box.h).data, bw = D.box.w, bh = D.box.h;
+      let used = false;
+      if (this.skillMode(s) === 'count') {
+        const mk = [];
+        for (let y = Math.floor(bh * 0.6); y < bh; y++) for (let X = Math.floor(bw * 0.5); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
+        const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let n = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) n++; return n; };
+        if (!D.mk) D.mk = mk;
+        else if (dif(mk, D.mk) >= 4) { if (D.cand && dif(mk, D.cand) <= 2) { if (++D.n >= 2) { D.mk = mk; D.cand = null; used = true; } } else { D.cand = mk; D.n = 1; } }
+        else D.cand = null;
+      } else {
+        let yel = 0; for (let i = 0; i < a.length; i += 4) if (a[i] > 190 && a[i + 1] > 165 && a[i + 2] < 60 && a[i] - a[i + 2] > 150) yel++;
+        const cd = yel >= 5; D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
+        if (D.on === 2 && D.ready !== false) { used = true; D.ready = false; }
+        if (D.off >= 3) D.ready = true;
+      }
+      if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; this._run[s.id] = now - 250 + s.cd * 1000; this._alerted[s.id] = false; }
+    });
+  }
+  skillIcon(s) { const m = { janus120: 'skill-janus.png', janus80: 'skill-janus.png', janus70: 'skill-janus.png', janus60: 'skill-janus.png', erda60: 'skill-erda.png', yein67: 'skill-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'skill-janus.png' : ''); }
+  skillMode(s) { return s.preset === 'yein67' ? 'count' : 'cd'; }
   findIcon(v, W, H) {
     if (!this._tpl) {
       if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'skill-yein.png'; }
@@ -1524,7 +1589,7 @@ class Component extends DCLogic {
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
     const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
-    const PRE = [['janus120', J + ' (2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (1분)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png']];
+    const PRE = [['janus120', J + ' (2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (1분)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI (67초 유지)', 67, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
       skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }],
@@ -1532,7 +1597,9 @@ class Component extends DCLogic {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
-          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
+          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom',
+          ...(() => { const D = (this._det || {})[s.id]; const t = pv === 'custom' ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' : '퀵슬롯에서 찾는 중…';
+            return { detMsg: t, hasDet: !!t, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
