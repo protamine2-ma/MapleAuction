@@ -191,14 +191,14 @@ input{font-family:inherit;}
       <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">스킬 알림</h2>
       <button onClick="{{ addSkill }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 스킬 추가</button>
     </div>
-    <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) 64px minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
-      <span>작동</span><span>스킬 이름</span><span style="text-align:center;">쿨타임(초)</span><span style="text-align:center;">알림 시점(초 전)</span><span style="text-align:center;">반복</span><span style="text-align:center;">남은 시간</span><span></span>
+    <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
+      <span>작동</span><span>스킬 이름</span><span style="text-align:center;">쿨타임(초)</span><span style="text-align:center;">알림 시점(초 전)</span><span style="text-align:center;">남은 시간</span><span></span>
     </div>
     <sc-if value="{{ huntNoSkills }}" hint-placeholder-val="{{ false }}">
       <div style="padding:28px;text-align:center;font-size:14px;color:#9a9ca1;">'+ 스킬 추가'로 알림 받을 스킬을 넣어주세요.</div>
     </sc-if>
     <sc-for list="{{ huntSkills }}" as="s" hint-placeholder-count="1">
-      <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) 64px minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0ee;">
+      <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0ee;">
         <button onClick="{{ s.toggleRun }}" title="스킬 사용 직후에 켜세요" style="width:44px;height:24px;border-radius:999px;border:none;padding:2px;background:{{ s.swBg }};display:flex;justify-content:{{ s.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
           <sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ false }}">
@@ -220,7 +220,6 @@ input{font-family:inherit;}
         </div>
         <input type="number" min="1" value="{{ s.cdVal }}" onChange="{{ s.onCd }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
         <input type="number" min="0" value="{{ s.beforeVal }}" onChange="{{ s.onBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
-        <button onClick="{{ s.toggleRepeat }}" style="padding:7px 0;border:none;border-radius:8px;background:{{ s.repeatBg }};color:{{ s.repeatColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ s.repeatLabel }}</button>
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
           <span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.remainColor }};">{{ s.remain }}</span>
           <span style="width:100%;height:4px;border-radius:2px;background:#f0f0ee;overflow:hidden;"><span style="display:block;height:100%;width:{{ s.pct }};background:oklch(0.48 0.17 255);"></span></span>
@@ -1284,7 +1283,7 @@ class Component extends DCLogic {
     if (this.state.hunt) return this.state.hunt;
     if (!this._huntLS) {
       let s = {}; try { s = JSON.parse(localStorage.getItem(KEY + ':hunt') || '{}'); } catch (e) {}
-      this._huntLS = { skills: [{ id: 's1', name: '솔 야누스 : 새벽', cd: 80, before: 8, repeat: true }], vol: 80, beep: true, voice: true, rune: true, runeMin: 4, runeEvery: 10, ...s };
+      this._huntLS = { skills: [{ id: 's1', name: '솔 야누스 : 새벽', cd: 80, before: 8 }], vol: 80, beep: true, voice: true, rune: true, runeMin: 4, runeEvery: 10, ...s };
     }
     return this._huntLS;
   }
@@ -1302,8 +1301,8 @@ class Component extends DCLogic {
       any = true; let end = this._run[id];
       if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n); }
       if (end <= now) {
-        if (s.repeat && s.cd > 0) { while (end <= now) end += s.cd * 1000; this._run[id] = end; this._alerted[id] = false; }
-        else delete this._run[id];
+        const auto = this._stream && this._det && this._det[id] && this._det[id].box;
+        delete this._run[id];
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
@@ -1513,14 +1512,16 @@ class Component extends DCLogic {
       } else {
         let yel = 0; for (let i = 0; i < a.length; i += 4) if (a[i] > 190 && a[i + 1] > 165 && a[i + 2] < 60 && a[i] - a[i + 2] > 150) yel++;
         const cd = yel >= 5; D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
-        if (D.on === 2 && D.ready !== false) { used = true; D.ready = false; }
+        if (D.on === 2 && D.ready !== false && !this._run[s.id]) { used = true; D.ready = false; }
         if (D.off >= 3) D.ready = true;
       }
+      const isJanus = this.skillIcon(s) === 'qs-janus.png';
+      if (used && isJanus && (this._run[s.id] || now - (D.usedAt || 0) < 60000)) used = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; this._run[s.id] = now - 250 + s.cd * 1000; this._alerted[s.id] = false; }
     });
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
-  skillMode(s) { return s.preset === 'yein67' ? 'count' : 'cd'; }
+  skillMode(s) { return s.preset === 'yein67' || this.skillIcon(s) === 'qs-janus.png' ? 'count' : 'cd'; }
   findIcon(v, W, H) {
     if (!this._tpl) {
       if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'skill-yein.png'; }
@@ -1604,13 +1605,12 @@ class Component extends DCLogic {
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
           pct: on && s.cd ? (rem / (s.cd * 1000) * 100).toFixed(1) + '%' : '0%',
-          repeatLabel: s.repeat ? '반복' : '1회', repeatBg: s.repeat ? 'oklch(0.94 0.035 255)' : '#f4f4f2', repeatColor: s.repeat ? 'oklch(0.4 0.17 255)' : '#6b6d73',
-          toggleRun: () => this.toggleSkill(s), toggleRepeat: () => upd(s.id, 'repeat', !s.repeat),
+          toggleRun: () => this.toggleSkill(s),
           onName: e => upd(s.id, 'name', e.target.value), onCd: e => upd(s.id, 'cd', num(e.target.value)), onBefore: e => upd(s.id, 'before', num(e.target.value)),
           remove: () => { if (this._run) delete this._run[s.id]; this.saveHunt({ ...h, skills: h.skills.filter(x => x.id !== s.id) }); } };
       }),
       huntNoSkills: !h.skills.length,
-      addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 80, before: 8, repeat: true }] }),
+      addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 80, before: 8 }] }),
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
