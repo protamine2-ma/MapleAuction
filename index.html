@@ -1556,13 +1556,15 @@ class Component extends DCLogic {
         if (!cd && yel < 3) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
-        if (D.off >= 3) D.ready = true;
+        if (cd) D.offSince = 0; else if (!D.offSince) D.offSince = now;
+        const needReady = (this.skillIcon(s) === 'qs-janus.png' || !D.everUsed) ? 3000 : 600;
+        if (D.off >= 3 && D.offSince && now - D.offSince >= needReady) D.ready = true;
       }
       if (!D.boxAt) D.boxAt = now;
       if (now - D.boxAt < 3000) used = false;
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
       if (used && isJanus && (now - (D.usedAt || 0) < 60000 || Math.abs(now - (D.endAt || 0)) < 2500)) used = false;
-      if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.endAt = now - 2250 + s.cd * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; }
+      if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true; D.endAt = now - 2250 + s.cd * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; }
     });
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
