@@ -1569,16 +1569,38 @@ class Component extends DCLogic {
     this._bst = this._bst || {};
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
-      let best = 1e9, at = null;
+      let best = 1e9, at = null, bsz = 32;
       for (const sz of [32, 30, 34]) {
-        const T = this.tplFor(b.preset.replace('b29-', 'b29-') + '.png', sz / 30); if (!T) continue;
+        const T = this.tplFor(b.preset + '.png', sz / 30); if (!T) continue;
+        const pb = best;
         const n = T.w, P = []; for (let y = 2; y < n - 1; y += 2) for (let xx = 2; xx < n - 1; xx += 2) P.push([xx, y]);
         const tryAt = (X, Y) => { if (X < 0 || Y < 0 || X > rw - n || Y > rh - n) return; const s = this.buffScore(d, rw, X, Y, T, P); if (s < best) { best = s; at = [X, Y]; } };
         if (S.at) for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) tryAt(S.at[0] + dx, S.at[1] + dy);
         if (best >= 38) for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) tryAt(X, Y);
+        if (best < pb) bsz = sz;
         if (best < 38) break;
       }
-      const seen = best < 38;
+      let seen = best < 38;
+      if (seen) {
+        const n = bsz, P = []; for (let y = 2; y < n - 1; y += 2) for (let xx = 2; xx < n - 1; xx += 2) P.push([xx, y]);
+        for (const o of this.buffPresetList()) { if (o.key === b.preset) continue; const To = this.tplFor(o.key + '.png', n / 30); if (To && this.buffScore(d, rw, at[0], at[1], To, P) < best - 3) { seen = false; break; } }
+        const T = this.tplFor(b.preset + '.png', n / 30);
+        if (seen && T) {
+          const REF = '111100001111000|000010010000101|100010010010100|100010010000100|100100010000100|011000001111100'.split('|');
+          let bestIou = 0;
+          for (let oy = -3; oy <= 3; oy++) for (let ox = -3; ox <= 3; ox++) {
+            let i = 0, u = 0;
+            for (let r = 0; r < REF.length; r++) for (let cc = 0; cc < 15; cc++) {
+              const X = at[0] + ox + cc, Y = at[1] + oy + 20 + r; if (X < 0 || Y < 0 || X >= rw || Y >= rh) continue;
+              const a = (Y * rw + X) * 4, fw = d[a] > 200 && d[a + 1] > 200 && d[a + 2] > 200, tw = REF[r][cc] === '1';
+              if (fw && tw) i++; if (fw || tw) u++;
+            }
+            if (u && i / u > bestIou) bestIou = i / u;
+          }
+          S.iou = bestIou;
+          if (bestIou < 0.75) seen = false;
+        }
+      }
       if (seen) S.at = at;
       if (seen) {
         if (!S.end || (now - (S.lastSeen || 0) > 90000)) { if (!S.end || now >= S.end - 25 * 60000) { S.end = now + 30 * 60000; S.alerted = false; } }
