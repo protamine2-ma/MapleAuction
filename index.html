@@ -272,11 +272,16 @@ input{font-family:inherit;}
             </sc-for>
           </select>
         </div>
-        <span style="padding:5px 12px;border-radius:999px;background:{{ b.stBg }};color:{{ b.stColor }};font-size:13px;font-weight:700;white-space:nowrap;">{{ b.stText }}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="padding:5px 12px;border-radius:999px;background:{{ b.stBg }};color:{{ b.stColor }};font-size:13px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;">{{ b.stText }}</span>
+          <sc-if value="{{ b.hasTimer }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ b.resetTimer }}" title="타이머 취소" style="padding:4px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;">취소</button>
+          </sc-if>
+        </div>
         <button onClick="{{ b.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
-    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">화면 오른쪽 위 버프창에서 아이콘을 찾아요. 버프 위치가 바뀌어도 계속 찾고, 아이콘이 사라지면 '○○ 종료'라고 알려줘요.</div>
+    <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">화면 오른쪽 위 버프창에서 숫자 '29'가 붙은 아이콘이 보이면 그때부터 30분 타이머가 시작되고, 30분이 지나면 '○○ 종료'라고 알려줘요.</div>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
@@ -1356,7 +1361,8 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
-    if (this._stream) { this.detectSkills(now); this.checkBuffs(now); }
+    if (this._stream) { this.detectSkills(now); this.checkBuffs29(now); }
+    this.b29Tick(now);
     if (this._pick && this._stream && !this._pdrag && now - (this._pickDrawAt || 0) > 500) { this._pickDrawAt = now; this.drawPick(); }
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
     this.forceUpdate();
@@ -1551,21 +1557,55 @@ class Component extends DCLogic {
     });
     this.forceUpdate();
   }
-  buffPresetList() { return [['union1', '유니온의 부 1단계'], ['union2', '유니온의 부 2단계'], ['union3', '유니온의 부 3단계'], ['mvpadd', 'MVP 추가 경험치'], ['mvp70', 'MVP 경험치 70%'], ['vip', 'VIP 경험치'], ['expadd', '추가 경험치'], ['exp3', '경험치 3배'], ['exp4', '경험치 4배'], ['hyeongjae', '형재']].map(p => ({ key: p[0], label: p[1] })); }
+  buffPresetList() { return [['b29-vip', 'VIP 경험치'], ['b29-hj', '형재'], ['b29-exp', '추가 경험치'], ['b29-union', '유니온의 부'], ['b29-mvp', 'MVP 추가 경험치']].map(p => ({ key: p[0], label: p[1] })); }
+  checkBuffs29(now) {
+    const v = this._video, list = (this.hunt().buffs || []).filter(b => b.preset && b.preset.startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
+    if (now - (this._b29Chk || 0) < 1000) return; this._b29Chk = now;
+    if (now - (this._fadeAt || 0) < 3000) return;
+    const W = v.videoWidth, H = v.videoHeight, rx = Math.floor(W * 0.45), rw = W - rx, rh = Math.floor(H * 0.25);
+    const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, 0, rw, rh, 0, 0, rw, rh);
+    const d = x.getImageData(0, 0, rw, rh).data;
+    this._bst = this._bst || {};
+    list.forEach(b => {
+      const S = this._bst[b.id] || (this._bst[b.id] = {});
+      let best = 1e9, at = null;
+      for (const sz of [32, 30, 34]) {
+        const T = this.tplFor(b.preset.replace('b29-', 'b29-') + '.png', sz / 30); if (!T) continue;
+        const n = T.w, P = []; for (let y = 2; y < n - 1; y += 2) for (let xx = 2; xx < n - 1; xx += 2) P.push([xx, y]);
+        const tryAt = (X, Y) => { if (X < 0 || Y < 0 || X > rw - n || Y > rh - n) return; const s = this.buffScore(d, rw, X, Y, T, P); if (s < best) { best = s; at = [X, Y]; } };
+        if (S.at) for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) tryAt(S.at[0] + dx, S.at[1] + dy);
+        if (best >= 38) for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) tryAt(X, Y);
+        if (best < 38) break;
+      }
+      const seen = best < 38;
+      if (seen) S.at = at;
+      if (seen) {
+        if (!S.end || (now - (S.lastSeen || 0) > 90000)) { if (!S.end || now >= S.end - 25 * 60000) { S.end = now + 30 * 60000; S.alerted = false; } }
+        S.lastSeen = now;
+      }
+    });
+  }
+  b29Tick(now) {
+    const list = this.hunt().buffs || [], st = this._bst || {};
+    list.forEach(b => { const S = st[b.id]; if (S && S.end && !S.alerted && now >= S.end) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료'); S.end = 0; } });
+  }
   buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
   buffListVals() {
     const h = this.hunt(), list = h.buffs || [], sv = l => this.saveHunt({ ...h, buffs: l }), st = this._bst || {};
     return {
+      ...(() => { if (list.some(b => !String(b.preset).startsWith('b29'))) setTimeout(() => sv(list.filter(b => String(b.preset).startsWith('b29'))), 0); return {}; })(),
       buffPresets: this.buffPresetList(),
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
-        const t = !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
-        return { id: b.id, preset: b.preset, iconBg: 'url(buff-' + b.preset + '.png)', swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
+        const left = S.end && S.end > Date.now() ? S.end - Date.now() : 0, mm = Math.floor(left / 60000), ss = Math.floor(left % 60000 / 1000);
+        const t = left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ["'29' 대기 중", 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
+        return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2],
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
           onPreset: e => { const k = e.target.value; delete st[b.id]; sv(list.map(x => x.id === b.id ? { ...x, preset: k } : x)); },
           remove: () => { delete st[b.id]; sv(list.filter(x => x.id !== b.id)); } }; }),
-      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'union3', on: true }]),
+      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'b29-vip', on: true }]),
     };
   }
   checkBuff(now) {
