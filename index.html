@@ -1405,14 +1405,16 @@ class Component extends DCLogic {
       }
       if (best) rows.push({ y, x0: best[0], x1: best[1] });
     }
-    const colOk = (x, y0, y1) => { let n = 0; for (let y = y0; y <= y1; y++) if (wh((y * w + x) * 4) || wh((y * w + x + 1) * 4) || wh((y * w + x - 1) * 4)) n++; return n >= (y1 - y0 + 1) * 0.7; };
+    const colFrac = (x, y0, y1) => { if (x < 0 || x >= w) return 0; let n = 0; for (let y = y0; y <= y1; y++) if (wh((y * w + x) * 4)) n++; return n / Math.max(1, y1 - y0 + 1); };
+    const findCol = (xa, xb, y0, y1) => { let bx = -1, bf = 0; for (let x = xa; x <= xb; x++) { const f = colFrac(x, y0, y1); if (f > bf) { bf = f; bx = x; } } return bf >= 0.6 ? bx : -1; };
     let pick = null;
     for (let i = 0; i < rows.length; i++) for (let j = rows.length - 1; j > i; j--) {
       const a = rows[i], b = rows[j];
       if (b.y - a.y < 20) break;
       if (Math.abs(a.x0 - b.x0) > 6 || Math.abs(a.x1 - b.x1) > 6) continue;
-      const x0 = Math.min(a.x0, b.x0) - 3, x1 = Math.max(a.x1, b.x1) + 3;
-      if (!colOk(Math.max(1, x0 + 1), a.y + 4, b.y - 4) || !colOk(Math.min(w - 2, x1 - 1), a.y + 4, b.y - 4)) continue;
+      const lx = findCol(Math.min(a.x0, b.x0) - 8, Math.max(a.x0, b.x0) + 2, a.y + 4, b.y - 4), rx2 = findCol(Math.min(a.x1, b.x1) - 2, Math.max(a.x1, b.x1) + 8, a.y + 4, b.y - 4);
+      if (lx < 0 || rx2 < 0) continue;
+      const x0 = lx - 2, x1 = rx2 + 2;
       if (!darkIn(x0 + 4, a.y + 4, x1 - 4, b.y - 4)) continue;
       const area = (x1 - x0) * (b.y - a.y);
       if (!pick || area > pick.area) pick = { area, x: x0 + 3, y: a.y + 3, w: x1 - x0 - 6, h: b.y - a.y - 6 };
@@ -1492,9 +1494,9 @@ class Component extends DCLogic {
   }
   buffScore(d, rw, X, Y, T, P) {
     let st = 0, sc = 0; for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; st += T.d[t] + T.d[t + 1] + T.d[t + 2]; sc += d[a] + d[a + 1] + d[a + 2]; }
-    const g = Math.max(1, Math.min(2.5, st / Math.max(1, sc))); let s = 0;
-    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; s += Math.abs(d[a] * g - T.d[t]) + Math.abs(d[a + 1] * g - T.d[t + 1]) + Math.abs(d[a + 2] * g - T.d[t + 2]); }
-    return s / (P.length * 3);
+    const g = Math.max(1, Math.min(2.5, st / Math.max(1, sc))); let good = 0;
+    for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * T.w + p[0]) * 4; if (Math.abs(d[a] * g - T.d[t]) + Math.abs(d[a + 1] * g - T.d[t + 1]) + Math.abs(d[a + 2] * g - T.d[t + 2]) < 105) good++; }
+    return 100 * (1 - good / P.length);
   }
   checkBuffs(now) {
     const v = this._video, list = this.hunt().buffs || []; if (!v || !v.videoWidth || !list.length) return;
@@ -1506,11 +1508,11 @@ class Component extends DCLogic {
     const d = x.getImageData(0, 0, rw, rh).data;
     const sc = Math.round(W / 1366 * 20) / 20, BP = this.buffPresetList();
     const ALL = [...new Set(list.map(b => 'buff-' + b.preset + '.png'))], GROUP = { union1: 'u', union2: 'u', union3: 'u', mvpadd: 'm', mvp70: 'm', exp3: 'e', exp4: 'e' };
-    const T = {}; for (const f of ALL) { T[f] = this.tplFor(f, sc * 32 / 30); if (!T[f]) return; }
-    for (const g of ['u', 'm', 'e']) for (const k in GROUP) if (GROUP[k] === g && list.some(b => GROUP[b.preset] === g)) { const f = 'buff-' + k + '.png'; if (!T[f]) { T[f] = this.tplFor(f, sc * 32 / 30); if (!T[f]) return; } }
+    const T = {}; for (const f of ALL) { T[f] = this.tplFor(f, 32 / 30); if (!T[f]) return; }
+    for (const g of ['u', 'm', 'e']) for (const k in GROUP) if (GROUP[k] === g && list.some(b => GROUP[b.preset] === g)) { const f = 'buff-' + k + '.png'; if (!T[f]) { T[f] = this.tplFor(f, 32 / 30); if (!T[f]) return; } }
     const n = T[ALL[0]].w, P = this.buffPts(n);
     this._bst = this._bst || {};
-    const locate = Tt => { const out = []; let lim = 45;
+    const locate = Tt => { const out = []; let lim = 50;
       for (let Y = 0; Y <= rh - n; Y += 2) for (let X = 0; X <= rw - n; X += 2) { const s = this.buffScore(d, rw, X, Y, Tt, P); if (s < lim) out.push([X, Y, s]); }
       return out.sort((a, b) => a[2] - b[2]).slice(0, 6); };
     list.forEach(b => {
@@ -1520,8 +1522,9 @@ class Component extends DCLogic {
       let best = 1e9;
       const tryAt = (X, Y) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - n || yy > rh - n) continue; const s = this.buffScore(d, rw, xx, yy, T[src], P); if (s < best) { best = s; S.at = [xx, yy]; } } };
       if (S.at) tryAt(S.at[0], S.at[1]);
-      if (best >= 32) { best = 1e9; const prev = S.at; for (const p of locate(T[src])) tryAt(p[0], p[1]); if (best >= 32) S.at = prev; }
-      let on = best < 32;
+      const keepLim = S.on ? 66 : 40;
+      if (best >= keepLim) { best = 1e9; const prev = S.at; for (const p of locate(T[src])) tryAt(p[0], p[1]); if (best >= 40) S.at = prev; }
+      let on = best < (S.on ? 66 : 40);
       if (on) { const [X, Y] = S.at; for (const o of sib) if (T[o] && this.buffScore(d, rw, X, Y, T[o], P) < best - 2) on = false; }
       if (on) { S.miss = 0; S.on = true; S.seen = now; }
       else if (S.on && ++S.miss >= 3) { S.on = false; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료'); }
