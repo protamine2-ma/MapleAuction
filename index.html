@@ -46,7 +46,7 @@ input{font-family:inherit;}
       </div>
       <div style="display:flex;gap:8px;">
         <sc-for list="{{ areas }}" as="a" hint-placeholder-count="3">
-          <button onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:baseline;gap:4px;" style-hover="opacity:0.9;">{{ a.label }}<sc-if value="{{ a.beta }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;opacity:0.75;">beta</span></sc-if></button>
+          <button onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:baseline;gap:4px;" style-hover="opacity:0.9;">{{ a.label }}<sc-if value="{{ a.beta }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;opacity:0.75;">beta</span></sc-if><sc-if value="{{ a.soon }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;opacity:0.75;">준비중</span></sc-if></button>
         </sc-for>
       </div>
     </div>
@@ -381,6 +381,12 @@ input{font-family:inherit;}
   </sc-if>
 </div>
 </sc-if>
+<sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:760px;margin:0 auto;padding:80px 28px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+  <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">강화</h1>
+  <span style="font-size:15px;color:#6b6d73;">준비 중이에요.</span>
+</div>
+</sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
@@ -402,6 +408,7 @@ input{font-family:inherit;}
       </sc-if>
     </div>
     <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">보약</button>
+    <button onClick="{{ growTabs.2.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.2.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.2.weight }};color:{{ growTabs.2.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">환산별템세팅</button>
   </div>
 </nav>
 <sc-if value="{{ noGuide }}" hint-placeholder-val="{{ true }}">
@@ -459,6 +466,20 @@ input{font-family:inherit;}
           <textarea value="{{ s.text }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasArt }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px;">
+              <sc-for list="{{ s.artCards }}" as="a" hint-placeholder-count="9">
+                <div style="display:flex;align-items:stretch;gap:12px;border:1px solid #e3e3e0;border-radius:12px;padding:10px;">
+                  <span style="flex:none;width:clamp(48px,28%,86px);aspect-ratio:192/226;border-radius:8px;background-image:{{ a.img }};background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8%;box-sizing:border-box;font-size:clamp(24px,2.6vw,40px);font-weight:900;line-height:1;color:oklch(0.6 0.23 25);-webkit-text-stroke:1px #fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);">{{ a.num }}</span>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;">
+                    <sc-for list="{{ a.effects }}" as="e" hint-placeholder-count="3">
+                      <span style="padding:6px 6px;border-radius:7px;background:oklch(0.95 0.025 255);font-size:clamp(11px,1.1vw,15px);font-weight:700;color:#2a2b2f;text-align:center;word-break:keep-all;">{{ e.t }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasAbil }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
               <div style="display:flex;gap:14px;font-size:13px;font-weight:600;color:#6b6d73;">
@@ -488,12 +509,14 @@ input{font-family:inherit;}
                     <span style="font-size:12px;color:#9a9ca1;">{{ c.sample }}</span>
                   </div>
                   <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="14">
-                    <div style="display:grid;grid-template-columns:26px 32px minmax(0,1fr) 70px 52px;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid #f0f0ee;">
+                    <div style="display:grid;grid-template-columns:26px 32px minmax(0,1fr) 52px;align-items:center;gap:4px 10px;padding:7px 14px;border-bottom:1px solid #f0f0ee;">
                       <span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;background:{{ r.rankBg }};color:{{ r.rankColor }};font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;">{{ r.rank }}</span>
                       <span style="width:32px;height:32px;background-image:{{ r.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
-                      <span style="font-size:15px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
-                      <span style="height:8px;border-radius:999px;background:#ececea;overflow:hidden;"><span style="display:block;height:100%;width:{{ r.bar }};background:oklch(0.65 0.15 150);border-radius:999px;"></span></span>
+                      <span style="font-size:15px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}<span style="font-size:13px;font-weight:500;color:#8a8c92;margin-left:4px;">{{ r.job }}</span></span>
                       <span style="font-size:14px;font-weight:700;color:#3a3b3f;text-align:right;font-variant-numeric:tabular-nums;">{{ r.pct }}</span>
+                      <sc-if value="{{ r.hasDesc }}" hint-placeholder-val="{{ false }}">
+                        <span style="grid-column:3 / 5;font-size:12.5px;line-height:1.5;color:#6b6d73;white-space:pre-wrap;text-wrap:pretty;">{{ r.desc }}</span>
+                      </sc-if>
                     </div>
                   </sc-for>
                 </div>
@@ -1250,6 +1273,22 @@ const pushWeek = (x, date, valsById) => {
   }
 };
 
+const LINK_JOB = {
+  '인빈서블 빌리프': '모험가 전사', '임피리컬 널리지': '모험가 마법사', '어드벤쳐러 큐리어스': '모험가 궁수', '시프 커닝': '모험가 도적', '파이렛 블레스': '모험가 해적',
+  '시그너스 블레스': '시그너스', '빛의 수호': '미하일', '스피릿 오브 프리덤': '레지스탕스',
+  '콤보킬 어드밴티지': '아란', '룬 퍼시스턴스': '에반', '엘프의 축복': '메르세데스', '데들리 인스팅트': '팬텀', '구사일생': '은월', '퍼미에이트': '루미너스',
+  '데몬스 퓨리': '데몬슬레이어', '와일드 레이지': '데몬어벤져', '하이브리드 로직': '제논',
+  '아이언 윌': '카이저', '인텐시브 인썰트': '카데나', '소울 컨트랙트': '엔젤릭버스터',
+  '륀느의 축복': '제로', '판단': '키네시스', '노블레스': '아델', '전투의 흐름': '일리움', '무아': '아크',
+  '자신감': '호영', '자연의 벗': '라라', '프라이어 프리퍼레이션': '카인', '이네이트 기프트': '칼리', '커버넌트': '레테',
+};
+const ARTIFACT = {
+  '아델': [
+    ['보스 공격시 뎀증', '데미지 증가', '크리티컬 데미지'], ['데미지 증가', '보스 공격시 뎀증', '크리티컬 데미지'], ['재사용 초기화', '올스탯 증가', '크리티컬 확률'],
+    ['크리티컬 확률', '올스탯 증가', '재사용 초기화'], ['방어율 무시', '경험치 증가', '공격력 / 마력'], ['메소 획득량', '공격력 / 마력', '방어율 무시'],
+    ['버프 지속 증가', '메소 획득량', '아이템 드롭'], ['아이템 드롭', '경험치 증가', '버프 지속 증가'], ['파이널 어택류', '상태이상 내성', '소환수 지속시간'],
+  ],
+};
 const ABILITY = {
   '아델': [
     { name: '보스용', lines: [['L', '보스 몬스터 공격 시 데미지 20% 증가'], ['U', '스킬 사용 시 10% 확률로 재사용 대기시간 미적용'], ['U', '상태 이상에 걸린 대상 공격 시 데미지 8% 증가']] },
@@ -1528,7 +1567,7 @@ class Component extends DCLogic {
     this._pb[key] = null; job = key;
     const f = kind + '-' + encodeURIComponent(key.slice(kind.length + 1)) + '.json?t=' + Date.now();
     const get = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-    get(f).then(j => j && j.items ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && j.items) { this._pb[job] = j; this.forceUpdate(); } });
+    get(f).then(j => j && (j.items || j.boss) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && (j.items || j.boss)) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
   guideVals(job) {
@@ -1557,11 +1596,13 @@ class Component extends DCLogic {
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
         hasLink: s.title === '링크' && !!(lk && lk.boss),
-        linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: r === 0 ? 'oklch(0.8 0.15 80)' : r === 1 ? 'oklch(0.9 0.03 255)' : r === 2 ? 'oklch(0.7 0.08 50)' : 'transparent', rankColor: r < 3 ? (r === 1 ? 'oklch(0.4 0.09 255)' : '#fff') : '#6b6d73' })) })) : [],
+        linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', desc: String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) })) : [],
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })),
+        hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
+        artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '어빌리티' && ABILITY[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: s.type === 'video' ? String(s.text || '').split('\n').map(yt).filter(Boolean).map(src => ({ src })) : [],
@@ -2614,10 +2655,10 @@ class Component extends DCLogic {
       ...(() => {
         const area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         return {
-          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성',
+          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(() => {
-            const GT = ['직업가이드', '보약'];
+            const GT = ['직업가이드', '보약', '환산별템세팅'];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
             if (!GT.includes(g)) g = GT[0];
             const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
@@ -2633,7 +2674,7 @@ class Component extends DCLogic {
               growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
-          areas: ['옥션', '사냥', '육성'].map(l => ({ label: l, beta: l === '사냥', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
+          areas: ['옥션', '사냥', '육성', '강화'].map(l => ({ label: l, beta: l === '사냥', soon: l === '육성' || l === '강화', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); } })),
         };
       })(),
