@@ -1,0 +1,415 @@
+{
+  "job": "아델",
+  "date": "2026-10-19",
+  "sample": 190,
+  "items": [
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 176,
+      "pct": 92.6
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 176,
+      "pct": 92.6
+    },
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 168,
+      "pct": 88.4
+    },
+    {
+      "name": "오라 웨폰",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLGPBMA",
+      "count": 56,
+      "pct": 29.5
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 50,
+      "pct": 26.3
+    },
+    {
+      "name": "럭키 다이스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLCPBMB",
+      "count": 29,
+      "pct": 15.3
+    },
+    {
+      "name": "트라이엄프 페더",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIGPBNF",
+      "count": 18,
+      "pct": 9.5
+    },
+    {
+      "name": "홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIGPBMD",
+      "count": 18,
+      "pct": 9.5
+    },
+    {
+      "name": "어드밴스드 블레스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFPBMF",
+      "count": 17,
+      "pct": 8.9
+    },
+    {
+      "name": "부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKHPBMF",
+      "count": 14,
+      "pct": 7.4
+    },
+    {
+      "name": "메디테이션",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKHPBMB",
+      "count": 14,
+      "pct": 7.4
+    },
+    {
+      "name": "쉐도우 파트너",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGKGPBMC",
+      "count": 13,
+      "pct": 6.8
+    },
+    {
+      "name": "크로스 오버 체인",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIGPBNF",
+      "count": 13,
+      "pct": 6.8
+    },
+    {
+      "name": "샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFPBMC",
+      "count": 12,
+      "pct": 6.3
+    },
+    {
+      "name": "스피릿 블레이드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKHPBMG",
+      "count": 11,
+      "pct": 5.8
+    },
+    {
+      "name": "블리딩 톡신",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGKFPBJE",
+      "count": 10,
+      "pct": 5.3
+    },
+    {
+      "name": "컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDJGPBNB",
+      "count": 9,
+      "pct": 4.7
+    },
+    {
+      "name": "디바인 블레싱",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDJFPBNF",
+      "count": 9,
+      "pct": 4.7
+    },
+    {
+      "name": "미러 이미징",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIEPBMC",
+      "count": 9,
+      "pct": 4.7
+    },
+    {
+      "name": "히든 블레이드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDPBJE",
+      "count": 9,
+      "pct": 4.7
+    },
+    {
+      "name": "다크 레조넌스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFPBNF",
+      "count": 7,
+      "pct": 3.7
+    },
+    {
+      "name": "버추얼 프로젝션",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKGPBMG",
+      "count": 7,
+      "pct": 3.7
+    },
+    {
+      "name": "스톰 브링어",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFPBNH",
+      "count": 6,
+      "pct": 3.2
+    },
+    {
+      "name": "인클라인 파워",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMELHPBMC",
+      "count": 6,
+      "pct": 3.2
+    },
+    {
+      "name": "몽키 매직",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIHPBMD",
+      "count": 6,
+      "pct": 3.2
+    },
+    {
+      "name": "스카링 소드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKGPBMD",
+      "count": 6,
+      "pct": 3.2
+    },
+    {
+      "name": "트루 사이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKGPBOD",
+      "count": 5,
+      "pct": 2.6
+    },
+    {
+      "name": "장검 가속",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKHPBMF",
+      "count": 5,
+      "pct": 2.6
+    },
+    {
+      "name": "블레싱 마하",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKGPBNC",
+      "count": 4,
+      "pct": 2.1
+    },
+    {
+      "name": "엘리멘탈 리셋",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKDPBNG",
+      "count": 4,
+      "pct": 2.1
+    },
+    {
+      "name": "오닉스의 축복",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAPBLD",
+      "count": 4,
+      "pct": 2.1
+    },
+    {
+      "name": "메카닉 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKHPBMG",
+      "count": 4,
+      "pct": 2.1
+    },
+    {
+      "name": "소울 게이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFPBME",
+      "count": 4,
+      "pct": 2.1
+    },
+    {
+      "name": "윈드 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFPBMJ",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "바이퍼지션",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFPBNF",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "권술 : 호접지몽",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFPBMH",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "환영 분신부",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKHPBMD",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "부채 가속",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKHPBMF",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "디아볼릭 리커버리",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJGPBME",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "뱀피릭 터치",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFPBMC",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "메타모포시스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFPBMF",
+      "count": 3,
+      "pct": 1.6
+    },
+    {
+      "name": "ESP 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELALHPBMC",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "글로리 오브 가디언즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFPBJD",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIHPBMH",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "브레스 슈터 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJBKHPBNA",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "커스 톨러런스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIGPBNC",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "웨폰 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKHPBMD",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "엘비쉬 블레싱",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFPBJE",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "앤시언트 스피릿",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFPBME",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "다크니스 소서리",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFPBMG",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "포틱 메디테이션",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKGPBMG",
+      "count": 2,
+      "pct": 1.1
+    },
+    {
+      "name": "리게인 스트렝스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKGPBMD",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "블레이즈 업",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKHPBME",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "스태프 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKHPBMF",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "파이렛 스타일",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFPBNI",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "매직 건틀렛 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKHPBMH",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "너클 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKHPBMF",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "블레스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIHPBME",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "지팡이 가속",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJAKHPBND",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "용맥 흡수",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJAKFPBMA",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "레이스 오브 갓",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFPBIC",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "하울링",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKHPBME",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "버닝 리젼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFPBMF",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "가호의 증표",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHLHPBMH",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "쉐도우 서번트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKGPBOE",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "매그넘 샷",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJHPBMB",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "차크람 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKHPBMF",
+      "count": 1,
+      "pct": 0.5
+    },
+    {
+      "name": "쓸만한 윈드 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEPCLHGBMG",
+      "count": 1,
+      "pct": 0.5
+    }
+  ]
+}
