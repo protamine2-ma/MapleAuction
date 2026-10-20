@@ -1953,6 +1953,13 @@ class Component extends DCLogic {
       if (j < 0) continue; used.add(i); used.add(j); const v = Number(a.k + comps[j].k); if (v >= 10 && v <= 59) out.push({ x: a.x, y: a.y, v }); }
     return out;
   }
+  yDig() {
+    if (this._YD) return this._YD;
+    const S = { 3: '11110|00001|00001|00001|01110|00001|00001|00011|11110', 2: '11111|00001|00001|00001|00010|00110|01100|01000|11111', 7: '111111|000011|000010|000010|000100|000100|001000|001000|010000', 4: '000110|000110|001110|001010|010010|010010|111111|000010|000010', 9: '011110|100001|100001|100001|011111|000001|000001|000010|011100', 6: '011111|110000|100000|100000|111110|100001|100001|110011|011110' };
+    const out = [];
+    for (const k in S) { const R = S[k].split('|'), h = R.length, w = R[0].length; let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor((gx + 0.5) * w / 6), Y = Math.floor((gy + 0.5) * h / 10); m += R[Y][X]; } out.push([k, m]); }
+    return (this._YD = out);
+  }
   readTime(a, bw, bh) { const r = this.readTimeMode(a, bw, bh, 0); return r != null ? r : this.readTimeMode(a, bw, bh, 1); }
   readTimeMode(a, bw, bh, mode) {
     const M = new Uint8Array(bw * bh), dk = (X, Y) => X >= 0 && Y >= 0 && X < bw && Y < bh && a[(Y * bw + X) * 4] + a[(Y * bw + X) * 4 + 1] + a[(Y * bw + X) * 4 + 2] < 200;
@@ -1960,11 +1967,20 @@ class Component extends DCLogic {
       if (mode === 0) { if (a[i] > 200 && a[i + 1] > 180 && a[i + 2] < 90) M[Y * bw + X] = 1; continue; }
       if (!(a[i] > 185 && a[i + 1] > 165 && a[i + 2] < 150 && a[i] - a[i + 2] > 60)) continue;
       let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (ok) M[Y * bw + X] = 1; }
+    { const fr = []; for (let Y = 0; Y < bh; Y++) { let k = 0, n = 0; for (let X = Math.floor(bw * 0.15); X < Math.ceil(bw * 0.85); X++) { n++; if (dk(X, Y)) k++; } fr.push(k / n); }
+      let best = null, s0 = -1; for (let Y = 0; Y <= bh; Y++) { const on = Y < bh && fr[Y] >= 0.35; if (on && s0 < 0) s0 = Y; if (!on && s0 >= 0) { if (!best || Y - s0 > best[1] - best[0]) best = [s0, Y]; s0 = -1; } }
+      if (best && best[1] - best[0] >= 8 && best[1] - best[0] <= 24) for (let Y = 0; Y < bh; Y++) if (Y < best[0] - 1 || Y > best[1]) for (let X = 0; X < bw; X++) M[Y * bw + X] = 0; }
     const isY = i => M[i >> 2] === 1;
     const cols = []; for (let X = 0; X < bw; X++) { let k = 0; for (let y = 0; y < bh; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
     const runs = []; let s = -1;
     for (let X = 0; X <= bw; X++) { const on = X < bw && cols[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
-    const info = runs.map(r => { let y0 = bh, y1 = 0, n = 0; for (let y = 0; y < bh; y++) for (let X = r[0]; X <= r[1]; X++) if (isY((y * bw + X) * 4)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); n++; } return { r, y0, y1, n, w: r[1] - r[0] + 1, h: y1 - y0 + 1 }; }).filter(g => g.n >= 2);
+    const info = runs.map(r => {
+      const rows = []; for (let y = 0; y < bh; y++) { let k = 0; for (let X = r[0]; X <= r[1]; X++) if (M[y * bw + X]) k++; rows.push(k); }
+      let y0 = bh, y1 = 0;
+      if (r[1] - r[0] >= 2) { let bs = null, st = -1; for (let y = 0; y <= bh; y++) { const on = y < bh && rows[y] > 0; if (on && st < 0) st = y; if (!on && st >= 0) { if (!bs || y - st > bs[1] - bs[0]) bs = [st, y - 1]; st = -1; } } if (bs) { y0 = bs[0]; y1 = bs[1]; } }
+      else for (let y = 0; y < bh; y++) if (rows[y]) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      let x0 = r[1], x1 = r[0], n = 0; for (let y = y0; y <= y1; y++) for (let X = r[0]; X <= r[1]; X++) if (M[y * bw + X]) { x0 = Math.min(x0, X); x1 = Math.max(x1, X); n++; }
+      return { r: [x0, x1], y0, y1, n, w: x1 - x0 + 1, h: y1 - y0 + 1 }; }).filter(g => g.n >= 2);
     if (info.length < 3) return null;
     const H = Math.max(...info.map(g => g.h)), top = Math.min(...info.filter(g => g.h >= H * 0.75).map(g => g.y0));
     for (let i = 0; i < info.length - 1; i++) { const g = info[i], nx = info[i + 1];
@@ -1974,7 +1990,9 @@ class Component extends DCLogic {
       if (g.h < H * 0.75) { str += ':'; continue; }
       if (g.w <= Math.max(3, H * 0.34)) { str += '1'; continue; }
       let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
-      const DIG = this._DIG || {}; let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
+      const DIG = this._DIG || {}, YD = this.yDig(); let bk = null, bd = 1e9;
+      for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
+      for (const [k, t] of YD) { let dd = 0; for (let i = 0; i < 60; i++) if (t[i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       if (bk == null || bd > 16) { str += '?'; continue; } str += bk;
     }
     const mm = str.match(/^\?*(\d):([0-5]\d)\?*$/); if (!mm) return null;
