@@ -256,7 +256,10 @@ input{font-family:inherit;}
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
       <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">버프 종료 알림</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onClick="{{ pickBuffRow }}" style="padding:7px 14px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.4 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.97 0.02 255);">{{ buffRowLabel }}</button>
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
+      </div>
     </div>
     <sc-if value="{{ buffNone }}" hint-placeholder-val="{{ false }}">
       <div style="padding:22px 20px;font-size:14px;color:#9a9ca1;text-align:center;">'+ 버프 추가'를 눌러 알림 받을 버프를 고르세요</div>
@@ -1376,16 +1379,13 @@ class Component extends DCLogic {
     else { if (!(s.cd > 0)) return; this._run[s.id] = Date.now() + (s.preset === 'yein67' ? 57 : s.cd) * 1000; this._alerted[s.id] = false; this.ensureTick(); }
     this.forceUpdate();
   }
-  huntAlert(text) {
+  huntAlert(text, kind = 'skill') {
     const h = this.hunt(), vol = h.vol / 100;
     if (h.beep) {
-      try {
-        const ctx = this._ac || (this._ac = new (window.AudioContext || window.webkitAudioContext)()); ctx.resume();
-        [0, 0.18].forEach(t => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 880; g.gain.value = 0.3 * vol; o.connect(g).connect(ctx.destination); o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.12); });
-      } catch (e) {}
+      try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
     }
     if (h.voice && window.speechSynthesis) {
-      setTimeout(() => { const u = new SpeechSynthesisUtterance(text); u.lang = 'ko-KR'; u.volume = vol; u.rate = 1.1; speechSynthesis.speak(u); }, h.beep ? 380 : 0);
+      setTimeout(() => { const u = new SpeechSynthesisUtterance(text); u.lang = 'ko-KR'; u.volume = vol; u.rate = 1.1; speechSynthesis.speak(u); }, h.beep ? 1450 : 0);
     }
   }
   async startShare() {
@@ -1465,7 +1465,7 @@ class Component extends DCLogic {
     const base = prev0.base == null ? px : Math.min(prev0.base, px);
     const h = this.hunt(), prev = prev0, hit = h.rune && px - base >= h.runeMin;
     const streak = hit ? (prev.streak || 0) + 1 : 0; let last = hit ? prev.last || 0 : 0;
-    if (streak >= 2 && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성'); last = Date.now(); }
+    if (streak >= 2 && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성', 'rune'); last = Date.now(); }
     this._rune = { px, base, found: streak >= 2, streak, last, res: W + '×' + H, reg: g };
     const cv = this._runeCv && this._runeCv.current;
     this._rune.box = bx;
@@ -1482,12 +1482,14 @@ class Component extends DCLogic {
     const dr = this._drag;
     if (dr) { c.setLineDash([5, 4]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
   }
-  pickRegion() { const v = this._video; if (!v || !v.videoWidth) return null; const W = v.videoWidth, H = v.videoHeight, x = Math.floor(W * 0.4), y = Math.floor(H * 0.72); return { x, y, w: W - x, h: H - y }; }
+  pickRegion() { const v = this._video; if (!v || !v.videoWidth) return null; const W = v.videoWidth, H = v.videoHeight;
+    if (this._pick === '__buffrow') { const x = Math.floor(W * 0.45); return { x, y: 0, w: W - x, h: Math.floor(H * 0.3) }; }
+    const x = Math.floor(W * 0.4), y = Math.floor(H * 0.72); return { x, y, w: W - x, h: H - y }; }
   drawPick() {
     const cv = this._pickCv && this._pickCv.current, v = this._video, g = this.pickRegion(); if (!cv || !g) return;
     if (cv.width !== g.w) { cv.width = g.w; cv.height = g.h; }
     const c = cv.getContext('2d'); c.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
-    const s = this.hunt().skills.find(x => x.id === this._pick), res = v.videoWidth + 'x' + v.videoHeight, b = s && s.box && s.box[res];
+    const s = this.hunt().skills.find(x => x.id === this._pick), res = v.videoWidth + 'x' + v.videoHeight, b = this._pick === '__buffrow' ? (this.hunt().buffRow || {})[res] : s && s.box && s.box[res];
     c.lineWidth = 2;
     if (b) { c.strokeStyle = '#3dff7a'; c.strokeRect(b.x - g.x, b.y - g.y, b.w, b.h); }
     const dr = this._pdrag; if (dr) { c.setLineDash([4, 3]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
@@ -1556,7 +1558,7 @@ class Component extends DCLogic {
       }
       if (on) { const [X, Y] = S.at; for (const o of sib) if (T[o] && this.buffScore(d, rw, X, Y, T[o], P) < best - 2) on = false; }
       if (on) { S.miss = 0; S.on = true; S.seen = now; }
-      else if (S.on && ++S.miss >= 3) { S.on = false; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료'); }
+      else if (S.on && ++S.miss >= 3) { S.on = false; if (b.on !== false) this.huntAlert(this.buffName(b) + ' 종료', 'buff'); }
     });
     this.forceUpdate();
   }
@@ -1616,18 +1618,37 @@ class Component extends DCLogic {
     const v = this._video, list = (this.hunt().buffs || []).filter(b => String(b.preset).startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
     if (now - (this._btChk || 0) < 1000) return; this._btChk = now;
     if (now - (this._fadeAt || 0) < 3000) return;
-    const W = v.videoWidth, H = v.videoHeight, rx = Math.floor(W * 0.45), rw = W - rx, rh = Math.floor(H * 0.25);
+    const W = v.videoWidth, H = v.videoHeight, row = (this.hunt().buffRow || {})[W + 'x' + H];
+    if (!row) { this._buffDbg = '줄 미지정'; return; }
+    const rx = Math.max(0, row.x - 2), ry = Math.max(0, row.y - 4), rw = Math.min(W - rx, row.w + 4), rh = Math.max(34, Math.min(H - ry, row.h + 8));
     const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
-    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, 0, rw, rh, 0, 0, rw, rh);
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
     const d = x.getImageData(0, 0, rw, rh).data;
-    const yel = (X, Y, n) => { let k = 0, dk = 0; for (let y = 9; y <= 22; y++) for (let xx = 2; xx < n - 2; xx++) { const i = ((Y + y) * rw + X + xx) * 4; if (d[i] > 215 && d[i + 1] > 195 && d[i + 2] < 90) k++; if (d[i] + d[i + 1] + d[i + 2] < 120) dk++; } return dk >= 80 ? k : 0; };
+    const yel = (X, Y, n) => { let k = 0, dk = 0; for (let y = 9; y <= 22; y++) for (let xx = 2; xx < n - 2; xx++) { const i = ((Y + y) * rw + X + xx) * 4; if (d[i] > 215 && d[i + 1] > 195 && d[i + 2] < 90) k++; if (d[i] + d[i + 1] + d[i + 2] < 120) dk++; } return dk >= 45 ? k : 0; };
     const slots = [];
     for (let Y = 0; Y <= rh - 32; Y++) for (let X = 0; X <= rw - 32; X += 2) { if (slots.some(s => Math.abs(s[0] - X) < 24 && Math.abs(s[1] - Y) < 24)) continue; if (yel(X, Y, 32) >= 35) { let bx = X, by = Y, bk = 0; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { if (X + dx < 0 || Y + dy < 0 || X + dx > rw - 32 || Y + dy > rh - 32) continue; const k = yel(X + dx, Y + dy, 32); if (k > bk) { bk = k; bx = X + dx; by = Y + dy; } } slots.push([bx, by]); } }
     const P = []; for (let y = 3; y <= 29; y += 2) for (let xx = 3; xx <= 29; xx += 2) { if (y >= 8 && y <= 22) continue; if (xx < 15 && y > 19) continue; P.push([xx, y]); }
     const keys = this.buffPresetList().map(p => p.key), T = {};
     for (const k of keys) { T[k] = this.tplFor(k + '.png', 32 / 30); if (!T[k]) return; }
-    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 55 ? bk : null; });
+    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 64 ? bk : null; });
+    this._buffDbg = slots.length + '칸';
     this._bst = this._bst || {};
+    const wmin = this.readWhiteMins(d, rw, rh), wByKey = {};
+    for (const n of wmin) {
+      let bk = null, bs = 1e9;
+      for (const k of keys) { let s = 1e9; for (let dy = -6; dy <= 4; dy++) for (let dx = -5; dx <= 5; dx++) { const xx = n.x - 1 + dx, yy = n.y - 25 + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } }
+      if (bk && bs < 64 && wByKey[bk] == null) wByKey[bk] = n.v;
+    }
+    list.forEach(b => {
+      const N = wByKey[b.preset]; if (N == null) return;
+      const S = this._bst[b.id] || (this._bst[b.id] = {}); S.lastSeen = now; S.fail = false; S.pending = false;
+      const fresh = () => { S.end = now + (N * 60 + 30) * 1000; S.approx = true; S.lock = false; S.alerted = false; };
+      if (S.wm == null || !S.end || S.end < now) fresh();
+      else if (N === S.wm - 1) { S.end = now + (N * 60 + 59) * 1000 + 500; S.approx = false; S.lock = true; }
+      else if (N > S.wm) fresh();
+      else if (N === S.wm && S.lock) { const r = (S.end - now) / 1000; if (r < N * 60 - 5 || r > N * 60 + 65) fresh(); }
+      S.wm = N;
+    });
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
       const has = owner.includes(b.preset);
@@ -1638,7 +1659,7 @@ class Component extends DCLogic {
           for (let y = 0; y < bh; y++) for (let xx = 0; xx < bw; xx++) { const i = ((sy + y) * rw + sx + xx) * 4, o = (y * bw + xx) * 4; a[o] = d[i]; a[o + 1] = d[i + 1]; a[o + 2] = d[i + 2]; }
           const sec = this.readTime(a, bw, bh);
           if (sec != null && sec < 600) { const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
-            if (!S.end || Math.abs((S.end - now) / 1000 - sec) > 3) { S.end = now + sec * 1000 + 500; }
+            if (!S.end || S.approx || Math.abs((S.end - now) / 1000 - sec) > 3) { S.end = now + sec * 1000 + 500; S.approx = false; }
             if (Hh.length >= 2) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
               if (ok) { S.lock = true; S.pending = false; S.end = now + sec * 1000 + 500; S.alerted = false; } } }
         } }
@@ -1648,7 +1669,7 @@ class Component extends DCLogic {
   b29Tick(now) {
     const list = this.hunt().buffs || [], st = this._bst || {};
     list.forEach(b => { const S = st[b.id]; if (!S || !S.end) return; const bf = Math.max(0, Number(b.before) || 0);
-      if (!S.alerted && now >= S.end - bf * 1000) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + (bf ? ' ' + bf + '초 전' : ' 종료')); }
+      if (!S.alerted && now >= S.end - bf * 1000) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + (bf ? ' ' + bf + '초 전' : ' 종료'), 'buff'); }
       if (now >= S.end) { S.end = 0; S.pending = false; S.doneAt = now; } });
   }
   buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
@@ -1660,7 +1681,7 @@ class Component extends DCLogic {
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
         const left = S.end && S.end > Date.now() ? S.end - Date.now() : 0, mm = Math.floor(left / 60000), ss = Math.floor(left % 60000 / 1000);
-        const t = !left && S.fail && this._stream ? ['인식 실패', 'oklch(0.95 0.04 25)', 'oklch(0.5 0.19 25)'] : left ? [mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? ['노란 시간 대기 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
+        const t = !left && S.fail && this._stream ? ['인식 실패', 'oklch(0.95 0.04 25)', 'oklch(0.5 0.19 25)'] : left ? [(S.approx ? '약 ' : '') + mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? [this._buffDbg === '줄 미지정' ? '버프 줄을 지정하세요' : '노란 시간 대기 중' + (this._buffDbg ? ' (시간 ' + this._buffDbg + ' 발견)' : ''), 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
         return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2],
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
@@ -1694,7 +1715,7 @@ class Component extends DCLogic {
     } else this._mkCand = null;
     const keep = b.keep * 1000, el = this._useAt ? now - this._useAt : Infinity;
     this._buffOn = el < keep;
-    if (this._buffOn && !this._buffAlerted && el >= keep - b.before * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전'); }
+    if (this._buffOn && !this._buffAlerted && el >= keep - b.before * 1000) { this._buffAlerted = true; this.huntAlert(b.name + ' ' + b.before + '초 전', 'buff'); }
   }
   tplFor(src, sc = 1) {
     this._tpls = this._tpls || {}; const key = src + '@' + sc;
@@ -1847,6 +1868,27 @@ class Component extends DCLogic {
   }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
+  readWhiteMins(d, W, H) {
+    const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' };
+    const blk = (X, Y) => { if (X < 0 || Y < 0 || X >= W || Y >= H) return false; const i = (Y * W + X) * 4; return d[i] + d[i + 1] + d[i + 2] < 90; };
+    const M = new Uint8Array(W * H);
+    for (let Y = 0; Y < H; Y++) for (let X = 0; X < W; X++) { const i = (Y * W + X) * 4; if (d[i] > 140 && d[i + 1] > 180 && d[i + 2] > 215 && (blk(X - 1, Y) || blk(X + 1, Y) || blk(X, Y - 1) || blk(X, Y + 1))) M[Y * W + X] = 1; }
+    const seen = new Uint8Array(W * H), comps = [];
+    for (let p = 0; p < W * H; p++) {
+      if (!M[p] || seen[p]) continue; const st = [p]; seen[p] = 1; let x0 = W, x1 = 0, y0 = H, y1 = 0, n = 0;
+      while (st.length) { const q = st.pop(), qx = q % W, qy = (q - qx) / W; n++; if (qx < x0) x0 = qx; if (qx > x1) x1 = qx; if (qy < y0) y0 = qy; if (qy > y1) y1 = qy;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = qx + dx, ny = qy + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const m = ny * W + nx; if (M[m] && !seen[m]) { seen[m] = 1; st.push(m); } } }
+      const w = x1 - x0 + 1, h = y1 - y0 + 1; if (h < 8 || h > 10 || w > 7 || n > 60) continue;
+      let bk = null, bd = 99;
+      for (const k in G) { const gw = k === '1' ? 3 : 6; if (Math.abs(gw - w) > 1) continue; let dd = 0; for (let y = 0; y < 9; y++) for (let X = 0; X < gw; X++) { const on = M[(y0 + y) * W + x0 + X] ? '1' : '0'; if (on !== G[k][y * gw + X]) dd++; } if (dd < bd) { bd = dd; bk = k; } }
+      if (bk != null && bd <= 4) comps.push({ x: x0, y: y0, k: bk });
+    }
+    comps.sort((a, b) => a.x - b.x); const out = [], used = new Set();
+    for (let i = 0; i < comps.length; i++) { if (used.has(i)) continue; const a = comps[i];
+      const j = comps.findIndex((b, jj) => jj > i && !used.has(jj) && Math.abs(b.y - a.y) <= 1 && b.x - a.x >= 7 && b.x - a.x <= 9);
+      if (j < 0) continue; used.add(i); used.add(j); const v = Number(a.k + comps[j].k); if (v >= 10 && v <= 59) out.push({ x: a.x, y: a.y, v }); }
+    return out;
+  }
   readTime(a, bw, bh) {
     const isY = i => a[i] > 200 && a[i + 1] > 180 && a[i + 2] < 90;
     const cols = []; for (let X = 0; X < bw; X++) { let k = 0; for (let y = 0; y < bh; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
@@ -1985,11 +2027,17 @@ class Component extends DCLogic {
       huntNoSkills: !h.skills.length,
       ...(() => { if (!this._pickCv) this._pickCv = React.createRef(); const ps = this._stream && h.skills.find(x => x.id === this._pick);
         const pt = e => this.runePt(e);
-        return { picking: !!ps, pickName: ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
+        const isRow = this._stream && this._pick === '__buffrow';
+        return { picking: !!ps || isRow, pickName: isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
+          pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
+          buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && (h.buffRow || {})[v.videoWidth + 'x' + v.videoHeight]; return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
           cancelPick: () => { this._pick = null; this._pdrag = null; this.forceUpdate(); },
           onPickDown: e => { const p = pt(e); this._pdrag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawPick(); },
           onPickMove: e => { if (!this._pdrag) return; const p = pt(e); this._pdrag.x1 = p.x; this._pdrag.y1 = p.y; this.drawPick(); },
-          onPickUp: () => { const d = this._pdrag, g = this.pickRegion(), v = this._video; this._pdrag = null; if (!d || !g || !ps) return;
+          onPickUp: () => { const d = this._pdrag, g = this.pickRegion(), v = this._video; this._pdrag = null; if (!d || !g || (!ps && !isRow)) return;
+            if (isRow) { const w = Math.abs(d.x1 - d.x0), hh = Math.abs(d.y1 - d.y0); if (w < 20 || hh < 8) { this.drawPick(); return; }
+              const res = v.videoWidth + 'x' + v.videoHeight, box = { x: g.x + Math.min(d.x0, d.x1), y: g.y + Math.min(d.y0, d.y1), w, h: hh };
+              this._pick = null; this.saveHunt({ ...h, buffRow: { ...(h.buffRow || {}), [res]: box } }); return; }
             const w = Math.abs(d.x1 - d.x0), hh = Math.abs(d.y1 - d.y0); if (w < 8 || hh < 8) { this.drawPick(); return; }
             const res = v.videoWidth + 'x' + v.videoHeight, box = { x: g.x + Math.min(d.x0, d.x1), y: g.y + Math.min(d.y0, d.y1), w, h: hh };
             if (this._run) delete this._run[ps.id];
