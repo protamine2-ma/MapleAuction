@@ -46,7 +46,7 @@ input{font-family:inherit;}
       </div>
       <div style="display:flex;gap:8px;">
         <sc-for list="{{ areas }}" as="a" hint-placeholder-count="3">
-          <button onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;" style-hover="opacity:0.9;">{{ a.label }}</button>
+          <button onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:baseline;gap:4px;" style-hover="opacity:0.9;">{{ a.label }}<sc-if value="{{ a.beta }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;opacity:0.75;">beta</span></sc-if></button>
         </sc-for>
       </div>
     </div>
@@ -382,10 +382,129 @@ input{font-family:inherit;}
 </div>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
+<nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
+  <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
+    <div onMouseEnter="{{ jobMenuOpen }}" onMouseLeave="{{ jobMenuClose }}" style="position:relative;">
+      <button onClick="{{ growTabs.0.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.0.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.0.weight }};color:{{ growTabs.0.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">직업가이드<span style="font-size:10px;opacity:0.6;">▼</span></button>
+      <sc-if value="{{ jobMenu }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:50;width:min(560px,92vw);max-height:420px;overflow-y:auto;background:#fff;border:1px solid #e3e3e0;border-radius:12px;box-shadow:0 12px 32px rgba(20,30,60,0.14);padding:14px;display:flex;flex-direction:column;gap:12px;">
+          <sc-for list="{{ jobGroups }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <span style="font-size:12px;font-weight:800;color:oklch(0.4 0.17 255);padding:0 4px;">{{ g.name }}</span>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;">
+                <sc-for list="{{ g.jobs }}" as="j" hint-placeholder-count="3">
+                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">{{ j.name }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">보약</button>
+  </div>
+</nav>
+<sc-if value="{{ noGuide }}" hint-placeholder-val="{{ true }}">
 <div style="max-width:760px;margin:0 auto;padding:80px 28px 96px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
-  <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">{{ areaName }}</h1>
-  <span style="font-size:15px;color:#6b6d73;">준비 중이에요.</span>
+  <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">{{ growTitle }}</h1>
+  <span style="font-size:15px;color:#6b6d73;">{{ growSub }}</span>
 </div>
+</sc-if>
+<sc-if value="{{ hasGuide }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1180px;margin:0 auto;padding:32px 28px 72px;display:grid;grid-template-columns:minmax(0,1fr) 0;gap:0;align-items:start;">
+<div style="display:flex;flex-direction:column;gap:20px;min-width:0;">
+  <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;">
+      <button onClick="{{ toggleGuideEdit }}" style="padding:8px 16px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.9;">{{ guideEditLabel }}</button>
+      <span style="font-size:13px;color:#6b6d73;">{{ guideMsg }}</span>
+    </div>
+  </sc-if>
+  <section style="position:relative;border-radius:16px;overflow:hidden;background:oklch(0.3 0.09 255);min-height:300px;display:flex;align-items:flex-end;">
+    <sc-if value="{{ guideHasImg }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background-image:{{ guideImgBg }};background-size:cover;background-position:center 25%;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,18,40,0.85),rgba(10,18,40,0) 60%);"></div>
+    </sc-if>
+    <div style="position:relative;padding:28px 32px;display:flex;flex-direction:column;gap:8px;width:100%;box-sizing:border-box;">
+      <span style="font-size:13px;font-weight:800;letter-spacing:0.08em;color:oklch(0.85 0.1 85);">직업가이드</span>
+      <h1 style="margin:0;font-size:52px;font-weight:800;letter-spacing:-0.03em;color:#fff;">{{ guideJob }}</h1>
+      <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+        <span style="font-size:18px;font-weight:600;color:#fff;">{{ guideTagline }}</span>
+        <span style="font-size:14px;color:oklch(0.9 0.04 255);">{{ guideMeta }}</span>
+      </sc-if>
+      <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
+        <input value="{{ guideTagline }}" onChange="{{ onGuideTagline }}" placeholder="한 줄 소개" style="box-sizing:border-box;width:100%;padding:8px 10px;border:none;border-radius:8px;font-family:inherit;font-size:16px;font-weight:600;">
+        <input value="{{ guideMeta }}" onChange="{{ onGuideMeta }}" placeholder="계열 · 주스탯 · 무기" style="box-sizing:border-box;width:100%;padding:8px 10px;border:none;border-radius:8px;font-family:inherit;font-size:14px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label style="padding:7px 14px;border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:13px;font-weight:700;cursor:pointer;">일러스트 올리기<input type="file" accept="image/*" onChange="{{ onGuideImg }}" style="display:none;"></label>
+          <sc-if value="{{ guideHasImg }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ removeGuideImg }}" style="padding:7px 14px;border:none;border-radius:8px;background:rgba(255,255,255,0.2);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">이미지 삭제</button>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+  <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="6">
+    <section id="{{ s.anchor }}" style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;scroll-margin-top:16px;">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
+        <span style="font-size:14px;font-weight:800;color:oklch(0.48 0.17 255);font-variant-numeric:tabular-nums;">{{ s.no }}</span>
+        <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">{{ s.title }}</h2>
+        </sc-if>
+        <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
+          <input value="{{ s.title }}" onChange="{{ s.onTitle }}" style="flex:1;min-width:0;padding:6px 10px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:17px;font-weight:800;">
+        </sc-if>
+      </div>
+      <div style="padding:18px 22px;">
+        <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
+          <textarea value="{{ s.text }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
+        </sc-if>
+        <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasPet }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+              <span style="font-size:12px;font-weight:600;color:#9a9ca1;">{{ s.petInfo }} · 펫 버프 자동스킬 사용 비율</span>
+              <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
+                <div style="display:grid;grid-template-columns:24px 28px minmax(0,220px) minmax(0,1fr) 52px;align-items:center;gap:8px;">
+                  <span style="font-size:13px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
+                  <span style="width:28px;height:28px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                  <span style="font-size:14px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</span>
+                  <div style="height:10px;border-radius:999px;background:#f0f0ee;overflow:hidden;"><div style="height:100%;width:{{ p.bar }};background:oklch(0.48 0.17 255);border-radius:999px;"></div></div>
+                  <span style="font-size:14px;font-weight:700;color:oklch(0.3 0.09 255);text-align:right;font-variant-numeric:tabular-nums;">{{ p.pct }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasText }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:15px;line-height:1.8;color:#2a2b2f;white-space:pre-wrap;text-wrap:pretty;">{{ s.text }}</div>
+          </sc-if>
+          <sc-if value="{{ s.isEmpty }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:14px;color:#9a9ca1;">준비 중이에요.</span>
+          </sc-if>
+          <sc-if value="{{ s.isVideo }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:14px;">
+              <sc-for list="{{ s.videos }}" as="v" hint-placeholder-count="0">
+                <iframe src="{{ v.src }}" title="유튜브 영상" allowfullscreen="" style="width:100%;aspect-ratio:16/9;border:none;border-radius:10px;background:#000;"></iframe>
+              </sc-for>
+            </div>
+            <sc-if value="{{ s.noVideo }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:14px;color:#9a9ca1;">등록된 영상이 아직 없어요.</span>
+            </sc-if>
+          </sc-if>
+        </sc-if>
+      </div>
+    </section>
+  </sc-for>
+</div>
+<aside style="position:fixed;right:16px;bottom:16px;width:max-content;z-index:20;overflow:hidden;background:rgba(255,255,255,0.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;gap:0;box-shadow:0 4px 16px rgba(20,30,60,0.08);">
+  <span style="font-size:11px;font-weight:800;letter-spacing:0.06em;color:oklch(0.48 0.17 255);padding:2px 8px 4px;">목차</span>
+  <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="8">
+    <button onClick="{{ s.goTo }}" style="display:flex;align-items:baseline;gap:5px;padding:4px 8px;border:none;border-radius:6px;background:{{ s.navBg }};color:{{ s.navColor }};font-family:inherit;font-size:13px;font-weight:{{ s.navWeight }};text-align:left;white-space:nowrap;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">
+      <span style="font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.no }}</span>{{ s.title }}
+    </button>
+  </sc-for>
+  <button onClick="{{ guideTop }}" style="margin:4px 4px 0;padding:4px 6px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#6b6d73;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;" style-hover="background:#f4f4f2;">↑ 맨 위로</button>
+</aside>
+</div>
+</sc-if>
 </sc-if>
 <sc-if value="{{ isAuction }}" hint-placeholder-val="{{ true }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
@@ -1089,6 +1208,9 @@ const pushWeek = (x, date, valsById) => {
   }
 };
 
+const GUIDE_DRAFT = {
+  '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
+};
 class Component extends DCLogic {
   state = (() => {
     let tab = '기타아이템';
@@ -1263,6 +1385,7 @@ class Component extends DCLogic {
     document.head.appendChild(s);
   }
   componentDidMount() {
+    this.bindGuideScroll();
     this._onResize = () => { const wide = window.innerWidth >= 1700; if (wide !== this.state.wide) this.setState({ wide }); };
     window.addEventListener('resize', this._onResize); this._onResize();
     this.loadAdsense();
@@ -1281,7 +1404,8 @@ class Component extends DCLogic {
       if (!rows.length) { this.setState({ remoteEmpty: true }); if (this.state.admin) this.pushAll(); return; }
       const all = clone(this.state.all);
       rows.forEach(row => { if (TABS.includes(row.tab) && row.data && row.data.dates) all[row.tab] = row.data; });
-      this.setState({ all, remoteEmpty: false });
+      const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
+      this.setState({ all, guides, remoteEmpty: false });
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
   }
@@ -1324,6 +1448,68 @@ class Component extends DCLogic {
     } catch (e) { this.setState({ syncMsg: '서버 저장 실패 — 잠시 후 다시 시도해 주세요.' }); return false; }
   }
   pushAll() { return this.pushTabs(TABS); }
+  bindGuideScroll() {
+    this._gScroll = () => {
+      const els = document.querySelectorAll('[id^="gs-"]'); if (!els.length) return;
+      let act = 0; els.forEach((el, i) => { if (el.getBoundingClientRect().top <= 40) act = i; });
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) act = els.length - 1;
+      if (act !== this.state.guideActive) this.setState({ guideActive: act });
+    };
+    window.addEventListener('scroll', this._gScroll, { passive: true });
+  }
+  guideOf(job) { const g = (this.state.guides || {})[job]; return (g && g.v === 2 ? g : null) || (GUIDE_DRAFT[job] ? clone(GUIDE_DRAFT[job]) : null); }
+  saveGuide(job, g) {
+    this.setState(s => ({ guides: { ...(s.guides || {}), [job]: g }, guideMsg: '저장 중…' }));
+    clearTimeout(this._gT);
+    this._gT = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ guideMsg: '로그인이 만료됐어요.' }); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'guide:' + job, data: g, updated_at: new Date().toISOString() }]) });
+        if (!r.ok) throw new Error();
+        this.setState({ guideMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
+      } catch (e) { this.setState({ guideMsg: '저장 실패 — 다시 시도해 주세요.' }); }
+    }, 900);
+  }
+  loadPetBuff(job) {
+    this._pb = this._pb || {};
+    if (this._pb[job] !== undefined) return this._pb[job];
+    this._pb[job] = null;
+    fetch('petbuff-' + encodeURIComponent(job) + '.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.items) { this._pb[job] = j; this.forceUpdate(); } }).catch(() => {});
+    return null;
+  }
+  guideVals(job) {
+    const g = this.guideOf(job); if (!g) return { hasGuide: false, noGuide: true };
+    const pb = this.loadPetBuff(job);
+    const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
+    const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
+    const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
+    return {
+      hasGuide: true, noGuide: false, guideJob: job, guideTagline: g.tagline || '', guideMeta: g.meta || '',
+      guideHasImg: !!g.img, guideNoImg: !g.img, guideImgBg: g.img ? 'url(' + g.img + ')' : 'none',
+      guideAdmin: admin, guideEdit: edit, guideView: !edit, guideMsg: this.state.guideMsg || '',
+      guideEditLabel: edit ? '수정 완료' : '페이지 수정',
+      toggleGuideEdit: () => this.setState(s => ({ guideEdit: !s.guideEdit })),
+      onGuideTagline: e => { const v = e.target.value; upd(n => { n.tagline = v; }); },
+      onGuideMeta: e => { const v = e.target.value; upd(n => { n.meta = v; }); },
+      onGuideImg: e => {
+        const f = e.target.files && e.target.files[0]; if (!f) return; e.target.value = '';
+        const im = new Image(); im.onload = () => { const w = Math.min(1400, im.width), h = Math.round(im.height * w / im.width), c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(im, 0, 0, w, h); const url = c.toDataURL('image/jpeg', 0.85); URL.revokeObjectURL(im.src); upd(n => { n.img = url; }); };
+        im.src = URL.createObjectURL(f);
+      },
+      removeGuideImg: () => upd(n => { n.img = ''; }),
+      guideTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      guideSections: g.sections.map((s, i) => ({ no: String(i + 1).padStart(2, '0'), title: s.title, anchor: 'gs-' + i,
+        navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
+        goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
+        hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? '랭킹 상위 ' + pb.sample + '명 기준 · ' + pb.date : '',
+        petRows: s.title === '펫버프' && pb ? pb.items.slice(0, 20).map((x, k) => ({ rank: k + 1, name: x.name, iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
+        onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
+        onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
+        videos: s.type === 'video' ? String(s.text || '').split('\n').map(yt).filter(Boolean).map(src => ({ src })) : [],
+        noVideo: s.type === 'video' && !String(s.text || '').split('\n').map(yt).filter(Boolean).length })),
+    };
+  }
   queuePush(tabs) {
     if (!this.state.admin) return;
     this._dirty = this._dirty || new Set(); tabs.forEach(t => this._dirty.add(t));
@@ -2319,7 +2505,24 @@ class Component extends DCLogic {
         return {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
-          areas: ['옥션', '사냥', '육성'].map(l => ({ label: l, bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
+          ...(() => {
+            const GT = ['직업가이드', '보약'];
+            let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
+            if (!GT.includes(g)) g = GT[0];
+            const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
+              ['시그너스 기사단', ['소울마스터', '미하일', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커']], ['레지스탕스', ['블래스터', '배틀메이지', '와일드헌터', '메카닉', '제논', '데몬슬레이어', '데몬어벤져']],
+              ['영웅', ['아란', '에반', '루미너스', '메르세데스', '팬텀', '은월']], ['노바', ['카이저', '카인', '카데나', '엔젤릭버스터']], ['레프', ['아델', '일리움', '칼리', '아크']], ['아니마', ['라라', '호영', '렌']], ['기타', ['제로', '키네시스', '레테']]];
+            let job = this.state.job || (() => { try { return localStorage.getItem(KEY + ':job'); } catch (e) { return null; } })();
+            const isGuide = g === '직업가이드';
+            const gv = isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: true };
+            return { ...gv, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
+              growTitle: isGuide && job ? job : g, growSub: isGuide && !job ? '직업가이드에 마우스를 올려 직업을 선택하세요.' : '준비 중이에요.',
+              jobGroups: JG.map(([name, jobs]) => ({ name, jobs: jobs.map(n => ({ name: n, bg: n === job && isGuide ? 'oklch(0.48 0.17 255)' : 'transparent', color: n === job && isGuide ? '#fff' : '#3a3b3f',
+                onClick: () => { try { localStorage.setItem(KEY + ':job', n); localStorage.setItem(KEY + ':growTab', '직업가이드'); } catch (e) {} this.setState({ job: n, growTab: '직업가이드', jobMenu: false }); } })) })),
+              growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
+              onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
+          })(),
+          areas: ['옥션', '사냥', '육성'].map(l => ({ label: l, beta: l === '사냥', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); } })),
         };
       })(),
