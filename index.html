@@ -461,14 +461,12 @@ input{font-family:inherit;}
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
           <sc-if value="{{ s.hasPet }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
-              <span style="font-size:12px;font-weight:600;color:#9a9ca1;">{{ s.petInfo }} · 펫 버프 자동스킬 사용 비율</span>
               <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
-                <div style="display:grid;grid-template-columns:24px 28px minmax(0,220px) minmax(0,1fr) 52px;align-items:center;gap:8px;">
+                <div style="display:grid;grid-template-columns:24px 28px minmax(0,220px) minmax(0,1fr);align-items:center;gap:8px;">
                   <span style="font-size:13px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
                   <span style="width:28px;height:28px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
                   <span style="font-size:14px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</span>
                   <div style="height:10px;border-radius:999px;background:#f0f0ee;overflow:hidden;"><div style="height:100%;width:{{ p.bar }};background:oklch(0.48 0.17 255);border-radius:999px;"></div></div>
-                  <span style="font-size:14px;font-weight:700;color:oklch(0.3 0.09 255);text-align:right;font-variant-numeric:tabular-nums;">{{ p.pct }}</span>
                 </div>
               </sc-for>
             </div>
@@ -1502,7 +1500,7 @@ class Component extends DCLogic {
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
-        petRows: s.title === '펫버프' && pb ? pb.items.slice(0, 20).map((x, k) => ({ rank: k + 1, name: x.name, iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
+        petRows: s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50).map((x, k) => ({ rank: k + 1, name: x.name, iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
         isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
