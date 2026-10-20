@@ -31,7 +31,7 @@ async function pool(list, fn, size = 20) {
 
 const d = new Date(Date.now() + 9 * 3600e3 - 86400e3);
 const date = d.toISOString().slice(0, 10);
-const count = {}, icons = {}; let ok = 0, checked = 0, inactive = 0;
+const count = {}, icons = {}; let ok = 0, checked = 0, inactive = 0, other = 0;
 async function one(name) {
   if (ok >= N) return;
   const id = await api('/id', { character_name: name });
@@ -39,6 +39,7 @@ async function one(name) {
   const b = await api('/character/basic', { ocid: id.ocid });
   checked++;
   if (!b || String(b.access_flag) !== 'true') { inactive++; return; }
+  if (b.character_class !== JOB) { other++; return; }
   if (ok >= N) return;
   const p = await api('/character/pet-equipment', { ocid: id.ocid });
   if (!p) return;
@@ -55,7 +56,7 @@ for (let page = 1; ok < N && page <= 60; page++) {
   const r = (j && j.ranking) || [];
   if (!r.length) break;
   await pool(r.map(x => x.character_name), one);
-  console.log(`랭킹 ${page}페이지 · 확인 ${checked}명 · 활성 ${ok}명 · 미접속 ${inactive}명`);
+  console.log(`랭킹 ${page}페이지 · 확인 ${checked}명 · 활성 ${ok}명 · 미접속 ${inactive}명 · 다른 직업 ${other}명`);
 }
 if (!ok) { console.error('집계된 캐릭터가 없어요. CLASS 값을 확인해 주세요.'); process.exit(1); }
 
