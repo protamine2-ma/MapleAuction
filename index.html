@@ -666,7 +666,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <sc-for list="{{ rowGroups }}" as="rg" hint-placeholder-count="1">
       <sc-if value="{{ rg.showLabel }}" hint-placeholder-val="{{ false }}">
         <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
-          <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ rg.label }}</span>
+          <span onClick="{{ rg.onRename }}" title="{{ rg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ rg.cursor }};">{{ rg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
             <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
           </sc-for>
@@ -752,7 +752,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           </div>
         </sc-if>
         <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
-          <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ pg.label }}</span>
+          <span onClick="{{ pg.onRename }}" title="{{ pg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ pg.cursor }};">{{ pg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
             <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
           </sc-for>
@@ -827,7 +827,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         <sc-for list="{{ pg.cgs }}" as="cg" hint-placeholder-count="1">
         <sc-if value="{{ cg.showLabel }}" hint-placeholder-val="{{ false }}">
           <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 12px 0 16px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
-            <span style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ cg.label }}</span>
+            <span onClick="{{ cg.onRename }}" title="{{ cg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ cg.cursor }};">{{ cg.label }}</span>
             <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
               <span style="display:flex;align-items:center;gap:3px;flex:none;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;">
                 <span style="width:8px;height:8px;border-radius:2px;background:{{ l.color }};"></span>{{ l.label }}
@@ -1648,14 +1648,14 @@ class Component extends DCLogic {
     for (const p of this.buffPresetList()) { const t = this.tplFor(p.key + '.png', 32 / 30); if (t) T[p.key] = t; else if (!this._tplFail || !this._tplFail[p.key + '.png']) wait = true; }
     if (wait && now - (this._tplWaitAt || (this._tplWaitAt = now)) < 4000) { this._buffDbg = '준비 중'; return; }
     const keys = Object.keys(T); if (!keys.length) { this._buffDbg = '아이콘 없음'; return; }
-    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 64 ? bk : this.bandMatch(d, rw, rh, X, Y, T, keys); });
+    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 40 ? bk : this.bandMatch(d, rw, rh, X, Y, T, keys); });
     this._buffDbg = slots.length + '칸';
     this._bst = this._bst || {};
     const wmin = this.readWhiteMins(d, rw, rh), wByKey = {};
     for (const n of wmin) {
-      let bk = null, bs = 1e9;
-      for (const k of keys) { let s = 1e9; for (let dy = -6; dy <= 4; dy++) for (let dx = -5; dx <= 5; dx++) { const xx = n.x - 1 + dx, yy = n.y - 25 + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } }
-      if (bk && bs < 64 && wByKey[bk] == null) wByKey[bk] = n.v;
+      const sc = keys.map(k => { let s = 1e9; for (let dy = -10; dy <= 8; dy++) for (let dx = -7; dx <= 5; dx++) { const xx = n.x - 1 + dx, yy = n.y - 25 + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } return [k, s]; }).sort((a, b) => a[1] - b[1]);
+      const bk = sc[0] && sc[0][1] < 56 && (!sc[1] || sc[1][1] - sc[0][1] >= 6) ? sc[0][0] : null;
+      if (bk && wByKey[bk] == null) wByKey[bk] = n.v;
     }
     list.forEach(b => {
       const N = wByKey[b.preset]; if (N == null) return;
@@ -1669,7 +1669,7 @@ class Component extends DCLogic {
     });
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
-      const has = owner.includes(b.preset);
+      const has = owner.includes(b.preset) && wByKey[b.preset] == null;
       if (has) { if (!S.end && !S.pending && now - (S.doneAt || 0) > 3000) { S.pending = true; S.alerted = false; S.lock = false; S.h = []; S.pendAt = now; } S.lastSeen = now;
         S.fail = !!(S.pending && !S.end && now - S.pendAt > 8000);
         if ((S.pending || S.end) && !S.lock) {
@@ -1899,11 +1899,11 @@ class Component extends DCLogic {
       const w = x1 - x0 + 1, h = y1 - y0 + 1; if (h < 8 || h > 10 || w > 7 || n > 60) continue;
       let bk = null, bd = 99;
       for (const k in G) { const gw = k === '1' ? 3 : 6; if (Math.abs(gw - w) > 1) continue; let dd = 0; for (let y = 0; y < 9; y++) for (let X = 0; X < gw; X++) { const on = M[(y0 + y) * W + x0 + X] ? '1' : '0'; if (on !== G[k][y * gw + X]) dd++; } if (dd < bd) { bd = dd; bk = k; } }
-      if (bk != null && bd <= 4) comps.push({ x: x0, y: y0, k: bk });
+      if (bk != null && bd <= 4) comps.push({ x: x0, y: y0, k: bk, w });
     }
     comps.sort((a, b) => a.x - b.x); const out = [], used = new Set();
     for (let i = 0; i < comps.length; i++) { if (used.has(i)) continue; const a = comps[i];
-      const j = comps.findIndex((b, jj) => jj > i && !used.has(jj) && Math.abs(b.y - a.y) <= 1 && b.x - a.x >= 7 && b.x - a.x <= 9);
+      const j = comps.findIndex((b, jj) => jj > i && !used.has(jj) && Math.abs(b.y - a.y) <= 1 && b.x - (a.x + a.w) >= 1 && b.x - (a.x + a.w) <= 3);
       if (j < 0) continue; used.add(i); used.add(j); const v = Number(a.k + comps[j].k); if (v >= 10 && v <= 59) out.push({ x: a.x, y: a.y, v }); }
     return out;
   }
@@ -2283,14 +2283,16 @@ class Component extends DCLogic {
     data.items.forEach(it => { const u = unitOf(it); if (!units.includes(u)) units.push(u); });
     const multi = units.length > 1;
     const unitLabel = u => u || (multi ? '기타' : '');
-    const rowGroups = units.map(u => ({ label: unitLabel(u), showLabel: true, rows: rows.filter(r => r.unit === u) }));
+    const renameUnit = u => () => { if (!admin) return; const v = window.prompt('묶음 이름 수정', unitLabel(u)); if (v == null || !v.trim() || v.trim() === unitLabel(u)) return;
+      this.updateTab(tab, y => { y.items.forEach(it => { if (unitOf(it) === u) it.group = v.trim(); }); }); };
+    const rowGroups = units.map(u => ({ label: unitLabel(u), showLabel: true, rows: rows.filter(r => r.unit === u), onRename: renameUnit(u), cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '' }));
     const chartGroups = units.map((u, gi) => {
       const its = data.items.filter(it => unitOf(it) === u);
       let max = 0;
       its.filter(it => !it.hideBar).forEach(it => it.values.slice(last4).forEach(v => { const x = num(v); if (x !== null && x > max) max = x; }));
       max = max * 1.12 || 1;
       return {
-        label: unitLabel(u), showLabel: true,
+        label: unitLabel(u), showLabel: true, onRename: renameUnit(u), cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '',
         pad: gi > 0 ? '18px' : '0', border: gi > 0 ? '1px solid #ececea' : 'none',
         chart: its.map(it => ({
           short: it.short || it.name,
@@ -2372,7 +2374,7 @@ class Component extends DCLogic {
       pairGroups: rowGroups.map((rg, i) => {
         const idx = selItem ? rg.rows.findIndex(r => r.id === selItem.id) : -1;
         const has = idx >= 0;
-        return { label: rg.label, rows: rg.rows, first: i === 0, cgs: [chartGroups[i]], hasLine: has, noLine: !has,
+        return { label: rg.label, rows: rg.rows, onRename: rg.onRename, cursor: rg.cursor, tip: rg.tip, first: i === 0, cgs: [chartGroups[i]], hasLine: has, noLine: !has,
           lineTop: has && !this.state.narrow && i === 0 ? '52px' : '0' };
       }),
       showLine: false, showBars: true,
