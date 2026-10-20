@@ -1708,12 +1708,15 @@ class Component extends DCLogic {
       if (sec != null && sec < 600) {
         S.lastSeen = now; S.fail = false;
         if (S.mode !== 'y') { S.mode = 'y'; S.h = []; S.lock = false; }
-        if (S.lock) return;
-        const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
-        if (!S.end) { if (sec >= 5) { S.end = now + sec * 1000 + 500; S.approx = false; S.alerted = false; } }
-        else if (S.approx || Math.abs((S.end - now) / 1000 - sec) > 3) { S.end = now + sec * 1000 + 500; S.approx = false; }
-        if (Hh.length >= 3) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
-          if (ok && S.end) { S.lock = true; S.end = now + sec * 1000 + 500; } }
+        const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-3));
+        const okSeq = n => { if (Hh.length < n) return false; const T = Hh.slice(-n); for (let i = 1; i < T.length; i++) { const el = (T[i][0] - T[i - 1][0]) / 1000, dn = T[i - 1][1] - T[i][1]; if (Math.abs(dn - el) > 1.5) return false; } return true; };
+        if (S.lock) {
+          const r = (S.end - now) / 1000;
+          if (S.end > now && Math.abs(r - sec) > 5 && sec > r && okSeq(3)) { S.end = now + sec * 1000 + 500; S.alerted = false; }
+          return;
+        }
+        if (!S.end && sec >= 5) { S.end = now + sec * 1000 + 500; S.approx = false; S.alerted = false; }
+        if (okSeq(2)) { S.lock = true; S.approx = false; S.end = now + sec * 1000 + 500; }
       } else if (N != null) {
         S.lastSeen = now; S.fail = false;
         if (S.mode !== 'w') { S.mode = 'w'; S.wm = null; }
@@ -1723,7 +1726,7 @@ class Component extends DCLogic {
         else if (N > S.wm) fresh();
         else if (N === S.wm && S.lock) { const r = (S.end - now) / 1000; if (r < N * 60 - 5 || r > N * 60 + 65) fresh(); }
         S.wm = N;
-      } else if (S.end && !S.lock && now - (S.lastSeen || 0) > 15000 && S.end - now > 20000) { S.end = 0; S.mode = null; }
+      } else if (S.end && !S.lock && now - (S.lastSeen || 0) > 30000 && S.end - now > 20000) { S.end = 0; S.mode = null; }
     });
   }
   buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
