@@ -50,7 +50,7 @@ async function one(name) {
   if (!valid.length || ok >= N) return;
   ok++;
   const pick = (keys, other) => valid.map(p => [p, score(p, keys) - score(p, other)]).sort((x, y) => y[1] - x[1])[0];
-  const add = (k, p) => { C[k].n++; new Set(p.map(x => x.skill_name)).forEach(v => { C[k].c[v] = (C[k].c[v] || 0) + 1; }); p.forEach(x => { if (x.skill_icon) icons[x.skill_name] = x.skill_icon; const e = x.skill_effect || x.skill_description; if (e && (!descs[x.skill_name] || (x.skill_level || 0) >= (descs[x.skill_name].lv || 0))) descs[x.skill_name] = { t: e, lv: x.skill_level || 0 }; }); };
+  const add = (k, p) => { C[k].n++; new Set(p.map(x => x.skill_name)).forEach(v => { C[k].c[v] = (C[k].c[v] || 0) + 1; }); p.forEach(x => { if (x.skill_icon) icons[x.skill_name] = x.skill_icon; const e = x.skill_effect || x.skill_description; if (e) { const L = (descs[x.skill_name] = descs[x.skill_name] || {}); L[x.skill_level || 0] = L[x.skill_level || 0] || e; } }); };
   const h = pick(HUNT, BOSS), bo = pick(BOSS, HUNT);
   if (h && h[1] >= 2) add('hunt', h[0]);
   if (bo && bo[1] >= 1 && (!h || bo[0] !== h[0] || h[1] < 2)) add('boss', bo[0]);
@@ -64,7 +64,10 @@ for (let page = 1; ok < N && page <= 60; page++) {
 }
 if (!ok) { console.error('집계된 캐릭터가 없어요.'); process.exit(1); }
 
-const list = k => Object.entries(C[k].c).sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, icon: icons[name] || '', desc: (descs[name] || {}).t || '', count: n, pct: Math.round(n / Math.max(1, C[k].n) * 1000) / 10 }));
+const WANT = { '륀느의 축복': 5, '스피릿 오브 프리덤': 8, '시그너스 블레스': 10, '시프 커닝': 6, '어드벤쳐러 큐리어스': 6, '인빈서블 빌리프': 6, '임피리컬 널리지': 6, '파이렛 블레스': 6 };
+const pickLv = (L, name) => { if (!L) return 0; const w = WANT[name] || 2, lv = Object.keys(L).map(Number); return lv.includes(w) ? w : lv.sort((a, b) => Math.abs(a - w) - Math.abs(b - w) || b - a)[0]; };
+const pickDesc = (L, name) => (L ? L[pickLv(L, name)] : '') || '';
+const list = k => Object.entries(C[k].c).sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, icon: icons[name] || '', desc: pickDesc(descs[name], name), descLv: pickLv(descs[name], name), count: n, pct: Math.round(n / Math.max(1, C[k].n) * 1000) / 10 }));
 const out = { job: JOB, date, sample: ok, active: true, boss: { sample: C.boss.n, items: list('boss') }, hunt: { sample: C.hunt.n, items: list('hunt') } };
 fs.writeFileSync(`linkskill-${JOB}.json`, JSON.stringify(out, null, 2));
 for (const k of ['boss', 'hunt']) { console.log(`[${k}] ${out[k].sample}명`); out[k].items.slice(0, 14).forEach((x, i) => console.log(`${i + 1}. ${x.name} ${x.pct}%`)); }
