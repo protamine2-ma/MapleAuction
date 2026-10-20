@@ -1963,7 +1963,9 @@ class Component extends DCLogic {
     for (let X = 0; X <= bw; X++) { const on = X < bw && cols[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
     const info = runs.map(r => { let y0 = bh, y1 = 0, n = 0; for (let y = 0; y < bh; y++) for (let X = r[0]; X <= r[1]; X++) if (isY((y * bw + X) * 4)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); n++; } return { r, y0, y1, n, w: r[1] - r[0] + 1, h: y1 - y0 + 1 }; }).filter(g => g.n >= 2);
     if (info.length < 3) return null;
-    const H = Math.max(...info.map(g => g.h));
+    const H = Math.max(...info.map(g => g.h)), top = Math.min(...info.filter(g => g.h >= H * 0.75).map(g => g.y0));
+    for (let i = 0; i < info.length - 1; i++) { const g = info[i], nx = info[i + 1];
+      if (g.h < H * 0.75 && g.y1 <= top + H * 0.45 && nx.r[0] - g.r[1] <= 2) { nx.r = [g.r[0], nx.r[1]]; nx.y0 = Math.min(nx.y0, g.y0); nx.y1 = Math.max(nx.y1, g.y1); nx.n += g.n; nx.w = nx.r[1] - nx.r[0] + 1; nx.h = nx.y1 - nx.y0 + 1; info.splice(i, 1); i--; } }
     let str = '';
     for (const g of info) {
       if (g.h < H * 0.75) { str += ':'; continue; }
@@ -1972,7 +1974,7 @@ class Component extends DCLogic {
       const DIG = this._DIG || {}; let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       if (bk == null || bd > 16) { str += '?'; continue; } str += bk;
     }
-    const mm = str.match(/(\d):(\d\d)/); if (!mm) return null;
+    const mm = str.match(/^\?*(\d):([0-5]\d)\?*$/); if (!mm) return null;
     return Number(mm[1]) * 60 + Number(mm[2]);
   }
   readCd(a, bw, bh) {
