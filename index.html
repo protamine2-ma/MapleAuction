@@ -390,12 +390,12 @@ input{font-family:inherit;}
 <sc-if value="{{ isAuction }}" hint-placeholder-val="{{ true }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
-    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
     <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ sundayTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">썬데이</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
       <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
     </sc-for>
+    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
@@ -1091,7 +1091,7 @@ const pushWeek = (x, date, valsById) => {
 
 class Component extends DCLogic {
   state = (() => {
-    let tab = '인구수';
+    let tab = '기타아이템';
     let trash = [];
     try { trash = JSON.parse(localStorage.getItem(KEY + ':trash')) || []; } catch (e) {}
     let session = null;
