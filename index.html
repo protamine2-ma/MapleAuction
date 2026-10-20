@@ -459,6 +459,47 @@ input{font-family:inherit;}
           <textarea value="{{ s.text }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasAbil }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
+              <div style="display:flex;gap:14px;font-size:13px;font-weight:600;color:#6b6d73;">
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.72 0.17 145);"></span>레전드리</span>
+                <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.8 0.16 80);"></span>유니크</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:12px;">
+                <sc-for list="{{ s.abilSets }}" as="a" hint-placeholder-count="6">
+                  <div style="border:1px solid #e3e3e0;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+                    <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);margin-bottom:2px;">{{ a.name }}</span>
+                    <sc-for list="{{ a.lines }}" as="l" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:{{ l.bg }};border-left:4px solid {{ l.bd }};">
+                        <span style="font-size:15px;font-weight:600;color:#2a2b2f;">{{ l.text }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasLink }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-bottom:14px;">
+              <sc-for list="{{ s.linkCols }}" as="c" hint-placeholder-count="2">
+                <div style="border:1px solid #e3e3e0;border-radius:12px;overflow:hidden;">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid #e3e3e0;">
+                    <span style="font-size:17px;font-weight:800;color:#2a2b2f;">{{ c.title }}</span>
+                    <span style="font-size:12px;color:#9a9ca1;">{{ c.sample }}</span>
+                  </div>
+                  <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="14">
+                    <div style="display:grid;grid-template-columns:26px 32px minmax(0,1fr) 70px 52px;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid #f0f0ee;">
+                      <span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;background:{{ r.rankBg }};color:{{ r.rankColor }};font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;">{{ r.rank }}</span>
+                      <span style="width:32px;height:32px;background-image:{{ r.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                      <span style="font-size:15px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
+                      <span style="height:8px;border-radius:999px;background:#ececea;overflow:hidden;"><span style="display:block;height:100%;width:{{ r.bar }};background:oklch(0.65 0.15 150);border-radius:999px;"></span></span>
+                      <span style="font-size:14px;font-weight:700;color:#3a3b3f;text-align:right;font-variant-numeric:tabular-nums;">{{ r.pct }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasPet }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
               <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
@@ -1209,6 +1250,16 @@ const pushWeek = (x, date, valsById) => {
   }
 };
 
+const ABILITY = {
+  '아델': [
+    { name: '보스용', lines: [['L', '보스 몬스터 공격 시 데미지 20% 증가'], ['U', '스킬 사용 시 10% 확률로 재사용 대기시간 미적용'], ['U', '상태 이상에 걸린 대상 공격 시 데미지 8% 증가']] },
+    { name: '보스 종결', lines: [['L', '패시브 스킬 레벨 1 증가'], ['L', '보스 몬스터 공격 시 데미지 20% 증가'], ['L', '스킬 사용 시 20% 확률로 재사용 대기시간 미적용']] },
+    { name: '보스 드롭', lines: [['L', '아이템 드롭률 20% 증가']] },
+    { name: '사냥용 (메획)', lines: [['L', '메소 획득량 20% 증가'], ['U', '아이템 드롭률 15% 증가'], ['U', '일반 몬스터 공격 시 데미지 8% 증가']] },
+    { name: '사냥용 (드롭)', lines: [['L', '아이템 드롭률 20% 증가'], ['U', '메소 획득량 15% 증가'], ['U', '일반 몬스터 공격 시 데미지 8% 증가']] },
+    { name: '사냥 종결', lines: [['L', '아이템 드롭률 20% 증가'], ['L', '메소 획득량 20% 증가']] },
+  ],
+};
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -1471,18 +1522,18 @@ class Component extends DCLogic {
       } catch (e) { this.setState({ guideMsg: '저장 실패 — 다시 시도해 주세요.' }); }
     }, 900);
   }
-  loadPetBuff(job) {
-    this._pb = this._pb || {};
-    if (this._pb[job] !== undefined) return this._pb[job];
-    this._pb[job] = null;
-    const f = 'petbuff-' + encodeURIComponent(job) + '.json?t=' + Date.now();
+  loadPetBuff(job, kind = 'petbuff') {
+    this._pb = this._pb || {}; const key = kind + ':' + job;
+    if (this._pb[key] !== undefined) return this._pb[key];
+    this._pb[key] = null; job = key;
+    const f = kind + '-' + encodeURIComponent(key.slice(kind.length + 1)) + '.json?t=' + Date.now();
     const get = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
     get(f).then(j => j && j.items ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && j.items) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
   guideVals(job) {
     const g = this.guideOf(job); if (!g) return { hasGuide: false, noGuide: true };
-    const pb = this.loadPetBuff(job);
+    const pb = this.loadPetBuff(job), lk = this.loadPetBuff(job, 'linkskill');
     const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
     const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
@@ -1505,8 +1556,12 @@ class Component extends DCLogic {
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
-        petRows: s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
+        hasLink: s.title === '링크' && !!(lk && lk.boss),
+        linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: r === 0 ? 'oklch(0.8 0.15 80)' : r === 1 ? 'oklch(0.9 0.03 255)' : r === 2 ? 'oklch(0.7 0.08 50)' : 'transparent', rankColor: r < 3 ? (r === 1 ? 'oklch(0.4 0.09 255)' : '#fff') : '#6b6d73' })) })) : [],
+        petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })),
+        hasAbil: s.title === '어빌리티' && !!ABILITY[job],
+        abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '어빌리티' && ABILITY[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: s.type === 'video' ? String(s.text || '').split('\n').map(yt).filter(Boolean).map(src => ({ src })) : [],
@@ -2153,10 +2208,16 @@ class Component extends DCLogic {
         if (s.preset === 'yein67') {
           const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
           const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
-          const lim = Math.max(4, Math.round(mk.length * 0.025));
-          if (!D.ymk) D.ymk = mk;
-          else if (dif(mk, D.ymk) >= lim) { if (D.yc && dif(mk, D.yc) <= 2) { if (++D.yn >= 3) { D.ymk = mk; D.yc = null; if (now - (D.usedAt || 0) > 3000) used = true; } } else { D.yc = mk; D.yn = 1; } }
-          else D.yc = null;
+          const lim = Math.max(8, Math.round(mk.length * 0.06)), wc = m => m.reduce((p, q) => p + q, 0);
+          let tb = 0, tn = 0; for (let y = 1; y < bh * 0.5; y += 2) for (let X = 1; X < bw * 0.5; X += 2) { const i = (y * bw + X) * 4; tb += a[i] + a[i + 1] + a[i + 2]; tn++; } tb /= Math.max(1, tn);
+          const iconOk = !D.ytb || Math.abs(tb - D.ytb) / D.ytb < 0.12;
+          if (!D.ymk) { D.ymk = mk; D.ytb = tb; }
+          else if (!iconOk) { D.yc = null; D.ytb = D.ytb * 0.7 + tb * 0.3; }
+          else if (dif(mk, D.ymk) >= lim && wc(D.ymk) >= 6 && wc(mk) <= wc(D.ymk) * 1.1) {
+            if (D.yc && dif(mk, D.yc) <= 2) { if (++D.yn >= 5) { D.ymk = mk; D.yc = null; if (now - (D.usedAt || 0) > 5000) used = true; } } else { D.yc = mk; D.yn = 1; }
+          }
+          else if (dif(mk, D.ymk) >= lim) { if (D.yc2 && dif(mk, D.yc2) <= 2) { if (++D.yn2 >= 6) { D.ymk = mk; D.yc2 = null; } } else { D.yc2 = mk; D.yn2 = 1; } D.yc = null; }
+          else { D.yc = null; D.yc2 = null; D.ytb = D.ytb * 0.9 + tb * 0.1; }
         }
         if (this.skillIcon(s) === 'qs-janus.png') {
           const mk = []; for (let y = Math.floor(bh * 0.62); y < bh; y++) for (let X = Math.floor(bw * 0.55); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
