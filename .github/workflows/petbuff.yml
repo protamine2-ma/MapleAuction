@@ -1,0 +1,22 @@
+name: petbuff
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/petbuff.mjs
+        env:
+          NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add petbuff-*.json
+          git commit -m "펫 버프 집계" || echo "변경 없음"
+          git push
