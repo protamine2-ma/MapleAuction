@@ -258,6 +258,9 @@ input{font-family:inherit;}
       <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">버프 종료 알림</h2>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onClick="{{ pickBuffRow }}" style="padding:7px 14px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.4 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.97 0.02 255);">{{ buffRowLabel }}</button>
+      <sc-if value="{{ sharing }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ saveRowShot }}" style="padding:7px 14px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;color:#3a3b3f;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;" style-hover="background:#f4f4f2;">버프 줄 캡처 저장</button>
+      </sc-if>
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
     </div>
@@ -1637,7 +1640,7 @@ class Component extends DCLogic {
     const rx = Math.max(0, row.x - 2), ry = Math.max(0, row.y - 4), rw = Math.min(W - rx, row.w + 4), rh = Math.max(34, Math.min(H - ry, row.h + 8));
     const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
-    const d = x.getImageData(0, 0, rw, rh).data;
+    const d = x.getImageData(0, 0, rw, rh).data; this._rowCanvas = c;
     const yel = (X, Y, n) => { let k = 0, dk = 0; for (let y = 9; y <= 22; y++) for (let xx = 2; xx < n - 2; xx++) { const i = ((Y + y) * rw + X + xx) * 4; if (d[i] > 215 && d[i + 1] > 195 && d[i + 2] < 90) k++; if (d[i] + d[i + 1] + d[i + 2] < 120) dk++; } return dk >= 45 ? k : 0; };
     const slots = [];
     for (let Y = 0; Y <= rh - 32; Y++) for (let X = 0; X <= rw - 32; X += 2) { if (slots.some(s => Math.abs(s[0] - X) < 24 && Math.abs(s[1] - Y) < 24)) continue; if (yel(X, Y, 32) >= 35) { let bx = X, by = Y, bk = 0; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { if (X + dx < 0 || Y + dy < 0 || X + dx > rw - 32 || Y + dy > rh - 32) continue; const k = yel(X + dx, Y + dy, 32); if (k > bk) { bk = k; bx = X + dx; by = Y + dy; } } slots.push([bx, by]); } }
@@ -2047,6 +2050,9 @@ class Component extends DCLogic {
         return { picking: !!ps || isRow, pickName: isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
           pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
           buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
+          saveRowShot: () => { const v = this._video; const row = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); if (!row) { alert('먼저 화면 공유 후 버프 줄을 지정하세요.'); return; }
+            const c = document.createElement('canvas'), rx = Math.max(0, row.x - 2), ry = Math.max(0, row.y - 4), rw = Math.min(v.videoWidth - rx, row.w + 4), rh = Math.max(34, Math.min(v.videoHeight - ry, row.h + 8)); c.width = rw; c.height = rh; c.getContext('2d').drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
+            const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'buff-row.png'; a.click(); },
           cancelPick: () => { this._pick = null; this._pdrag = null; this.forceUpdate(); },
           onPickDown: e => { const p = pt(e); this._pdrag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawPick(); },
           onPickMove: e => { if (!this._pdrag) return; const p = pt(e); this._pdrag.x1 = p.x; this._pdrag.y1 = p.y; this.drawPick(); },
