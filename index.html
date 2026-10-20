@@ -1652,13 +1652,13 @@ class Component extends DCLogic {
     list.forEach(b => {
       const S = this._bst[b.id] || (this._bst[b.id] = {});
       const has = owner.includes(b.preset);
-      if (has) { if (!S.end && !S.pending && now - (S.doneAt || 0) > 60000) { S.pending = true; S.alerted = false; S.lock = false; S.h = []; S.pendAt = now; } S.lastSeen = now;
+      if (has) { if (!S.end && !S.pending && now - (S.doneAt || 0) > 3000) { S.pending = true; S.alerted = false; S.lock = false; S.h = []; S.pendAt = now; } S.lastSeen = now;
         S.fail = !!(S.pending && !S.end && now - S.pendAt > 8000);
         if ((S.pending || S.end) && !S.lock) {
           const [qx, qy] = slots[owner.indexOf(b.preset)], sx = Math.max(0, qx - 6), sy = Math.max(0, qy - 4), bw = Math.min(46, rw - sx), bh = Math.min(38, rh - sy), a = new Uint8ClampedArray(bw * bh * 4);
           for (let y = 0; y < bh; y++) for (let xx = 0; xx < bw; xx++) { const i = ((sy + y) * rw + sx + xx) * 4, o = (y * bw + xx) * 4; a[o] = d[i]; a[o + 1] = d[i + 1]; a[o + 2] = d[i + 2]; }
           const sec = this.readTime(a, bw, bh);
-          if (sec != null && sec < 600) { const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
+          if (sec != null && sec < 600 && (S.end || sec >= 5)) { const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-4));
             if (!S.end || S.approx || Math.abs((S.end - now) / 1000 - sec) > 3) { S.end = now + sec * 1000 + 500; S.approx = false; }
             if (Hh.length >= 2) { let ok = true; for (let i = 1; i < Hh.length; i++) { const el = (Hh[i][0] - Hh[i - 1][0]) / 1000, dn = Hh[i - 1][1] - Hh[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
               if (ok) { S.lock = true; S.pending = false; S.end = now + sec * 1000 + 500; S.alerted = false; } } }
