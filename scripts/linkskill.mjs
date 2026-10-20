@@ -5,7 +5,7 @@ const BASE = 'https://open.api.nexon.com/maplestory/v1';
 const NX = process.env.NEXON_API_KEY;
 const JOB = process.env.JOB || '아델';
 const CLASS = process.env.CLASS || '레프-아델';
-const N = Number(process.env.COUNT || 500);
+const N = Number(process.env.COUNT || 200);
 if (!NX) { console.error('NEXON_API_KEY 가 필요해요'); process.exit(1); }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
