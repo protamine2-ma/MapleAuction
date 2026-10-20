@@ -1851,7 +1851,7 @@ class Component extends DCLogic {
             D.ocrLast = now; const H = (D.ocrH = (D.ocrH || []).concat([[now, N]]).slice(-4));
             if (H.length >= 3) {
               let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
-              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 + 500; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
+              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 - 500; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
             }
           }
         }
