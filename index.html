@@ -1501,7 +1501,7 @@ class Component extends DCLogic {
       guideSections: g.sections.map((s, i) => ({ no: String(i + 1).padStart(2, '0'), title: s.title, anchor: 'gs-' + i,
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
-        hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? '랭킹 상위 ' + pb.sample + '명 기준 · ' + pb.date : '',
+        hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
         petRows: s.title === '펫버프' && pb ? pb.items.slice(0, 20).map((x, k) => ({ rank: k + 1, name: x.name, iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
         isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
