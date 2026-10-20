@@ -1391,7 +1391,7 @@ class Component extends DCLogic {
     try {
       const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5, displaySurface: 'window' }, audio: false, preferCurrentTab: false, selfBrowserSurface: 'exclude', surfaceSwitching: 'exclude', monitorTypeSurfaces: 'exclude' });
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.srcObject = st; await v.play();
-      this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null;
+      this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null; this._runeStartAlerted = false;
       const bc = this.buffCfg(); if (Object.keys(bc.box || {}).length) this.saveBuff({ box: {}, sig: {} });
       st.getVideoTracks()[0].onended = () => this.stopShare();
       this._shareErr = ''; this.ensureTick(); this.forceUpdate();
@@ -1462,8 +1462,11 @@ class Component extends DCLogic {
     }
     const prev0 = this._rune || {};
     const base = prev0.base == null ? px : Math.min(prev0.base, px);
-    const h = this.hunt(), prev = prev0, hit = h.rune && px - base >= h.runeMin;
-    const streak = hit ? (prev.streak || 0) + 1 : 0; let last = hit ? prev.last || 0 : 0;
+    const h = this.hunt(), prev = prev0;
+    const startHit = prev0.base == null && h.rune && px >= h.runeMin && !this._runeStartAlerted;
+    if (startHit) { this._runeStartAlerted = true; this.huntAlert('룬 생성', 'rune'); }
+    const hit = h.rune && px - base >= h.runeMin;
+    const streak = hit ? (prev.streak || 0) + 1 : 0; let last = hit ? prev.last || 0 : startHit ? Date.now() : 0;
     if (streak >= 2 && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성', 'rune'); last = Date.now(); }
     this._rune = { px, base, found: streak >= 2, streak, last, res: W + '×' + H, reg: g };
     const cv = this._runeCv && this._runeCv.current;
