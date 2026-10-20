@@ -1724,7 +1724,7 @@ class Component extends DCLogic {
   buffListVals() {
     const h = this.hunt(), list = h.buffs || [], sv = l => this.saveHunt({ ...h, buffs: l }), st = this._bst || {};
     return {
-      ...(() => { if (list.some(b => !String(b.preset).startsWith('b29'))) setTimeout(() => sv(list.filter(b => String(b.preset).startsWith('b29'))), 0); return {}; })(),
+      ...(() => {  return {}; })(),
       buffPresets: this.buffPresetList(),
       buffNone: !list.length,
       buffRows: list.map(b => { const S = st[b.id] || {}, on = b.on !== false;
