@@ -2104,10 +2104,24 @@ class Component extends DCLogic {
         const mk = [];
         for (let y = Math.floor(bh * 0.6); y < bh; y++) for (let X = Math.floor(bw * 0.5); X < bw; X++) { const i = (y * bw + X) * 4; mk.push(a[i] > 200 && a[i + 1] > 200 && a[i + 2] > 200 ? 1 : 0); }
         const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let n = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) n++; return n; };
-        D.dbg = null; D.cnt = '숫자 변화 ' + (D.mk ? dif(mk, D.mk) : 0);
-        if (!D.mk) D.mk = mk;
-        else if (dif(mk, D.mk) >= Math.max(6, Math.round(mk.length * 0.06))) { if (D.cand && dif(mk, D.cand) <= 2) { if (++D.n >= 3) { D.mk = mk; D.cand = null; used = true; } } else { D.cand = mk; D.n = 1; } }
-        else D.cand = null;
+        const wc = m => m ? m.reduce((t, v) => t + v, 0) : 0;
+        let tl = 0, tn = 0;
+        for (let y = 1; y < bh * 0.5; y++) for (let X = 1; X < bw * 0.5; X++) { const i = (y * bw + X) * 4; tl += a[i] + a[i + 1] + a[i + 2]; tn++; }
+        tl /= Math.max(1, tn);
+        const iconSame = D.tl ? Math.abs(tl - D.tl) / Math.max(1, D.tl) < 0.1 : true;
+        const d0 = D.mk ? dif(mk, D.mk) : 0;
+        D.dbg = null; D.cnt = '숫자 변화 ' + d0;
+        if (!D.mk) { D.mk = mk; D.tl = tl; }
+        else if (!iconSame) { D.cand = null; }
+        else if (d0 >= Math.max(10, Math.round(mk.length * 0.1)) && wc(D.mk) >= 4 && wc(mk) <= wc(D.mk) * 1.15) {
+          if (D.cand && dif(mk, D.cand) <= 2) { if (++D.n >= 4) { D.mk = mk; D.cand = null; if (now - (D.usedAt || 0) > 5000) used = true; } }
+          else { D.cand = mk; D.n = 1; }
+        }
+        else if (d0 >= Math.max(10, Math.round(mk.length * 0.1))) {
+          if (D.cand2 && dif(mk, D.cand2) <= 2) { if (++D.n2 >= 6) { D.mk = mk; D.cand2 = null; } } else { D.cand2 = mk; D.n2 = 1; }
+          D.cand = null;
+        }
+        else { D.cand = null; D.cand2 = null; D.tl = D.tl * 0.9 + tl * 0.1; }
       } else {
         let yel = 0;
         for (let y = Math.floor(bh * 0.18); y < Math.ceil(bh * 0.64); y++) for (let X = Math.floor(bw * 0.1); X < Math.ceil(bw * 0.8); X++) { const i = (y * bw + X) * 4; if (a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80 && a[i] - a[i + 2] > 150) yel++; }
