@@ -255,10 +255,6 @@ input{font-family:inherit;}
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
       <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">버프 종료 알림</h2>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button onClick="{{ pickBuffRow }}" style="padding:7px 14px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.4 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.97 0.02 255);">{{ buffRowLabel }}</button>
-      <sc-if value="{{ sharing }}" hint-placeholder-val="{{ false }}">
-        <button onClick="{{ saveRowShot }}" style="padding:7px 14px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;color:#3a3b3f;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;" style-hover="background:#f4f4f2;">버프 줄 캡처 저장</button>
-      </sc-if>
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
     </div>
@@ -269,12 +265,7 @@ input{font-family:inherit;}
       <div style="display:grid;grid-template-columns:52px minmax(0,1fr) auto auto auto 32px;gap:12px;align-items:center;padding:12px 20px;border-top:1px solid #efefec;">
         <button onClick="{{ b.toggle }}" style="width:44px;height:24px;border:none;border-radius:999px;padding:2px;background:{{ b.swBg }};display:flex;justify-content:{{ b.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-          <span style="width:26px;height:26px;border-radius:5px;flex:none;background-size:cover;image-rendering:pixelated;background-image:{{ b.iconBg }};"></span>
-          <select value="{{ b.preset }}" onChange="{{ b.onPreset }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;background:#fff;cursor:pointer;">
-            <sc-for list="{{ buffPresets }}" as="p" hint-placeholder-count="3">
-              <option value="{{ p.key }}">{{ p.label }}</option>
-            </sc-for>
-          </select>
+          <input value="{{ b.name }}" onChange="{{ b.onName }}" placeholder="버프 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;background:#fff;">
         </div>
         <button onClick="{{ b.pickPos }}" style="padding:6px 10px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:{{ b.pickBg }};color:{{ b.pickColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">{{ b.pickLabel }}</button>
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#6b6d73;white-space:nowrap;">
@@ -1729,7 +1720,7 @@ class Component extends DCLogic {
       } else if (S.end && !S.lock && now - (S.lastSeen || 0) > 30000 && S.end - now > 20000) { S.end = 0; S.mode = null; }
     });
   }
-  buffName(b) { return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
+  buffName(b) { if (b.name) return b.name; return (this.buffPresetList().find(p => p.key === b.preset) || {}).label || '버프'; }
   buffListVals() {
     const h = this.hunt(), list = h.buffs || [], sv = l => this.saveHunt({ ...h, buffs: l }), st = this._bst || {};
     return {
@@ -1745,9 +1736,9 @@ class Component extends DCLogic {
         return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2], ...pickInfo,
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
-          onPreset: e => { const k = e.target.value; delete st[b.id]; sv(list.map(x => x.id === b.id ? { ...x, preset: k } : x)); },
+          name: b.name ?? this.buffName(b), onName: e => { const v = e.target.value; sv(list.map(x => x.id === b.id ? { ...x, name: v } : x)); },
           remove: () => { delete st[b.id]; sv(list.filter(x => x.id !== b.id)); } }; }),
-      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'b29-vip', on: true, before: 0 }]),
+      addBuff: () => sv([...list, { id: 'b' + Date.now(), preset: 'box', name: '버프 ' + (list.length + 1), on: true, before: 0 }]),
     };
   }
   checkBuff(now) {
