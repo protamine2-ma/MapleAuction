@@ -8,37 +8,43 @@
       "name": "쓸만한 샤프 아이즈",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
       "count": 500,
-      "pct": 100
+      "pct": 100,
+      "tier": "5차"
     },
     {
       "name": "쓸만한 홀리 심볼",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
       "count": 499,
-      "pct": 99.8
+      "pct": 99.8,
+      "tier": "5차"
     },
     {
       "name": "부스터",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKHPBMF",
       "count": 497,
-      "pct": 99.4
+      "pct": 99.4,
+      "tier": "2차"
     },
     {
       "name": "쓸만한 컴뱃 오더스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
       "count": 496,
-      "pct": 99.2
+      "pct": 99.2,
+      "tier": "5차"
     },
     {
       "name": "오라 웨폰",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLGPBMA",
       "count": 480,
-      "pct": 96
+      "pct": 96,
+      "tier": "5차"
     },
     {
       "name": "쓸만한 하이퍼 바디",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
       "count": 114,
-      "pct": 22.8
+      "pct": 22.8,
+      "tier": "5차"
     },
     {
       "name": "레이스 오브 갓",
