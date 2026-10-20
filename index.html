@@ -1562,6 +1562,13 @@ class Component extends DCLogic {
     });
     this.forceUpdate();
   }
+  bandMatch(d, rw, rh, X, Y, T, keys) {
+    const P = []; for (let y = 23; y <= 29; y++) for (let x = 3; x <= 28; x++) P.push([x, y]);
+    const ncc = (XX, YY, t) => { const c = [], u = []; for (const p of P) { const a = ((YY + p[1]) * rw + XX + p[0]) * 4, q = (p[1] * t.w + p[0]) * 4; for (let k = 0; k < 3; k++) { c.push(d[a + k]); u.push(t.d[q + k]); } }
+      const n = c.length; let mc = 0, mt = 0; for (let i = 0; i < n; i++) { mc += c[i]; mt += u[i]; } mc /= n; mt /= n; let a = 0, b = 0, e = 0; for (let i = 0; i < n; i++) { a += (c[i] - mc) * (u[i] - mt); b += (c[i] - mc) ** 2; e += (u[i] - mt) ** 2; } return a / Math.sqrt(b * e + 1e-6); };
+    const sc = keys.map(k => { let s = -2; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.max(s, ncc(xx, yy, T[k])); } return [k, s]; }).sort((a, b) => b[1] - a[1]);
+    return sc[0] && sc[0][1] >= 0.8 && sc[0][1] - (sc[1] ? sc[1][1] : 0) >= 0.05 ? sc[0][0] : null;
+  }
   buffRowFor(W, H) {
     const all = this.hunt().buffRow || {}; if (all[W + 'x' + H]) return all[W + 'x' + H];
     let best = null, bd = 1e9;
@@ -1639,7 +1646,7 @@ class Component extends DCLogic {
     for (const p of this.buffPresetList()) { const t = this.tplFor(p.key + '.png', 32 / 30); if (t) T[p.key] = t; else if (!this._tplFail || !this._tplFail[p.key + '.png']) wait = true; }
     if (wait && now - (this._tplWaitAt || (this._tplWaitAt = now)) < 4000) { this._buffDbg = '준비 중'; return; }
     const keys = Object.keys(T); if (!keys.length) { this._buffDbg = '아이콘 없음'; return; }
-    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 64 ? bk : null; });
+    const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 64 ? bk : this.bandMatch(d, rw, rh, X, Y, T, keys); });
     this._buffDbg = slots.length + '칸';
     this._bst = this._bst || {};
     const wmin = this.readWhiteMins(d, rw, rh), wByKey = {};
