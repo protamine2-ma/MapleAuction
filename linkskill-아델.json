@@ -1,0 +1,310 @@
+{
+  "job": "아델",
+  "date": "2026-10-19",
+  "sample": 200,
+  "active": true,
+  "boss": {
+    "sample": 200,
+    "items": [
+      {
+        "name": "데몬스 퓨리",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMB",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "소울 컨트랙트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPAJF",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "시프 커닝",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLA",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "인텐시브 인썰트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKB",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "임피리컬 널리지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKC",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "판단",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAEI",
+        "count": 200,
+        "pct": 100
+      },
+      {
+        "name": "무아",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOENE",
+        "count": 199,
+        "pct": 99.5
+      },
+      {
+        "name": "와일드 레이지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJA",
+        "count": 199,
+        "pct": 99.5
+      },
+      {
+        "name": "프라이어 프리퍼레이션",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBNF",
+        "count": 195,
+        "pct": 97.5
+      },
+      {
+        "name": "하이브리드 로직",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBIH",
+        "count": 191,
+        "pct": 95.5
+      },
+      {
+        "name": "전투의 흐름",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKI",
+        "count": 160,
+        "pct": 80
+      },
+      {
+        "name": "커버넌트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHKAKA",
+        "count": 151,
+        "pct": 75.5
+      },
+      {
+        "name": "퍼미에이트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMF",
+        "count": 54,
+        "pct": 27
+      },
+      {
+        "name": "파이렛 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLE",
+        "count": 17,
+        "pct": 8.5
+      },
+      {
+        "name": "시그너스 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJF",
+        "count": 8,
+        "pct": 4
+      },
+      {
+        "name": "스피릿 오브 프리덤",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCOJ",
+        "count": 7,
+        "pct": 3.5
+      },
+      {
+        "name": "강체",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNJLH",
+        "count": 5,
+        "pct": 2.5
+      },
+      {
+        "name": "데들리 인스팅트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMC",
+        "count": 4,
+        "pct": 2
+      },
+      {
+        "name": "인빈서블 빌리프",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGJI",
+        "count": 4,
+        "pct": 2
+      },
+      {
+        "name": "자신감",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOHMJ",
+        "count": 2,
+        "pct": 1
+      },
+      {
+        "name": "륀느의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOANA",
+        "count": 2,
+        "pct": 1
+      },
+      {
+        "name": "구사 일생",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAKJ",
+        "count": 1,
+        "pct": 0.5
+      },
+      {
+        "name": "이네이트 기프트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNDOE",
+        "count": 1,
+        "pct": 0.5
+      }
+    ]
+  },
+  "hunt": {
+    "sample": 194,
+    "items": [
+      {
+        "name": "룬 퍼시스턴스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCKJ",
+        "count": 194,
+        "pct": 100
+      },
+      {
+        "name": "엘프의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPBIA",
+        "count": 194,
+        "pct": 100
+      },
+      {
+        "name": "와일드 레이지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJA",
+        "count": 194,
+        "pct": 100
+      },
+      {
+        "name": "판단",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAEI",
+        "count": 191,
+        "pct": 98.5
+      },
+      {
+        "name": "자신감",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOHMJ",
+        "count": 187,
+        "pct": 96.4
+      },
+      {
+        "name": "무아",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOENE",
+        "count": 182,
+        "pct": 93.8
+      },
+      {
+        "name": "자연의 벗",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBJI",
+        "count": 179,
+        "pct": 92.3
+      },
+      {
+        "name": "하이브리드 로직",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBIH",
+        "count": 174,
+        "pct": 89.7
+      },
+      {
+        "name": "콤보킬 어드밴티지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCLA",
+        "count": 154,
+        "pct": 79.4
+      },
+      {
+        "name": "시그너스 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJF",
+        "count": 129,
+        "pct": 66.5
+      },
+      {
+        "name": "전투의 흐름",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKI",
+        "count": 106,
+        "pct": 54.6
+      },
+      {
+        "name": "이네이트 기프트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNDOE",
+        "count": 86,
+        "pct": 44.3
+      },
+      {
+        "name": "파이렛 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLE",
+        "count": 71,
+        "pct": 36.6
+      },
+      {
+        "name": "어드벤쳐러 큐리어스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKG",
+        "count": 67,
+        "pct": 34.5
+      },
+      {
+        "name": "인텐시브 인썰트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKB",
+        "count": 53,
+        "pct": 27.3
+      },
+      {
+        "name": "커버넌트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHKAKA",
+        "count": 42,
+        "pct": 21.6
+      },
+      {
+        "name": "데들리 인스팅트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMC",
+        "count": 33,
+        "pct": 17
+      },
+      {
+        "name": "프라이어 프리퍼레이션",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBNF",
+        "count": 26,
+        "pct": 13.4
+      },
+      {
+        "name": "임피리컬 널리지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKC",
+        "count": 22,
+        "pct": 11.3
+      },
+      {
+        "name": "시프 커닝",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLA",
+        "count": 20,
+        "pct": 10.3
+      },
+      {
+        "name": "소울 컨트랙트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPAJF",
+        "count": 12,
+        "pct": 6.2
+      },
+      {
+        "name": "륀느의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOANA",
+        "count": 4,
+        "pct": 2.1
+      },
+      {
+        "name": "데몬스 퓨리",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMB",
+        "count": 2,
+        "pct": 1
+      },
+      {
+        "name": "퍼미에이트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMF",
+        "count": 2,
+        "pct": 1
+      },
+      {
+        "name": "스피릿 오브 프리덤",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCOJ",
+        "count": 2,
+        "pct": 1
+      },
+      {
+        "name": "구사 일생",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAKJ",
+        "count": 1,
+        "pct": 0.5
+      }
+    ]
+  }
+}
