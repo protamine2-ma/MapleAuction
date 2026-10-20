@@ -462,14 +462,14 @@ input{font-family:inherit;}
           <sc-if value="{{ s.hasPet }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
               <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
-                <div style="display:grid;grid-template-columns:24px 28px minmax(0,270px) minmax(0,1fr);align-items:center;gap:8px;">
-                  <span style="font-size:13px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
-                  <span style="width:28px;height:28px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                <div style="display:grid;grid-template-columns:28px 40px minmax(0,1fr);align-items:center;gap:12px;padding:4px 0;">
+                  <span style="font-size:16px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
+                  <span style="width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
                   <span style="display:flex;align-items:center;gap:6px;min-width:0;">
-                    <span style="font-size:14px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</span>
-                    <sc-if value="{{ p.hasTier }}" hint-placeholder-val="{{ false }}"><span style="flex:none;padding:1px 7px;border-radius:999px;background:oklch(0.94 0.035 255);color:oklch(0.4 0.17 255);font-size:11px;font-weight:700;">{{ p.tier }}</span></sc-if>
+                    <span style="font-size:18px;font-weight:700;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</span>
+                    <sc-if value="{{ p.hasTier }}" hint-placeholder-val="{{ false }}"><span style="flex:none;padding:2px 9px;border-radius:999px;background:oklch(0.94 0.035 255);color:oklch(0.4 0.17 255);font-size:13px;font-weight:700;">{{ p.tier }}</span></sc-if>
+                    <span style="flex:none;font-size:14px;font-weight:600;color:#6b6d73;">{{ p.pctText }}</span>
                   </span>
-                  <div style="height:10px;border-radius:999px;background:#f0f0ee;overflow:hidden;"><div style="height:100%;width:{{ p.bar }};background:oklch(0.48 0.17 255);border-radius:999px;"></div></div>
                 </div>
               </sc-for>
             </div>
@@ -1475,7 +1475,9 @@ class Component extends DCLogic {
     this._pb = this._pb || {};
     if (this._pb[job] !== undefined) return this._pb[job];
     this._pb[job] = null;
-    fetch('petbuff-' + encodeURIComponent(job) + '.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.items) { this._pb[job] = j; this.forceUpdate(); } }).catch(() => {});
+    const f = 'petbuff-' + encodeURIComponent(job) + '.json?t=' + Date.now();
+    const get = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+    get(f).then(j => j && j.items ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && j.items) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
   guideVals(job) {
@@ -1503,7 +1505,7 @@ class Component extends DCLogic {
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
-        petRows: s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
+        petRows: s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })) : [],
         isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
