@@ -1489,7 +1489,7 @@ class Component extends DCLogic {
     const cv = this._pickCv && this._pickCv.current, v = this._video, g = this.pickRegion(); if (!cv || !g) return;
     if (cv.width !== g.w) { cv.width = g.w; cv.height = g.h; }
     const c = cv.getContext('2d'); c.drawImage(v, g.x, g.y, g.w, g.h, 0, 0, g.w, g.h);
-    const s = this.hunt().skills.find(x => x.id === this._pick), res = v.videoWidth + 'x' + v.videoHeight, b = this._pick === '__buffrow' ? (this.hunt().buffRow || {})[res] : s && s.box && s.box[res];
+    const s = this.hunt().skills.find(x => x.id === this._pick), res = v.videoWidth + 'x' + v.videoHeight, b = this._pick === '__buffrow' ? this.buffRowFor(v.videoWidth, v.videoHeight) : s && s.box && s.box[res];
     c.lineWidth = 2;
     if (b) { c.strokeStyle = '#3dff7a'; c.strokeRect(b.x - g.x, b.y - g.y, b.w, b.h); }
     const dr = this._pdrag; if (dr) { c.setLineDash([4, 3]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
@@ -1562,6 +1562,13 @@ class Component extends DCLogic {
     });
     this.forceUpdate();
   }
+  buffRowFor(W, H) {
+    const all = this.hunt().buffRow || {}; if (all[W + 'x' + H]) return all[W + 'x' + H];
+    let best = null, bd = 1e9;
+    for (const k in all) { const [w, h] = k.split('x').map(Number); const dd = Math.abs(w - W) + Math.abs(h - H); if (dd < bd) { bd = dd; best = { w, h, b: all[k] }; } }
+    if (!best) return null; const b = best.b, right = best.w - b.x;
+    return { x: Math.max(0, W - right), y: Math.min(b.y, Math.max(0, H - b.h)), w: Math.min(b.w, W), h: b.h };
+  }
   buffPresetList() { return [['b29-vip', 'VIP 경험치'], ['b29-hj', '형재'], ['b29-exp', '추가 경험치'], ['b29-union', '유니온의 부'], ['b29-union1', '유니온의 부 1단계'], ['b29-union2', '유니온의 부 2단계'], ['b29-mvp', 'MVP 추가 경험치']].map(p => ({ key: p[0], label: p[1] })); }
   checkBuffs29(now) {
     const v = this._video, list = (this.hunt().buffs || []).filter(b => b.preset && b.preset.startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
@@ -1618,7 +1625,7 @@ class Component extends DCLogic {
     const v = this._video, list = (this.hunt().buffs || []).filter(b => String(b.preset).startsWith('b29')); if (!v || !v.videoWidth || !list.length) return;
     if (now - (this._btChk || 0) < 1000) return; this._btChk = now;
     if (now - (this._fadeAt || 0) < 3000) return;
-    const W = v.videoWidth, H = v.videoHeight, row = (this.hunt().buffRow || {})[W + 'x' + H];
+    const W = v.videoWidth, H = v.videoHeight, row = this.buffRowFor(W, H);
     if (!row) { this._buffDbg = '줄 미지정'; return; }
     const rx = Math.max(0, row.x - 2), ry = Math.max(0, row.y - 4), rw = Math.min(W - rx, row.w + 4), rh = Math.max(34, Math.min(H - ry, row.h + 8));
     const c = this._bfc || (this._bfc = document.createElement('canvas')); c.width = rw; c.height = rh;
@@ -1628,8 +1635,10 @@ class Component extends DCLogic {
     const slots = [];
     for (let Y = 0; Y <= rh - 32; Y++) for (let X = 0; X <= rw - 32; X += 2) { if (slots.some(s => Math.abs(s[0] - X) < 24 && Math.abs(s[1] - Y) < 24)) continue; if (yel(X, Y, 32) >= 35) { let bx = X, by = Y, bk = 0; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { if (X + dx < 0 || Y + dy < 0 || X + dx > rw - 32 || Y + dy > rh - 32) continue; const k = yel(X + dx, Y + dy, 32); if (k > bk) { bk = k; bx = X + dx; by = Y + dy; } } slots.push([bx, by]); } }
     const P = []; for (let y = 3; y <= 29; y += 2) for (let xx = 3; xx <= 29; xx += 2) { if (y >= 8 && y <= 22) continue; if (xx < 15 && y > 19) continue; P.push([xx, y]); }
-    const keys = this.buffPresetList().map(p => p.key), T = {};
-    for (const k of keys) { T[k] = this.tplFor(k + '.png', 32 / 30); if (!T[k]) return; }
+    const T = {}; let wait = false;
+    for (const p of this.buffPresetList()) { const t = this.tplFor(p.key + '.png', 32 / 30); if (t) T[p.key] = t; else if (!this._tplFail || !this._tplFail[p.key + '.png']) wait = true; }
+    if (wait && now - (this._tplWaitAt || (this._tplWaitAt = now)) < 4000) { this._buffDbg = '준비 중'; return; }
+    const keys = Object.keys(T); if (!keys.length) { this._buffDbg = '아이콘 없음'; return; }
     const owner = slots.map(([X, Y]) => { let bk = null, bs = 1e9; for (const k of keys) { let s = 1e9; for (let dy = -5; dy <= 5; dy++) for (let dx = -6; dx <= 6; dx++) { const xx = X + dx, yy = Y + dy; if (xx < 0 || yy < 0 || xx > rw - 32 || yy > rh - 32) continue; s = Math.min(s, this.buffScore(d, rw, xx, yy, T[k], P)); } if (s < bs) { bs = s; bk = k; } } return bs < 64 ? bk : null; });
     this._buffDbg = slots.length + '칸';
     this._bst = this._bst || {};
@@ -1721,7 +1730,7 @@ class Component extends DCLogic {
     this._tpls = this._tpls || {}; const key = src + '@' + sc;
     if (this._tpls[key] !== undefined) return this._tpls[key];
     this._tpls[key] = null; const n = Math.round(30 * sc);
-    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.src = src;
+    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.onerror = () => { (this._tplFail = this._tplFail || {})[src] = true; }; im.src = src;
     return null;
   }
   findHP(v, W, H) {
@@ -2030,7 +2039,7 @@ class Component extends DCLogic {
         const isRow = this._stream && this._pick === '__buffrow';
         return { picking: !!ps || isRow, pickName: isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
           pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
-          buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && (h.buffRow || {})[v.videoWidth + 'x' + v.videoHeight]; return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
+          buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
           cancelPick: () => { this._pick = null; this._pdrag = null; this.forceUpdate(); },
           onPickDown: e => { const p = pt(e); this._pdrag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawPick(); },
           onPickMove: e => { if (!this._pdrag) return; const p = pt(e); this._pdrag.x1 = p.x; this._pdrag.y1 = p.y; this.drawPick(); },
