@@ -2078,6 +2078,31 @@ class Component extends DCLogic {
     const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.onerror = () => { (this._tplFail = this._tplFail || {})[src] = true; }; im.src = src;
     return null;
   }
+  snapIcon(v, W, H, cb, src) {
+    const lo = Math.max(16, Math.round(Math.min(cb.w, cb.h) * 0.6)), hi = Math.min(64, Math.round(Math.max(cb.w, cb.h) + 6));
+    const sizes = []; for (let n = lo; n <= hi; n += 2) sizes.push(n);
+    const Ts = sizes.map(n => this.tplFor(src, n / 30)); if (Ts.some(t => !t)) return undefined;
+    const pad = 6, rx = Math.max(0, cb.x - pad), ry = Math.max(0, cb.y - pad), rw = Math.min(W - rx, cb.w + pad * 2), rh = Math.min(H - ry, cb.h + pad * 2);
+    const c = this._sc || (this._sc = document.createElement('canvas')); c.width = rw; c.height = rh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, rx, ry, rw, rh, 0, 0, rw, rh);
+    const d = x.getImageData(0, 0, rw, rh).data;
+    let best = 1e9, at = null;
+    Ts.forEach(T => {
+      const n = T.w, f = n / 30, P = [];
+      for (let X = 11; X <= 25; X += 2) for (const y of [6, 8]) P.push([Math.round(X * f), Math.round(y * f)]);
+      for (let y = 11; y <= 25; y += 2) for (const X of [5, 7]) P.push([Math.round(X * f), Math.round(y * f)]);
+      for (let y = 11; y <= 17; y += 2) for (const X of [23, 25]) P.push([Math.round(X * f), Math.round(y * f)]);
+      for (let X = 9; X <= 17; X += 2) P.push([Math.round(X * f), Math.round(25 * f)]);
+      let st = 0; for (const p of P) { const t = (p[1] * n + p[0]) * 4; st += T.d[t] + T.d[t + 1] + T.d[t + 2]; }
+      for (let Y = 0; Y <= rh - n; Y++) for (let X = 0; X <= rw - n; X++) {
+        let sc = 0; for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4; sc += d[a] + d[a + 1] + d[a + 2]; }
+        const g = Math.max(1, Math.min(3, st / Math.max(1, sc))); let s = 0;
+        for (const p of P) { const a = ((Y + p[1]) * rw + X + p[0]) * 4, t = (p[1] * n + p[0]) * 4; s += Math.abs(d[a] * g - T.d[t]) + Math.abs(d[a + 1] * g - T.d[t + 1]) + Math.abs(d[a + 2] * g - T.d[t + 2]); if (s > best * P.length * 3) break; }
+        s /= P.length * 3; if (s < best) { best = s; at = { x: rx + X, y: ry + Y, w: n, h: n }; }
+      }
+    });
+    return best < 34 ? at : null;
+  }
   findHP(v, W, H) {
     const y0 = Math.floor(H * 0.5), hh = H - y0;
     const c = this._hc || (this._hc = document.createElement('canvas')); c.width = W; c.height = hh;
@@ -2143,7 +2168,15 @@ class Component extends DCLogic {
       if (!cbox) return;
       const icon = cbox ? 'custom:' + cbox.x + ',' + cbox.y + ',' + cbox.w + ',' + cbox.h : this.skillIcon(s); if (!icon) return;
       const D = this._det[s.id] || (this._det[s.id] = { src: icon });
-      if (D.src !== icon || D.res !== res) { this._det[s.id] = { src: icon, res, box: cbox || undefined }; return; }
+      const isYein = s.preset === 'yein67';
+      if (D.src !== icon || D.res !== res) { this._det[s.id] = { src: icon, res, box: isYein ? undefined : (cbox || undefined), snapTry: 0 }; return; }
+      if (!D.box && isYein && cbox) {
+        if (now - (D.findAt || 0) < 400) return;
+        D.findAt = now; D.snapTry = (D.snapTry || 0) + 1;
+        const r = this.snapIcon(v, W, H, cbox, 'qs-yein.png');
+        if (r === undefined) { if (D.snapTry > 30) D.box = cbox; return; }
+        D.box = r || cbox; D.snapped = !!r; return;
+      }
       if (!D.box) {
         if (searched || now - (D.findAt || 0) < 1500) return;
         const s0 = Math.round(W / 1366 * 20) / 20, SC = [...new Set([s0, 1, 1.4, 1.25, 1.33, 1.5, 0.8])];
@@ -2413,7 +2446,7 @@ class Component extends DCLogic {
           presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
           ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
             return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
-              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
+              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
               customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
               pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
           ...(() => { const D = (this._det || {})[s.id]; const hasBox = !!(this._video && this._video.videoWidth && s.box && s.box[this._video.videoWidth + 'x' + this._video.videoHeight]);
