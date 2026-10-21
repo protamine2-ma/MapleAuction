@@ -1,0 +1,71 @@
+{
+  "job": "섀도어",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "메소 익스플로젼-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBIF",
+      "desc": "한 번에 사용할 수 있는 동전 최대 개수와 픽 파킷과 블러디 파킷으로 떨어지는 동전의 최대 개수 5개, 픽 파킷 및 블러디 파킷으로 동전이 떨어질 확률 10% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "암살-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBJA",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "메소 익스플로젼-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "암살-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "암살-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBJB",
+      "desc": "몬스터 방어율 10% 무시",
+      "count": 816,
+      "pct": 81.6
+    },
+    {
+      "name": "크루얼 스탭-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 155,
+      "pct": 15.5
+    },
+    {
+      "name": "크루얼 스탭-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 27,
+      "pct": 2.7
+    },
+    {
+      "name": "메소 익스플로젼-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBIE",
+      "desc": "방어율 무시 10% 증가",
+      "count": 20,
+      "pct": 2
+    },
+    {
+      "name": "크루얼 스탭-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGJFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 10,
+      "pct": 1
+    }
+  ]
+}
