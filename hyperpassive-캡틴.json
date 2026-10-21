@@ -1,0 +1,71 @@
+{
+  "job": "캡틴",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "헤드 샷-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "헤드 샷-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBII",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "헤드 샷-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBIH",
+      "desc": "공격 횟수 1 증가",
+      "count": 987,
+      "pct": 98.7
+    },
+    {
+      "name": "래피드 파이어-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBIJ",
+      "desc": "데미지 30% 증가",
+      "count": 948,
+      "pct": 94.8
+    },
+    {
+      "name": "래피드 파이어-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBJA",
+      "desc": "사거리 100 증가",
+      "count": 634,
+      "pct": 63.4
+    },
+    {
+      "name": "래피드 파이어-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBJB",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 406,
+      "pct": 40.6
+    },
+    {
+      "name": "더블 럭키 다이스-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBIF",
+      "desc": "럭키 다이스 4, 5, 6 나올 확률 증가",
+      "count": 21,
+      "pct": 2.1
+    },
+    {
+      "name": "더블 럭키 다이스-원모어찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBID",
+      "desc": "더블 럭키 다이스 미발동 시 40% 확률로 재사용 대기시간 미적용, 다음 시전 시 4 이상의 더블 럭키 다이스 발동",
+      "count": 14,
+      "pct": 1.4
+    },
+    {
+      "name": "더블 럭키 다이스-엑스트라 넘버",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHJFOBIE",
+      "desc": "더블 럭키 다이스에 7 추가\n7 : 몬스터 방어율 무시 20% 증가",
+      "count": 4,
+      "pct": 0.4
+    }
+  ]
+}
