@@ -470,6 +470,11 @@ input{font-family:inherit;}
           <textarea value="{{ s.rawText }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasVm }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:center;margin-bottom:14px;">
+              <img src="{{ s.vmImg }}" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasUnion }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-bottom:14px;">
               <sc-for list="{{ s.unionSets }}" as="u" hint-placeholder-count="2">
@@ -1418,6 +1423,7 @@ const ABILITY = {
     { name: '사냥 종결', lines: [['L', '아이템 드롭률 20% 증가'], ['L', '메소 획득량 20% 증가']] },
   ],
 };
+const VMATRIX = { '아델': 'vmatrix-adele.png' };
 const UNION_BASE = [['STR', 15, 15, '75'], ['DEX', 0, 15, '0'], ['INT', 0, 15, '0'], ['LUK', 0, 15, '0'], ['공격력', 15, 15, '15'], ['마력', 0, 15, '0'], ['최대 HP', 0, 15, '0'], ['최대 MP', 0, 15, '0']];
 const UNION = {
   '아델': [
@@ -1745,6 +1751,7 @@ class Component extends DCLogic {
         linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', ...this.tipOf('lk:' + k + ':' + x.name, { info: '', top: '', effLabel: x.descLv ? '[현재 레벨 ' + x.descLv + ']' : '', eff: x.desc }) })) })) : [],
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
+        hasVm: s.title === 'V매트릭스' && !!VMATRIX[job], vmImg: VMATRIX[job] || '',
         hasUnion: s.title === '유니온' && !!UNION[job],
         unionSets: s.title === '유니온' && UNION[job] ? UNION[job].map(u => { const cell = ([l, c, m, v]) => ({ label: l, cnt: c + ' / ' + m, val: v, bd: c > 0 ? 'oklch(0.78 0.11 75)' : '#3c4654', labelColor: c > 0 ? 'oklch(0.86 0.09 75)' : '#aab3bf', pri: (u.pri || {})[l] || '', hasPri: !!(u.pri || {})[l] });
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
@@ -1752,7 +1759,7 @@ class Component extends DCLogic {
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
