@@ -1,0 +1,71 @@
+{
+  "job": "데몬슬레이어",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "데몬 슬래시-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBIE",
+      "desc": "최종 데미지 10% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "데몬 임팩트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "데몬 임팩트-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBJA",
+      "desc": "공격 횟수 1 증가",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "메타모포시스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBIH",
+      "desc": "데미지 20% 증가",
+      "count": 870,
+      "pct": 87
+    },
+    {
+      "name": "데몬 슬래시-엑스트라 포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBID",
+      "desc": "포스 흡수량 50% 증가",
+      "count": 703,
+      "pct": 70.3
+    },
+    {
+      "name": "데몬 임팩트-리듀스 포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBJB",
+      "desc": "포스 소비량 50% 감소",
+      "count": 262,
+      "pct": 26.2
+    },
+    {
+      "name": "메타모포시스-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBIG",
+      "desc": "발동 시 지속 시간의 20%동안 데몬 슬레이어의 모든 공격이 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힘\n[패시브 효과 : 도트 데미지가 공격 무시 및 공격 반사 상태의 적에게도 피해를 입힘.]",
+      "count": 139,
+      "pct": 13.9
+    },
+    {
+      "name": "데몬 슬래시-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBIF",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 35,
+      "pct": 3.5
+    },
+    {
+      "name": "메타모포시스-리듀스 포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFOBII",
+      "desc": "포스 소비량 50% 감소",
+      "count": 10,
+      "pct": 1
+    }
+  ]
+}

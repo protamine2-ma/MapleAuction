@@ -1,0 +1,98 @@
+{
+  "job": "데몬슬레이어",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 988,
+      "pct": 98.8,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 970,
+      "pct": 97,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 953,
+      "pct": 95.3,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "뱀피릭 터치",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFPBMC",
+      "count": 891,
+      "pct": 89.1,
+      "tier": "4차",
+      "info": "[마스터 레벨 : 9]\r\n일정 시간 동안 적들에게 입힌 데미지의 일부를 나와 파티원의 HP로 회복시킨다.",
+      "effect": "포스 30 소비, 192초 동안 공격 데미지의 4%를 일정 범위 내의 파티원의 HP로 회복시킴. 최대 HP의 25%이상 회복 불가, 한 번 흡수 후 5초 동안 재흡수 불가",
+      "lv": 10
+    },
+    {
+      "name": "메타모포시스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFPBMF",
+      "count": 792,
+      "pct": 79.2,
+      "tier": "4차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 잠재능력을 개방하여 데미지를 증가시키고 자신의 주위로 암흑 투기 2개를 빠르게 회전시켜 공격 범위 내 다수의 적을 자동으로 공격한다.\n메타모포시스는 공격 반사 상태의 적을 공격해도 피해를 입지 않는다.",
+      "effect": "포스 40 소비, 시전 동작 중 무적\n184초 동안 데미지 36% 증가\n최대 6명의 적을 255%의 데미지로 자동 공격\n재사용 대기시간 92초\n[패시브 효과 : 최대 HP 21% 증가]",
+      "lv": 31
+    },
+    {
+      "name": "오라 웨폰",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLGPBMA",
+      "count": 752,
+      "pct": 75.2,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n생명력의 일부를 무기에 부여하여 강력한 힘을 발휘한다. 오라 파동은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다. 재사용 대기시간 감소 효과를 받는다.",
+      "effect": "HP 100 소비, 130초 동안 몬스터 방어율 무시 16%, 최종 데미지 6% 증가\n5초 마다 자신의 공격 스킬 사용 시 최대 10명의 적을 1100%의 데미지로 6번 공격하는 오라 파동 발사\n재사용 대기시간 120초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 192,
+      "pct": 19.2
+    },
+    {
+      "name": "다크 리벤지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKHPBMD",
+      "count": 116,
+      "pct": 11.6
+    },
+    {
+      "name": "데모닉 포티튜드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDKFPBJD",
+      "count": 37,
+      "pct": 3.7
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMCLGGBMA",
+      "count": 2,
+      "pct": 0.2
+    },
+    {
+      "name": "테라 블링크: 모자의 알 수 없는 힘",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNEKG",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}
