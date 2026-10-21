@@ -1,0 +1,71 @@
+{
+  "job": "데몬어벤져",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "실드 체이싱-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBJA",
+      "desc": "영구적으로 실드 체이싱의 방패 1개 당 최대 공격 횟수 2 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "익시드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBID",
+      "desc": "영구적으로 익시드 스킬의 데미지 20% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "실드 체이싱-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBIJ",
+      "desc": "영구적으로 실드 체이싱의 데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "익시드-보너스 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBIF",
+      "desc": "영구적으로 익시드 스킬의 추가 공격 발동 확률 10% 증가",
+      "count": 876,
+      "pct": 87.6
+    },
+    {
+      "name": "익시드-리듀스 오버로드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBIE",
+      "desc": "영구적으로 익시드 오버로드 최대 수치 1 감소",
+      "count": 759,
+      "pct": 75.9
+    },
+    {
+      "name": "실드 체이싱-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBJB",
+      "desc": "영구적으로 실드 체이싱의 사거리 50 증가",
+      "count": 325,
+      "pct": 32.5
+    },
+    {
+      "name": "리프랙트 이블-리듀스 데미지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBIG",
+      "desc": "영구적으로 받는 데미지 비율 10% 추가로 감소",
+      "count": 30,
+      "pct": 3
+    },
+    {
+      "name": "리프랙트 이블-이뮤너티 인핸스1",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBIH",
+      "desc": "영구적으로 상태 이상 내성 확률 10 추가로 증가",
+      "count": 9,
+      "pct": 0.9
+    },
+    {
+      "name": "리프랙트 이블-이뮤너티 인핸스2",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMDJFOBII",
+      "desc": "영구적으로 모든 속성 내성 확률 10% 추가로 증가",
+      "count": 4,
+      "pct": 0.4
+    }
+  ]
+}
