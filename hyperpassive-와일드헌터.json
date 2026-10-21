@@ -1,0 +1,64 @@
+{
+  "job": "와일드헌터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "와일드 발칸 : 에이펙스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPB",
+      "desc": "데미지 10% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "어시스트-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPG",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "어나더 바이트-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPJ",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "어시스트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPE",
+      "desc": "데미지 10% 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "어나더 바이트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPH",
+      "desc": "데미지 10% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "와일드 발칸 : 에이펙스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 7,
+      "pct": 0.7
+    },
+    {
+      "name": "어나더 바이트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPI",
+      "desc": "방어율 무시 20% 증가",
+      "count": 5,
+      "pct": 0.5
+    },
+    {
+      "name": "와일드 발칸 : 에이펙스-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMBKFOBPD",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 4,
+      "pct": 0.4
+    }
+  ]
+}
