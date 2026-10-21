@@ -169,6 +169,10 @@ input{font-family:inherit;}
     <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}">
       <button onClick="{{ onShare }}" style="padding:10px 18px;border:none;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">게임 화면 공유</button>
     </sc-if>
+    <button onClick="{{ togglePause }}" style="padding:10px 16px;border:1px solid {{ pauseBorder }};border-radius:10px;background:{{ pauseBg }};color:{{ pauseColor }};font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">{{ pauseLabel }}</button>
+    <sc-if value="{{ isPaused }}" hint-placeholder-val="{{ false }}">
+      <span style="font-size:13px;font-weight:700;color:oklch(0.5 0.19 25);">모든 알림이 꺼져 있어요</span>
+    </sc-if>
     <sc-if value="{{ hasShareErr }}" hint-placeholder-val="{{ false }}">
       <span style="font-size:13px;font-weight:600;color:oklch(0.5 0.19 25);">{{ shareErr }}</span>
     </sc-if>
@@ -470,6 +474,36 @@ input{font-family:inherit;}
           <textarea value="{{ s.rawText }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasSpot }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;margin-bottom:14px;">
+              <sc-for list="{{ s.spots }}" as="sp" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:96px minmax(90px,130px) minmax(0,1fr);align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #efefed;background:#fff;">
+                  <span style="font-size:15px;font-weight:800;color:oklch(0.4 0.17 255);font-variant-numeric:tabular-nums;white-space:nowrap;">{{ sp.lv }}</span>
+                  <span style="font-size:16px;font-weight:800;color:#1d1e22;">{{ sp.area }}</span>
+                  <span style="font-size:15px;color:#3a3b3f;line-height:1.5;text-wrap:pretty;">{{ sp.maps }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasQuest }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px;">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;">
+                <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);">
+                  <span style="font-size:14px;font-weight:700;color:#6b6d73;">진행할 퀘스트</span>
+                  <span style="font-size:20px;font-weight:800;color:oklch(0.3 0.09 255);">{{ s.quest.quest }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.04 75);">
+                  <span style="font-size:14px;font-weight:700;color:#6b6d73;">완료 보상 · {{ s.quest.reward }} (마스터 Lv.10)</span>
+                  <span style="font-size:20px;font-weight:800;color:oklch(0.42 0.12 60);">{{ s.quest.effect }}</span>
+                </div>
+              </div>
+              <span style="font-size:20px;font-weight:700;color:#3a3b3f;line-height:1.5;text-align:center;text-wrap:pretty;">{{ s.quest.note }}</span>
+              <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;">
+                <img src="quest-adele-1.png" alt="가려진 기억 퀘스트 목록" style="display:block;width:100%;max-width:268px;height:auto;border-radius:8px;">
+                <img src="quest-adele-2.png" alt="페이스 스킬 효과" style="display:block;width:100%;max-width:304px;height:auto;border-radius:8px;">
+              </div>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasVm }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;justify-content:center;margin-bottom:14px;">
               <img src="vmatrix-adele.png" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
@@ -1467,14 +1501,35 @@ const ABILITY = {
   ],
 };
 const VMATRIX = { '아델': 'vmatrix-adele.png' };
+const HUNTSPOT = { '아델': [
+  ['200~205', '소멸의 여로', '숨겨진 호숫가, 동굴의 동쪽길, 동굴 아래쪽'],
+  ['205~210', '리버스 시티', '숨겨진 연구열차'],
+  ['210~215', '츄츄 아일랜드', '알록달록 숲지대1, 츄릅포레스트 깊은 곳, 격류지대'],
+  ['215~220', '얌얌 아일랜드', '머쉬버드 숲6, 숨겨진 일리야드 들판, 펑고스 숲1'],
+  ['220~230', '레헬른', '닭이 뛰노는 곳3'],
+  ['230~235', '아르카나', '동굴 아랫길 깊디 깊은 곳, 다섯 갈래 동굴'],
+  ['235~240', '모라스', '그림자가 춤추는 곳2, 그날의 트뤼에페3'],
+  ['240~250', '셀라스', '빛이 마지막으로 닿는 곳6, 끝없이 추락하는 심해3, 별이 삼켜진 심해3'],
+  ['245~250', '문브릿지', '사상의 경계2,3, 미지의 안개1,2, 공허의 파도 4,5'],
+  ['250~255', '고통의 미궁', '고통의 미궁 중심부 3,6, 공허의 파도 4,5'],
+  ['255~260', '리멘', '세계가 끝나는 곳 2-5, 2-6'],
+  ['260~261', '세르니움', '해변 암석 지대 3'],
+  ['262~264', '세르니움', '왕립 도서관 제 3구역'],
+  ['265~269', '아르크스', '무법자들이 지배하는 황야4'],
+  ['265~269', '아르크스', '종착지 없는 횡단열차 1,2'],
+  ['270~271', '오디움', '점령당한 골목 3, 4'],
+  ['271~272', '오디움', '볕 드는 실험실 2, 3'],
+  ['273~274', '오디움', '잠긴문 뒤 실험실 3, 4'],
+] };
+const QUEST = { '아델': { reward: '페이스', effect: '크리티컬 데미지 10% · 공격력 10%', quest: '[아델] 가려진 기억 1 ~ 9', note: '가려진 기억 퀘스트를 1부터 9까지 모두 진행하세요.', imgs: ['quest-adele-1.png', 'quest-adele-2.png'] } };
 const HEXA = { '아델': ['hexa-adele-1.png', 'hexa-adele-2.png'] };
 const HYPERSTAT = { '아델': [
   { name: '보스용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280], rows: [
     ['STR', [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]], ['DEX', [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12]],
     ['방무', [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12]], ['데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12]], ['보공', [13, 13, 13, 13, 13, 13, 13, 13, 14, 14, 14]], ['공마', [6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7]]] },
-  { name: '사냥용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282], rows: [
-    ['STR', [3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5]], ['DEX', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 10]],
-    ['방무', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['데미지', [10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12]], ['일몹 데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 13]], ['공마', [4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6]], ['획득 경험치', [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]]] },
+  { name: '사냥용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280], rows: [
+    ['STR', [3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5]], ['DEX', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10]],
+    ['방무', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['데미지', [10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12]], ['일몹 데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12]], ['공마', [4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6]], ['획득 경험치', [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]]] },
 ] };
 const UNION_BASE = [['STR', 15, 15, '75'], ['DEX', 0, 15, '0'], ['INT', 0, 15, '0'], ['LUK', 0, 15, '0'], ['공격력', 15, 15, '15'], ['마력', 0, 15, '0'], ['최대 HP', 0, 15, '0'], ['최대 MP', 0, 15, '0']];
 const UNION = {
@@ -1733,7 +1788,7 @@ class Component extends DCLogic {
     window.addEventListener('scroll', this._gScroll, { passive: true });
   }
   guideOf(job) {
-    let g = (this.state.guides || {})[job]; g = (g && g.v === 2 ? g : null) || (GUIDE_DRAFT[job] ? clone(GUIDE_DRAFT[job]) : null);
+    let g = (this.state.guides || {})[job]; g = (g && g.v === 2 ? g : null) || (GUIDE_DRAFT[job] ? clone(GUIDE_DRAFT[job]) : job ? { ...clone(GUIDE_DRAFT['아델']), tagline: '', meta: '', img: '' } : null);
     if (g && Array.isArray(g.sections)) {
       const nm = x => typeof x === 'string' ? x : (x && (x.title || x.name)) || '';
       if (!g.sections.some(x => nm(x) === '하이퍼패시브')) {
@@ -1809,6 +1864,8 @@ class Component extends DCLogic {
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasVm: s.title === 'V매트릭스' && !!VMATRIX[job], vmImg: VMATRIX[job] || '',
+        hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
+        hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {},
         hasUnion: s.title === '유니온' && !!UNION[job],
         unionSets: s.title === '유니온' && UNION[job] ? UNION[job].map(u => { const cell = ([l, c, m, v]) => ({ label: l, cnt: c + ' / ' + m, val: v, bd: c > 0 ? 'oklch(0.78 0.11 75)' : '#3c4654', labelColor: c > 0 ? 'oklch(0.86 0.09 75)' : '#aab3bf', pri: (u.pri || {})[l] || '', hasPri: !!(u.pri || {})[l] });
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
@@ -1820,7 +1877,7 @@ class Component extends DCLogic {
           rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
@@ -1921,7 +1978,7 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
-    if (this._stream) { this.detectSkills(now); this.checkBuffsTimer(now); }
+    if (this._stream && !h.paused) { this.detectSkills(now); this.checkBuffsTimer(now); }
     this.b29Tick(now);
     (this._tms || []).forEach(tm => { if (tm.end) { any = true; if (now >= tm.end) { tm.end = 0; tm.done = now; this.huntAlert('타이머 끝', 'timer'); } } });
     if (this._pick && this._stream && !this._pdrag && now - (this._pickDrawAt || 0) > 500) { this._pickDrawAt = now; this.drawPick(); }
@@ -1935,6 +1992,7 @@ class Component extends DCLogic {
     this.forceUpdate();
   }
   huntAlert(text, kind = 'skill') {
+    if (this.hunt().paused && text !== '알림 테스트') return;
     const h = this.hunt(), vol = h.vol / 100;
     if (h.beep) {
       try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
@@ -2748,6 +2806,9 @@ class Component extends DCLogic {
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
+      pauseLabel: h.paused ? '전체 다시 켜기' : '전체 비활성화', pauseBg: h.paused ? 'oklch(0.55 0.2 25)' : '#fff', pauseColor: h.paused ? '#fff' : 'oklch(0.5 0.19 25)', pauseBorder: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.85 0.06 25)',
+      isPaused: !!h.paused,
+      togglePause: () => { const p = !h.paused; if (p) { this._run = {}; this._alerted = {}; this._det = {}; this._bst = {}; this._useAt = 0; this._buffOn = false; if (this._rune) { this._rune.base = null; this._rune.streak = 0; } } set('paused', p); },
       sharing: !!this._stream, notSharing: !this._stream, shareErr: this._stream ? '' : this._shareErr || '', hasShareErr: !this._stream && !!this._shareErr, shareRes: r.res || '연결 중', onShare: () => this.startShare(), onStopShare: () => this.stopShare(),
       runeSw: sw(h.rune), toggleRune: () => set('rune', !h.rune),
       runeStatus: st[0], runeStatusBg: st[1], runeStatusColor: st[2],
