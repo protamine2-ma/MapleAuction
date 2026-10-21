@@ -472,7 +472,7 @@ input{font-family:inherit;}
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
           <sc-if value="{{ s.hasVm }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;justify-content:center;margin-bottom:14px;">
-              <img src="{{ s.vmImg }}" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
+              <img src="vmatrix-adele.png" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
             </div>
           </sc-if>
           <sc-if value="{{ s.hasUnion }}" hint-placeholder-val="{{ false }}">
@@ -527,6 +527,49 @@ input{font-family:inherit;}
                     <sc-for list="{{ a.effects }}" as="e" hint-placeholder-count="3">
                       <span style="padding:6px 6px;border-radius:7px;background:oklch(0.95 0.025 255);font-size:clamp(13px,1.35vw,18px);font-weight:700;color:#2a2b2f;text-align:center;word-break:keep-all;">{{ e.t }}</span>
                     </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasHexa }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+              <span style="font-size:13px;font-weight:600;color:#6b6d73;">왼쪽 위부터 순서대로 강화 · 숫자는 강화 후 레벨</span>
+              <sc-for list="{{ s.hexaImgs }}" as="im" hint-placeholder-count="2">
+                <img src="{{ im.src }}" alt="{{ im.alt }}" style="display:block;width:100%;height:auto;border-radius:10px;border:1px solid #e3e3e0;">
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasHs }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:14px;">
+              <span style="font-size:13px;font-weight:600;color:#6b6d73;">초록 칸은 이전 레벨보다 오른 스탯이에요</span>
+              <sc-for list="{{ s.hsSets }}" as="h" hint-placeholder-count="2">
+                <div style="border:1px solid #e3e3e0;border-radius:12px;overflow:hidden;">
+                  <div style="display:flex;align-items:baseline;gap:10px;padding:10px 14px;background:oklch(0.94 0.035 255);">
+                    <span style="font-size:18px;font-weight:800;color:oklch(0.3 0.09 255);">{{ h.name }}</span>
+                    <span style="font-size:14px;font-weight:700;color:oklch(0.45 0.1 255);">{{ h.range }}</span>
+                  </div>
+                  <div style="overflow-x:auto;">
+                    <table style="border-collapse:collapse;width:100%;min-width:640px;font-variant-numeric:tabular-nums;">
+                      <thead>
+                        <tr>
+                          <th style="position:sticky;left:0;background:#fafaf8;padding:9px 12px;text-align:left;font-size:13px;font-weight:700;color:#6b6d73;border-bottom:1px solid #e3e3e0;white-space:nowrap;">스탯</th>
+                          <sc-for list="{{ h.lvs }}" as="l" hint-placeholder-count="11">
+                            <th style="background:#fafaf8;padding:9px 6px;text-align:center;font-size:13px;font-weight:800;color:#3a3b3f;border-bottom:1px solid #e3e3e0;white-space:nowrap;">{{ l.t }}</th>
+                          </sc-for>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <sc-for list="{{ h.rows }}" as="r" hint-placeholder-count="8">
+                          <tr>
+                            <td style="position:sticky;left:0;background:#fff;padding:8px 12px;font-size:14px;font-weight:700;color:#3a3b3f;border-bottom:1px solid #f0f0ee;white-space:nowrap;">{{ r.name }}</td>
+                            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="11">
+                              <td style="padding:8px 6px;text-align:center;font-size:17px;font-weight:800;color:{{ c.color }};background:{{ c.bg }};border-bottom:1px solid #f0f0ee;">{{ c.v }}</td>
+                            </sc-for>
+                          </tr>
+                        </sc-for>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </sc-for>
@@ -1424,10 +1467,19 @@ const ABILITY = {
   ],
 };
 const VMATRIX = { '아델': 'vmatrix-adele.png' };
+const HEXA = { '아델': ['hexa-adele-1.png', 'hexa-adele-2.png'] };
+const HYPERSTAT = { '아델': [
+  { name: '보스용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280], rows: [
+    ['STR', [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]], ['DEX', [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12]],
+    ['방무', [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12]], ['데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12]], ['보공', [13, 13, 13, 13, 13, 13, 13, 13, 14, 14, 14]], ['공마', [6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7]]] },
+  { name: '사냥용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282], rows: [
+    ['STR', [3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5]], ['DEX', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 10]],
+    ['방무', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['데미지', [10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12]], ['일몹 데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 13]], ['공마', [4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6]], ['획득 경험치', [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]]] },
+] };
 const UNION_BASE = [['STR', 15, 15, '75'], ['DEX', 0, 15, '0'], ['INT', 0, 15, '0'], ['LUK', 0, 15, '0'], ['공격력', 15, 15, '15'], ['마력', 0, 15, '0'], ['최대 HP', 0, 15, '0'], ['최대 MP', 0, 15, '0']];
 const UNION = {
   '아델': [
-    { name: '보스용 유니온', server: '일반서버', pri: { 'STR': 4, '공격력': 5, '크리티컬 데미지': 1, '보스 데미지': 2, '방어율 무시': 3, '버프 지속 시간': 6 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 40, 40, '40%'], ['방어율 무시', 40, 40, '40%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 16, 40, '16%'], ['일반몹 데미지', 0, 40, '0%'], ['획득 경험치', 0, 40, '0.0%'], ['상태 이상 내성', 0, 40, '0']] },
+    { name: '보스용 유니온', server: '일반서버', pri: { 'STR': 4, '공격력': 5, '크리티컬 데미지': 1, '보스 데미지': 2, '방어율 무시': 3, '버프 지속 시간': 6, 'DEX': 7 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 40, 40, '40%'], ['방어율 무시', 40, 40, '40%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 16, 40, '16%'], ['일반몹 데미지', 0, 40, '0%'], ['획득 경험치', 0, 40, '0.0%'], ['상태 이상 내성', 0, 40, '0']] },
     { name: '사냥용 유니온', server: '일반서버', pri: { 'STR': 4, 'DEX': 7, '공격력': 5, '크리티컬 데미지': 3, '방어율 무시': 6, '일반몹 데미지': 2, '획득 경험치': 1 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 0, 40, '0%'], ['방어율 무시', 16, 40, '16%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 0, 40, '0%'], ['일반몹 데미지', 40, 40, '40%'], ['획득 경험치', 40, 40, '10.0%'], ['상태 이상 내성', 0, 40, '0']] },
   ],
 };
@@ -1689,6 +1741,11 @@ class Component extends DCLogic {
         const item = typeof tpl === 'string' ? '하이퍼패시브' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '하이퍼패시브', ...(tpl && 'name' in tpl ? { name: '하이퍼패시브' } : {}), ...(tpl && 'id' in tpl ? { id: 'hp' + Date.now() } : {}) };
         g = { ...g, sections: [...g.sections.slice(0, i + 1), item, ...g.sections.slice(i + 1)] };
       }
+      if (!g.sections.some(x => nm(x) === '필수퀘스트')) {
+        const i = g.sections.findIndex(x => nm(x) === '펫버프'), tpl = g.sections[0];
+        const item = typeof tpl === 'string' ? '필수퀘스트' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '필수퀘스트', ...(tpl && 'name' in tpl ? { name: '필수퀘스트' } : {}), ...(tpl && 'id' in tpl ? { id: 'mq' + Date.now() } : {}) };
+        g = { ...g, sections: [...g.sections.slice(0, i + 1), item, ...g.sections.slice(i + 1)] };
+      }
     }
     return g;
   }
@@ -1757,9 +1814,13 @@ class Component extends DCLogic {
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
+        hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => ({ src, alt: '헥사스킬 강화 순서 ' + (k + 1) })) : [],
+        hasHs: s.title === '하이퍼스탯' && !!HYPERSTAT[job],
+        hsSets: s.title === '하이퍼스탯' && HYPERSTAT[job] ? HYPERSTAT[job].map(h => ({ name: h.name, range: h.lv[0] + '~' + h.lv[h.lv.length - 1] + 'Lv', lvs: h.lv.map(l => ({ t: l + 'Lv' })),
+          rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
