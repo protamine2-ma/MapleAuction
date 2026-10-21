@@ -1,0 +1,71 @@
+{
+  "job": "보우마스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "폭풍의 시-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBIJ",
+      "desc": "데미지 30% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "폭풍의 시-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBJA",
+      "desc": "보스 몬스터 공격 시 데미지 10% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "폭풍의 시-스플릿 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBJB",
+      "desc": "공격 횟수 1 증가, 데미지 원래의 75%로 감소",
+      "count": 987,
+      "pct": 98.7
+    },
+    {
+      "name": "샤프 아이즈-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBIF",
+      "desc": "크리티컬 확률 5% 증가",
+      "count": 925,
+      "pct": 92.5
+    },
+    {
+      "name": "샤프 아이즈-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBIE",
+      "desc": "방어율 무시 효과 5% 추가",
+      "count": 831,
+      "pct": 83.1
+    },
+    {
+      "name": "언카운터블 애로우-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 145,
+      "pct": 14.5
+    },
+    {
+      "name": "언카운터블 애로우-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 93,
+      "pct": 9.3
+    },
+    {
+      "name": "언카운터블 애로우-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 15,
+      "pct": 1.5
+    },
+    {
+      "name": "샤프 아이즈-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBKFOBID",
+      "desc": "지속 시간 30초 증가",
+      "count": 8,
+      "pct": 0.8
+    }
+  ]
+}
