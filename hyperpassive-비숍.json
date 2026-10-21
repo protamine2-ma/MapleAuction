@@ -1,0 +1,71 @@
+{
+  "job": "비숍",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "홀리 심볼-엑스트라 드롭",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBII",
+      "desc": "드롭률 30% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "어드밴스드 블레스-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBJA",
+      "desc": "보스 몬스터 공격 시 데미지 10% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "홀리 심볼-익스피리언스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBIG",
+      "desc": "경험치 20% 증가. 자신에게만 적용",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "어드밴스드 블레스-보너스 데미지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBIJ",
+      "desc": "공격력 및 마력 20 추가 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "홀리 매직쉘-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBIE",
+      "desc": "지속 시간 5초 증가",
+      "count": 598,
+      "pct": 59.8
+    },
+    {
+      "name": "홀리 심볼-임뷰 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBIH",
+      "desc": "상태 이상 내성 및 모든 속성 내성 10% 증가\n[패시브 효과 : 상태 이상 내성 10, 모든 속성 내성 10% 증가]",
+      "count": 306,
+      "pct": 30.6
+    },
+    {
+      "name": "홀리 매직쉘-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBIF",
+      "desc": "피해 감소량 5% 증가",
+      "count": 56,
+      "pct": 5.6
+    },
+    {
+      "name": "홀리 매직쉘-엑스트라 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBID",
+      "desc": "가드 횟수 2 증가",
+      "count": 39,
+      "pct": 3.9
+    },
+    {
+      "name": "어드밴스드 블레스-엑스트라 포인트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAIFOBJB",
+      "desc": "최대 HP 및 최대 MP 1000 추가 증가",
+      "count": 9,
+      "pct": 0.9
+    }
+  ]
+}
