@@ -41,7 +41,7 @@ async function one(name) {
   if (b.character_class !== JOB) { other++; return; }
   if (ok >= N) return;
   const s = await api('/character/skill', { ocid: id.ocid, character_skill_grade: 'hyperpassive' });
-  const list = ((s && s.character_skill) || []).filter(x => x && x.skill_name);
+  const list = ((s && s.character_skill) || []).filter(x => x && x.skill_name && Number(x.skill_level) >= 1);
   if (!list.length || ok >= N) return;
   ok++;
   new Set(list.map(x => x.skill_name)).forEach(v => { cnt[v] = (cnt[v] || 0) + 1; });
