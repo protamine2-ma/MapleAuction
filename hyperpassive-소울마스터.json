@@ -1,0 +1,71 @@
+{
+  "job": "소울마스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "디바이드 앤 슬래시-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "트루 사이트-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBIE",
+      "desc": "최종 데미지 10% 증가\n트루 사이트에 의해 증가되는 최종 데미지와 합적용",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "트루 사이트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBIF",
+      "desc": "방어율 10% 추가 무시\n트루 사이트에 의해 증가되는 방어율 무시와 합적용",
+      "count": 961,
+      "pct": 96.1
+    },
+    {
+      "name": "코스믹 샤워/버스트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 944,
+      "pct": 94.4
+    },
+    {
+      "name": "디바이드 앤 슬래시-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBJB",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 798,
+      "pct": 79.8
+    },
+    {
+      "name": "트루 사이트-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBID",
+      "desc": "지속 시간 20초 증가",
+      "count": 199,
+      "pct": 19.9
+    },
+    {
+      "name": "코스믹 버스트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBIH",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 64,
+      "pct": 6.4
+    },
+    {
+      "name": "디바이드 앤 슬래시-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 29,
+      "pct": 2.9
+    },
+    {
+      "name": "코스믹 샤워-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFODKFOBII",
+      "desc": "지속 시간 10초 증가",
+      "count": 19,
+      "pct": 1.9
+    }
+  ]
+}
