@@ -1,0 +1,86 @@
+{
+  "job": "히어로",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "스피릿 블레이드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKHPBMG",
+      "count": 992,
+      "pct": 99.2,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 20]\r\n검과 영혼이 일체가 되어 일정 시간 동안 공격력을 증가시키고 자신이 받는 데미지를 증폭시켜 반사한다.",
+      "effect": "MP 20 소비, 200초 동안 공격력 30 증가\n피격 데미지 30% 감소 후 500% 증폭시켜 반사",
+      "lv": 20
+    },
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 991,
+      "pct": 99.1,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "스카링 소드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKGPBMD",
+      "count": 985,
+      "pct": 98.5,
+      "tier": "3차",
+      "info": "[마스터 레벨 : 20]\r\n검에 예기가 더해져 적에게 지워지지 않는 흉터를 남긴다.",
+      "effect": "MP 20 소모, 200초 동안 지속\n지속 중 공격력 30 증가, 적에게 공격 적중 시 100%의 확률로 20초 동안 지속되는 자상을 새김",
+      "lv": 20
+    },
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 985,
+      "pct": 98.5,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 984,
+      "pct": 98.4,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "오라 웨폰",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLGPBMA",
+      "count": 880,
+      "pct": 88,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n생명력의 일부를 무기에 부여하여 강력한 힘을 발휘한다. 오라 파동은 공격 반사 상태의 적을 공격해도 피해를 입지 않는다. 재사용 대기시간 감소 효과를 받는다.",
+      "effect": "HP 100 소비, 130초 동안 몬스터 방어율 무시 16%, 최종 데미지 6% 증가\n5초 마다 자신의 공격 스킬 사용 시 최대 10명의 적을 1100%의 데미지로 6번 공격하는 오라 파동 발사\n재사용 대기시간 120초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 57,
+      "pct": 5.7
+    },
+    {
+      "name": "에픽 어드벤쳐",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFPBJD",
+      "count": 10,
+      "pct": 1
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPCLHGBMA",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "job": "히어로",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "레이징 블로우-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "레이징 블로우-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "어드밴스드 콤보-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBID",
+      "desc": "콤보 카운터 1개 당 최종 데미지 2% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "어드밴스드 콤보-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBIF",
+      "desc": "콤보 개수 당 보스 몬스터 공격 시 데미지 2% 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "어드밴스드 파이널 어택-보너스 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBII",
+      "desc": "발동 확률 15% 증가",
+      "count": 945,
+      "pct": 94.5
+    },
+    {
+      "name": "어드밴스드 파이널 어택-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBIG",
+      "desc": "데미지 10% 증가",
+      "count": 23,
+      "pct": 2.3
+    },
+    {
+      "name": "레이징 블로우-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 20,
+      "pct": 2
+    },
+    {
+      "name": "어드밴스드 파이널 어택-보너스 데미지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBIH",
+      "desc": "공격력 20 증가",
+      "count": 19,
+      "pct": 1.9
+    },
+    {
+      "name": "어드밴스드 콤보-보너스 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDKFOBIE",
+      "desc": "콤보 카운터 한 번에 2개 충전될 확률 20% 증가",
+      "count": 2,
+      "pct": 0.2
+    }
+  ]
+}
