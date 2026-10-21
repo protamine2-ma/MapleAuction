@@ -1,0 +1,71 @@
+{
+  "job": "메르세데스",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "이슈타르의 링-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBIF",
+      "desc": "이슈타르의 링 보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "이슈타르의 링-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "이슈타르의 링-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBIE",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 929,
+      "pct": 92.9
+    },
+    {
+      "name": "레전드리 스피어-링크드 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBJB",
+      "desc": "데미지 30% 추가 증가",
+      "count": 826,
+      "pct": 82.6
+    },
+    {
+      "name": "레전드리 스피어-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 788,
+      "pct": 78.8
+    },
+    {
+      "name": "레전드리 스피어-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 352,
+      "pct": 35.2
+    },
+    {
+      "name": "워터실드-이뮤너티 인핸스1",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBIH",
+      "desc": "상태내성 10 추가 증가",
+      "count": 79,
+      "pct": 7.9
+    },
+    {
+      "name": "워터실드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBIG",
+      "desc": "피격 데미지 감소량 10% 증가",
+      "count": 13,
+      "pct": 1.3
+    },
+    {
+      "name": "워터실드-이뮤너티 인핸스2",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNBKFOBII",
+      "desc": "속성내성 10% 추가 증가",
+      "count": 13,
+      "pct": 1.3
+    }
+  ]
+}
