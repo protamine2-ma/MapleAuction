@@ -1,0 +1,71 @@
+{
+  "job": "아크메이지(썬,콜)",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "체인 라이트닝-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "텔레포트-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFPBIF",
+      "desc": "이동 거리 100 만큼 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "체인 라이트닝-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBII",
+      "desc": "공격 횟수 1 증가 ",
+      "count": 994,
+      "pct": 99.4
+    },
+    {
+      "name": "프로즌 오브-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "블리자드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBID",
+      "desc": "데미지 10% 증가",
+      "count": 629,
+      "pct": 62.9
+    },
+    {
+      "name": "체인 라이트닝-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 357,
+      "pct": 35.7
+    },
+    {
+      "name": "프로즌 오브-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 24,
+      "pct": 2.4
+    },
+    {
+      "name": "프로즌 오브-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBJB",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 9,
+      "pct": 0.9
+    },
+    {
+      "name": "썬더 스피어-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAJFOBIE",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 2,
+      "pct": 0.2
+    }
+  ]
+}
