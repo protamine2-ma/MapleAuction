@@ -1,0 +1,71 @@
+{
+  "job": "엔젤릭버스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "트리니티-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "트리니티-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 994,
+      "pct": 99.4
+    },
+    {
+      "name": "소울 시커-메이크 업",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBIE",
+      "desc": "재생성 확률 10% 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "소울 시커-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 987,
+      "pct": 98.7
+    },
+    {
+      "name": "피니투라 페투치아-리듀스 아머",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBIH",
+      "desc": "방어율 무시 15% 증가",
+      "count": 895,
+      "pct": 89.5
+    },
+    {
+      "name": "트리니티-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBJA",
+      "desc": "방어율 무시 20% 증가",
+      "count": 79,
+      "pct": 7.9
+    },
+    {
+      "name": "피니투라 페투치아-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBII",
+      "desc": "재사용 대기시간 25% 감소",
+      "count": 34,
+      "pct": 3.4
+    },
+    {
+      "name": "소울 시커-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBIF",
+      "desc": "방어율 무시 10% 증가",
+      "count": 16,
+      "pct": 1.6
+    },
+    {
+      "name": "피니투라 페투치아-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJHKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 7,
+      "pct": 0.7
+    }
+  ]
+}
