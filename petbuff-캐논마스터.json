@@ -1,0 +1,80 @@
+{
+  "job": "캐논마스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 986,
+      "pct": 98.6,
+      "tier": "0차",
+      "info": "[아이템 잠재스킬]\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 부여한다.",
+      "effect": "MP 80 소비, 240초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가",
+      "lv": 1
+    },
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 986,
+      "pct": 98.6,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 973,
+      "pct": 97.3,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "몽키 매직",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIHPBMD",
+      "count": 971,
+      "pct": 97.1,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 20]\r\n몽키의 마법으로 일정 시간 동안 HP, MP, 올스탯, 이동속도, 점프력을 높여준다. 다른 모든 버프 스킬과 중복으로 사용할 수 있다.",
+      "effect": "MP 55 소비, 180초 동안 HP 400, MP 400, 올스탯 30, 이동속도 10, 점프력 5 증가",
+      "lv": 20
+    },
+    {
+      "name": "럭키 다이스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIGPBMF",
+      "count": 839,
+      "pct": 83.9,
+      "tier": "3차",
+      "info": "[마스터 레벨 : 20]\r\n주사위를 던져 자신의 행운을 시험한다. 주사위의 결과에 따라 일정 시간 동안 랜덤 버프를 획득할 수 있지만, 1이 나올 경우에는 버프를 획득할 수 없고 럭키 다이스의 재사용 대기시간이 감소한다.",
+      "effect": "MP 60 소비, 주사위 버프 지속시간 180초\n1 : 럭키 다이스 재사용 대기시간 50% 감소\n2 : 방어력 30% 증가\n3 : 공격력 15 증가\n4 : 크리티컬 확률 15% 증가\n5 : 데미지 20% 증가\n6 : 경험치 획득량 30% 증가\n재사용 대기시간 60초",
+      "lv": 20
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 314,
+      "pct": 31.4,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n최대 HP와 최대 MP의 양이 증가한다. 하이퍼 바디와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "에픽 어드벤쳐",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFPBJD",
+      "count": 13,
+      "pct": 1.3
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPCLHGBMA",
+      "count": 5,
+      "pct": 0.5
+    }
+  ]
+}

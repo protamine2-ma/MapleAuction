@@ -1,0 +1,71 @@
+{
+  "job": "캐논마스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "캐논 버스터-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "캐논 버스터-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "서포트 몽키-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBIF",
+      "desc": "공격 횟수 1 증가",
+      "count": 972,
+      "pct": 97.2
+    },
+    {
+      "name": "서포트 몽키-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 877,
+      "pct": 87.7
+    },
+    {
+      "name": "캐논 바주카-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 827,
+      "pct": 82.7
+    },
+    {
+      "name": "캐논 바주카-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 195,
+      "pct": 19.5
+    },
+    {
+      "name": "캐논 바주카-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 62,
+      "pct": 6.2
+    },
+    {
+      "name": "서포트 몽키-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBIE",
+      "desc": "지속 시간 10초 증가",
+      "count": 52,
+      "pct": 5.2
+    },
+    {
+      "name": "캐논 버스터-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHIFOBJA",
+      "desc": "크리티컬 확률 15% 증가",
+      "count": 23,
+      "pct": 2.3
+    }
+  ]
+}
