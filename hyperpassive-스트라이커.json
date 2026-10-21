@@ -1,0 +1,71 @@
+{
+  "job": "스트라이커",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "섬멸-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "섬멸-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBJB",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "벽력-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 970,
+      "pct": 97
+    },
+    {
+      "name": "질풍-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBIF",
+      "desc": "공격 횟수 1 증가",
+      "count": 871,
+      "pct": 87.1
+    },
+    {
+      "name": "질풍-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 715,
+      "pct": 71.5
+    },
+    {
+      "name": "벽력-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 383,
+      "pct": 38.3
+    },
+    {
+      "name": "섬멸-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBJA",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 49,
+      "pct": 4.9
+    },
+    {
+      "name": "벽력-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 18,
+      "pct": 1.8
+    },
+    {
+      "name": "질풍-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOHKFOBIE",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}
