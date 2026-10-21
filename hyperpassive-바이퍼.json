@@ -1,0 +1,71 @@
+{
+  "job": "바이퍼",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "피스트 인레이지-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBIH",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 993,
+      "pct": 99.3
+    },
+    {
+      "name": "피스트 인레이지-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 990,
+      "pct": 99
+    },
+    {
+      "name": "피스트 인레이지-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 985,
+      "pct": 98.5
+    },
+    {
+      "name": "더블 럭키 다이스-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBIF",
+      "desc": "럭키 다이스 4, 5, 6 나올 확률 증가",
+      "count": 868,
+      "pct": 86.8
+    },
+    {
+      "name": "더블 럭키 다이스-원모어찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBID",
+      "desc": "더블 럭키 다이스 미발동 시 40% 확률로 재사용 대기시간 미적용, 다음 시전 시 4 이상의 더블 럭키 다이스 발동",
+      "count": 654,
+      "pct": 65.4
+    },
+    {
+      "name": "훅 봄버-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 245,
+      "pct": 24.5
+    },
+    {
+      "name": "훅 봄버-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 127,
+      "pct": 12.7
+    },
+    {
+      "name": "더블 럭키 다이스-엑스트라 넘버",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBIE",
+      "desc": "더블 럭키 다이스에 7 추가\n7 : 몬스터 방어율 무시 20% 증가",
+      "count": 105,
+      "pct": 10.5
+    },
+    {
+      "name": "훅 봄버-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPHKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 31,
+      "pct": 3.1
+    }
+  ]
+}
