@@ -1,0 +1,400 @@
+{
+  "job": "에반",
+  "date": "2026-10-20",
+  "sample": 151,
+  "active": true,
+  "boss": {
+    "sample": 151,
+    "items": [
+      {
+        "name": "판단",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAEI",
+        "desc": " 크리티컬 데미지 4% 증가",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "와일드 레이지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJA",
+        "desc": "데미지 10% 증가",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "소울 컨트랙트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPAJF",
+        "desc": "10초 동안 데미지 45% 증가\n재사용 대기시간 60초",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "무아",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOENE",
+        "desc": "전투 상태에 돌입 시 데미지 11% 증가, 지속시간 10초",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "임피리컬 널리지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKC",
+        "desc": "공격한 적에 대한 약점을 70% 확률로 파악, 파악한 약점은 10초 동안 지속되며 최대 3회까지 중첩\n중첩 당 데미지 3%, 방어율 무시 3% 증가",
+        "descLv": 6,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "인텐시브 인썰트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKB",
+        "desc": "캐릭터보다 레벨이 낮은 몬스터 공격 시 데미지 6% 증가, 상태 이상에 걸린 몬스터 공격 시 데미지 6% 증가",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "데몬스 퓨리",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMB",
+        "desc": "보스 몬스터 공격 시 데미지 15% 증가",
+        "descLv": 2,
+        "count": 151,
+        "pct": 100
+      },
+      {
+        "name": "시프 커닝",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLA",
+        "desc": "적에게 상태 이상을 적용시키면 10초 동안 데미지 18% 증가\n재발동 대기시간 20초 ",
+        "descLv": 6,
+        "count": 150,
+        "pct": 99.3
+      },
+      {
+        "name": "프라이어 프리퍼레이션",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBNF",
+        "desc": "적 8명 처치, 혹은 보스 몬스터에게 5번 공격 적중 시 사전 준비 1번 완료, 사전 준비를 5번 마치면 20초 동안 데미지 17% 증가\n재발동 대기시간 40초",
+        "descLv": 2,
+        "count": 146,
+        "pct": 96.7
+      },
+      {
+        "name": "전투의 흐름",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKI",
+        "desc": "10초 동안 데미지 10% 증가",
+        "descLv": 2,
+        "count": 138,
+        "pct": 91.4
+      },
+      {
+        "name": "하이브리드 로직",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBIH",
+        "desc": "모든 능력치 10% 증가",
+        "descLv": 2,
+        "count": 135,
+        "pct": 89.4
+      },
+      {
+        "name": "커버넌트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHKAKA",
+        "desc": "소환수 소환 시 데미지 8% 증가",
+        "descLv": 2,
+        "count": 79,
+        "pct": 52.3
+      },
+      {
+        "name": "퍼미에이트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMF",
+        "desc": "방어율 무시 15% 증가",
+        "descLv": 2,
+        "count": 72,
+        "pct": 47.7
+      },
+      {
+        "name": "강체",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNJLH",
+        "desc": "최대 HP의 일정 비율로 피해를 입히는 공격 포함한 피해 4% 감소",
+        "descLv": 2,
+        "count": 8,
+        "pct": 5.3
+      },
+      {
+        "name": "스피릿 오브 프리덤",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCOJ",
+        "desc": "부활 시 8초 동안 피해를 받지 않음, 맵 이동 시 해제",
+        "descLv": 8,
+        "count": 6,
+        "pct": 4
+      },
+      {
+        "name": "파이렛 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLE",
+        "desc": "힘 70, 민첩 70, 지력 70, 운 70, 최대 HP 1225, 최대 MP 1225 증가, 피격 데미지 15% 감소",
+        "descLv": 6,
+        "count": 4,
+        "pct": 2.6
+      },
+      {
+        "name": "자신감",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOHMJ",
+        "desc": "방어율 무시 10% 증가, HP가 100%인 몬스터 공격 시 데미지 14% 증가",
+        "descLv": 2,
+        "count": 4,
+        "pct": 2.6
+      },
+      {
+        "name": "시그너스 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJF",
+        "desc": "공격력과 마력 25, 상태 이상 내성 15, 모든 속성 내성 15% 증가",
+        "descLv": 10,
+        "count": 3,
+        "pct": 2
+      },
+      {
+        "name": "노블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMJJH",
+        "desc": "보스 몬스터 공격 시 데미지 4% 증가\n같은 맵에 있는 자신을 포함한 파티원 1명 당 데미지 2% 증가, 최대 8%까지 증가\n파티를 하지 않았을 때는 자신만 파티한 것으로 취급",
+        "descLv": 2,
+        "count": 3,
+        "pct": 2
+      },
+      {
+        "name": "륀느의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOANA",
+        "desc": "받는 데미지 15% 감소, 방어율 무시 10% 증가",
+        "descLv": 5,
+        "count": 2,
+        "pct": 1.3
+      },
+      {
+        "name": "구사 일생",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAKJ",
+        "desc": "사망에 이르는 공격을 당할 시, 10% 확률로 생존",
+        "descLv": 2,
+        "count": 2,
+        "pct": 1.3
+      },
+      {
+        "name": "이네이트 기프트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNDOE",
+        "desc": "데미지 5% 증가\n공격 시 100% 확률로 5초 동안 매초 최대 HP/MP의 2% 회복\n재발동 대기시간 30초",
+        "descLv": 2,
+        "count": 1,
+        "pct": 0.7
+      },
+      {
+        "name": "어드벤쳐러 큐리어스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKG",
+        "desc": "몬스터 컬렉션 등록 확률 35%, 크리티컬 확률 10% 증가",
+        "descLv": 6,
+        "count": 1,
+        "pct": 0.7
+      },
+      {
+        "name": "인빈서블 빌리프",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGJI",
+        "desc": "현재 HP가 최대 HP의 15% 이하가 되었을 때 자동 발동되어 3초 동안 1초 마다 최대 HP의 35% 회복\n재발동 대기시간 210초",
+        "descLv": 6,
+        "count": 1,
+        "pct": 0.7
+      }
+    ]
+  },
+  "hunt": {
+    "sample": 133,
+    "items": [
+      {
+        "name": "판단",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOAEI",
+        "desc": " 크리티컬 데미지 4% 증가",
+        "descLv": 2,
+        "count": 132,
+        "pct": 99.2
+      },
+      {
+        "name": "와일드 레이지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJA",
+        "desc": "데미지 10% 증가",
+        "descLv": 2,
+        "count": 132,
+        "pct": 99.2
+      },
+      {
+        "name": "엘프의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPBIA",
+        "desc": "사용 시 에우렐로 귀환\n재사용 대기시간 1800초\n[패시브 효과 : 경험치 획득량 15% 증가]",
+        "descLv": 2,
+        "count": 132,
+        "pct": 99.2
+      },
+      {
+        "name": "자연의 벗",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBJI",
+        "desc": "데미지 5% 증가\n일반 몬스터 20명 처치 시 자연의 도움 발동, 자연의 도움 발동 시 30초 동안 일반 몬스터 공격 시 데미지 11% 증가\n재발동 대기시간 30초",
+        "descLv": 2,
+        "count": 131,
+        "pct": 98.5
+      },
+      {
+        "name": "자신감",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOHMJ",
+        "desc": "방어율 무시 10% 증가, HP가 100%인 몬스터 공격 시 데미지 14% 증가",
+        "descLv": 2,
+        "count": 129,
+        "pct": 97
+      },
+      {
+        "name": "무아",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOENE",
+        "desc": "전투 상태에 돌입 시 데미지 11% 증가, 지속시간 10초",
+        "descLv": 2,
+        "count": 125,
+        "pct": 94
+      },
+      {
+        "name": "하이브리드 로직",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBIH",
+        "desc": "모든 능력치 10% 증가",
+        "descLv": 2,
+        "count": 123,
+        "pct": 92.5
+      },
+      {
+        "name": "콤보킬 어드밴티지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOCLA",
+        "desc": "영구적으로 콤보킬 구슬 경험치 획득량 650% 추가 획득",
+        "descLv": 2,
+        "count": 114,
+        "pct": 85.7
+      },
+      {
+        "name": "시그너스 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBJF",
+        "desc": "공격력과 마력 25, 상태 이상 내성 15, 모든 속성 내성 15% 증가",
+        "descLv": 10,
+        "count": 100,
+        "pct": 75.2
+      },
+      {
+        "name": "전투의 흐름",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKI",
+        "desc": "10초 동안 데미지 10% 증가",
+        "descLv": 2,
+        "count": 77,
+        "pct": 57.9
+      },
+      {
+        "name": "이네이트 기프트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNDOE",
+        "desc": "데미지 5% 증가\n공격 시 100% 확률로 5초 동안 매초 최대 HP/MP의 2% 회복\n재발동 대기시간 30초",
+        "descLv": 2,
+        "count": 76,
+        "pct": 57.1
+      },
+      {
+        "name": "인텐시브 인썰트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHODKB",
+        "desc": "캐릭터보다 레벨이 낮은 몬스터 공격 시 데미지 6% 증가, 상태 이상에 걸린 몬스터 공격 시 데미지 6% 증가",
+        "descLv": 2,
+        "count": 69,
+        "pct": 51.9
+      },
+      {
+        "name": "파이렛 블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLE",
+        "desc": "힘 70, 민첩 70, 지력 70, 운 70, 최대 HP 1225, 최대 MP 1225 증가, 피격 데미지 15% 감소",
+        "descLv": 6,
+        "count": 61,
+        "pct": 45.9
+      },
+      {
+        "name": "어드벤쳐러 큐리어스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKG",
+        "desc": "몬스터 컬렉션 등록 확률 35%, 크리티컬 확률 10% 증가",
+        "descLv": 6,
+        "count": 51,
+        "pct": 38.3
+      },
+      {
+        "name": "데들리 인스팅트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMC",
+        "desc": "크리티컬 확률 15% 증가",
+        "descLv": 2,
+        "count": 30,
+        "pct": 22.6
+      },
+      {
+        "name": "프라이어 프리퍼레이션",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNBNF",
+        "desc": "적 8명 처치, 혹은 보스 몬스터에게 5번 공격 적중 시 사전 준비 1번 완료, 사전 준비를 5번 마치면 20초 동안 데미지 17% 증가\n재발동 대기시간 40초",
+        "descLv": 2,
+        "count": 28,
+        "pct": 21.1
+      },
+      {
+        "name": "커버넌트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHKAKA",
+        "desc": "소환수 소환 시 데미지 8% 증가",
+        "descLv": 2,
+        "count": 21,
+        "pct": 15.8
+      },
+      {
+        "name": "임피리컬 널리지",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGKC",
+        "desc": "공격한 적에 대한 약점을 70% 확률로 파악, 파악한 약점은 10초 동안 지속되며 최대 3회까지 중첩\n중첩 당 데미지 3%, 방어율 무시 3% 증가",
+        "descLv": 6,
+        "count": 19,
+        "pct": 14.3
+      },
+      {
+        "name": "시프 커닝",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMGLA",
+        "desc": "적에게 상태 이상을 적용시키면 10초 동안 데미지 18% 증가\n재발동 대기시간 20초 ",
+        "descLv": 6,
+        "count": 17,
+        "pct": 12.8
+      },
+      {
+        "name": "소울 컨트랙트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHPAJF",
+        "desc": "10초 동안 데미지 45% 증가\n재사용 대기시간 60초",
+        "descLv": 2,
+        "count": 12,
+        "pct": 9
+      },
+      {
+        "name": "륀느의 축복",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOANA",
+        "desc": "받는 데미지 15% 감소, 방어율 무시 10% 증가",
+        "descLv": 5,
+        "count": 6,
+        "pct": 4.5
+      },
+      {
+        "name": "노블레스",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHMJJH",
+        "desc": "보스 몬스터 공격 시 데미지 4% 증가\n같은 맵에 있는 자신을 포함한 파티원 1명 당 데미지 2% 증가, 최대 8%까지 증가\n파티를 하지 않았을 때는 자신만 파티한 것으로 취급",
+        "descLv": 2,
+        "count": 2,
+        "pct": 1.5
+      },
+      {
+        "name": "퍼미에이트",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMF",
+        "desc": "방어율 무시 15% 증가",
+        "descLv": 2,
+        "count": 2,
+        "pct": 1.5
+      },
+      {
+        "name": "데몬스 퓨리",
+        "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHOBMB",
+        "desc": "보스 몬스터 공격 시 데미지 15% 증가",
+        "descLv": 2,
+        "count": 1,
+        "pct": 0.8
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "job": "에반",
+  "date": "2026-10-20",
+  "sample": 151,
+  "active": true,
+  "items": [
+    {
+      "name": "드래곤 스위프트-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEE",
+      "desc": "재사용 대기시간 25% 감소",
+      "count": 149,
+      "pct": 98.7
+    },
+    {
+      "name": "드래곤 브레스-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBFA",
+      "desc": "재사용 대기시간 25% 감소",
+      "count": 149,
+      "pct": 98.7
+    },
+    {
+      "name": "드래곤 다이브-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEH",
+      "desc": "재사용 대기시간 25% 감소",
+      "count": 148,
+      "pct": 98
+    },
+    {
+      "name": "드래곤 다이브-어스 인헨스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEJ",
+      "desc": "데미지 20% 증가",
+      "count": 143,
+      "pct": 94.7
+    },
+    {
+      "name": "드래곤 스위프트-썬더 보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEG",
+      "desc": "지점별 공격 횟수 1회 증가",
+      "count": 139,
+      "pct": 92.1
+    },
+    {
+      "name": "드래곤 스위프트-윈드 인스톨",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEF",
+      "desc": "바람 칼날 1개 추가",
+      "count": 13,
+      "pct": 8.6
+    },
+    {
+      "name": "드래곤 브레스-윈드 보너스 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBFC",
+      "desc": "대상의 최저 HP 범위 조건 5% 증가, 데미지 증가량 85%p 추가 증가",
+      "count": 10,
+      "pct": 6.6
+    },
+    {
+      "name": "드래곤 브레스-어스 인스톨",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBFB",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 3,
+      "pct": 2
+    },
+    {
+      "name": "드래곤 다이브-썬더 인스톨",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNAKAOBEI",
+      "desc": "번개 구체 2개 증가",
+      "count": 1,
+      "pct": 0.7
+    }
+  ]
+}
