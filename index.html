@@ -463,9 +463,52 @@ input{font-family:inherit;}
       </div>
       <div style="padding:18px 22px;">
         <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
-          <textarea value="{{ s.text }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
+          <textarea value="{{ s.rawText }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasUnion }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-bottom:14px;">
+              <sc-for list="{{ s.unionSets }}" as="u" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:18px;font-weight:800;color:#2a2b2f;">{{ u.name }}</span>
+                    <span style="padding:2px 9px;border-radius:999px;background:oklch(0.94 0.035 255);color:oklch(0.4 0.17 255);font-size:13px;font-weight:700;">{{ u.server }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:12px;background:#1f2630;">
+                    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;">
+                      <sc-for list="{{ u.base }}" as="c" hint-placeholder-count="8">
+                        <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px 8px;border-radius:8px;border:1px solid {{ c.bd }};background:linear-gradient(180deg,#2a3441,#223040);">
+                          <sc-if value="{{ c.hasPri }}" hint-placeholder-val="{{ false }}">
+                            <span style="position:absolute;top:-10px;left:-10px;width:30px;height:30px;border-radius:50%;background:oklch(0.58 0.21 27);color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.4);font-variant-numeric:tabular-nums;">{{ c.pri }}</span>
+                          </sc-if>
+                          <span style="padding:1px 10px;border-radius:999px;background:#151b23;color:#e6e7ea;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;">{{ c.cnt }}</span>
+                          <span style="font-size:13px;color:{{ c.labelColor }};text-align:center;word-break:keep-all;">{{ c.label }}</span>
+                          <span style="font-size:18px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">{{ c.val }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="height:1px;background:#3c4654;"></div>
+                    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;">
+                      <sc-for list="{{ u.extra }}" as="c" hint-placeholder-count="8">
+                        <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px 8px;border-radius:8px;border:1px solid {{ c.bd }};background:linear-gradient(180deg,#2a3441,#223040);">
+                          <sc-if value="{{ c.hasPri }}" hint-placeholder-val="{{ false }}">
+                            <span style="position:absolute;top:-10px;left:-10px;width:30px;height:30px;border-radius:50%;background:oklch(0.58 0.21 27);color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.4);font-variant-numeric:tabular-nums;">{{ c.pri }}</span>
+                          </sc-if>
+                          <span style="padding:1px 10px;border-radius:999px;background:#151b23;color:#e6e7ea;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;">{{ c.cnt }}</span>
+                          <span style="font-size:13px;color:{{ c.labelColor }};text-align:center;word-break:keep-all;">{{ c.label }}</span>
+                          <span style="font-size:18px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">{{ c.val }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px;color:#6b6d73;">
+                    <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;border-radius:50%;background:oklch(0.58 0.21 27);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;">1</span>배치 우선순위</span>
+                    <sc-if value="{{ u.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-weight:700;color:#3a3b3f;">{{ u.note }}</span></sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasArt }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px;">
               <sc-for list="{{ s.artCards }}" as="a" hint-placeholder-count="9">
@@ -473,7 +516,7 @@ input{font-family:inherit;}
                   <span style="flex:none;width:clamp(48px,28%,86px);aspect-ratio:192/226;border-radius:8px;background-image:{{ a.img }};background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8%;box-sizing:border-box;font-size:clamp(24px,2.6vw,40px);font-weight:900;line-height:1;color:oklch(0.6 0.23 25);-webkit-text-stroke:1px #fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);">{{ a.num }}</span>
                   <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;">
                     <sc-for list="{{ a.effects }}" as="e" hint-placeholder-count="3">
-                      <span style="padding:6px 6px;border-radius:7px;background:oklch(0.95 0.025 255);font-size:clamp(11px,1.1vw,15px);font-weight:700;color:#2a2b2f;text-align:center;word-break:keep-all;">{{ e.t }}</span>
+                      <span style="padding:6px 6px;border-radius:7px;background:oklch(0.95 0.025 255);font-size:clamp(13px,1.35vw,18px);font-weight:700;color:#2a2b2f;text-align:center;word-break:keep-all;">{{ e.t }}</span>
                     </sc-for>
                   </div>
                 </div>
@@ -1371,6 +1414,13 @@ const ABILITY = {
     { name: '사냥 종결', lines: [['L', '아이템 드롭률 20% 증가'], ['L', '메소 획득량 20% 증가']] },
   ],
 };
+const UNION_BASE = [['STR', 15, 15, '75'], ['DEX', 0, 15, '0'], ['INT', 0, 15, '0'], ['LUK', 0, 15, '0'], ['공격력', 15, 15, '15'], ['마력', 0, 15, '0'], ['최대 HP', 0, 15, '0'], ['최대 MP', 0, 15, '0']];
+const UNION = {
+  '아델': [
+    { name: '보스용 유니온', server: '일반서버', pri: { 'STR': 4, '공격력': 5, '크리티컬 데미지': 1, '보스 데미지': 2, '방어율 무시': 3, '버프 지속 시간': 6 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 40, 40, '40%'], ['방어율 무시', 40, 40, '40%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 16, 40, '16%'], ['일반몹 데미지', 0, 40, '0%'], ['획득 경험치', 0, 40, '0.0%'], ['상태 이상 내성', 0, 40, '0']] },
+    { name: '사냥용 유니온', server: '일반서버', pri: { 'STR': 4, 'DEX': 7, '공격력': 5, '크리티컬 데미지': 3, '방어율 무시': 6, '일반몹 데미지': 2, '획득 경험치': 1 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 0, 40, '0%'], ['방어율 무시', 16, 40, '16%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 0, 40, '0%'], ['일반몹 데미지', 40, 40, '40%'], ['획득 경험치', 40, 40, '10.0%'], ['상태 이상 내성', 0, 40, '0']] },
+  ],
+};
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -1685,20 +1735,23 @@ class Component extends DCLogic {
       guideTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       guideSections: g.sections.map((s, i) => ({ no: String(i + 1).padStart(2, '0'), title: s.title, anchor: 'gs-' + i,
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
-        goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
+        goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, rawText: s.text || '', text: String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('\n').trim(),
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
         hasLink: s.title === '링크' && !!(lk && lk.boss),
         linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', ...this.tipOf('lk:' + k + ':' + x.name, { info: '', top: '', effLabel: x.descLv ? '[현재 레벨 ' + x.descLv + ']' : '', eff: x.desc }) })) })) : [],
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
+        hasUnion: s.title === '유니온' && !!UNION[job],
+        unionSets: s.title === '유니온' && UNION[job] ? UNION[job].map(u => { const cell = ([l, c, m, v]) => ({ label: l, cnt: c + ' / ' + m, val: v, bd: c > 0 ? 'oklch(0.78 0.11 75)' : '#3c4654', labelColor: c > 0 ? 'oklch(0.86 0.09 75)' : '#aab3bf', pri: (u.pri || {})[l] || '', hasPri: !!(u.pri || {})[l] });
+          return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
-        videos: s.type === 'video' ? String(s.text || '').split('\n').map(yt).filter(Boolean).map(src => ({ src })) : [],
+        videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
         noVideo: s.type === 'video' && !String(s.text || '').split('\n').map(yt).filter(Boolean).length })),
     };
   }
