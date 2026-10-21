@@ -1,0 +1,71 @@
+{
+  "job": "나이트워커",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "퀸터플 스로우-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 1000,
+      "pct": 100
+    },
+    {
+      "name": "퀸터플 스로우-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBIE",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "사이펀 바이탈리티-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBJA",
+      "desc": "공격력 30 증가",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "다크니스 오멘-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBIG",
+      "desc": "재사용 대기시간 50% 감소",
+      "count": 983,
+      "pct": 98.3
+    },
+    {
+      "name": "다크니스 오멘-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBII",
+      "desc": "데미지 20% 증가",
+      "count": 969,
+      "pct": 96.9
+    },
+    {
+      "name": "사이펀 바이탈리티-엑스트라 포인트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBIJ",
+      "desc": "보호막 최대 HP의 3% 증가",
+      "count": 29,
+      "pct": 2.9
+    },
+    {
+      "name": "다크니스 오멘-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 9 증가",
+      "count": 19,
+      "pct": 1.9
+    },
+    {
+      "name": "퀸터플 스로우-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBIF",
+      "desc": "크리티컬 확률 10% 증가",
+      "count": 8,
+      "pct": 0.8
+    },
+    {
+      "name": "사이펀 바이탈리티-임뷰 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOGKFOBJB",
+      "desc": "상태 이상 내성 20 증가",
+      "count": 7,
+      "pct": 0.7
+    }
+  ]
+}
