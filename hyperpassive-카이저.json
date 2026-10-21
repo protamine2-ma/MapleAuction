@@ -1,0 +1,71 @@
+{
+  "job": "카이저",
+  "date": "2026-10-20",
+  "sample": 91,
+  "active": true,
+  "items": [
+    {
+      "name": "기가 슬래셔-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 91,
+      "pct": 100
+    },
+    {
+      "name": "기가 슬래셔-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBIF",
+      "desc": "공격 횟수 1 증가",
+      "count": 91,
+      "pct": 100
+    },
+    {
+      "name": "인퍼널 브레스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 90,
+      "pct": 98.9
+    },
+    {
+      "name": "인퍼널 브레스-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBII",
+      "desc": "보스 몬스터 공격 시 데미지 10% 증가",
+      "count": 89,
+      "pct": 97.8
+    },
+    {
+      "name": "윙비트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 74,
+      "pct": 81.3
+    },
+    {
+      "name": "인퍼널 브레스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBIH",
+      "desc": "방어율 무시 20% 증가",
+      "count": 12,
+      "pct": 13.2
+    },
+    {
+      "name": "기가 슬래셔-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBIE",
+      "desc": "지속시간 5초 증가",
+      "count": 3,
+      "pct": 3.3
+    },
+    {
+      "name": "윙비트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBJA",
+      "desc": "방어율 무시 20% 증가",
+      "count": 1,
+      "pct": 1.1
+    },
+    {
+      "name": "윙비트-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJDKFOBJB",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 1,
+      "pct": 1.1
+    }
+  ]
+}
