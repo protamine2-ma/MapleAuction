@@ -1,0 +1,64 @@
+{
+  "job": "일리움",
+  "date": "2026-10-20",
+  "sample": 78,
+  "active": true,
+  "items": [
+    {
+      "name": "자벨린-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPB",
+      "desc": "크래프트:자벨린의 데미지 20% 증가",
+      "count": 78,
+      "pct": 100
+    },
+    {
+      "name": "자벨린-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPC",
+      "desc": "크래프트:자벨린의 공격 횟수 1 증가",
+      "count": 78,
+      "pct": 100
+    },
+    {
+      "name": "롱기누스-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPG",
+      "desc": "크래프트:롱기누스의 재사용 대기시간 20% 감소",
+      "count": 74,
+      "pct": 94.9
+    },
+    {
+      "name": "자벨린-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPD",
+      "desc": "크래프트:자벨린의 보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 73,
+      "pct": 93.6
+    },
+    {
+      "name": "데우스-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPI",
+      "desc": "데우스와 위성의 공격 횟수 1 증가",
+      "count": 73,
+      "pct": 93.6
+    },
+    {
+      "name": "롱기누스-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPF",
+      "desc": "크래프트:롱기누스의 공격 횟수 1 증가",
+      "count": 8,
+      "pct": 10.3
+    },
+    {
+      "name": "데우스-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPJ",
+      "desc": "데우스와 위성의 보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 4,
+      "pct": 5.1
+    },
+    {
+      "name": "데우스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKAKFOBPH",
+      "desc": "데우스와 위성의 데미지 20% 증가",
+      "count": 2,
+      "pct": 2.6
+    }
+  ]
+}
