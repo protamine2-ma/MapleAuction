@@ -1,0 +1,71 @@
+{
+  "job": "아크메이지(불,독)",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "미스트 이럽션-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBJB",
+      "desc": "재사용 대기시간 50% 감소",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "플레임 스윕-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "미스트 이럽션-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBIJ",
+      "desc": "데미지 10% 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "플레임 스윕-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBIG",
+      "desc": "데미지 10% 증가",
+      "count": 989,
+      "pct": 98.9
+    },
+    {
+      "name": "미스트 이럽션-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBJA",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 971,
+      "pct": 97.1
+    },
+    {
+      "name": "플레임 스윕-도트 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBIH",
+      "desc": "데미지 20% 증가",
+      "count": 44,
+      "pct": 4.4
+    },
+    {
+      "name": "포이즌 미스트-도트 퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBIE",
+      "desc": "도트 지속 시간 6초 증가",
+      "count": 3,
+      "pct": 0.3
+    },
+    {
+      "name": "포이즌 미스트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 2,
+      "pct": 0.2
+    },
+    {
+      "name": "포이즌 미스트-도트 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPAKFOBIF",
+      "desc": "데미지 20% 증가",
+      "count": 2,
+      "pct": 0.2
+    }
+  ]
+}
