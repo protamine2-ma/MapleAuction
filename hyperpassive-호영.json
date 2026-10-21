@@ -1,0 +1,71 @@
+{
+  "job": "호영",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "천지인-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPB",
+      "desc": "데미지 10% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "천지인-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPD",
+      "desc": "보스 몬스터 공격 시 데미지 15% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "추적 귀화부-헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPG",
+      "desc": "공격 주기 25% 감소",
+      "count": 971,
+      "pct": 97.1
+    },
+    {
+      "name": "환영 분신부-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPF",
+      "desc": "방어율 무시 25% 증가",
+      "count": 911,
+      "pct": 91.1
+    },
+    {
+      "name": "천지인-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPC",
+      "desc": "방어율 무시 15% 증가",
+      "count": 828,
+      "pct": 82.8
+    },
+    {
+      "name": "권술 : 호접지몽-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPI",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 147,
+      "pct": 14.7
+    },
+    {
+      "name": "흡성와류-헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPJ",
+      "desc": "공격 주기 20% 감소",
+      "count": 145,
+      "pct": 14.5
+    },
+    {
+      "name": "마봉 호로부-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPE",
+      "desc": "데미지 25% 증가",
+      "count": 2,
+      "pct": 0.2
+    },
+    {
+      "name": "권술 : 미생강변-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFOBPH",
+      "desc": "데미지 35% 증가",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}

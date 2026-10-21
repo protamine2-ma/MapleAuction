@@ -1,0 +1,86 @@
+{
+  "job": "호영",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 993,
+      "pct": 99.3,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 989,
+      "pct": 98.9,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 989,
+      "pct": 98.9,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "부채 가속",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKHPBMF",
+      "count": 983,
+      "pct": 98.3,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 10]\r\nMP를 소비하여 일정 시간 동안 부채의 공격 속도를 증가시킨다.\r\n필요 스킬 : 부채 숙련 5레벨 이상",
+      "effect": "MP 10 소비, 200초 동안 부채의 공격 속도 2단계 증가",
+      "lv": 10
+    },
+    {
+      "name": "권술 : 호접지몽",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKFPBMH",
+      "count": 902,
+      "pct": 90.2,
+      "tier": "4차",
+      "info": "[마스터 레벨 : 30]\r\n[도술] 두루마리를 펼쳐 아름답지만 치명적인 오색의 나비를 불러낸다. 일정 시간 동안 공격 시 적을 추적하여 공격하는 나비가 소환된다.\n권술 : 호접지몽은 공격 반사 상태의 적을 공격해도 피해를 입지 않으며 최대 HP가 가장 높은 보스 몬스터를 우선 추적한다.",
+      "effect": "도력 150 소비, 100초 동안 최종 데미지 10% 증가 및 공격 시 405% 데미지로 공격하는 나비를 5마리 소환\n단, 나비가 생성된 다음 1초 동안 다시 생성되지 않음\n권술 : 미생강변의 데미지 404%p 증가",
+      "lv": 31
+    },
+    {
+      "name": "환영 분신부",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJGKHPBMD",
+      "count": 902,
+      "pct": 90.2,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 20]\r\n[도술] 부적을 분신으로 둔갑시켜 적을 농락하는 신출귀몰한 공격을 펼친다. 일정 시간 동안 적을 공격 시 분신이 나와 주위의 적을 공격한다.\n설치기나 소환수에 의한 공격으로는 분신이 생성되지 않는다. 환영 분신부는 공격 반사 상태의 적을 공격해도 피해를 입지 않으며 최대 HP가 가장 높은 보스 몬스터를 우선 추적한다.",
+      "effect": "도력 50 소비, 200초 동안 공격 시 분신 3개 생성\n각 분신은 38% 데미지로 4번 공격, 일반 몬스터 공격 시 데미지 20% 증가\n단, 분신이 생성된 다음 1.5초 동안 다시 생성되지 않음",
+      "lv": 20
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 44,
+      "pct": 4.4
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJCLHGBMA",
+      "count": 1,
+      "pct": 0.1
+    },
+    {
+      "name": "테라 블링크: 모자의 알 수 없는 힘",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNEKG",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}
