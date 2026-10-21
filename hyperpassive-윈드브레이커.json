@@ -1,0 +1,64 @@
+{
+  "job": "윈드브레이커",
+  "date": "2026-10-20",
+  "sample": 386,
+  "active": true,
+  "items": [
+    {
+      "name": "천공의 노래-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBJB",
+      "desc": "보스 몬스터 공격 시 데미지 30% 증가",
+      "count": 386,
+      "pct": 100
+    },
+    {
+      "name": "트라이플링 윔-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 384,
+      "pct": 99.5
+    },
+    {
+      "name": "트라이플링 윔-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBIE",
+      "desc": "발생 확률 10% 증가",
+      "count": 383,
+      "pct": 99.2
+    },
+    {
+      "name": "트라이플링 윔-더블 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBIF",
+      "desc": "정령의 기운이 2배로 발생되며 하나의 대상에 최대 2개까지 명중 가능",
+      "count": 382,
+      "pct": 99
+    },
+    {
+      "name": "천공의 노래-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 380,
+      "pct": 98.4
+    },
+    {
+      "name": "천공의 노래-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBJA",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 10,
+      "pct": 2.6
+    },
+    {
+      "name": "페어리 턴-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 4,
+      "pct": 1
+    },
+    {
+      "name": "페어리 턴-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOBKFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 1,
+      "pct": 0.3
+    }
+  ]
+}
