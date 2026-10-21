@@ -1,0 +1,71 @@
+{
+  "job": "렌",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "매화검 본초 : 선참-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPE",
+      "desc": "데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "망혼검 본초 : 영격-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPB",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "망혼강림-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPH",
+      "desc": "데미지 20% 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "매화검 본초 : 선참-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPG",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "망혼강림-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPI",
+      "desc": "방어율 무시 20% 증가",
+      "count": 940,
+      "pct": 94
+    },
+    {
+      "name": "매화검 본초 : 선참-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPF",
+      "desc": "방어율 무시 20% 증가",
+      "count": 37,
+      "pct": 3.7
+    },
+    {
+      "name": "망혼검 본초 : 영격-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 23,
+      "pct": 2.3
+    },
+    {
+      "name": "망혼검 본초 : 영격-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPD",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 12,
+      "pct": 1.2
+    },
+    {
+      "name": "망혼강림-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJDKFOBPJ",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 5,
+      "pct": 0.5
+    }
+  ]
+}
