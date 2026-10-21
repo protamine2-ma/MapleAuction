@@ -1,0 +1,74 @@
+{
+  "job": "라라",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 987,
+      "pct": 98.7,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 986,
+      "pct": 98.6,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 981,
+      "pct": 98.1,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "지팡이 가속",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJAKHPBND",
+      "count": 977,
+      "pct": 97.7,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 9]\r\nMP를 소비하여 일정 시간 동안 마법 공격 속도를 2단계 증가시킨다.\r\n필요 스킬 : 지팡이 숙련 5레벨 이상",
+      "effect": "MP 24 소비, 180초 동안 마법 공격 속도 증가",
+      "lv": 9
+    },
+    {
+      "name": "용맥 흡수",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJAKFPBMA",
+      "count": 848,
+      "pct": 84.8,
+      "tier": "4차",
+      "info": "[마스터 레벨 : 1]\r\n땅에 잠들어 있는 용맥을 찾아 용맥에 잠재되어 있는 힘을 흡수한다. 용맥이 머금은 속성에 해당하는 힘이 흡수되어 토지령들이 라라를 따라다닌다. 정기 뿌리기 적중 시 흡수된 속성의 토지령들이 나타나 라라를 도와 공격한다. 공격 반사 상태의 적을 공격해도 피해를 입지 않고 시전 동작 중 스탠스 100%가 적용된다. 용맥 흡수는 재사용 대기시간 초기화의 효과를 받지 않는다.\r\n필요 스킬 : 흡수 : 강 웅덩이 물벼락, 흡수 : 소소리 바람, 흡수 : 햇빛 맹아리 중 하나의 스킬 1레벨 이상",
+      "effect": "MP 30 소비, 120초 동안 해, 강, 바람의 토지령 소환\n재사용 대기시간 0.30초",
+      "lv": 1
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 491,
+      "pct": 49.1,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n최대 HP와 최대 MP의 양이 증가한다. 하이퍼 바디와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEJCLGGBMA",
+      "count": 9,
+      "pct": 0.9
+    }
+  ]
+}
