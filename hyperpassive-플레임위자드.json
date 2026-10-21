@@ -1,0 +1,71 @@
+{
+  "job": "플레임위자드",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "오비탈 플레임-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFPBID",
+      "desc": "이동거리 100 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "오비탈 플레임-스플릿 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBIF",
+      "desc": "데미지 90%p 감소, 공격 횟수 1회 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "블레이징 익스팅션-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBIH",
+      "desc": "블레이징 익스팅션의 데미지 20% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "블레이징 익스팅션-애드 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBIG",
+      "desc": "공격 횟수 1회 증가",
+      "count": 985,
+      "pct": 98.5
+    },
+    {
+      "name": "오비탈 플레임-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBIE",
+      "desc": "방어율 무시 20% 증가",
+      "count": 933,
+      "pct": 93.3
+    },
+    {
+      "name": "오비탈 익스플로젼-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 67,
+      "pct": 6.7
+    },
+    {
+      "name": "블레이징 익스팅션-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBII",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 21,
+      "pct": 2.1
+    },
+    {
+      "name": "오비탈 익스플로젼-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBJB",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 8,
+      "pct": 0.8
+    },
+    {
+      "name": "오비탈 익스플로젼-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFOAKFOBJA",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 5,
+      "pct": 0.5
+    }
+  ]
+}
