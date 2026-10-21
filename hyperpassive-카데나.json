@@ -1,0 +1,71 @@
+{
+  "job": "카데나",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "체인아츠:스트로크-넥스트어택 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBIH",
+      "desc": "체인아츠:스트로크를 제외한 1타 직후 사용하는 스킬의 최종 데미지 5% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "논체인아츠-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "논체인아츠-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBIF",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "체인아츠:테이크다운-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBJB",
+      "desc": "재사용 대기시간 50% 감소",
+      "count": 966,
+      "pct": 96.6
+    },
+    {
+      "name": "체인아츠:스트로크-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 956,
+      "pct": 95.6
+    },
+    {
+      "name": "체인아츠:테이크다운-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 54,
+      "pct": 5.4
+    },
+    {
+      "name": "체인아츠:테이크다운-웨이브 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBJA",
+      "desc": "데미지 20% 증가",
+      "count": 22,
+      "pct": 2.2
+    },
+    {
+      "name": "체인아츠:스트로크-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBII",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 5,
+      "pct": 0.5
+    },
+    {
+      "name": "논체인아츠-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFJGKFOBIE",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 3,
+      "pct": 0.3
+    }
+  ]
+}
