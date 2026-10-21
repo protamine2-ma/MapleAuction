@@ -1,0 +1,71 @@
+{
+  "job": "배틀메이지",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "다크 오라-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKA",
+      "desc": "보스 몬스터 공격 시 데미지 5% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "다크 제네시스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBJI",
+      "desc": "데미지 20% 증가",
+      "count": 980,
+      "pct": 98
+    },
+    {
+      "name": "다크 제네시스-에디셔널 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBJJ",
+      "desc": "데미지 20% 증가",
+      "count": 977,
+      "pct": 97.7
+    },
+    {
+      "name": "다크 제네시스-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBJH",
+      "desc": "재사용 대기시간 40% 감소",
+      "count": 934,
+      "pct": 93.4
+    },
+    {
+      "name": "블루 오라-디스펠 매직",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKC",
+      "desc": "5초 마다 파티원의 상태 이상 1종 해제",
+      "count": 918,
+      "pct": 91.8
+    },
+    {
+      "name": "드레인 오라-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKB",
+      "desc": "준 데미지의 1%만큼 MP 회복",
+      "count": 143,
+      "pct": 14.3
+    },
+    {
+      "name": "쉘터-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKD",
+      "desc": "재사용 대기시간 8% 감소",
+      "count": 17,
+      "pct": 1.7
+    },
+    {
+      "name": "쉘터-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKE",
+      "desc": "지속시간 11초 증가",
+      "count": 17,
+      "pct": 1.7
+    },
+    {
+      "name": "쉘터-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMAKFOBKF",
+      "desc": "최대 HP의 일정 비율로 피해를 입히는 공격의 피해 감소 비율 10% 증가",
+      "count": 9,
+      "pct": 0.9
+    }
+  ]
+}
