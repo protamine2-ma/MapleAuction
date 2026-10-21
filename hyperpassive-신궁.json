@@ -1,0 +1,71 @@
+{
+  "job": "신궁",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "스나이핑-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 993,
+      "pct": 99.3
+    },
+    {
+      "name": "스나이핑-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 990,
+      "pct": 99
+    },
+    {
+      "name": "스나이핑-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBJA",
+      "desc": "보스 몬스터 공격 시 데미지 10% 증가",
+      "count": 989,
+      "pct": 98.9
+    },
+    {
+      "name": "샤프 아이즈-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBIF",
+      "desc": "크리티컬 확률 5% 증가",
+      "count": 654,
+      "pct": 65.4
+    },
+    {
+      "name": "피어싱-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBII",
+      "desc": "공격 횟수 1 증가",
+      "count": 491,
+      "pct": 49.1
+    },
+    {
+      "name": "샤프 아이즈-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBIE",
+      "desc": "방어율 무시 효과 5% 추가",
+      "count": 448,
+      "pct": 44.8
+    },
+    {
+      "name": "피어싱-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 333,
+      "pct": 33.3
+    },
+    {
+      "name": "피어싱-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 94,
+      "pct": 9.4
+    },
+    {
+      "name": "샤프 아이즈-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBJFOBID",
+      "desc": "지속 시간 30초 증가",
+      "count": 8,
+      "pct": 0.8
+    }
+  ]
+}
