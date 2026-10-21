@@ -1603,7 +1603,7 @@ class Component extends DCLogic {
   guideVals(job) {
     const g = this.guideOf(job); if (!g) return { hasGuide: false, noGuide: true };
     const pb = this.loadPetBuff(job), lk = this.loadPetBuff(job, 'linkskill'), hp = this.loadPetBuff(job, 'hyperpassive');
-    const hpRows = hp && hp.items ? hp.items.filter(x => x.pct >= 30).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', desc: String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) : [];
+    const hpRows = hp && hp.items ? hp.items.filter(x => x.pct >= 30 && /-/.test(x.name)).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', desc: String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) : [];
     const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
     const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
