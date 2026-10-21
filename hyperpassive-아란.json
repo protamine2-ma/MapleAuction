@@ -1,0 +1,71 @@
+{
+  "job": "아란",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "아드레날린 부스트-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKE",
+      "desc": "지속 시간 5초 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "비욘더-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKF",
+      "desc": "데미지 20% 증가",
+      "count": 995,
+      "pct": 99.5
+    },
+    {
+      "name": "비욘더-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKG",
+      "desc": "공격 횟수 1 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "부스트 엔드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKC",
+      "desc": "데미지 30% 증가",
+      "count": 987,
+      "pct": 98.7
+    },
+    {
+      "name": "부스트 엔드-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKD",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 726,
+      "pct": 72.6
+    },
+    {
+      "name": "비욘더-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKH",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 237,
+      "pct": 23.7
+    },
+    {
+      "name": "프로즌 그라운드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBJJ",
+      "desc": "데미지 20% 증가",
+      "count": 34,
+      "pct": 3.4
+    },
+    {
+      "name": "프로즌 그라운드-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKB",
+      "desc": "지속 시간 10초 증가",
+      "count": 16,
+      "pct": 1.6
+    },
+    {
+      "name": "프로즌 그라운드-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNDKFOBKA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 12,
+      "pct": 1.2
+    }
+  ]
+}
