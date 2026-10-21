@@ -1,0 +1,71 @@
+{
+  "job": "다크나이트",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "궁니르 디센트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 993,
+      "pct": 99.3
+    },
+    {
+      "name": "리인카네이션-데미지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBIG",
+      "desc": "최종 데미지 5% 증가",
+      "count": 984,
+      "pct": 98.4
+    },
+    {
+      "name": "비홀더-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBID",
+      "desc": "데미지 150% 증가",
+      "count": 969,
+      "pct": 96.9
+    },
+    {
+      "name": "비홀더-버프 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBIE",
+      "desc": "공격력 30 증가",
+      "count": 959,
+      "pct": 95.9
+    },
+    {
+      "name": "궁니르 디센트-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBJB",
+      "desc": "보스 몬스터 공격 시 데미지 10% 증가",
+      "count": 871,
+      "pct": 87.1
+    },
+    {
+      "name": "리인카네이션-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBII",
+      "desc": "크리티컬 확률 20% 추가 증가",
+      "count": 162,
+      "pct": 16.2
+    },
+    {
+      "name": "궁니르 디센트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBJA",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 55,
+      "pct": 5.5
+    },
+    {
+      "name": "리인카네이션-리듀스 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBIH",
+      "desc": "재사용 대기시간을 감소하기 위해 처치 해야 하는 적 30% 감소",
+      "count": 5,
+      "pct": 0.5
+    },
+    {
+      "name": "비홀더-힐링 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPDIFOBIF",
+      "desc": "회복량 최대 HP의 10%로 증가",
+      "count": 2,
+      "pct": 0.2
+    }
+  ]
+}
