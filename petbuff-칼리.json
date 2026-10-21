@@ -1,0 +1,88 @@
+{
+  "job": "칼리",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "쓸만한 홀리 심볼",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBOA",
+      "count": 990,
+      "pct": 99,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 몬스터를 사냥할 때 더 많은 경험치와 아이템을 획득할 수 있다. 홀리 심볼과 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 획득 경험치 35%, 드롭률 24% 증가\n재사용 대기시간 180초",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 샤프 아이즈",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMC",
+      "count": 990,
+      "pct": 99,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n적의 약점을 찾아 치명상을 입힐 수 있는 능력을 자신에게 부여한다. 샤프 아이즈와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 크리티컬 확률 10%, 크리티컬 데미지 8% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "쓸만한 컴뱃 오더스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBME",
+      "count": 973,
+      "pct": 97.3,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n일정 시간 동안 자신의 모든 스킬 레벨을 증가시켜준다. 4차 스킬에 한해 마스터 레벨 이상으로 증가시킬 수 있으며 그 외 스킬은 마스터 레벨까지만 올려줄 수 있다.\n예외적으로 일부 특별한 스킬과 초보자 스킬, 컴뱃 오더스, 쓸만한 컴뱃 오더스, 하이퍼 스킬, 5차 스킬, 6차 스킬의 스킬 레벨은 올려줄 수 없다.\n컴뱃 오더스와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 모든 스킬 레벨 1 증가\n재사용 대기시간 180초\n[패시브 효과 : 상태 이상 내성 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "차크람 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKHPBMF",
+      "count": 972,
+      "pct": 97.2,
+      "tier": "2차",
+      "info": "[마스터 레벨 : 10]\r\n일정 시간 동안 차크람의 공격 속도를 증가시킨다.\r\n필요 스킬 : 차크람 마스터리 5레벨 이상",
+      "effect": "MP 10 소비, 200초 동안 차크람의 공격 속도 2단계 증가",
+      "lv": 10
+    },
+    {
+      "name": "쓸만한 하이퍼 바디",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHPBMD",
+      "count": 395,
+      "pct": 39.5,
+      "tier": "5차",
+      "info": "[마스터 레벨 : 30]\r\n최대 HP와 최대 MP의 양이 증가한다. 하이퍼 바디와 중복 사용되지 않는다.",
+      "effect": "HP 100 소비, 270초 동안 최대 HP 40%, 최대 MP 40% 증가\n재사용 대기시간 180초\n[패시브 효과 : 올스탯 6 증가]",
+      "lv": 30
+    },
+    {
+      "name": "레이스 오브 갓",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFPBIC",
+      "count": 14,
+      "pct": 1.4
+    },
+    {
+      "name": "테라 블링크: 모자의 알 수 없는 힘",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFHCLHNEKG",
+      "count": 9,
+      "pct": 0.9
+    },
+    {
+      "name": "쓸만한 헤이스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKCLEGBMA",
+      "count": 9,
+      "pct": 0.9
+    },
+    {
+      "name": "쓸만한 윈드 부스터",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKCLEGBMG",
+      "count": 3,
+      "pct": 0.3
+    },
+    {
+      "name": "쓸만한 어드밴스드 블레스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKCLEGBMF",
+      "count": 1,
+      "pct": 0.1
+    }
+  ]
+}

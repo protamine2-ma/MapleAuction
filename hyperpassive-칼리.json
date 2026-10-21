@@ -1,0 +1,71 @@
+{
+  "job": "칼리",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "헥스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPB",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "헥스-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPD",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 994,
+      "pct": 99.4
+    },
+    {
+      "name": "아츠-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPH",
+      "desc": "데미지 20% 증가",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "보이드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPF",
+      "desc": "데미지 20% 증가",
+      "count": 986,
+      "pct": 98.6
+    },
+    {
+      "name": "아츠-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPJ",
+      "desc": "공격 횟수 1 증가",
+      "count": 979,
+      "pct": 97.9
+    },
+    {
+      "name": "헥스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 32,
+      "pct": 3.2
+    },
+    {
+      "name": "레조네이트-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPE",
+      "desc": "적 탐색 범위 증가",
+      "count": 12,
+      "pct": 1.2
+    },
+    {
+      "name": "보이드-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPG",
+      "desc": "방어율 무시 20% 증가",
+      "count": 6,
+      "pct": 0.6
+    },
+    {
+      "name": "아츠-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKGKFOBPI",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 6,
+      "pct": 0.6
+    }
+  ]
+}
