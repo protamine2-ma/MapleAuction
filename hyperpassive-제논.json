@@ -1,0 +1,71 @@
+{
+  "job": "제논",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "퍼지롭 매스커레이드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 998,
+      "pct": 99.8
+    },
+    {
+      "name": "홀로그램 그래피티-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBJA",
+      "desc": "데미지 10% 증가",
+      "count": 983,
+      "pct": 98.3
+    },
+    {
+      "name": "홀로그램 그래피티-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBIJ",
+      "desc": "홀로그램 그래피티의 공격 횟수 1 증가",
+      "count": 960,
+      "pct": 96
+    },
+    {
+      "name": "블레이드 댄싱-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBIE",
+      "desc": "데미지 20% 증가",
+      "count": 896,
+      "pct": 89.6
+    },
+    {
+      "name": "퍼지롭 매스커레이드-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBIH",
+      "desc": "방어무시 비율 10% 증가",
+      "count": 714,
+      "pct": 71.4
+    },
+    {
+      "name": "홀로그램 그래피티-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBJB",
+      "desc": "홀로그램 필드의 유지 시간 10초 증가",
+      "count": 371,
+      "pct": 37.1
+    },
+    {
+      "name": "퍼지롭 매스커레이드-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBII",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가 ",
+      "count": 65,
+      "pct": 6.5
+    },
+    {
+      "name": "블레이드 댄싱-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBIF",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 8,
+      "pct": 0.8
+    },
+    {
+      "name": "블레이드 댄싱-패스트 무브먼트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMEKFOBID",
+      "desc": "스킬 사용 시 이동속도 10 증가",
+      "count": 5,
+      "pct": 0.5
+    }
+  ]
+}
