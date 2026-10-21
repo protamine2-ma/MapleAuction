@@ -538,6 +538,25 @@ input{font-family:inherit;}
               </sc-for>
             </div>
           </sc-if>
+          <sc-if value="{{ s.hasHyper }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+              <sc-for list="{{ s.hyperRows }}" as="p" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:28px 40px minmax(0,1fr);align-items:start;gap:12px;padding:4px 0;">
+                  <span style="font-size:16px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;line-height:40px;">{{ p.rank }}</span>
+                  <span style="width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                  <div style="display:flex;flex-direction:column;gap:3px;min-width:0;">
+                    <span style="display:flex;align-items:center;gap:8px;min-width:0;min-height:40px;flex-wrap:wrap;">
+                      <span style="font-size:18px;font-weight:700;color:#2a2b2f;">{{ p.name }}</span>
+                      <span style="flex:none;font-size:14px;font-weight:600;color:#6b6d73;">{{ p.pctText }}</span>
+                    </span>
+                    <sc-if value="{{ p.hasDesc }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:13px;line-height:1.6;color:#6b6d73;white-space:pre-wrap;text-wrap:pretty;">{{ p.desc }}</span>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasText }}" hint-placeholder-val="{{ true }}">
             <div style="font-size:15px;line-height:1.8;color:#2a2b2f;white-space:pre-wrap;text-wrap:pretty;">{{ s.text }}</div>
           </sc-if>
@@ -1300,7 +1319,7 @@ const ABILITY = {
   ],
 };
 const GUIDE_DRAFT = {
-  '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
+  '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
 class Component extends DCLogic {
   state = (() => {
@@ -1548,7 +1567,18 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this._gScroll, { passive: true });
   }
-  guideOf(job) { const g = (this.state.guides || {})[job]; return (g && g.v === 2 ? g : null) || (GUIDE_DRAFT[job] ? clone(GUIDE_DRAFT[job]) : null); }
+  guideOf(job) {
+    let g = (this.state.guides || {})[job]; g = (g && g.v === 2 ? g : null) || (GUIDE_DRAFT[job] ? clone(GUIDE_DRAFT[job]) : null);
+    if (g && Array.isArray(g.sections)) {
+      const nm = x => typeof x === 'string' ? x : (x && (x.title || x.name)) || '';
+      if (!g.sections.some(x => nm(x) === '하이퍼패시브')) {
+        const i = g.sections.findIndex(x => nm(x) === 'V매트릭스'), tpl = g.sections[0];
+        const item = typeof tpl === 'string' ? '하이퍼패시브' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '하이퍼패시브', ...(tpl && 'name' in tpl ? { name: '하이퍼패시브' } : {}), ...(tpl && 'id' in tpl ? { id: 'hp' + Date.now() } : {}) };
+        g = { ...g, sections: [...g.sections.slice(0, i + 1), item, ...g.sections.slice(i + 1)] };
+      }
+    }
+    return g;
+  }
   saveGuide(job, g) {
     this.setState(s => ({ guides: { ...(s.guides || {}), [job]: g }, guideMsg: '저장 중…' }));
     clearTimeout(this._gT);
@@ -1572,7 +1602,8 @@ class Component extends DCLogic {
   }
   guideVals(job) {
     const g = this.guideOf(job); if (!g) return { hasGuide: false, noGuide: true };
-    const pb = this.loadPetBuff(job), lk = this.loadPetBuff(job, 'linkskill');
+    const pb = this.loadPetBuff(job), lk = this.loadPetBuff(job, 'linkskill'), hp = this.loadPetBuff(job, 'hyperpassive');
+    const hpRows = hp && hp.items ? hp.items.filter(x => x.pct >= 30).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', desc: String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) : [];
     const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
     const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
@@ -1598,11 +1629,12 @@ class Component extends DCLogic {
         hasLink: s.title === '링크' && !!(lk && lk.boss),
         linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', desc: (x.descLv ? 'Lv.' + x.descLv + ' · ' : '') + String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) })) : [],
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })),
+        hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').trim(), isVideo: s.type === 'video', isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: s.type === 'video' ? String(s.text || '').split('\n').map(yt).filter(Boolean).map(src => ({ src })) : [],
