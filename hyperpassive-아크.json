@@ -1,0 +1,71 @@
+{
+  "job": "아크",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "배틀 아츠-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPB",
+      "desc": "데미지 20% 증가",
+      "count": 992,
+      "pct": 99.2
+    },
+    {
+      "name": "배틀 아츠-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPD",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 984,
+      "pct": 98.4
+    },
+    {
+      "name": "스펙터 잠식-엑스트라 힐링",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPE",
+      "desc": "정신력 회복 속도 10% 증가",
+      "count": 955,
+      "pct": 95.5
+    },
+    {
+      "name": "스펙터 잠식-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPF",
+      "desc": "[마스터 레벨 : 1]\r\n스펙터 잠식 상태일 때 어떠한 공격에도 밀리지 않게 된다.",
+      "count": 938,
+      "pct": 93.8
+    },
+    {
+      "name": "기어 다니는 공포-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPI",
+      "desc": "재사용 대기시간 20% 감소",
+      "count": 892,
+      "pct": 89.2
+    },
+    {
+      "name": "배틀 아츠-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 174,
+      "pct": 17.4
+    },
+    {
+      "name": "황홀한 구속-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPH",
+      "desc": "데미지 60% 증가",
+      "count": 35,
+      "pct": 3.5
+    },
+    {
+      "name": "멈출 수 없는 본능-엑스트라 무브",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPJ",
+      "desc": "연속 사용 횟수 1회 증가",
+      "count": 19,
+      "pct": 1.9
+    },
+    {
+      "name": "잠식-어드밴스드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKHKFOBPG",
+      "desc": "[마스터 레벨 : 1]\r\n레프 상태에서 스킬 사용 중 잠식 제어를 사용하면 정신력을 추가로 소모하여 해당 스킬을 취소하고 스펙터 잠식 상태가 될 수 있다.\n플레인 차지드라이브 사용 중 잠식 제어를 사용해 스킬을 취소했다면 전투 광란이 발동될 수 있다.",
+      "count": 11,
+      "pct": 1.1
+    }
+  ]
+}
