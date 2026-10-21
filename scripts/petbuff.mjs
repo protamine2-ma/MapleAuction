@@ -64,13 +64,13 @@ const items = Object.entries(count).sort((a, b) => b[1] - a[1]).map(([name, c]) 
 
 // 스킬 차수 확인: 활성 캐릭터 몇 명의 차수별 스킬 목록에서 이름을 찾아요
 const GRADES = [['0', '0차'], ['1', '1차'], ['1.5', '1.5차'], ['2', '2차'], ['2.5', '2.5차'], ['3', '3차'], ['4', '4차'], ['hyperpassive', '하이퍼 패시브'], ['hyperactive', '하이퍼 액티브'], ['5', '5차'], ['6', '6차']];
-const tier = {}, want = new Set(items.filter(x => x.pct > 20).map(x => x.name));
+const tier = {}, sinfo = {}, want = new Set(items.filter(x => x.pct > 20).map(x => x.name));
 for (const oc of ocids) {
   if (![...want].some(n => !tier[n])) break;
   const res = await pool(GRADES, ([g]) => api('/character/skill', { ocid: oc, character_skill_grade: g }), 11);
-  res.forEach((j, k) => ((j && j.character_skill) || []).forEach(s => { if (want.has(s.skill_name) && !tier[s.skill_name]) tier[s.skill_name] = GRADES[k][1]; }));
+  res.forEach((j, k) => ((j && j.character_skill) || []).forEach(s => { if (want.has(s.skill_name) && !tier[s.skill_name]) { tier[s.skill_name] = GRADES[k][1]; sinfo[s.skill_name] = { info: s.skill_description || '', effect: s.skill_effect || '', lv: s.skill_level || 0 }; } }));
 }
-items.forEach(x => { if (tier[x.name]) x.tier = tier[x.name]; });
+items.forEach(x => { if (tier[x.name]) x.tier = tier[x.name]; if (sinfo[x.name]) Object.assign(x, sinfo[x.name]); });
 console.log('차수 확인: ' + Object.entries(tier).map(([n, t]) => n + '=' + t).join(', '));
 fs.writeFileSync(`petbuff-${JOB}.json`, JSON.stringify({ job: JOB, date, sample: ok, active: true, items }, null, 2));
 console.log(`펫 버프 사용 캐릭터 ${ok}명 · 스킬 ${items.length}종`);

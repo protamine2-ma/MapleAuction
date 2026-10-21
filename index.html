@@ -451,8 +451,8 @@ input{font-family:inherit;}
     </div>
   </section>
   <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="6">
-    <section id="{{ s.anchor }}" style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;scroll-margin-top:16px;">
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
+    <section id="{{ s.anchor }}" style="position:relative;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:visible;scroll-margin-top:16px;" style-hover="z-index:20;">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);border-radius:13px 13px 0 0;">
         <span style="font-size:14px;font-weight:800;color:oklch(0.48 0.17 255);font-variant-numeric:tabular-nums;">{{ s.no }}</span>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
           <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">{{ s.title }}</h2>
@@ -503,7 +503,7 @@ input{font-family:inherit;}
           <sc-if value="{{ s.hasLink }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-bottom:14px;">
               <sc-for list="{{ s.linkCols }}" as="c" hint-placeholder-count="2">
-                <div style="border:1px solid #e3e3e0;border-radius:12px;overflow:hidden;">
+                <div style="border:1px solid #e3e3e0;border-radius:12px;overflow:visible;">
                   <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid #e3e3e0;">
                     <span style="font-size:17px;font-weight:800;color:#2a2b2f;">{{ c.title }}</span>
                     <span style="font-size:12px;color:#9a9ca1;">{{ c.sample }}</span>
@@ -511,12 +511,29 @@ input{font-family:inherit;}
                   <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="14">
                     <div style="display:grid;grid-template-columns:26px 32px minmax(0,1fr) 52px;align-items:center;gap:4px 10px;padding:7px 14px;border-bottom:1px solid #f0f0ee;">
                       <span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;background:{{ r.rankBg }};color:{{ r.rankColor }};font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;">{{ r.rank }}</span>
-                      <span style="width:32px;height:32px;background-image:{{ r.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                      <span onMouseEnter="{{ r.onEnter }}" onMouseLeave="{{ r.onLeave }}" onClick="{{ r.onEnter }}" style="position:relative;width:32px;height:32px;cursor:help;">
+                        <span style="display:block;width:32px;height:32px;background-image:{{ r.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                        <sc-if value="{{ r.tipShow }}" hint-placeholder-val="{{ false }}">
+                          <div style="position:absolute;left:0;top:40px;z-index:30;width:min(320px,80vw);padding:12px 14px;border-radius:8px;background:rgba(28,30,36,0.96);border:1px solid #4a4d55;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:10px;pointer-events:none;">
+                            <span style="font-size:15px;font-weight:800;color:#fff;text-align:center;">{{ r.name }}</span>
+                            <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start;">
+                              <span style="width:48px;height:48px;border-radius:6px;background-color:#fff;background-image:{{ r.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                              <div style="display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                                <span style="color:#cfd1d6;">{{ r.job }}</span>
+                                <sc-if value="{{ r.noTipData }}" hint-placeholder-val="{{ false }}"><span style="color:#9a9ca1;">설명 준비 중</span></sc-if>
+                              </div>
+                            </div>
+                            <sc-if value="{{ r.hasEff }}" hint-placeholder-val="{{ false }}">
+                              <div style="display:flex;flex-direction:column;gap:3px;padding-top:10px;border-top:1px dashed #4a4d55;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                                <sc-if value="{{ r.hasEffLabel }}" hint-placeholder-val="{{ false }}"><span style="color:#cfd1d6;">{{ r.tipEffLabel }}</span></sc-if>
+                                <span style="white-space:pre-wrap;text-wrap:pretty;">{{ r.tipEff }}</span>
+                              </div>
+                            </sc-if>
+                          </div>
+                        </sc-if>
+                      </span>
                       <span style="font-size:15px;font-weight:600;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}<span style="font-size:13px;font-weight:500;color:#8a8c92;margin-left:4px;">{{ r.job }}</span></span>
                       <span style="font-size:14px;font-weight:700;color:#3a3b3f;text-align:right;font-variant-numeric:tabular-nums;">{{ r.pct }}</span>
-                      <sc-if value="{{ r.hasDesc }}" hint-placeholder-val="{{ false }}">
-                        <span style="grid-column:3 / 5;font-size:12.5px;line-height:1.5;color:#6b6d73;white-space:pre-wrap;text-wrap:pretty;">{{ r.desc }}</span>
-                      </sc-if>
                     </div>
                   </sc-for>
                 </div>
@@ -528,7 +545,28 @@ input{font-family:inherit;}
               <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
                 <div style="display:grid;grid-template-columns:28px 40px minmax(0,1fr);align-items:center;gap:12px;padding:4px 0;">
                   <span style="font-size:16px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
-                  <span style="width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                  <span onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" onClick="{{ p.onEnter }}" style="position:relative;width:40px;height:40px;cursor:help;">
+                    <span style="display:block;width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                    <sc-if value="{{ p.tipShow }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:absolute;left:48px;top:-6px;z-index:30;width:min(320px,70vw);padding:12px 14px;border-radius:8px;background:rgba(28,30,36,0.96);border:1px solid #4a4d55;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:10px;pointer-events:none;">
+                        <span style="font-size:15px;font-weight:800;color:#fff;text-align:center;">{{ p.name }}</span>
+                        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start;">
+                          <span style="width:48px;height:48px;border-radius:6px;background-color:#fff;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                          <div style="display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                            <sc-if value="{{ p.hasTop }}" hint-placeholder-val="{{ false }}"><span style="color:#cfd1d6;">{{ p.tipTop }}</span></sc-if>
+                            <sc-if value="{{ p.hasInfo }}" hint-placeholder-val="{{ false }}"><span style="white-space:pre-wrap;text-wrap:pretty;">{{ p.tipInfo }}</span></sc-if>
+                            <sc-if value="{{ p.noTipData }}" hint-placeholder-val="{{ false }}"><span style="color:#9a9ca1;">설명 준비 중</span></sc-if>
+                          </div>
+                        </div>
+                        <sc-if value="{{ p.hasEff }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;flex-direction:column;gap:3px;padding-top:10px;border-top:1px dashed #4a4d55;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                            <sc-if value="{{ p.hasEffLabel }}" hint-placeholder-val="{{ false }}"><span style="color:#cfd1d6;">{{ p.tipEffLabel }}</span></sc-if>
+                            <span style="white-space:pre-wrap;text-wrap:pretty;">{{ p.tipEff }}</span>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-if>
+                  </span>
                   <span style="display:flex;align-items:center;gap:6px;min-width:0;">
                     <span style="font-size:18px;font-weight:700;color:#2a2b2f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.name }}</span>
                     <sc-if value="{{ p.hasTier }}" hint-placeholder-val="{{ false }}"><span style="flex:none;padding:2px 9px;border-radius:999px;background:oklch(0.94 0.035 255);color:oklch(0.4 0.17 255);font-size:13px;font-weight:700;">{{ p.tier }}</span></sc-if>
@@ -543,16 +581,31 @@ input{font-family:inherit;}
               <sc-for list="{{ s.hyperRows }}" as="p" hint-placeholder-count="6">
                 <div style="display:grid;grid-template-columns:28px 40px minmax(0,1fr);align-items:start;gap:12px;padding:4px 0;">
                   <span style="font-size:16px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;line-height:40px;">{{ p.rank }}</span>
-                  <span style="width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
-                  <div style="display:flex;flex-direction:column;gap:3px;min-width:0;">
-                    <span style="display:flex;align-items:center;gap:8px;min-width:0;min-height:40px;flex-wrap:wrap;">
-                      <span style="font-size:18px;font-weight:700;color:#2a2b2f;">{{ p.name }}</span>
-                      <span style="flex:none;font-size:14px;font-weight:600;color:#6b6d73;">{{ p.pctText }}</span>
-                    </span>
-                    <sc-if value="{{ p.hasDesc }}" hint-placeholder-val="{{ false }}">
-                      <span style="font-size:13px;line-height:1.6;color:#6b6d73;white-space:pre-wrap;text-wrap:pretty;">{{ p.desc }}</span>
+                  <span onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" onClick="{{ p.onEnter }}" style="position:relative;width:40px;height:40px;cursor:help;">
+                    <span style="display:block;width:40px;height:40px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                    <sc-if value="{{ p.tipShow }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:absolute;left:48px;top:-6px;z-index:30;width:min(320px,70vw);padding:12px 14px;border-radius:8px;background:rgba(28,30,36,0.96);border:1px solid #4a4d55;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:10px;pointer-events:none;">
+                        <span style="font-size:15px;font-weight:800;color:#fff;text-align:center;">{{ p.name }}</span>
+                        <div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start;">
+                          <span style="width:48px;height:48px;border-radius:6px;background-color:#fff;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                          <div style="display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                            <span style="color:#cfd1d6;">[마스터 레벨 : 1]</span>
+                            <sc-if value="{{ p.hasInfo }}" hint-placeholder-val="{{ false }}"><span style="white-space:pre-wrap;text-wrap:pretty;">{{ p.tipInfo }}</span></sc-if>
+                          </div>
+                        </div>
+                        <sc-if value="{{ p.hasEff }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;flex-direction:column;gap:3px;padding-top:10px;border-top:1px dashed #4a4d55;font-size:13px;line-height:1.5;color:#e6e7ea;">
+                            <span style="color:#cfd1d6;">[현재 레벨 1]</span>
+                            <span style="white-space:pre-wrap;text-wrap:pretty;">{{ p.tipEff }}</span>
+                          </div>
+                        </sc-if>
+                      </div>
                     </sc-if>
-                  </div>
+                  </span>
+                  <span style="display:flex;align-items:center;gap:8px;min-width:0;min-height:40px;flex-wrap:wrap;">
+                    <span style="font-size:18px;font-weight:700;color:#2a2b2f;">{{ p.name }}</span>
+                    <span style="flex:none;font-size:14px;font-weight:600;color:#6b6d73;">{{ p.pctText }}</span>
+                  </span>
                 </div>
               </sc-for>
             </div>
@@ -1600,10 +1653,18 @@ class Component extends DCLogic {
     get(f).then(j => j && (j.items || j.boss) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && (j.items || j.boss)) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
+  tipOf(key, o) {
+    const c = v => String(v || '').replace(/\r/g, '').trim(), info = c(o.info), eff = c(o.eff), top = o.top || '';
+    return { tipShow: this.state.hpTip === key, tipInfo: info, hasInfo: !!info, tipTop: top, hasTop: !!top, tipEffLabel: o.effLabel || '', hasEffLabel: !!o.effLabel, tipEff: eff, hasEff: !!eff, hasTipBody: !!(info || top), noTipData: !info && !eff && !top,
+      onEnter: () => this.setState({ hpTip: key }), onLeave: () => this.setState(st => st.hpTip === key ? { hpTip: null } : null) };
+  }
   guideVals(job) {
     const g = this.guideOf(job); if (!g) return { hasGuide: false, noGuide: true };
     const pb = this.loadPetBuff(job), lk = this.loadPetBuff(job, 'linkskill'), hp = this.loadPetBuff(job, 'hyperpassive');
-    const hpRows = hp && hp.items ? hp.items.filter(x => x.pct >= 30 && /-/.test(x.name)).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', desc: String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) : [];
+    const hpRows = hp && hp.items ? hp.items.filter(x => x.pct >= 30 && /-/.test(x.name)).map((x, k) => { const info = String(x.info || '').replace(/\r/g, '').trim(), eff = String(x.effect || (x.info ? '' : x.desc) || '').replace(/\r/g, '').trim(), key = 'hp:' + x.name;
+      return { rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none',
+        tipShow: this.state.hpTip === key, tipInfo: info, hasInfo: !!info, tipEff: eff, hasEff: !!eff,
+        onEnter: () => this.setState({ hpTip: key }), onLeave: () => this.setState(st => st.hpTip === key ? { hpTip: null } : null) }; }) : [];
     const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
     const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
@@ -1627,8 +1688,8 @@ class Component extends DCLogic {
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, text: s.text,
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
         hasLink: s.title === '링크' && !!(lk && lk.boss),
-        linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', desc: (x.descLv ? 'Lv.' + x.descLv + ' · ' : '') + String(x.desc || '').replace(/\r/g, '').trim(), hasDesc: !!String(x.desc || '').trim() })) })) : [],
-        petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%' })),
+        linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', ...this.tipOf('lk:' + k + ':' + x.name, { info: '', top: '', effLabel: x.descLv ? '[현재 레벨 ' + x.descLv + ']' : '', eff: x.desc }) })) })) : [],
+        petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
