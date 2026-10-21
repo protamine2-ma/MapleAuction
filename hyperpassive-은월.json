@@ -1,0 +1,71 @@
+{
+  "job": "은월",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "귀참-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAIG",
+      "desc": "데미지 20% 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "귀참-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAIH",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 990,
+      "pct": 99
+    },
+    {
+      "name": "귀참-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAII",
+      "desc": "공격 횟수 1 증가",
+      "count": 988,
+      "pct": 98.8
+    },
+    {
+      "name": "여우령-리핏 어택 보너스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAJD",
+      "desc": "공격 반복 횟수 1 증가",
+      "count": 939,
+      "pct": 93.9
+    },
+    {
+      "name": "여우령-서먼 찬스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAJE",
+      "desc": "소환 확률 10% 증가",
+      "count": 933,
+      "pct": 93.3
+    },
+    {
+      "name": "여우령-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAJC",
+      "desc": "데미지 20% 증가",
+      "count": 112,
+      "pct": 11.2
+    },
+    {
+      "name": "폭류권-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAIJ",
+      "desc": "데미지 20% 증가",
+      "count": 24,
+      "pct": 2.4
+    },
+    {
+      "name": "폭류권-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAJA",
+      "desc": "최대 공격 가능 몬스터 수 2 증가",
+      "count": 15,
+      "pct": 1.5
+    },
+    {
+      "name": "폭류권-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNHKFOAJB",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 3,
+      "pct": 0.3
+    }
+  ]
+}
