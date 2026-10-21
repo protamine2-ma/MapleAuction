@@ -1,0 +1,71 @@
+{
+  "job": "미하일",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "샤이닝 크로스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBJG",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "샤이닝 크로스-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBJI",
+      "desc": "공격 횟수 1 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "샤이닝 크로스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBJH",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 935,
+      "pct": 93.5
+    },
+    {
+      "name": "로얄 가드-리액션",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBIE",
+      "desc": "로얄 가드의 방어 가능한 시간 0.5초로 증가",
+      "count": 827,
+      "pct": 82.7
+    },
+    {
+      "name": "로얄 가드-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBID",
+      "desc": "최대 HP의 일정 비율로 피해를 입히는 공격의 피해 5% 추가 감소, 어드밴스드 소울 실드의 효과에 합 적용",
+      "count": 705,
+      "pct": 70.5
+    },
+    {
+      "name": "인스톨 실드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 376,
+      "pct": 37.6
+    },
+    {
+      "name": "로얄 가드-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBIF",
+      "desc": "최대 HP의 일정 비율로 피해를 입히는 공격의 피해 감소 효과의 지속 시간 5초 증가",
+      "count": 84,
+      "pct": 8.4
+    },
+    {
+      "name": "인스톨 실드-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 47,
+      "pct": 4.7
+    },
+    {
+      "name": "인스톨 실드-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFKDKFOBJB",
+      "desc": "지속시간 10초 증가",
+      "count": 28,
+      "pct": 2.8
+    }
+  ]
+}
