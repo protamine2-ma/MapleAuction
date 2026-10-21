@@ -1,0 +1,71 @@
+{
+  "job": "메카닉",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "매시브 파이어-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBIJ",
+      "desc": "데미지 10% 증가",
+      "count": 976,
+      "pct": 97.6
+    },
+    {
+      "name": "매시브 파이어 : IRON-B-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBJB",
+      "desc": "공격 횟수 1 증가",
+      "count": 975,
+      "pct": 97.5
+    },
+    {
+      "name": "마그네틱 필드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 965,
+      "pct": 96.5
+    },
+    {
+      "name": "로봇 팩토리 : RM1-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBIH",
+      "desc": "지속 시간 10초 증가",
+      "count": 833,
+      "pct": 83.3
+    },
+    {
+      "name": "마그네틱 필드-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBIF",
+      "desc": "몬스터 방어율 무시 20% 증가",
+      "count": 657,
+      "pct": 65.7
+    },
+    {
+      "name": "마그네틱 필드-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBIE",
+      "desc": "지속 시간 10초 증가",
+      "count": 254,
+      "pct": 25.4
+    },
+    {
+      "name": "워머신 : 타이탄-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBII",
+      "desc": "데미지 20% 증가",
+      "count": 180,
+      "pct": 18
+    },
+    {
+      "name": "매시브 파이어 : SPLASH-F-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 100,
+      "pct": 10
+    },
+    {
+      "name": "로봇 런처 : RM7-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMHKFOBIG",
+      "desc": "지속 시간 10초 증가",
+      "count": 57,
+      "pct": 5.7
+    }
+  ]
+}
