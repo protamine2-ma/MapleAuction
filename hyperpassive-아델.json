@@ -1,71 +1,71 @@
 {
   "job": "아델",
   "date": "2026-10-20",
-  "sample": 200,
+  "sample": 757,
   "active": true,
   "items": [
     {
       "name": "블로섬-쿨타임 리듀스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPG",
       "desc": "재사용 대기시간 25% 감소",
-      "count": 200,
-      "pct": 100
+      "count": 755,
+      "pct": 99.7
     },
     {
       "name": "트리거-리인포스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPB",
       "desc": "데미지 20% 증가",
-      "count": 199,
-      "pct": 99.5
+      "count": 751,
+      "pct": 99.2
     },
     {
       "name": "테리토리-리인포스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPF",
       "desc": "데미지 20% 증가",
-      "count": 196,
-      "pct": 98
+      "count": 735,
+      "pct": 97.1
     },
     {
       "name": "트리거-보스 킬러",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPD",
       "desc": "보스 몬스터 공격 시 데미지 20% 증가",
-      "count": 180,
-      "pct": 90
+      "count": 691,
+      "pct": 91.3
     },
     {
       "name": "다이크-퍼시스트",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPJ",
       "desc": "최대 키다운 시간 2초 증가",
-      "count": 170,
-      "pct": 85
+      "count": 599,
+      "pct": 79.1
     },
     {
       "name": "노빌리티-실드 리인포스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPI",
       "desc": "데미지 15% 증가",
-      "count": 32,
-      "pct": 16
+      "count": 144,
+      "pct": 19
     },
     {
       "name": "레조넌스-엑스트라 힐링",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPE",
       "desc": "레조넌스로 에테르 결정 소멸 시 에테르 20 획득, 임페일 사용 시 에테르 소비 삭제",
-      "count": 14,
-      "pct": 7
+      "count": 78,
+      "pct": 10.3
     },
     {
       "name": "트리거-이그노어 가드",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPC",
       "desc": "방어율 무시 20% 증가",
-      "count": 6,
-      "pct": 3
+      "count": 28,
+      "pct": 3.7
     },
     {
       "name": "어트리뷰트-힐링 리인포스",
       "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KEKDKFOBPH",
       "desc": "회복 비율 3% 증가, 기존 회복 비율에 합적용",
-      "count": 2,
-      "pct": 1
+      "count": 3,
+      "pct": 0.4
     }
   ]
 }
