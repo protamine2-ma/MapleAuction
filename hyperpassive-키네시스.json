@@ -1,0 +1,64 @@
+{
+  "job": "키네시스",
+  "date": "2026-10-20",
+  "sample": 77,
+  "active": true,
+  "items": [
+    {
+      "name": "얼티메이트-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPE",
+      "desc": "데미지 20% 증가",
+      "count": 77,
+      "pct": 100
+    },
+    {
+      "name": "싸이킥 스매싱-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPB",
+      "desc": "데미지 20% 증가",
+      "count": 76,
+      "pct": 98.7
+    },
+    {
+      "name": "얼티메이트-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPG",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 76,
+      "pct": 98.7
+    },
+    {
+      "name": "텔레키네시스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPH",
+      "desc": "데미지 20% 증가",
+      "count": 76,
+      "pct": 98.7
+    },
+    {
+      "name": "얼티메이트-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPF",
+      "desc": "방어율 무시 20% 증가",
+      "count": 75,
+      "pct": 97.4
+    },
+    {
+      "name": "싸이킥 스매싱-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 3,
+      "pct": 3.9
+    },
+    {
+      "name": "텔레키네시스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPI",
+      "desc": "방어율 무시 20% 증가",
+      "count": 1,
+      "pct": 1.3
+    },
+    {
+      "name": "싸이킥 스매싱-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KELAKFOBPD",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 1,
+      "pct": 1.3
+    }
+  ]
+}
