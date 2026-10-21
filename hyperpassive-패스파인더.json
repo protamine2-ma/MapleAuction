@@ -1,0 +1,64 @@
+{
+  "job": "패스파인더",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "에인션트 포스-보스 킬러",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBPB",
+      "desc": "보스 몬스터 공격 시 데미지 20% 증가",
+      "count": 991,
+      "pct": 99.1
+    },
+    {
+      "name": "카디널 포스-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBPA",
+      "desc": "공격 횟수 1 증가",
+      "count": 985,
+      "pct": 98.5
+    },
+    {
+      "name": "카디널 포스-에디셔널 인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBOJ",
+      "desc": "발동 확률 10% 증가",
+      "count": 966,
+      "pct": 96.6
+    },
+    {
+      "name": "카디널 포스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBOI",
+      "desc": "데미지 20% 증가",
+      "count": 783,
+      "pct": 78.3
+    },
+    {
+      "name": "에인션트 포스-인챈트 인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBPD",
+      "desc": "데미지 20% 증가",
+      "count": 680,
+      "pct": 68
+    },
+    {
+      "name": "에인션트 포스-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBPC",
+      "desc": "방어율 무시 20% 증가",
+      "count": 564,
+      "pct": 56.4
+    },
+    {
+      "name": "샤프 아이즈-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBOH",
+      "desc": "크리티컬 확률 5% 증가",
+      "count": 17,
+      "pct": 1.7
+    },
+    {
+      "name": "샤프 아이즈-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPBIFOBOG",
+      "desc": "방어율 무시 효과 5% 추가",
+      "count": 14,
+      "pct": 1.4
+    }
+  ]
+}
