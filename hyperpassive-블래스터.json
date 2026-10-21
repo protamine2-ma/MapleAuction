@@ -1,0 +1,71 @@
+{
+  "job": "블래스터",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "펀치-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBID",
+      "desc": "데미지 10% 증가",
+      "count": 996,
+      "pct": 99.6
+    },
+    {
+      "name": "펀치-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBIF",
+      "desc": "공격 횟수 2 증가",
+      "count": 983,
+      "pct": 98.3
+    },
+    {
+      "name": "펀치-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBIE",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 959,
+      "pct": 95.9
+    },
+    {
+      "name": "릴리즈 파일 벙커-쇼크 웨이브 리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBIH",
+      "desc": "데미지 15% 증가",
+      "count": 943,
+      "pct": 94.3
+    },
+    {
+      "name": "릴리즈 파일 벙커-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 919,
+      "pct": 91.9
+    },
+    {
+      "name": "릴리즈 파일 벙커-보너스 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBII",
+      "desc": "릴리즈 파일 벙커 사용 중 가드 판정, 피격 데미지 감소량은 차지 마스터리를 따름",
+      "count": 148,
+      "pct": 14.8
+    },
+    {
+      "name": "슈퍼 인듀어런스-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBJA",
+      "desc": "재사용 대기시간 20% 감소",
+      "count": 36,
+      "pct": 3.6
+    },
+    {
+      "name": "인듀어런스 실드-엑스트라 힐링",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBIJ",
+      "desc": "소멸하는 인듀어런스 실드의 50%만큼 HP 회복",
+      "count": 11,
+      "pct": 1.1
+    },
+    {
+      "name": "허리케인 믹서-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFMFKFOBJB",
+      "desc": "데미지 20% 증가",
+      "count": 5,
+      "pct": 0.5
+    }
+  ]
+}
