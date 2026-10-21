@@ -1,0 +1,71 @@
+{
+  "job": "루미너스",
+  "date": "2026-10-20",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "앱솔루트 킬-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBIJ",
+      "desc": "데미지 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "라이트 리플렉션-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 852,
+      "pct": 85.2
+    },
+    {
+      "name": "앱솔루트 킬-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBJB",
+      "desc": "사거리 50 증가",
+      "count": 849,
+      "pct": 84.9
+    },
+    {
+      "name": "라이트 리플렉션-스프레드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBIE",
+      "desc": "전이 데미지 감소율 0%로 감소",
+      "count": 718,
+      "pct": 71.8
+    },
+    {
+      "name": "아포칼립스-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 693,
+      "pct": 69.3
+    },
+    {
+      "name": "라이트 리플렉션-애드 레인지",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBIF",
+      "desc": "사거리 50 증가",
+      "count": 678,
+      "pct": 67.8
+    },
+    {
+      "name": "아포칼립스-크리티컬 레이트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBIH",
+      "desc": "크리티컬 확률 20% 증가",
+      "count": 177,
+      "pct": 17.7
+    },
+    {
+      "name": "앱솔루트 킬-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBJA",
+      "desc": "최대 공격 가능한 몬스터 수 1 증가",
+      "count": 25,
+      "pct": 2.5
+    },
+    {
+      "name": "아포칼립스-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNFKFOBII",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 9,
+      "pct": 0.9
+    }
+  ]
+}
