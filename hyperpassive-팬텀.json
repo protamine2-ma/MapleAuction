@@ -1,0 +1,71 @@
+{
+  "job": "팬텀",
+  "date": "2026-10-20",
+  "sample": 342,
+  "active": true,
+  "items": [
+    {
+      "name": "템페스트 오브 카드-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBID",
+      "desc": "데미지 20% 증가",
+      "count": 342,
+      "pct": 100
+    },
+    {
+      "name": "얼티밋 드라이브-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBIG",
+      "desc": "데미지 20% 증가",
+      "count": 342,
+      "pct": 100
+    },
+    {
+      "name": "템페스트 오브 카드-쿨타임 리듀스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBIE",
+      "desc": "재사용 대기시간 15% 감소",
+      "count": 339,
+      "pct": 99.1
+    },
+    {
+      "name": "얼티밋 드라이브-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBII",
+      "desc": "몬스터 방어율 무시 20% 추가 증가",
+      "count": 326,
+      "pct": 95.3
+    },
+    {
+      "name": "탤런트 오브 팬텀시프-퍼시스트",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBJA",
+      "desc": "버프 지속시간 10% 증가",
+      "count": 235,
+      "pct": 68.7
+    },
+    {
+      "name": "탤런트 오브 팬텀시프-인핸스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBJB",
+      "desc": "스킬 매니지먼트의 훔친 4차 스킬 슬롯 1개 증가",
+      "count": 66,
+      "pct": 19.3
+    },
+    {
+      "name": "탤런트 오브 팬텀시프-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBIJ",
+      "desc": "데미지 15% 증가",
+      "count": 37,
+      "pct": 10.8
+    },
+    {
+      "name": "얼티밋 드라이브-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBIH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 20,
+      "pct": 5.8
+    },
+    {
+      "name": "템페스트 오브 카드-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFNGKFOBIF",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 3,
+      "pct": 0.9
+    }
+  ]
+}
