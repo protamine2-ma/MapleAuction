@@ -1173,15 +1173,22 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             </sc-for>
           </div>
           <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
-            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
-              <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;gap:4px;">
+            <div style="margin-top:14px;display:flex;gap:12px;">
+              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
-                <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.minVal }}</span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
               </div>
-              <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;gap:4px;">
+              <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+                  <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
+                  <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                  <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
+                </div>
+              </sc-if>
+              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
-                <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.maxVal }}</span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
               </div>
             </div>
@@ -1256,15 +1263,22 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           </sc-for>
         </div>
         <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
-            <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;gap:12px;">
+            <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
-              <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.minVal }}</span>
+              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
             </div>
-            <div style="padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;gap:4px;">
+            <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
+              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+                <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
+              </div>
+            </sc-if>
+            <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
-              <span style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#1b1c1f;">{{ line.maxVal }}</span>
+              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
             </div>
           </div>
@@ -2619,7 +2633,8 @@ class Component extends DCLogic {
         const cd = yel >= 5 && (dark || yel >= 15);
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
-        if (D.on === 2 && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
+        const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
+        if (D.on === needOn && yOk && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
           const N = this.readCd(a, bw, bh), extra = s.preset.startsWith('janus') ? 60 : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
@@ -2640,11 +2655,11 @@ class Component extends DCLogic {
           let rv = null; try { const wm = this.readWhiteMins(a, bw, bh).filter(n => n.x > bw * 0.4 && n.y > bh * 0.4); if (wm.length) rv = Math.max(...wm.map(n => n.v)); } catch (e) {}
           const rk = rv == null ? (wc(mk) < 3 ? 'none' : 'unk') : rv;
           if (rk === D.yr1) D.yrn = (D.yrn || 0) + 1; else { D.yr1 = rk; D.yrn = 1; }
-          if (D.yrn >= 2 && rk !== 'unk') {
+          if (D.yrn >= 3 && rk !== 'unk' && (typeof rk !== 'number' || rk <= 9)) {
             if (typeof rk === 'number') D.yRead = true;
             const prev = D.yConf;
             if (prev !== undefined && rk !== prev) {
-              const dec = (typeof rk === 'number' && typeof prev === 'number' && rk < prev) || (rk === 'none' && prev === 1);
+              const dec = (typeof rk === 'number' && typeof prev === 'number' && rk === prev - 1) || (rk === 'none' && prev === 1);
               if (dec && now - (D.usedAt || 0) > 2500) used = true;
             }
             D.yConf = rk;
@@ -2653,7 +2668,7 @@ class Component extends DCLogic {
           if (!D.ymk) D.ymk = mk;
           else if (D.yRead) { D.ymk = mk; D.yc = null; }
           else if (dif(mk, D.ymk) >= lim && base >= 4 && wc(mk) <= base * 1.1) {
-            if (D.yc && dif(mk, D.yc) <= 3) { if (++D.yn >= 3) { D.ymk = mk; D.yc = null; if (now - (D.usedAt || 0) > 2500) used = true; } } else { D.yc = mk; D.yn = 1; }
+            if (D.yc && dif(mk, D.yc) <= 3) { if (++D.yn >= 5) { D.ymk = mk; D.yc = null; if (now - (D.usedAt || 0) > 2500) used = true; } } else { D.yc = mk; D.yn = 1; }
           }
           else if (dif(mk, D.ymk) >= lim) { if (D.yc2 && dif(mk, D.yc2) <= 3) { if (++D.yn2 >= 4) { D.ymk = mk; D.yc2 = null; } } else { D.yc2 = mk; D.yn2 = 1; } D.yc = null; }
           else { D.yc = null; D.yc2 = null; }
@@ -3114,7 +3129,11 @@ class Component extends DCLogic {
           hist.forEach((h, i) => { const v = num(h.v); if (v === null) return; if (mi < 0 || v < num(hist[mi].v)) mi = i; if (ma < 0 || v >= num(hist[ma].v)) ma = i; });
           const show = mi >= 0;
           const um = (selItem.name || '').match(UNIT_RE); const u = um ? ' ' + um[1] + ' 메소' : '';
-          return { showRange: show, minVal: mi >= 0 ? fmt(hist[mi].v) + u : '–', maxVal: ma >= 0 ? fmt(hist[ma].v) + u : '–', minDate: mi >= 0 ? (hist[mi].date || '') : '', maxDate: ma >= 0 ? (hist[ma].date || '') : '' };
+          const isMan = true;
+          const avg = nums.length ? Math.round(nums.reduce((a, b) => a + b, 0) / nums.length * 10) / 10 : null;
+          const uu = u.replace(/\s/g, '');
+          return { unit: uu, minNum: mi >= 0 ? fmt(hist[mi].v) : '–', maxNum: ma >= 0 ? fmt(hist[ma].v) : '–', avgNum: avg !== null ? fmt(avg) : '–',
+            showAvg: isMan && avg !== null, avgVal: avg !== null ? fmt(avg) + u : '–', avgNote: (() => { const ds = hist.filter(h => num(h.v) !== null).map(h => h.date || ''); return ds.length ? ds[0] + ' ~ ' + ds[ds.length - 1] : ''; })(), showRange: show, minVal: mi >= 0 ? fmt(hist[mi].v) + u : '–', maxVal: ma >= 0 ? fmt(hist[ma].v) + u : '–', minDate: mi >= 0 ? (hist[mi].date || '') : '', maxDate: ma >= 0 ? (hist[ma].date || '') : '' };
         })(),
         name: selItem.name, count: hist.length,
         grid: ticks.map(v => ({ top: pct(yAt(v), 300), w: pct(AX, 600), label: String(Math.round(v * 10) / 10) })),
