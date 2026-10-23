@@ -1145,7 +1145,11 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <sc-for list="{{ rg.rows }}" as="row" hint-placeholder-count="7">
         <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
           <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
-            <image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;flex:none;"></image-slot>
+            <div style="position:relative;width:40px;height:40px;flex:none;">
+              <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
+              <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
+              <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
+            </div>
             <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
           </div>
           <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
@@ -1237,7 +1241,11 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         <sc-for list="{{ pg.rows }}" as="row" hint-placeholder-count="7">
           <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
             <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
-              <image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;flex:none;"></image-slot>
+              <div style="position:relative;width:40px;height:40px;flex:none;">
+              <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
+              <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
+              <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
+            </div>
               <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
             </div>
             <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
@@ -1805,7 +1813,32 @@ class Component extends DCLogic {
     try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
   }
+  iconKey(slotId) { return 'i_' + Array.from(new TextEncoder().encode(slotId)).map(b => b.toString(16).padStart(2, '0')).join('') + '.png'; }
+  async loadIcons() {
+    try {
+      const r = await fetch(SB_URL + '/storage/v1/object/list/icons', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: '', limit: 1000 }) });
+      if (!r.ok) return;
+      const icons = {}; (await r.json()).forEach(o => { if (o.name) icons[o.name] = o.updated_at || o.created_at || '1'; });
+      this.setState({ icons });
+    } catch (e) {}
+  }
+  async uploadIcon(slotId, file) {
+    if (!file) return;
+    const token = await this.ensureToken(); if (!token) { alert('로그인이 만료됐어요. 다시 로그인해 주세요.'); return; }
+    try {
+      const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = URL.createObjectURL(file); });
+      const S = 128, k = Math.min(1, S / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * k)); c.height = Math.max(1, Math.round(img.height * k));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const blob = await new Promise(ok => c.toBlob(ok, 'image/png'));
+      const key = this.iconKey(slotId);
+      const r = await fetch(SB_URL + '/storage/v1/object/icons/' + key, { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'image/png', 'x-upsert': 'true', 'cache-control': '60' }, body: blob });
+      if (!r.ok) throw new Error(await r.text());
+      this.setState(s => ({ icons: { ...(s.icons || {}), [key]: String(Date.now()) } }));
+    } catch (e) { alert('이미지 업로드에 실패했어요. Supabase 이미지 저장 공간 설정을 확인해 주세요.\n' + (e.message || '')); }
+  }
   async fetchRemote() {
+    if (!this._iconsLoaded) { this._iconsLoaded = true; this.loadIcons(); }
     try {
       const r = await fetch(SB_URL + '/rest/v1/prices?select=tab,data', { headers: { apikey: SB_KEY } });
       if (!r.ok) throw new Error();
@@ -3149,7 +3182,9 @@ class Component extends DCLogic {
       });
       const sel = this.state.selected === it.id;
       const nk = (it.name || '').replace(UNIT_RE, '').replace(/\s+/g, '');
-      return { id: it.id, unit: unitOf(it), slotId: 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk || it.id), name: (it.name || '').replace(UNIT_RE, ''), vals, deltaText, deltaColor,
+      const slotId = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk || it.id), ik = this.iconKey(slotId), iv = (this.state.icons || {})[ik];
+      return { id: it.id, unit: unitOf(it), slotId, hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+        canUpload: !!this.state.admin, onIcon: e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; this.uploadIcon(slotId, f); }, name: (it.name || '').replace(UNIT_RE, ''), vals, deltaText, deltaColor,
         bg: sel ? 'oklch(0.96 0.02 255)' : 'transparent', nameColor: sel ? 'oklch(0.4 0.17 255)' : '#1b1c1f',
         onSelect: () => this.setState(s => ({ selected: s.selected === it.id ? null : it.id })) };
     });
