@@ -39,12 +39,19 @@ function findBox(data, w, h, ch) {
   const rows = [];
   for (let y = Math.floor(h * 0.05); y < h; y++) if (rowHits(y) > 0.55) rows.push(y);
   if (rows.length < 2) return null;
-  const top = rows[0], bottom = rows[rows.length - 1];
+  const top = rows[0]; let bottom = rows[rows.length - 1];
   if (bottom - top < h * 0.15) return null;
   const mid = Math.floor((top + bottom) / 2);
   let left = 0, right = w - 1;
   for (let x = 0; x < w; x++) if (isBorder(x, mid)) { left = x; break; }
   for (let x = w - 1; x >= 0; x--) if (isBorder(x, mid)) { right = x; break; }
+  // 왼쪽 세로 테두리를 따라 내려가서, 박스가 실제로 끝나는 줄을 찾기 (아래쪽 '바로가기' 영역 제외)
+  const near = y => { for (let x = Math.max(0, left - 3); x <= Math.min(w - 1, left + 6); x++) if (isBorder(x, y)) return true; return false; };
+  let colEnd = mid, miss = 0;
+  for (let y = mid; y < h; y++) { if (near(y)) { colEnd = y; miss = 0; } else if (++miss > 6) break; }
+  let realBottom = -1;
+  for (let y = Math.max(top, colEnd - 10); y <= Math.min(h - 1, colEnd + 90); y++) if (rowHits(y) > 0.4) realBottom = y;
+  if (realBottom > top && realBottom < bottom) bottom = realBottom;
   const m = 4;
   return { left: Math.max(0, left - m), top: Math.max(0, top - m), width: Math.min(w, right - left + 1 + m * 2), height: Math.min(h - Math.max(0, top - m), bottom - top + 1 + m * 2) };
 }
