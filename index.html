@@ -1015,6 +1015,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
             <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
           </sc-for>
+          <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
+            <span style="position:absolute;left:{{ g.rl }};top:{{ g.top }};transform:translateY(-50%);text-align:left;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
+          </sc-for>
           <sc-for list="{{ mesoChart.marks }}" as="d" hint-placeholder-count="1">
             <span style="position:absolute;left:{{ d.left }};top:{{ d.top }};width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid oklch(0.62 0.15 75);box-sizing:border-box;transform:translate(-50%,-50%);pointer-events:none;"></span>
           </sc-for>
@@ -1810,7 +1813,7 @@ class Component extends DCLogic {
       ];
       if (hi === lo) { hi += 1; lo -= 1; }
       const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
-      const X0 = 64, X1 = 584, Y0 = 14, Y1 = 266;
+      const X0 = 64, X1 = 536, Y0 = 14, Y1 = 266;
       const t0 = days ? Math.min(cut, T(pts[0].date)) : T(pts[0].date), t1 = Math.max(T(today), T(pts[n - 1].date));
       const xAt = d => t1 === t0 ? (X0 + X1) / 2 : X0 + (X1 - X0) * (T(d) - t0) / (t1 - t0);
       const yAt = v => Y1 - (v - lo) / (hi - lo) * (Y1 - Y0);
@@ -1827,7 +1830,7 @@ class Component extends DCLogic {
         pts: xy.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '),
         area: n > 1 ? 'M' + xy[0][0].toFixed(1) + ' ' + Y1 + xy.map(p => 'L' + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('') + 'L' + xy[n - 1][0].toFixed(1) + ' ' + Y1 + 'Z' : '',
         hoverLine: h != null ? 'M' + xy[h][0].toFixed(1) + ' ' + Y0 + 'V' + Y1 : '',
-        grid: ticks.map(v => ({ top: pct(yAt(v), 280), w: pct(X0 - 8, 600), label: W(Math.round(v)) })),
+        grid: ticks.map(v => ({ top: pct(yAt(v), 280), w: pct(X0 - 8, 600), rl: pct(X1 + 8, 600), label: W(Math.round(v)) })),
         marks: [h != null ? h : n - 1].map(i => ({ left: pct(xy[i][0], 600), top: pct(xy[i][1], 280) })),
         xl,
       };
