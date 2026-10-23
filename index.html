@@ -29,13 +29,47 @@
 body{margin:0;background:#f4f4f2;color:#1b1c1f;font-family:Pretendard,-apple-system,sans-serif;}
 a{color:oklch(0.48 0.17 255);}a:hover{color:oklch(0.38 0.17 255);}
 input{font-family:inherit;}
+@media (min-width:761px){body:has([data-m="aside"]) [data-m="top"]{display:none!important;}}
+@media (max-width:760px){
+body{overflow-x:clip;}
+[data-m="hide"],[data-m="aside"]{display:none!important;}
+[data-m="hdr"]{display:flex!important;flex-direction:column;align-items:center;padding:0 12px 12px!important;gap:10px!important;}
+[data-m="hcol"]{padding:20px 0 0!important;gap:12px!important;}
+[data-m="areab"]{padding:8px 16px!important;font-size:15px!important;}
+[data-m="upd"]{justify-self:auto!important;font-size:15px!important;padding:6px 12px!important;}
+[data-m="maker"]{position:static!important;}
+[data-m="maker"] span{font-size:15px!important;}
+[data-m="maker"] img{height:34px!important;}
+[data-m="tabs"]{flex-wrap:nowrap!important;justify-content:flex-start!important;overflow-x:auto;padding:0 8px!important;scrollbar-width:none;}
+[data-m="tabs"] button{padding:13px 10px 11px!important;font-size:14px!important;}
+[data-m="wrap"]{padding-left:12px!important;padding-right:12px!important;padding-top:20px!important;padding-bottom:40px!important;}
+[data-m="h1"]{font-size:28px!important;}
+[data-m="gh1"]{font-size:34px!important;}
+[data-m="hero"]{padding:20px!important;}
+[data-m="dhdr"]{display:flex!important;flex-direction:column;gap:10px!important;}
+[data-m="dmeta"]{justify-content:center;}
+[data-m="trow"],[data-m="thead"]{padding:0 6px!important;gap:2px!important;}
+[data-m="trow"]>span:nth-of-type(1),[data-m="trow"]>span:nth-of-type(2),[data-m="thead"]>span:nth-of-type(2),[data-m="thead"]>span:nth-of-type(3){display:none!important;}
+[data-m="trow"]>span,[data-m="thead"]>span:not(:first-child){width:54px!important;}
+[data-m="trow"] span[title]{font-size:14px!important;}
+[data-m="thead"]>span:first-child{font-size:15px!important;}
+[data-m="rng"]{padding:10px 4px!important;}
+[data-m="rng"] span{font-size:revert;}
+[data-m="g2"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;}
+[data-m="mlab"]{font-size:11px!important;}
+[data-m="spot"]{grid-template-columns:auto minmax(0,1fr)!important;gap:4px 10px!important;padding:10px 12px!important;}
+[data-m="spot"]>span:nth-child(3){grid-column:1/-1;}
+[data-m="g1"]{grid-template-columns:minmax(0,1fr)!important;}
+[data-m="abil"]{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important;grid-auto-flow:row!important;}
+[data-m="top"]{right:14px!important;bottom:14px!important;width:46px!important;height:46px!important;}
+}
 </style>
 </helmet>
 <div style="background:oklch(0.3 0.09 255);color:#fff;">
-  <div style="position:relative;max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(250px,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
-    <div style="min-height:140px;min-width:250px;"></div>
+  <div data-m="hdr" style="position:relative;max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(250px,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
+    <div data-m="hide" style="min-height:140px;min-width:250px;"></div>
     <sc-if value="{{ sundayShow }}" hint-placeholder-val="{{ false }}">
-      <div onMouseEnter="{{ sundayHoverOn }}" onMouseLeave="{{ sundayHoverOff }}" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};">
+      <div onMouseEnter="{{ sundayHoverOn }}" onMouseLeave="{{ sundayHoverOff }}" data-m="hide" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};">
         <button onClick="{{ sundayTab.onClick }}" style="width:auto;max-width:100%;height:100%;padding:0;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
           <span style="font-size:13px;font-weight:800;color:#fff;letter-spacing:-0.01em;text-align:center;">썬데이 메이플</span>
           <span style="flex:1;min-height:0;display:flex;justify-content:center;">{{ sundayBannerImg }}</span>
@@ -48,19 +82,19 @@ input{font-family:inherit;}
         </sc-if>
       </div>
     </sc-if>
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px 0 22px;">
+    <div data-m="hcol" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px 0 22px;">
       <div style="display:flex;align-items:center;gap:16px;">
         <image-slot id="banner-logo" shape="rounded" radius="12" fit="contain" placeholder="+" compact="" style="width:clamp(48px,6vw,72px);height:clamp(48px,6vw,72px);flex:none;"></image-slot>
         <h1 style="margin:0;text-align:center;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;text-wrap:balance;">메이플 경매장 시세</h1>
       </div>
       <div style="display:flex;gap:8px;">
         <sc-for list="{{ areas }}" as="a" hint-placeholder-count="3">
-          <button onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:baseline;gap:4px;" style-hover="opacity:0.9;">{{ a.label }}<sc-if value="{{ a.beta }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;opacity:0.75;">beta</span></sc-if><sc-if value="{{ a.soon }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;opacity:0.75;">준비중</span></sc-if></button>
+          <button data-m="areab" onClick="{{ a.onClick }}" style="padding:8px 22px;border:none;border-radius:999px;background:{{ a.bg }};color:{{ a.color }};font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:baseline;gap:4px;" style-hover="opacity:0.9;">{{ a.label }}<sc-if value="{{ a.beta }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;opacity:0.75;">beta</span></sc-if><sc-if value="{{ a.soon }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;opacity:0.75;">준비중</span></sc-if></button>
         </sc-for>
       </div>
     </div>
-    <span style="justify-self:start;align-self:center;padding:8px 16px;border-radius:10px;background:oklch(0.4 0.1 255);font-size:clamp(20px,2.6vw,30px);font-weight:700;color:oklch(0.9 0.06 255);white-space:nowrap;font-variant-numeric:tabular-nums;">{{ siteLatest }} 업데이트</span>
-    <div style="position:absolute;bottom:6px;right:20px;display:flex;align-items:center;gap:4px;">
+    <span data-m="upd" style="justify-self:start;align-self:center;padding:8px 16px;border-radius:10px;background:oklch(0.4 0.1 255);font-size:clamp(20px,2.6vw,30px);font-weight:700;color:oklch(0.9 0.06 255);white-space:nowrap;font-variant-numeric:tabular-nums;">{{ siteLatest }} 업데이트</span>
+    <div data-m="maker" style="position:absolute;bottom:6px;right:20px;display:flex;align-items:center;gap:4px;">
       <span style="font-size:clamp(17px,1.8vw,22px);font-weight:600;font-style:italic;letter-spacing:0.02em;color:oklch(0.85 0.1 85);white-space:nowrap;">by 대장메린이</span>
       <img src="maker.png" alt="대장메린이" style="display:block;height:clamp(40px,4.5vw,56px);width:auto;">
     </div>
@@ -172,9 +206,9 @@ input{font-family:inherit;}
   <div style="position:fixed;top:50%;transform:translateY(-50%);right:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;border:1.5px dashed #c9cac6;border-radius:8px;background:#f4f4f2;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;color:#9a9ca1;line-height:1.5;">광고 자리<br>세로형<br>160×600</div>
 </sc-if>
 <sc-if value="{{ isHunt }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">사냥 타이머</h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">사냥 타이머</h1>
     <span style="font-size:14px;color:#6b6d73;text-wrap:pretty;">스킬 쿨타임을 알려주고, 게임 화면을 공유하면 미니맵에서 룬을 감지해요.</span>
   </div>
 
@@ -453,14 +487,14 @@ input{font-family:inherit;}
 </div>
 </sc-if>
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:760px;margin:0 auto;padding:80px 28px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
-  <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">강화</h1>
+<div data-m="wrap" style="max-width:760px;margin:0 auto;padding:80px 28px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+  <h1 data-m="h1" style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">강화</h1>
   <span style="font-size:15px;color:#6b6d73;">준비 중이에요.</span>
 </div>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
-  <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
+  <div data-m="tabs" style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
     <div onMouseEnter="{{ jobMenuOpen }}" onMouseLeave="{{ jobMenuClose }}" style="position:relative;">
       <button onClick="{{ growTabs.0.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.0.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.0.weight }};color:{{ growTabs.0.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">직업가이드<span style="font-size:10px;opacity:0.6;">▼</span></button>
       <sc-if value="{{ jobMenu }}" hint-placeholder-val="{{ false }}">
@@ -483,13 +517,13 @@ input{font-family:inherit;}
   </div>
 </nav>
 <sc-if value="{{ noGuide }}" hint-placeholder-val="{{ true }}">
-<div style="max-width:760px;margin:0 auto;padding:80px 28px 96px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
-  <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">{{ growTitle }}</h1>
+<div data-m="wrap" style="max-width:760px;margin:0 auto;padding:80px 28px 96px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+  <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">{{ growTitle }}</h1>
   <span style="font-size:15px;color:#6b6d73;">{{ growSub }}</span>
 </div>
 </sc-if>
 <sc-if value="{{ hasGuide }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:1180px;margin:0 auto;padding:32px 28px 72px;display:grid;grid-template-columns:minmax(0,1fr) 0;gap:0;align-items:start;">
+<div data-m="wrap" style="max-width:1180px;margin:0 auto;padding:32px 28px 72px;display:grid;grid-template-columns:minmax(0,1fr) 0;gap:0;align-items:start;">
 <div style="display:flex;flex-direction:column;gap:20px;min-width:0;">
   <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;">
@@ -502,9 +536,9 @@ input{font-family:inherit;}
       <div style="position:absolute;inset:0;background-image:{{ guideImgBg }};background-size:cover;background-position:center 25%;"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,18,40,0.85),rgba(10,18,40,0) 60%);"></div>
     </sc-if>
-    <div style="position:relative;padding:28px 32px;display:flex;flex-direction:column;gap:8px;width:100%;box-sizing:border-box;">
+    <div data-m="hero" style="position:relative;padding:28px 32px;display:flex;flex-direction:column;gap:8px;width:100%;box-sizing:border-box;">
       <span style="font-size:13px;font-weight:800;letter-spacing:0.08em;color:oklch(0.85 0.1 85);">직업가이드</span>
-      <h1 style="margin:0;font-size:52px;font-weight:800;letter-spacing:-0.03em;color:#fff;">{{ guideJob }}</h1>
+      <h1 style="margin:0;font-size:52px;font-weight:800;letter-spacing:-0.03em;color:#fff;" data-m="gh1">{{ guideJob }}</h1>
       <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
         <span style="font-size:18px;font-weight:600;color:#fff;">{{ guideTagline }}</span>
         <span style="font-size:14px;color:oklch(0.9 0.04 255);">{{ guideMeta }}</span>
@@ -540,7 +574,7 @@ input{font-family:inherit;}
           <sc-if value="{{ s.hasSpot }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;margin-bottom:14px;">
               <sc-for list="{{ s.spots }}" as="sp" hint-placeholder-count="6">
-                <div style="display:grid;grid-template-columns:96px minmax(90px,130px) minmax(0,1fr);align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #efefed;background:#fff;">
+                <div data-m="spot" style="display:grid;grid-template-columns:96px minmax(90px,130px) minmax(0,1fr);align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #efefed;background:#fff;">
                   <span style="font-size:15px;font-weight:800;color:oklch(0.4 0.17 255);font-variant-numeric:tabular-nums;white-space:nowrap;">{{ sp.lv }}</span>
                   <span style="font-size:16px;font-weight:800;color:#1d1e22;">{{ sp.area }}</span>
                   <span style="font-size:15px;color:#3a3b3f;line-height:1.5;text-wrap:pretty;">{{ sp.maps }}</span>
@@ -616,7 +650,7 @@ input{font-family:inherit;}
             </div>
           </sc-if>
           <sc-if value="{{ s.hasArt }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px;">
+            <div data-m="g1" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px;">
               <sc-for list="{{ s.artCards }}" as="a" hint-placeholder-count="9">
                 <div style="display:flex;align-items:stretch;gap:12px;border:1px solid #e3e3e0;border-radius:12px;padding:10px;">
                   <span style="flex:none;width:clamp(48px,28%,86px);aspect-ratio:192/226;border-radius:8px;background-image:{{ a.img }};background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8%;box-sizing:border-box;font-size:clamp(24px,2.6vw,40px);font-weight:900;line-height:1;color:oklch(0.6 0.23 25);-webkit-text-stroke:1px #fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);">{{ a.num }}</span>
@@ -678,7 +712,7 @@ input{font-family:inherit;}
                 <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.72 0.17 145);"></span>레전드리</span>
                 <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.8 0.16 80);"></span>유니크</span>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:12px;">
+              <div data-m="abil" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:12px;">
                 <sc-for list="{{ s.abilSets }}" as="a" hint-placeholder-count="6">
                   <div style="border:1px solid #e3e3e0;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
                     <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);margin-bottom:2px;">{{ a.name }}</span>
@@ -823,7 +857,7 @@ input{font-family:inherit;}
     </section>
   </sc-for>
 </div>
-<aside style="position:fixed;right:16px;bottom:16px;width:max-content;z-index:20;overflow:hidden;background:rgba(255,255,255,0.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;gap:0;box-shadow:0 4px 16px rgba(20,30,60,0.08);">
+<aside data-m="aside" style="position:fixed;right:16px;bottom:16px;width:max-content;z-index:20;overflow:hidden;background:rgba(255,255,255,0.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;gap:0;box-shadow:0 4px 16px rgba(20,30,60,0.08);">
   <span style="font-size:11px;font-weight:800;letter-spacing:0.06em;color:oklch(0.48 0.17 255);padding:2px 8px 4px;">목차</span>
   <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="8">
     <button onClick="{{ s.goTo }}" style="display:flex;align-items:baseline;gap:5px;padding:4px 8px;border:none;border-radius:6px;background:{{ s.navBg }};color:{{ s.navColor }};font-family:inherit;font-size:13px;font-weight:{{ s.navWeight }};text-align:left;white-space:nowrap;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">
@@ -837,7 +871,7 @@ input{font-family:inherit;}
 </sc-if>
 <sc-if value="{{ isAuction }}" hint-placeholder-val="{{ true }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
-  <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
+  <div data-m="tabs" style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
     <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ sundayTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">썬데이</button>
     <button onClick="{{ mesoTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ mesoTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ mesoTab.weight }};color:{{ mesoTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">메소</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
@@ -854,10 +888,10 @@ input{font-family:inherit;}
 </nav>
 
 <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;">
     <div style="display:flex;flex-direction:column;gap:4px;">
-      <h1 style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">방문자 통계</h1>
+      <h1 data-m="h1" style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">방문자 통계</h1>
       <span style="font-size:13px;color:#6b6d73;">관리자에게만 보여요 · 최근 30일 · {{ statsUpdated }}</span>
     </div>
     <button onClick="{{ reloadStats }}" style="padding:9px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ statsBtn }}</button>
@@ -939,9 +973,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </sc-if>
 
 <sc-if value="{{ isSunday }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:760px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+<div data-m="wrap" style="max-width:760px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">썬데이 메이플</h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">썬데이 메이플</h1>
     <span style="font-size:13px;color:#6b6d73;">이번 주 썬데이 메이플 혜택</span>
   </div>
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
@@ -966,9 +1000,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </sc-if>
 
 <sc-if value="{{ isMeso }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
     <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
   </div>
 
@@ -977,7 +1011,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 
   <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+    <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
       <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
         <span style="font-size:13px;font-weight:600;color:#6b6d73;">현재 시세</span>
         <span style="font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
@@ -1013,10 +1047,10 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             <path d="{{ mesoChart.hoverLine }}" stroke="#9a9ca1" stroke-width="1" stroke-dasharray="3 3" fill="none" vector-effect="non-scaling-stroke"></path>
           </svg>
           <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
-            <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
+            <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;" data-m="mlab">{{ g.label }}</span>
           </sc-for>
           <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
-            <span style="position:absolute;left:{{ g.rl }};top:{{ g.top }};transform:translateY(-50%);text-align:left;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
+            <span style="position:absolute;left:{{ g.rl }};top:{{ g.top }};transform:translateY(-50%);text-align:left;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;" data-m="mlab">{{ g.label }}</span>
           </sc-for>
           <sc-for list="{{ mesoChart.marks }}" as="d" hint-placeholder-count="1">
             <span style="position:absolute;left:{{ d.left }};top:{{ d.top }};width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid oklch(0.62 0.15 75);box-sizing:border-box;transform:translate(-50%,-50%);pointer-events:none;"></span>
@@ -1030,7 +1064,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </div>
         <div style="position:relative;height:22px;margin-top:4px;">
           <sc-for list="{{ mesoChart.xl }}" as="x" hint-placeholder-count="7">
-            <span style="position:absolute;left:{{ x.left }};transform:translateX(-50%);font-size:14px;font-weight:600;color:#3a3c41;white-space:nowrap;">{{ x.label }}</span>
+            <span style="position:absolute;left:{{ x.left }};transform:translateX(-50%);font-size:14px;font-weight:600;color:#3a3c41;white-space:nowrap;" data-m="mlab">{{ x.label }}</span>
           </sc-for>
         </div>
       </sc-if>
@@ -1064,9 +1098,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </sc-if>
 
 <sc-if value="{{ isPop }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수 <span style="font-size:20px;font-weight:700;color:#6b6d73;vertical-align:middle;">(테스트중)</span></h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수 <span style="font-size:20px;font-weight:700;color:#6b6d73;vertical-align:middle;">(테스트중)</span></h1>
     <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 기준 · 매주 목요일 집계 · 활동 계정 = 최근 7일 접속 또는 유니온·아티팩트·본캐가 성장한 계정</span>
   </div>
 
@@ -1164,9 +1198,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </sc-if>
 
 <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:720px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
+<div data-m="wrap" style="max-width:720px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
   <div style="display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;">
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">문의</h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">문의</h1>
     <p style="margin:0;font-size:15px;color:#6b6d73;text-wrap:pretty;">버그, 시세 오류, 추가했으면 하는 아이템 등 무엇이든 남겨주세요.</p>
   </div>
   <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
@@ -1208,11 +1242,11 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </sc-if>
 
 <sc-if value="{{ isData }}" hint-placeholder-val="{{ true }}">
-<div style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:28px;">
-  <header style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
-    <div></div>
-    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:28px;">
+  <header data-m="dhdr" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
+    <div data-m="hide"></div>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
+    <div data-m="dmeta" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #e3e3e0;font-size:14px;font-weight:600;">{{ server }}</span>
       <span style="font-size:14px;color:#6b6d73;">업데이트 {{ latestDate }}</span>
       <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
@@ -1232,7 +1266,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </sc-if>
       <sc-for list="{{ rowGroups }}" as="rg" hint-placeholder-count="1">
       <sc-if value="{{ rg.showLabel }}" hint-placeholder-val="{{ false }}">
-        <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
           <span onClick="{{ rg.onRename }}" title="{{ rg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ rg.cursor }};">{{ rg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
             <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
@@ -1241,7 +1275,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </div>
       </sc-if>
       <sc-for list="{{ rg.rows }}" as="row" hint-placeholder-count="7">
-        <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+        <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
           <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
             <div style="position:relative;width:40px;height:40px;flex:none;">
               <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
@@ -1291,19 +1325,19 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           </div>
           <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:14px;display:flex;gap:12px;">
-              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+              <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
                 <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
               </div>
               <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
-                <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+                <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                   <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
                   <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                   <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
                 </div>
               </sc-if>
-              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+              <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
                 <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
@@ -1329,7 +1363,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             <span style="flex:1;min-width:0;font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ categoryLabel }}</span>
           </div>
         </sc-if>
-        <div style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
           <span onClick="{{ pg.onRename }}" title="{{ pg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ pg.cursor }};">{{ pg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
             <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
@@ -1337,7 +1371,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <span style="width:68px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
         </div>
         <sc-for list="{{ pg.rows }}" as="row" hint-placeholder-count="7">
-          <div style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+          <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
             <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
               <div style="position:relative;width:40px;height:40px;flex:none;">
               <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
@@ -1385,19 +1419,19 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </div>
         <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;gap:12px;">
-            <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+            <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
               <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
             </div>
             <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
-              <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+              <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
                 <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
               </div>
             </sc-if>
-            <div style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+            <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
               <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
@@ -1478,7 +1512,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 
 </sc-if>
 <sc-if value="{{ topShow }}" hint-placeholder-val="{{ false }}">
-  <button onClick="{{ goTop }}" aria-label="맨 위로" title="맨 위로" style="position:fixed;right:24px;bottom:24px;z-index:900;width:52px;height:52px;border:none;border-radius:50%;background:oklch(0.3 0.09 255);color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 14px rgba(0,0,0,0.22);" style-hover="background:oklch(0.4 0.12 255);">
+  <button data-m="top" onClick="{{ goTop }}" aria-label="맨 위로" title="맨 위로" style="position:fixed;right:24px;bottom:24px;z-index:900;width:52px;height:52px;border:none;border-radius:50%;background:oklch(0.3 0.09 255);color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 14px rgba(0,0,0,0.22);" style-hover="background:oklch(0.4 0.12 255);">
     <span style="font-size:16px;line-height:1;">▲</span>
     <span style="font-size:11px;font-weight:800;letter-spacing:0.04em;line-height:1;">TOP</span>
   </button>
