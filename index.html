@@ -1990,7 +1990,7 @@ class Component extends DCLogic {
     if (!this._huntLS) {
       let s = {}; try { s = JSON.parse(localStorage.getItem(KEY + ':hunt') || '{}'); } catch (e) {}
       this._huntLS = { skills: [{ id: 's1', preset: 'janus80', name: '솔 야누스 : 새벽', cd: 60, before: 8 }], vol: 80, beep: true, voice: true, rune: true, runeMin: 4, runeEvery: 10, ...s };
-      this._huntLS.skills = (this._huntLS.skills || []).map(k => k.preset === 'yein67' && (k.cd === 67 || k.cd === 10 || k.cd === 59) ? { ...k, cd: 68 } : ((k.preset && k.preset.startsWith('janus')) || (!k.preset && k.name === '솔 야누스 : 새벽')) && !(JANUS_DUR[k.preset] && k.cd === 60) ? { ...k, preset: JANUS_DUR[k.preset] ? k.preset : JANUS_DUR['janus' + k.cd] ? 'janus' + k.cd : 'janus80', cd: 60 } : k);
+      this._huntLS.skills = (this._huntLS.skills || []).map(k => k.preset === 'yein67' && (k.cd === 68 || k.cd === 10 || k.cd === 59) ? { ...k, cd: 67 } : ((k.preset && k.preset.startsWith('janus')) || (!k.preset && k.name === '솔 야누스 : 새벽')) && !(JANUS_DUR[k.preset] && k.cd === 60) ? { ...k, preset: JANUS_DUR[k.preset] ? k.preset : JANUS_DUR['janus' + k.cd] ? 'janus' + k.cd : 'janus80', cd: 60 } : k);
     }
     return this._huntLS;
   }
@@ -2638,7 +2638,7 @@ class Component extends DCLogic {
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
         if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
-          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : 0;
+          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
           const lat = s.preset === 'erda60' ? 800 : 500;
           if (N != null && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
@@ -2702,7 +2702,7 @@ class Component extends DCLogic {
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
-  skillDur(s) { return JANUS_DUR[s.preset] || s.cd || 0; }
+  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 120 - (Number(s.cd) || 60) : s.cd || 0); }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
@@ -2861,7 +2861,7 @@ class Component extends DCLogic {
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
     const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
-    const PRE = [['janus120', J + ' (지속 2분)', 60, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 60, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 60, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 68, '예인', 'skill-yein.png']];
+    const PRE = [['janus120', J + ' (지속 2분)', 60, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 60, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 60, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
       skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }],
