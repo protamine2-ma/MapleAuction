@@ -1473,6 +1473,12 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </div>
 </sc-if>
 
+</sc-if>
+<sc-if value="{{ topShow }}" hint-placeholder-val="{{ false }}">
+  <button onClick="{{ goTop }}" aria-label="맨 위로" title="맨 위로" style="position:fixed;right:24px;bottom:24px;z-index:900;width:52px;height:52px;border:none;border-radius:50%;background:oklch(0.3 0.09 255);color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 14px rgba(0,0,0,0.22);" style-hover="background:oklch(0.4 0.12 255);">
+    <span style="font-size:16px;line-height:1;">▲</span>
+    <span style="font-size:11px;font-weight:800;letter-spacing:0.04em;line-height:1;">TOP</span>
+  </button>
 </sc-if></x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;server&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;전서버&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;categoryLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;아이템드랍 1줄&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showValues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;deltaStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;korean&quot;,&quot;western&quot;],&quot;default&quot;:&quot;korean&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;contactEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;문의&quot;},&quot;adsenseClient&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;},&quot;adSlotTop&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;},&quot;adSlotSide&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;광고&quot;}}">
 const KEY = 'maple-auction-prices-v1';
@@ -1991,6 +1997,8 @@ class Component extends DCLogic {
   }
   componentDidMount() {
     this.bindGuideScroll();
+    this._topScroll = () => { const s = window.scrollY > 400; if (s !== !!this.state.topShow) this.setState({ topShow: s }); };
+    window.addEventListener('scroll', this._topScroll, { passive: true }); this._topScroll();
     this._onResize = () => { const wide = window.innerWidth >= 1700; if (wide !== this.state.wide) this.setState({ wide }); };
     window.addEventListener('resize', this._onResize); this._onResize();
     this.loadAdsense();
@@ -3269,7 +3277,7 @@ class Component extends DCLogic {
     const check = () => { const narrow = el.clientWidth < 860; if (narrow !== this.state.narrow) this.setState({ narrow }); };
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
-  componentWillUnmount() { if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
+  componentWillUnmount() { if (this._topScroll) window.removeEventListener('scroll', this._topScroll); if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
   async sendContact() {
     const c = this.state.contact || {};
     if (!(c.body || '').trim()) { this.setState({ contactError: '내용을 입력해 주세요.' }); return; }
@@ -3495,6 +3503,7 @@ class Component extends DCLogic {
       ...this.statsVals(isStats),
       ...this.popVals(isPop, upColor, downColor),
       ...this.mesoVals(isMeso, upColor, downColor),
+      topShow: !!this.state.topShow, goTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
       closeLogin: () => this.setState({ loginOpen: false }),
       loginEmail: this.state.loginEmail, loginPw: this.state.loginPw,
