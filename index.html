@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>메이플 경매장 시세 · 주간 장비 시세 변동</title>
-<meta name="description" content="메이플스토리 경매장 주간 시세. 드메·여명·보스·칠흑 장신구, 에테르넬·아케인·앱솔랩스·카루타, 보조무기, 캐시아이템, 자석펫 시세와 등락폭, 26주 시세 그래프.">
+<meta name="description" content="메이플스토리 주요 장신구·방어구·캐시템의 매주 시세 변화, 최대 26주간 최고가·평균가·최저가, 사냥에 도움되는 타이머 기능, 메린이들을 위한 직업 상세 가이드.">
 <meta name="keywords" content="메이플스토리, 메이플 경매장, 메이플 시세, 경매장 시세, 칠흑 시세, 에테르넬 시세, 드메 시세, 여명 시세">
 <meta property="og:type" content="website">
 <meta property="og:title" content="메이플 경매장 시세">
-<meta property="og:description" content="메이플스토리 경매장 주간 시세와 등락폭, 26주 시세 그래프">
+<meta property="og:description" content="메이플스토리 주요 장신구·방어구·캐시템의 매주 시세 변화, 최대 26주간 최고가·평균가·최저가, 사냥에 도움되는 타이머 기능, 메린이들을 위한 직업 상세 가이드.">
 <meta property="og:locale" content="ko_KR">
 <meta name="robots" content="index,follow">
 <meta name="google-site-verification" content="pj_pOtf7Lvvwk_36sjs84ZsvfNtZSn1RR3sAVocxfVw">
@@ -237,7 +237,7 @@ input{font-family:inherit;}
           </div>
         </div>
         <input type="number" min="1" value="{{ s.cdVal }}" onChange="{{ s.onCd }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
-        <input type="number" min="0" value="{{ s.beforeVal }}" onChange="{{ s.onBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
+        <input type="number" value="{{ s.beforeVal }}" onChange="{{ s.onBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
           <span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.remainColor }};">{{ s.remain }}</span>
           <span style="width:100%;height:4px;border-radius:2px;background:#f0f0ee;overflow:hidden;"><span style="display:block;height:100%;width:{{ s.pct }};background:oklch(0.48 0.17 255);"></span></span>
@@ -436,6 +436,7 @@ input{font-family:inherit;}
     </div>
   </section>
   </sc-if>
+  <p style="margin:12px 0 0;padding-top:16px;border-top:1px solid #e3e3e0;font-size:12px;line-height:1.7;color:#6b6d73;text-align:center;text-wrap:pretty;">본 사이트의 기능은 참고용으로 제공되며, 이를 활용한 게임 플레이 결과에 대한 책임은 이용자 본인에게 있습니다.</p>
 </div>
 </sc-if>
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
@@ -1524,6 +1525,7 @@ PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%
 ] };
 const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
 const REF = '드메아이템';
+const JANUS_DUR = { janus120: 120, janus80: 80, janus70: 70, janus60: 60 };
 const RAMP = ['oklch(0.89 0.035 255)', 'oklch(0.78 0.075 255)', 'oklch(0.64 0.12 255)', 'oklch(0.48 0.17 255)'];
 const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 const fmt = v => { const n = num(v); return n === null ? '–' : String(Math.round(n * 100) / 100); };
@@ -1987,8 +1989,8 @@ class Component extends DCLogic {
     if (this.state.hunt) return this.state.hunt;
     if (!this._huntLS) {
       let s = {}; try { s = JSON.parse(localStorage.getItem(KEY + ':hunt') || '{}'); } catch (e) {}
-      this._huntLS = { skills: [{ id: 's1', name: '솔 야누스 : 새벽', cd: 80, before: 8 }], vol: 80, beep: true, voice: true, rune: true, runeMin: 4, runeEvery: 10, ...s };
-      this._huntLS.skills = (this._huntLS.skills || []).map(k => k.preset === 'yein67' && (k.cd === 67 || k.cd === 10) ? { ...k, cd: 59 } : k);
+      this._huntLS = { skills: [{ id: 's1', preset: 'janus80', name: '솔 야누스 : 새벽', cd: 60, before: 8 }], vol: 80, beep: true, voice: true, rune: true, runeMin: 4, runeEvery: 10, ...s };
+      this._huntLS.skills = (this._huntLS.skills || []).map(k => k.preset === 'yein67' && (k.cd === 67 || k.cd === 10 || k.cd === 59) ? { ...k, cd: 68 } : ((k.preset && k.preset.startsWith('janus')) || (!k.preset && k.name === '솔 야누스 : 새벽')) && !(JANUS_DUR[k.preset] && k.cd === 60) ? { ...k, preset: JANUS_DUR[k.preset] ? k.preset : JANUS_DUR['janus' + k.cd] ? 'janus' + k.cd : 'janus80', cd: 60 } : k);
     }
     return this._huntLS;
   }
@@ -2057,7 +2059,7 @@ class Component extends DCLogic {
       const s = h.skills.find(x => x.id === id); if (!s) { delete this._run[id]; return; }
       any = true; let end = this._run[id];
       if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n); }
-      if (end <= now) {
+      if (end <= now && this._alerted[id]) {
         const auto = this._stream && this._det && this._det[id] && this._det[id].box;
         delete this._run[id];
       }
@@ -2078,7 +2080,7 @@ class Component extends DCLogic {
   toggleSkill(s) {
     this._run = this._run || {}; this._alerted = this._alerted || {};
     if (this._run[s.id]) delete this._run[s.id];
-    else { if (!(s.cd > 0)) return; this._run[s.id] = Date.now() + (s.preset === 'yein67' ? 57 : s.cd) * 1000; this._alerted[s.id] = false; this.ensureTick(); }
+    else { if (!(s.cd > 0)) return; this._run[s.id] = Date.now() + this.skillDur(s) * 1000; this._alerted[s.id] = false; this.ensureTick(); }
     this.forceUpdate();
   }
   huntAlert(text, kind = 'skill') {
@@ -2634,15 +2636,17 @@ class Component extends DCLogic {
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
-        if (D.on === needOn && yOk && D.ready === true && !this._run[s.id]) { used = true; D.ready = false; }
+        if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
-          const N = this.readCd(a, bw, bh), extra = s.preset.startsWith('janus') ? 60 : 0;
+          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
+          const lat = s.preset === 'erda60' ? 800 : 500;
+          if (N != null && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
           if (N != null && cd && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
             D.ocrLast = now; const H = (D.ocrH = (D.ocrH || []).concat([[now, N]]).slice(-4));
             if (H.length >= 3) {
               let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
-              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 - 500; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
+              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 - lat; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
             }
           }
         }
@@ -2694,10 +2698,11 @@ class Component extends DCLogic {
       const ocrSkill = !!(s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60'));
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true;
         if (ocrSkill) { D.pend = now; D.ocrLock = false; D.ocrH = []; D.ocrFail = false; }
-        else { D.endAt = now - 2250 + (s.preset === 'yein67' ? 59 : s.cd) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; } }
-      if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + s.cd * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
+        else { D.endAt = now - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; } }
+      if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
+  skillDur(s) { return JANUS_DUR[s.preset] || s.cd || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
@@ -2856,7 +2861,7 @@ class Component extends DCLogic {
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
     const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
-    const PRE = [['janus120', J + ' (2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (1분)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 59, '예인', 'skill-yein.png']];
+    const PRE = [['janus120', J + ' (지속 2분)', 60, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 60, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 60, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 68, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
       skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }],
@@ -2877,9 +2882,9 @@ class Component extends DCLogic {
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2] } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
-          pct: on && s.cd ? Math.min(100, rem / ((s.preset === 'yein67' ? 57 : s.cd) * 1000) * 100).toFixed(1) + '%' : '0%',
+          pct: on && s.cd ? Math.min(100, rem / (this.skillDur(s) * 1000) * 100).toFixed(1) + '%' : '0%',
           toggleRun: () => this.toggleSkill(s),
-          onName: e => upd(s.id, 'name', e.target.value), onCd: e => upd(s.id, 'cd', num(e.target.value)), onBefore: e => upd(s.id, 'before', num(e.target.value)),
+          onName: e => upd(s.id, 'name', e.target.value), onCd: e => upd(s.id, 'cd', num(e.target.value)), onBefore: e => upd(s.id, 'before', Number(e.target.value) || 0),
           remove: () => { if (this._run) delete this._run[s.id]; this.saveHunt({ ...h, skills: h.skills.filter(x => x.id !== s.id) }); } };
       }),
       huntNoSkills: !h.skills.length,
@@ -2907,7 +2912,7 @@ class Component extends DCLogic {
             const res = v.videoWidth + 'x' + v.videoHeight, box = { x: g.x + Math.min(d.x0, d.x1), y: g.y + Math.min(d.y0, d.y1), w, h: hh };
             if (this._run) delete this._run[ps.id];
             this._pick = null; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== ps.id ? x : { ...x, box: { ...(x.box || {}), [res]: box } }) }); } }; })(),
-      addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 80, before: 8 }] }),
+      addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 60, before: 8 }] }),
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
@@ -3036,7 +3041,9 @@ class Component extends DCLogic {
       isContact, isData: !isContact && !isStats && !isPop && !isSunday,
       isSunday,
       ...(() => {
-        const area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화'] : ['옥션', '사냥'];
+        let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
+        if (!AREAS.includes(area)) area = '옥션';
         return {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
@@ -3057,7 +3064,7 @@ class Component extends DCLogic {
               growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
-          areas: ['옥션', '사냥', '육성', '강화'].map(l => ({ label: l, beta: l === '사냥', soon: l === '육성' || l === '강화', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
+          areas: AREAS.map(l => ({ label: l, beta: l === '사냥', soon: l === '육성' || l === '강화', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); } })),
         };
       })(),
