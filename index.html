@@ -839,6 +839,7 @@ input{font-family:inherit;}
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
     <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ sundayTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">썬데이</button>
+    <button onClick="{{ mesoTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ mesoTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ mesoTab.weight }};color:{{ mesoTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">메소</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
       <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
@@ -961,6 +962,101 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     </div>
   </section>
   <span style="text-align:center;font-size:12px;color:#9a9ca1;">이미지 출처: 메이플스토리 공식 홈페이지 · Data based on NEXON Open API</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ isMeso }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
+    <h1 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
+    <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
+  </div>
+
+  <sc-if value="{{ mesoNone }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 입력된 메소 시세가 없어요.</div>
+  </sc-if>
+
+  <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+        <span style="font-size:13px;font-weight:600;color:#6b6d73;">현재 시세</span>
+        <span style="font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
+        <span style="font-size:13px;font-weight:700;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
+      </div>
+      <sc-for list="{{ mesoStats }}" as="s" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
+          <span style="font-size:13px;font-weight:600;color:#6b6d73;">{{ s.label }}</span>
+          <span style="font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.color }};">{{ s.val }}<span style="font-size:14px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
+          <span style="font-size:12px;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+        <h2 style="margin:0;font-size:17px;font-weight:700;">시세 추이 · {{ mesoRangeLabel }}</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;padding:3px;background:#f0f0ee;border-radius:9px;">
+          <sc-for list="{{ mesoPeriods }}" as="p" hint-placeholder-count="6">
+            <button onClick="{{ p.onClick }}" style="padding:6px 12px;border:none;border-radius:7px;background:{{ p.bg }};color:{{ p.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:{{ p.shadow }};">{{ p.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ mesoEmptyRange }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:40px;text-align:center;font-size:14px;color:#6b6d73;">이 기간에는 기록이 없어요.</div>
+      </sc-if>
+      <sc-if value="{{ mesoHasRange }}" hint-placeholder-val="{{ true }}">
+        <div onMouseMove="{{ mesoMove }}" onMouseLeave="{{ mesoLeave }}" style="position:relative;width:100%;aspect-ratio:600/280;cursor:crosshair;">
+          <svg viewBox="0 0 600 280" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+            <path d="{{ mesoChart.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
+            <path d="{{ mesoChart.area }}" fill="oklch(0.72 0.14 85 / 0.16)"></path>
+            <polyline points="{{ mesoChart.pts }}" fill="none" stroke="oklch(0.62 0.15 75)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+            <path d="{{ mesoChart.hoverLine }}" stroke="#9a9ca1" stroke-width="1" stroke-dasharray="3 3" fill="none" vector-effect="non-scaling-stroke"></path>
+          </svg>
+          <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
+            <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
+          </sc-for>
+          <sc-for list="{{ mesoChart.marks }}" as="d" hint-placeholder-count="1">
+            <span style="position:absolute;left:{{ d.left }};top:{{ d.top }};width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid oklch(0.62 0.15 75);box-sizing:border-box;transform:translate(-50%,-50%);pointer-events:none;"></span>
+          </sc-for>
+          <sc-if value="{{ mesoTipShow }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:{{ mesoTip.left }};top:{{ mesoTip.top }};transform:{{ mesoTip.tf }};padding:7px 11px;border-radius:8px;background:#1b1c1f;color:#fff;font-size:12px;line-height:1.4;white-space:nowrap;pointer-events:none;display:flex;flex-direction:column;">
+              <span style="color:#bfc1c6;">{{ mesoTip.date }}</span>
+              <strong style="font-size:15px;font-variant-numeric:tabular-nums;">{{ mesoTip.val }}원</strong>
+            </div>
+          </sc-if>
+        </div>
+        <div style="position:relative;height:22px;margin-top:4px;">
+          <sc-for list="{{ mesoChart.xl }}" as="x" hint-placeholder-count="7">
+            <span style="position:absolute;left:{{ x.left }};transform:translateX(-50%);font-size:14px;font-weight:600;color:#3a3c41;white-space:nowrap;">{{ x.label }}</span>
+          </sc-for>
+        </div>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#f7f7f5;border-bottom:1px solid #ececea;">
+        <h2 style="margin:0 auto 0 0;font-size:17px;font-weight:700;">메소 시세 입력 <span style="font-size:13px;font-weight:600;color:#6b6d73;">관리자만 보여요</span></h2>
+        <span style="font-size:13px;color:#6b6d73;">{{ mesoMsg }}</span>
+      </div>
+      <div style="padding:16px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;border-bottom:1px solid #ececea;">
+        <input type="date" value="{{ mesoInDate }}" onChange="{{ onMesoDate }}" style="padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;">
+        <input value="{{ mesoInVal }}" onChange="{{ onMesoVal }}" onKeyDown="{{ onMesoKey }}" inputMode="decimal" placeholder="1억 메소당 원 (예: 2650)" style="width:200px;padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;">
+        <button onClick="{{ addMeso }}" style="padding:8px 16px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">추가</button>
+        <span style="font-size:12px;color:#9a9ca1;">같은 날짜를 다시 넣으면 값이 바뀌어요.</span>
+      </div>
+      <div style="max-height:320px;overflow-y:auto;">
+        <sc-for list="{{ mesoList }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:40px;border-bottom:1px solid #f0f0ee;font-size:14px;font-variant-numeric:tabular-nums;">
+            <span style="width:110px;color:#6b6d73;">{{ r.date }}</span>
+            <strong style="flex:1;">{{ r.val }}원</strong>
+            <button onClick="{{ r.onDel }}" style="padding:4px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:oklch(0.5 0.17 25);cursor:pointer;">삭제</button>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
 </div>
 </sc-if>
 
@@ -1546,6 +1642,7 @@ PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%
 ] };
 const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
 const REF = '드메아이템';
+const MESO_SEED = {"points":[{"date":"2026-01-13","v":2085},{"date":"2026-01-20","v":2152},{"date":"2026-01-27","v":2068},{"date":"2026-02-03","v":2075},{"date":"2026-02-10","v":2099},{"date":"2026-02-14","v":2311},{"date":"2026-02-21","v":2309},{"date":"2026-02-28","v":2388},{"date":"2026-03-03","v":2441},{"date":"2026-03-06","v":2503},{"date":"2026-03-13","v":2497},{"date":"2026-03-20","v":2511},{"date":"2026-03-28","v":2531},{"date":"2026-04-03","v":2569},{"date":"2026-04-09","v":2559},{"date":"2026-04-18","v":2417},{"date":"2026-04-24","v":2402},{"date":"2026-05-01","v":2477},{"date":"2026-05-09","v":2425},{"date":"2026-05-15","v":2335},{"date":"2026-05-23","v":2337},{"date":"2026-05-29","v":2350},{"date":"2026-06-05","v":2440},{"date":"2026-06-12","v":2551},{"date":"2026-06-20","v":2471},{"date":"2026-06-26","v":2480},{"date":"2026-07-03","v":2756},{"date":"2026-07-10","v":2649},{"date":"2026-08-03","v":2202},{"date":"2026-08-07","v":2158},{"date":"2026-08-14","v":2139},{"date":"2026-08-21","v":2024},{"date":"2026-08-28","v":1987},{"date":"2026-09-06","v":2063},{"date":"2026-09-12","v":2271},{"date":"2026-09-18","v":2248},{"date":"2026-09-26","v":2269},{"date":"2026-09-27","v":2290},{"date":"2026-10-03","v":2370},{"date":"2026-10-10","v":2336},{"date":"2026-10-16","v":2250},{"date":"2026-10-24","v":2185}]};
 const JANUS_DUR = { janus120: 120, janus80: 80, janus70: 70, janus60: 60 };
 const RAMP = ['oklch(0.89 0.035 255)', 'oklch(0.78 0.075 255)', 'oklch(0.64 0.12 255)', 'oklch(0.48 0.17 255)'];
 const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
@@ -1629,14 +1726,16 @@ const GUIDE_DRAFT = {
 };
 class Component extends DCLogic {
   state = (() => {
-    let tab = '기타아이템';
+    let tab = '메소';
     let trash = [];
     try { trash = JSON.parse(localStorage.getItem(KEY + ':trash')) || []; } catch (e) {}
     let session = null;
     try { session = JSON.parse(localStorage.getItem(SB_SESSION)); } catch (e) {}
     let wantLogin = false;
     try { wantLogin = new URLSearchParams(location.search).has('admin'); } catch (e) {}
-    return { tab, all: this.loadAll(), trash, editing: false, session, admin: !!session, selected: null,
+    let meso = null;
+    try { meso = JSON.parse(localStorage.getItem(KEY + ':meso')); } catch (e) {}
+    return { tab, meso, all: this.loadAll(), trash, editing: false, session, admin: !!session, selected: null,
       loginOpen: wantLogin && !session, loginEmail: '', loginPw: '', loginErr: '', syncMsg: '' };
   })();
   logVisit(kind, tab) {
@@ -1661,6 +1760,96 @@ class Component extends DCLogic {
       }
       this.setState({ pop: rows, popLoading: false });
     } catch (e) { this.setState({ pop: [], popLoading: false, popErr: e.message === 'setup' ? 'setup' : 'fail' }); }
+  }
+  saveMeso(points) {
+    const data = { points };
+    this.setState({ meso: data, mesoMsg: '저장 중…' });
+    try { localStorage.setItem(KEY + ':meso', JSON.stringify(data)); } catch (e) {}
+    clearTimeout(this._mT);
+    this._mT = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ mesoMsg: '로그인이 만료됐어요.' }); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'meso', data, updated_at: new Date().toISOString() }]) });
+        if (!r.ok) throw new Error();
+        this.setState({ mesoMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
+      } catch (e) { this.setState({ mesoMsg: '저장 실패 — 다시 시도해 주세요.' }); }
+    }, 600);
+  }
+  mesoVals(isMeso, up, down) {
+    const tabBtn = { onClick: () => this.switchTab('메소'), color: isMeso ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isMeso ? 700 : 500, border: isMeso ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    if (!isMeso) return { isMeso, mesoTab: tabBtn };
+    const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const today = ds(new Date());
+    const allP = (((this.state.meso && this.state.meso.points && this.state.meso.points.length) ? this.state.meso : MESO_SEED).points || []).filter(p => p && /^\d{4}-\d{2}-\d{2}$/.test(p.date) && num(p.v) !== null).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+    const W = n => n.toLocaleString('ko-KR', { maximumFractionDigits: 1 });
+    const T = d => Date.parse(d + 'T00:00:00');
+    const PER = [['1개월', 31], ['3개월', 92], ['6개월', 183], ['1년', 366], ['3년', 1096], ['전체', 0]];
+    const per = this.state.mesoPer || '1년';
+    const days = (PER.find(p => p[0] === per) || PER[3])[1];
+    const cut = days ? T(today) - days * 864e5 : -Infinity;
+    const pts = allP.filter(p => T(p.date) >= cut);
+    const n = pts.length, vs = pts.map(p => num(p.v));
+    const last = allP[allP.length - 1], prev = allP[allP.length - 2];
+    let delta = '', dColor = '#9a9ca1';
+    if (last && prev) { const d = num(last.v) - num(prev.v), pc = d / num(prev.v) * 100; delta = (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + W(Math.abs(d)) + '원 (' + (d > 0 ? '+' : '') + pc.toFixed(1) + '%) · 직전 ' + prev.date; dColor = d > 0 ? up : d < 0 ? down : '#9a9ca1'; }
+    let chart = { gridPath: '', area: '', pts: '', hoverLine: '', grid: [], marks: [], xl: [] }, tip = null, stats = [];
+    this._mesoXY = [];
+    if (n) {
+      let lo = Math.min(...vs), hi = Math.max(...vs);
+      const mi = vs.indexOf(lo), ma = vs.lastIndexOf(hi), avg = vs.reduce((a, b) => a + b, 0) / n;
+      stats = [
+        { label: '기간 최고', val: W(hi), sub: pts[ma].date, color: up },
+        { label: '기간 최저', val: W(lo), sub: pts[mi].date, color: down },
+        { label: '기간 평균', val: W(Math.round(avg * 10) / 10), sub: n + '개 기록', color: '#1b1c1f' },
+      ];
+      if (hi === lo) { hi += 1; lo -= 1; }
+      const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+      const X0 = 64, X1 = 584, Y0 = 14, Y1 = 266;
+      const t0 = days ? Math.min(cut, T(pts[0].date)) : T(pts[0].date), t1 = Math.max(T(today), T(pts[n - 1].date));
+      const xAt = d => t1 === t0 ? (X0 + X1) / 2 : X0 + (X1 - X0) * (T(d) - t0) / (t1 - t0);
+      const yAt = v => Y1 - (v - lo) / (hi - lo) * (Y1 - Y0);
+      const pct = (v, t) => (v / t * 100).toFixed(2) + '%';
+      const xy = pts.map((p, i) => [xAt(p.date), yAt(vs[i])]);
+      const ticks = [0, 1, 2, 3, 4].map(k => lo + (hi - lo) * k / 4);
+      const span = (t1 - t0) / 864e5;
+      const lab = d => { const [y, m, dd] = d.split('-'); return span > 400 ? y.slice(2) + '.' + Number(m) : Number(m) + '/' + Number(dd); };
+      const xl = []; const K = 6;
+      for (let k = 0; k <= K; k++) xl.push({ left: pct(X0 + (X1 - X0) * k / K, 600), label: lab(ds(new Date(t0 + (t1 - t0) * k / K))) });
+      const hv = this.state.mesoHover, h = hv != null && hv < n ? hv : null;
+      chart = {
+        gridPath: ticks.map(v => 'M' + X0 + ' ' + yAt(v).toFixed(1) + 'H' + X1).join(' '),
+        pts: xy.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '),
+        area: n > 1 ? 'M' + xy[0][0].toFixed(1) + ' ' + Y1 + xy.map(p => 'L' + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('') + 'L' + xy[n - 1][0].toFixed(1) + ' ' + Y1 + 'Z' : '',
+        hoverLine: h != null ? 'M' + xy[h][0].toFixed(1) + ' ' + Y0 + 'V' + Y1 : '',
+        grid: ticks.map(v => ({ top: pct(yAt(v), 280), w: pct(X0 - 8, 600), label: W(Math.round(v)) })),
+        marks: [h != null ? h : n - 1].map(i => ({ left: pct(xy[i][0], 600), top: pct(xy[i][1], 280) })),
+        xl,
+      };
+      if (h != null) { const fx = xy[h][0] / 600; tip = { left: pct(xy[h][0], 600), top: pct(xy[h][1], 280), tf: 'translate(' + (fx > 0.8 ? '-100%' : fx < 0.2 ? '0' : '-50%') + ', calc(-100% - 12px))', date: pts[h].date, val: W(vs[h]) }; }
+      this._mesoXY = xy;
+    }
+    const delP = d => () => { if (!window.confirm(d + ' 기록을 삭제할까요?')) return; this.saveMeso(allP.filter(p => p.date !== d)); };
+    const add = () => {
+      const d = this.state.mesoInDate || today, v = num(String(this.state.mesoInVal || '').replace(/,/g, ''));
+      if (v === null) { this.setState({ mesoMsg: '숫자를 입력해 주세요.' }); return; }
+      this.saveMeso(allP.filter(p => p.date !== d).concat([{ date: d, v }]).sort((a, b) => a.date < b.date ? -1 : 1));
+      this.setState({ mesoInVal: '' });
+    };
+    return {
+      isMeso, mesoTab: tabBtn, mesoLastDate: last ? last.date : '–',
+      mesoHas: allP.length > 0, mesoNone: allP.length === 0,
+      mesoCur: last ? W(num(last.v)) : '–', mesoDelta: delta || (last ? last.date + ' 기준' : ''), mesoDeltaColor: dColor,
+      mesoStats: stats, mesoChart: chart, mesoTipShow: !!tip, mesoTip: tip || {},
+      mesoHasRange: n > 0, mesoEmptyRange: n === 0, mesoRangeLabel: per === '전체' ? '전체 기간' : '최근 ' + per,
+      mesoPeriods: PER.map(([l]) => { const on = l === per; return { label: l, onClick: () => this.setState({ mesoPer: l, mesoHover: null }), bg: on ? '#fff' : 'transparent', color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', shadow: on ? '0 1px 2px rgba(0,0,0,0.08)' : 'none' }; }),
+      mesoMove: e => { const xy = this._mesoXY || []; if (!xy.length) return; const r = e.currentTarget.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width * 600; let b = 0; xy.forEach((p, i) => { if (Math.abs(p[0] - x) < Math.abs(xy[b][0] - x)) b = i; }); if (b !== this.state.mesoHover) this.setState({ mesoHover: b }); },
+      mesoLeave: () => this.setState({ mesoHover: null }),
+      mesoMsg: this.state.mesoMsg || '',
+      mesoInDate: this.state.mesoInDate || today, mesoInVal: this.state.mesoInVal || '',
+      onMesoDate: e => this.setState({ mesoInDate: e.target.value }), onMesoVal: e => this.setState({ mesoInVal: e.target.value }),
+      onMesoKey: e => { if (e.key === 'Enter') add(); }, addMeso: add,
+      mesoList: allP.slice().reverse().map(p => ({ date: p.date, val: W(num(p.v)), onDel: delP(p.date) })),
+    };
   }
   popVals(isPop, up, down) {
     const rows = this.state.pop || [];
@@ -1846,6 +2035,8 @@ class Component extends DCLogic {
       const all = clone(this.state.all);
       rows.forEach(row => { if (TABS.includes(row.tab) && row.data && row.data.dates) all[row.tab] = row.data; });
       const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
+      const mr = rows.find(row => row.tab === 'meso');
+      if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
       this.setState({ all, guides, remoteEmpty: false });
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
@@ -3107,13 +3298,14 @@ class Component extends DCLogic {
     const isContact = this.state.tab === '문의';
     const isPop = this.state.tab === '인구수';
     const isSunday = this.state.tab === '썬데이';
-    const tab = (isContact || isPop || isSunday || this.state.tab === '방문자') ? REF : this.state.tab;
+    const isMeso = this.state.tab === '메소';
+    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자') ? REF : this.state.tab;
     const data = all[tab];
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats && !isPop && !isSunday,
+      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso,
       isSunday,
       ...(() => {
         const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화'] : ['옥션', '사냥'];
@@ -3302,6 +3494,7 @@ class Component extends DCLogic {
       })(),
       ...this.statsVals(isStats),
       ...this.popVals(isPop, upColor, downColor),
+      ...this.mesoVals(isMeso, upColor, downColor),
       openLogin: () => this.setState({ loginOpen: true, loginErr: '' }),
       closeLogin: () => this.setState({ loginOpen: false }),
       loginEmail: this.state.loginEmail, loginPw: this.state.loginPw,
