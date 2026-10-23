@@ -2648,15 +2648,15 @@ class Component extends DCLogic {
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
         if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
-          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : 0;
+          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
-          const lat = s.preset === 'erda60' ? 800 : 500;
-          if (N != null && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
-          if (N != null && cd && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
+          const lat = s.preset === 'erda60' ? 800 : 500, nMax = s.preset === 'erda60' ? 62 : (Number(s.cd) || 60) + 2, nOk = N != null && N >= 1 && N <= nMax && now - (D.boxAt || now) >= 3000;
+          if (nOk && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
+          if (nOk && cd && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
             D.ocrLast = now; const H = (D.ocrH = (D.ocrH || []).concat([[now, N]]).slice(-4));
             if (H.length >= 3) {
-              let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (Math.abs(dn - el) > 1.5) { ok = false; break; } }
-              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 - lat; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
+              let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (dn < 0 || Math.abs(dn - el) > 1.5) { ok = false; break; } }
+              const tDn = H[0][1] - H[H.length - 1][1], tEl = (H[H.length - 1][0] - H[0][0]) / 1000; if (tDn < 1 || Math.abs(tDn - tEl) > 1.3) ok = false;              if (ok) { D.ocrLock = true; D.pend = 0; D.ocrFail = false; this._run[s.id] = now + (N + extra) * 1000 - lat; D.endAt = this._run[s.id]; this._alerted[s.id] = false; D.usedAt = D.usedAt || now; this.ensureTick(); }
             }
           }
         }
@@ -2712,7 +2712,7 @@ class Component extends DCLogic {
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
-  skillDur(s) { return JANUS_DUR[s.preset] || s.cd || 0; }
+  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 120 - (Number(s.cd) || 60) : s.cd || 0); }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
