@@ -242,9 +242,9 @@ input{font-family:inherit;}
               <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
             </sc-if>
             <sc-if value="{{ s.dragMode }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                <button onClick="{{ s.pickPos }}" style="padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
-                <span style="font-size:12px;font-weight:600;color:{{ s.customColor }};">{{ s.customMsg }}</span>
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <button onClick="{{ s.pickPos }}" style="flex:none;white-space:nowrap;padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
+                <span title="{{ s.customMsg }}" style="flex:1;min-width:0;font-size:12px;font-weight:600;color:{{ s.customColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.customMsg }}</span>
               </div>
             </sc-if>
           </div>
