@@ -3235,7 +3235,7 @@ class Component extends DCLogic {
         const show = inWindow;
         const sdD = sd ? new Date(sun) : null;
         const sunday = sd ? {
-          img: sBase + 'sunday.png?v=' + encodeURIComponent(sd.notice_id || sd.start),
+          img: sBase + 'sunday.png?v=' + encodeURIComponent(sd.fetched || sd.start || sd.notice_id),
           url: sd.url || 'https://maplestory.nexon.com/News/Event',
           dateLabel: sdD.getUTCFullYear() + '년 ' + (sdD.getUTCMonth() + 1) + '월 ' + sdD.getUTCDate() + '일(일)',
           badge: inWindow ? '이번 주' : '지난 썬데이', badgeBg: inWindow ? 'oklch(0.8 0.15 85)' : '#e3e3e0',
