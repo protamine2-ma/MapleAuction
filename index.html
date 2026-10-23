@@ -2647,7 +2647,7 @@ class Component extends DCLogic {
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
-        if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
+        if (D.on === needOn && yOk && D.ready === true && (!(this._run[s.id] > now) || s.preset === 'erda60')) { used = true; D.ready = false; }
         if (false && s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
           const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
