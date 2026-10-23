@@ -187,14 +187,14 @@ input{font-family:inherit;}
         <span style="width:40px;height:22px;border-radius:999px;padding:2px;background:{{ beepSw.swBg }};display:flex;justify-content:{{ beepSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>알림음
       </button>
 
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#3a3b3f;">볼륨<input type="range" min="0" max="100" value="{{ huntVol }}" onChange="{{ onHuntVol }}" style="width:110px;accent-color:oklch(0.48 0.17 255);"><span style="width:38px;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ huntVol }}%</span></label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#3a3b3f;">전체 볼륨<input type="range" min="0" max="100" value="{{ huntVol }}" onChange="{{ onHuntVol }}" style="width:110px;accent-color:oklch(0.48 0.17 255);"><span style="width:38px;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ huntVol }}%</span></label>
       <button onClick="{{ testSound }}" style="padding:7px 12px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">소리 테스트</button>
     </div>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(쿨타임 : 쿨감 적용된 시간)</span></h2>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(쿨타임 : 쿨감 적용된 시간)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
       <button onClick="{{ addSkill }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 스킬 추가</button>
     </div>
     <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
@@ -261,7 +261,7 @@ input{font-family:inherit;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(2개 이상 등록 후 더블체크하기)</span></h2>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(2개 이상 등록 후 더블체크하기)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
@@ -293,7 +293,7 @@ input{font-family:inherit;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ runeStatusBg }};color:{{ runeStatusColor }};font-size:13px;font-weight:700;">{{ runeStatus }}</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
@@ -327,7 +327,7 @@ input{font-family:inherit;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label></div>
       <button onClick="{{ addTimer }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 타이머 추가</button>
     </div>
     <sc-for list="{{ timers }}" as="t" hint-placeholder-count="1">
@@ -2085,7 +2085,7 @@ class Component extends DCLogic {
   }
   huntAlert(text, kind = 'skill') {
     if (this.hunt().paused && text !== '알림 테스트') return;
-    const h = this.hunt(), vol = h.vol / 100;
+    const h = this.hunt(), grp = kind === 'buff' || kind === 'rune' || kind === 'skill' ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
     if (h.beep) {
       try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
     }
@@ -2712,7 +2712,7 @@ class Component extends DCLogic {
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
-  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 120 - (Number(s.cd) || 60) : s.cd || 0); }
+  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 60 : s.cd || 0); }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
@@ -2924,6 +2924,8 @@ class Component extends DCLogic {
             this._pick = null; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== ps.id ? x : { ...x, box: { ...(x.box || {}), [res]: box } }) }); } }; })(),
       addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 60, before: 8 }] }),
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
+      ...Object.fromEntries([['skill', 'volSkill'], ['buff', 'volBuff'], ['rune', 'volRune'], ['timer', 'volTimer']].map(([k, n]) => { const v = (h.vols || {})[k]; return [n, { val: String(v == null ? 100 : v),
+        onChange: e => { set('vols', { ...(h.vols || {}), [k]: Number(e.target.value) }); clearTimeout(this._vt); this._vt = setTimeout(() => this.huntAlert('알림 테스트', k), 250); } }]; })),
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
       pauseLabel: h.paused ? '전체 다시 켜기' : '전체 비활성화', pauseBg: h.paused ? 'oklch(0.55 0.2 25)' : '#fff', pauseColor: h.paused ? '#fff' : 'oklch(0.5 0.19 25)', pauseBorder: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.85 0.06 25)',
