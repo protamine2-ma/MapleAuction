@@ -25,7 +25,8 @@ if (!items.length) { console.log('썬데이 메이플 공지가 아직 없어요
 items.sort((a, b) => String(b.date_event_start || b.date).localeCompare(String(a.date_event_start || a.date)));
 const n = items[0];
 const old = fs.existsSync('sunday.json') ? JSON.parse(fs.readFileSync('sunday.json', 'utf8')) : null;
-if (!TEST && old && old.notice_id === n.notice_id && fs.existsSync('sunday.png') && process.env.FORCE !== '1') { console.log('이미 받아온 썬데이예요.'); process.exit(0); }
+const sameWeek = old && old.notice_id === n.notice_id && String(old.start || '').slice(0, 10) === String(n.date_event_start || '').slice(0, 10);
+if (!TEST && sameWeek && fs.existsSync('sunday.png') && process.env.FORCE !== '1') { console.log('이미 받아온 썬데이예요.'); process.exit(0); }
 
 const detail = await api('/notice-event/detail', { notice_id: n.notice_id });
 const srcs = [...String(detail.contents || '').matchAll(/<img[^>]+src=["']([^"']+)["']/gi)].map(m => m[1].replace(/&amp;/g, '&'));
