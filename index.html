@@ -2894,7 +2894,9 @@ class Component extends DCLogic {
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
           pct: on && s.cd ? Math.min(100, rem / (this.skillDur(s) * 1000) * 100).toFixed(1) + '%' : '0%',
           toggleRun: () => this.toggleSkill(s),
-          onName: e => upd(s.id, 'name', e.target.value), onCd: e => upd(s.id, 'cd', num(e.target.value)), onBefore: e => upd(s.id, 'before', Number(e.target.value) || 0),
+          onName: e => upd(s.id, 'name', e.target.value), onCd: e => { const nv = num(e.target.value), ov = Number(s.cd) || 60, R = this._run && this._run[s.id];
+            if (R && nv > 0 && (s.preset === 'erda60' || JANUS_DUR[s.preset])) { const d = (s.preset === 'erda60' ? ov - nv : nv - ov) * 1000; this._run[s.id] = R + d; const D = this._det && this._det[s.id]; if (D && D.endAt) D.endAt += d; }
+            upd(s.id, 'cd', nv); }, onBefore: e => upd(s.id, 'before', Number(e.target.value) || 0),
           remove: () => { if (this._run) delete this._run[s.id]; this.saveHunt({ ...h, skills: h.skills.filter(x => x.id !== s.id) }); } };
       }),
       huntNoSkills: !h.skills.length,
