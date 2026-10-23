@@ -207,7 +207,7 @@ input{font-family:inherit;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(쿨타임 : 쿨감 적용된 시간)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(퀵슬롯 스킬을 지정해주세요)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
       <button onClick="{{ addSkill }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 스킬 추가</button>
     </div>
     <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
@@ -244,7 +244,6 @@ input{font-family:inherit;}
             <sc-if value="{{ s.dragMode }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <button onClick="{{ s.pickPos }}" style="padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
-                <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}"><span title="사이트가 보고 있는 칸" style="width:44px;height:44px;flex:none;border-radius:4px;border:1px solid #e3e3e0;image-rendering:pixelated;background-size:100% 100%;background-image:{{ s.thumbBg }};"></span></sc-if>
                 <span style="font-size:12px;font-weight:600;color:{{ s.customColor }};">{{ s.customMsg }}</span>
               </div>
             </sc-if>
@@ -2691,9 +2690,9 @@ class Component extends DCLogic {
         let br = 0, bn = 0;
         for (let y = 2; y < bh - 2; y += 2) for (let X = 2; X < bw - 2; X += 2) { if (y > bh * 0.15 && y < bh * 0.7 && X > bw * 0.12 && X < bw * 0.65) continue; const i = (y * bw + X) * 4; br += a[i] + a[i + 1] + a[i + 2]; bn++; }
         br /= Math.max(1, bn);
-        const dark = D.bright ? br < D.bright * 0.85 : true;
+        const dark = D.bright ? br < D.bright * (s.preset === 'erda60' ? 0.93 : 0.85) : true;
         D.dbg = (D.bright ? Math.round(br / D.bright * 100) : 100) + '% · 숫자 ' + (yel >= 5 ? '있음' : '없음');
-        const cd = yel >= 5 && (dark || yel >= 15);
+        const cd = yel >= 5 && (dark || yel >= (s.preset === 'erda60' ? 10 : 15));
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (yel <= 1) { if (!D.clearSince) D.clearSince = now; } else D.clearSince = 0;
@@ -2746,7 +2745,7 @@ class Component extends DCLogic {
           if (!D.jmk) D.jmk = mk;
           else if (dif(mk, D.jmk) >= lim) { if (D.jc && dif(mk, D.jc) <= 2) { if (++D.jn >= 3) { D.jmk = mk; D.jc = null;
                 const wc = m => m.reduce((p, q) => p + q, 0), fewer = wc(mk) !== wc(D.jprev || mk);
-                if (this._run[s.id] && now - (D.usedAt || 0) >= 48000 && now < (D.endAt || 0) - 3000) used = true; } } else { D.jc = mk; D.jn = 1; D.jprev = D.jmk; } }
+                if (this._run[s.id] && cd && dark && yel >= 8 && now - (D.usedAt || 0) >= 48000 && now < (D.endAt || 0) - 3000) used = true; } } else { D.jc = mk; D.jn = 1; D.jprev = D.jmk; } }
           else D.jc = null;
         }
         if (cd) D.offSince = 0; else if (!D.offSince) D.offSince = now;
