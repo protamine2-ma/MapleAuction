@@ -113,7 +113,7 @@ input{font-family:inherit;}
               <sc-for list="{{ s.dateLabels }}" as="dl" hint-placeholder-count="4">
                 <span style="flex:1;min-width:0;text-align:center;">{{ dl }}</span>
               </sc-for>
-              <div style="width:32px;"></div>
+              <div style="width:64px;"></div>
             </div>
             <sc-if value="{{ s.isEmpty }}" hint-placeholder-val="{{ false }}">
               <div style="padding:14px 0;font-size:13px;color:#9a9ca1;">아직 아이템이 없어요.</div>
@@ -130,6 +130,10 @@ input{font-family:inherit;}
                 <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4">
                   <input value="{{ c.value }}" onChange="{{ c.onChange }}" onPaste="{{ c.onPaste }}" inputMode="decimal" style="flex:1;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;">
                 </sc-for>
+                <div style="display:flex;flex-direction:column;flex:none;">
+                  <button onClick="{{ r.onUp }}" disabled="{{ r.upOff }}" title="위로" style="width:26px;height:16px;padding:0;border:none;background:transparent;color:{{ r.upColor }};font-size:11px;line-height:1;cursor:pointer;">▲</button>
+                  <button onClick="{{ r.onDown }}" disabled="{{ r.downOff }}" title="아래로" style="width:26px;height:16px;padding:0;border:none;background:transparent;color:{{ r.downColor }};font-size:11px;line-height:1;cursor:pointer;">▼</button>
+                </div>
                 <button onClick="{{ r.onDelete }}" title="삭제" style="width:32px;height:32px;border:none;background:transparent;color:#9a9ca1;font-size:18px;cursor:pointer;">×</button>
               </div>
             </sc-for>
@@ -3319,6 +3323,10 @@ class Component extends DCLogic {
             onName: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].name = v; }); },
             onShort: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].short = v; }); },
             onDelete: () => this.deleteItem(t, r),
+            upOff: r === 0, downOff: r === x.items.length - 1,
+            upColor: r === 0 ? '#d6d6d2' : '#6b6d73', downColor: r === x.items.length - 1 ? '#d6d6d2' : '#6b6d73',
+            onUp: () => { if (r > 0) this.updateTab(t, y => { const a = y.items; [a[r - 1], a[r]] = [a[r], a[r - 1]]; if (a[r].group !== a[r - 1].group) { const g = a[r - 1].group; a[r - 1].group = a[r].group; a[r].group = g; } }); },
+            onDown: () => { if (r < x.items.length - 1) this.updateTab(t, y => { const a = y.items; [a[r], a[r + 1]] = [a[r + 1], a[r]]; if (a[r].group !== a[r + 1].group) { const g = a[r].group; a[r].group = a[r + 1].group; a[r + 1].group = g; } }); },
             cells: it.values.map((v, c) => ({ value: v ?? '', onPaste: e => this.pasteGrid(e, t, r, c), onChange: e => { const val = e.target.value; this.updateTab(t, y => { y.items[r].values[c] = val; }); } })),
           })),
         };
