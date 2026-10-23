@@ -2601,6 +2601,16 @@ class Component extends DCLogic {
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, D.box.x, D.box.y, D.box.w, D.box.h, 0, 0, D.box.w, D.box.h);
       const a = x.getImageData(0, 0, D.box.w, D.box.h).data, bw = D.box.w, bh = D.box.h;
       if (now - (D.thumbAt || 0) > 800) { D.thumbAt = now; try { D.thumb = c.toDataURL(); } catch (e) {} }
+      {
+        // 스킬 설명창·마우스가 아이콘을 덮으면 위쪽에 흰 글자/커서 픽셀이 갑자기 늘어남 → 그동안 인식 멈춤
+        let tw = 0; const yEnd = Math.floor(bh * 0.55);
+        for (let y = 0; y < yEnd; y++) for (let X = 0; X < bw; X++) { const i = (y * bw + X) * 4, mx = Math.max(a[i], a[i + 1], a[i + 2]), mn = Math.min(a[i], a[i + 1], a[i + 2]); if (mn > 185 && mx - mn < 35) tw++; }
+        const thr = Math.max(6, Math.round(bw * yEnd * 0.04));
+        if (D.twBase == null) D.twBase = tw;
+        const occ = tw > D.twBase + thr;
+        if (!occ) D.twBase = D.twBase * 0.95 + tw * 0.05; else D.occAt = now;
+        if (now - (D.occAt || 0) < 1200) { D.dbg = '아이콘 가려짐'; D.on = 0; D.yrn = 0; D.yc = null; D.yc2 = null; D.cand = null; D.cand2 = null; D.ocrH = []; return; }
+      }
       let used = false;
       if (this.skillMode(s) === 'count') {
         const mk = [];
@@ -2638,7 +2648,7 @@ class Component extends DCLogic {
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
         if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
         if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
-          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
+          const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
           const lat = s.preset === 'erda60' ? 800 : 500;
           if (N != null && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
@@ -2702,7 +2712,7 @@ class Component extends DCLogic {
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
-  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 120 - (Number(s.cd) || 60) : s.cd || 0); }
+  skillDur(s) { return JANUS_DUR[s.preset] || s.cd || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
