@@ -35,9 +35,18 @@ input{font-family:inherit;}
   <div style="position:relative;max-width:1320px;margin:0 auto;padding:0 28px 0 12px;display:grid;grid-template-columns:minmax(250px,1fr) auto minmax(0,1fr);align-items:stretch;gap:0 20px;">
     <div style="min-height:140px;min-width:250px;"></div>
     <sc-if value="{{ sundayShow }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ sundayTab.onClick }}" title="썬데이 메이플 보기" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};padding:0;border:none;background:transparent;cursor:pointer;" style-hover="opacity:0.92;">
-        {{ sundayBannerImg }}
-      </button>
+      <div onMouseEnter="{{ sundayHoverOn }}" onMouseLeave="{{ sundayHoverOff }}" style="position:absolute;z-index:6;left:12px;top:8px;width:250px;height:{{ sundayImgH }};">
+        <button onClick="{{ sundayTab.onClick }}" style="width:auto;max-width:100%;height:100%;padding:0;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span style="font-size:13px;font-weight:800;color:#fff;letter-spacing:-0.01em;text-align:center;">썬데이 메이플</span>
+          <span style="flex:1;min-height:0;display:flex;justify-content:center;">{{ sundayBannerImg }}</span>
+        </button>
+        <sc-if value="{{ sundayHover }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:calc(100% + 10px);top:0;width:min(480px,calc(100vw - 300px));padding:12px;border-radius:12px;background:#fff;box-shadow:0 12px 36px rgba(0,0,0,0.28);pointer-events:none;">
+            <div style="font-size:14px;font-weight:800;color:#1d1e22;margin-bottom:8px;">{{ sunday.dateLabel }} 썬데이 메이플</div>
+            {{ sundayBigImg }}
+          </div>
+        </sc-if>
+      </div>
     </sc-if>
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px 0 22px;">
       <div style="display:flex;align-items:center;gap:16px;">
@@ -3243,7 +3252,9 @@ class Component extends DCLogic {
         return {
           sunday, sundayShow: show, sundayHide: !show, sundayHasImg: !!sd, sundayNoImg: !sd,
           sundayTabImg: sd ? React.createElement('img', { src: sunday.img, alt: '썬데이 메이플 혜택', style: { display: 'block', width: '100%', maxWidth: 620, height: 'auto', borderRadius: 10 } }) : null,
-          sundayBannerImg: sd ? React.createElement('img', { src: sunday.img, alt: '이번 주 썬데이 메이플', style: { display: 'block', width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left center' } }) : null,
+          sundayBannerImg: sd ? React.createElement('img', { src: sunday.img, alt: '이번 주 썬데이 메이플', style: { display: 'block', width: 'auto', maxWidth: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left center' } }) : null,
+          sundayHover: !!sd && !!this.state.sundayHover, sundayHoverOn: () => this.setState({ sundayHover: true }), sundayHoverOff: () => this.setState({ sundayHover: false }),
+          sundayBigImg: sd ? React.createElement('img', { src: sunday.img, alt: '썬데이 메이플 크게 보기', style: { display: 'block', width: '100%', height: 'auto', maxHeight: '75vh', objectFit: 'contain', borderRadius: 8 } }) : null,
           adPadL: show ? '282px' : '28px',
           sundayImgH: topAd ? 'calc(100% + 95px)' : 'calc(100% - 16px)',
           adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
