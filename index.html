@@ -231,6 +231,7 @@ input{font-family:inherit;}
             <sc-if value="{{ s.dragMode }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <button onClick="{{ s.pickPos }}" style="padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
+                <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}"><span title="사이트가 보고 있는 칸" style="width:44px;height:44px;flex:none;border-radius:4px;border:1px solid #e3e3e0;image-rendering:pixelated;background-size:100% 100%;background-image:{{ s.thumbBg }};"></span></sc-if>
                 <span style="font-size:12px;font-weight:600;color:{{ s.customColor }};">{{ s.customMsg }}</span>
               </div>
             </sc-if>
@@ -2605,11 +2606,11 @@ class Component extends DCLogic {
         // 스킬 설명창·마우스가 아이콘을 덮으면 위쪽에 흰 글자/커서 픽셀이 갑자기 늘어남 → 그동안 인식 멈춤
         let tw = 0; const yEnd = Math.floor(bh * 0.55);
         for (let y = 0; y < yEnd; y++) for (let X = 0; X < bw; X++) { const i = (y * bw + X) * 4, mx = Math.max(a[i], a[i + 1], a[i + 2]), mn = Math.min(a[i], a[i + 1], a[i + 2]); if (mn > 185 && mx - mn < 35) tw++; }
-        const thr = Math.max(6, Math.round(bw * yEnd * 0.04));
+        const thr = Math.max(8, Math.round(bw * yEnd * 0.08)), busy = D.pend || this._run[s.id] > now;
         if (D.twBase == null) D.twBase = tw;
-        const occ = tw > D.twBase + thr;
-        if (!occ) D.twBase = D.twBase * 0.95 + tw * 0.05; else D.occAt = now;
-        if (now - (D.occAt || 0) < 1200) { D.dbg = '아이콘 가려짐'; D.on = 0; D.yrn = 0; D.yc = null; D.yc2 = null; D.cand = null; D.cand2 = null; D.ocrH = []; return; }
+        const occ = !busy && tw > D.twBase + thr;
+        if (!occ) { D.twBase = D.twBase * 0.95 + tw * 0.05; D.occFrom = 0; } else { D.occAt = now; if (!D.occFrom) D.occFrom = now; else if (now - D.occFrom > 6000) { D.twBase = tw; D.occFrom = 0; } }
+        if (!busy && now - (D.occAt || 0) < 1200) { D.dbg = '아이콘 가려짐'; D.on = 0; D.yrn = 0; D.yc = null; D.yc2 = null; D.cand = null; D.cand2 = null; D.ocrH = []; return; }
       }
       let used = false;
       if (this.skillMode(s) === 'count') {
@@ -2647,12 +2648,12 @@ class Component extends DCLogic {
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         const needOn = s.preset === 'yein67' ? 3 : 2, yOk = s.preset !== 'yein67' || (yel >= 8 && dark);
         if (D.on === needOn && yOk && D.ready === true && !(this._run[s.id] > now)) { used = true; D.ready = false; }
-        if (s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
+        if (false && s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
           const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
-          const lat = s.preset === 'erda60' ? 800 : 500, nMax = s.preset === 'erda60' ? 62 : (Number(s.cd) || 60) + 2, nOk = N != null && N >= 1 && N <= nMax && now - (D.boxAt || now) >= 3000;
-          if (nOk && cd && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
-          if (nOk && cd && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
+          const lat = s.preset === 'erda60' ? 800 : 500, nMax = s.preset === 'erda60' ? 62 : (Number(s.cd) || 60) + 2, nOk = N != null && N >= 1 && N <= nMax && now - (D.boxAt || now) >= 3000; D.ocrN = N;
+          if (nOk && D.ocrLock && now - (D.ocrLast || 0) >= 900) { D.ocrLast = now; const t = now + (N + extra) * 1000 - lat, R = this._run[s.id]; if (R && Math.abs(R - t) > 1200 && Math.abs(R - t) < 15000) { this._run[s.id] = t; D.endAt = t; } }
+          if (nOk && !D.ocrLock && now - (D.ocrLast || 0) >= 900) {
             D.ocrLast = now; const H = (D.ocrH = (D.ocrH || []).concat([[now, N]]).slice(-4));
             if (H.length >= 3) {
               let ok = true; for (let i = 1; i < H.length; i++) { const el = (H[i][0] - H[i - 1][0]) / 1000, dn = H[i - 1][1] - H[i][1]; if (dn < 0 || Math.abs(dn - el) > 1.5) { ok = false; break; } }
@@ -2705,14 +2706,14 @@ class Component extends DCLogic {
       if (now - D.boxAt < 3000) used = false;
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
       if (used && isJanus && now - (D.usedAt || 0) < 60000) used = false;
-      const ocrSkill = !!(s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60'));
+      const ocrSkill = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true;
         if (ocrSkill) { D.pend = now; D.ocrLock = false; D.ocrH = []; D.ocrFail = false; }
         else { D.endAt = now - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; } }
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
-  skillDur(s) { return JANUS_DUR[s.preset] || (s.preset === 'erda60' ? 60 : s.cd || 0); }
+  skillDur(s) { const c = Number(s.cd) || 60; return JANUS_DUR[s.preset] ? JANUS_DUR[s.preset] + (c - 60) : s.preset === 'erda60' ? 120 - c : s.cd || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
   readWhiteMins(d, W, H) {
@@ -2784,13 +2785,21 @@ class Component extends DCLogic {
   readCd(a, bw, bh) {
     const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","6":"011111110000100000100000111110111110100001100001110011011110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
     this._DIG = DIG;
-    const isY = i => a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80;
-    const y0 = Math.floor(bh * 0.12), y1 = Math.ceil(bh * 0.78), cols = [];
+    const TH = [[185, 155, 80], [165, 135, 105], [205, 175, 60], [145, 120, 120]];
+    for (const t of TH) { const r = this.readCdT(a, bw, bh, DIG, t); if (r != null) return r; }
+    return null;
+  }
+  readCdT(a, bw, bh, DIG, t) {
+    const isY = i => a[i] > t[0] && a[i + 1] > t[1] && a[i + 2] < t[2] && a[i] - a[i + 2] > 70;
+    const y0 = Math.floor(bh * 0.08), y1 = Math.ceil(bh * 0.85), cols = [];
     for (let X = 0; X < bw; X++) { let k = 0; for (let y = y0; y < y1; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
     const runs = []; let s = -1;
     for (let X = 0; X <= bw; X++) { const on = X < bw && cols[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
-    const gl = runs.filter(r => r[1] - r[0] >= 0 && cols.slice(r[0], r[1] + 1).reduce((p, q) => p + q, 0) >= 4);
-    if (!gl.length || gl.length > 2) return null;
+    let gl = runs.filter(r => cols.slice(r[0], r[1] + 1).reduce((p, q) => p + q, 0) >= 4);
+    for (let i = gl.length - 1; i > 0; i--) if (gl[i][0] - gl[i - 1][1] <= 1 && gl[i][1] - gl[i - 1][0] < bw * 0.22) { gl[i - 1] = [gl[i - 1][0], gl[i][1]]; gl.splice(i, 1); }
+    if (gl.length === 1 && gl[0][1] - gl[0][0] + 1 > bw * 0.42) { const r = gl[0], m = Math.round((r[0] + r[1]) / 2); gl = [[r[0], m - 1], [m + 1, r[1]]]; }
+    if (gl.length > 2) gl = gl.map(r => [r, cols.slice(r[0], r[1] + 1).reduce((p, q) => p + q, 0)]).sort((p, q) => q[1] - p[1]).slice(0, 2).map(x => x[0]).sort((p, q) => p[0] - q[0]);
+    if (!gl.length) return null;
     const f = bw / 32; let out = '';
     for (const r of gl) {
       const w = r[1] - r[0] + 1;
@@ -2798,8 +2807,8 @@ class Component extends DCLogic {
       if (gy1 - gy0 < 5 * f) return null;
       if (w <= 3 * f) { out += '1'; continue; }
       let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(r[0] + (gx + 0.5) * w / 6), Y = Math.floor(gy0 + (gy + 0.5) * (gy1 - gy0 + 1) / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
-      let bk = null, bd = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
-      if (bd > 14) return null; out += bk;
+      let bk = null, bd = 1e9, b2 = 1e9; for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { b2 = bd; bd = dd; bk = k; } else if (dd < b2) b2 = dd; }
+      if (bd > 16 || (bd > 8 && b2 - bd < 3)) return null; out += bk;
     }
     return Number(out);
   }
@@ -2882,7 +2891,7 @@ class Component extends DCLogic {
           presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
           ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
             return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
-              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
+              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' + (this._det[s.id].ocrN != null ? ' · 읽음 ' + this._det[s.id].ocrN : ' · 읽음 없음') : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
               customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
               pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
           ...(() => { const D = (this._det || {})[s.id]; const hasBox = !!(this._video && this._video.videoWidth && s.box && s.box[this._video.videoWidth + 'x' + this._video.videoHeight]);
