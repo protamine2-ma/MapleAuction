@@ -96,7 +96,7 @@ body{overflow-x:clip;}
     <span data-m="upd" style="justify-self:start;align-self:center;padding:8px 16px;border-radius:10px;background:oklch(0.4 0.1 255);font-size:clamp(20px,2.6vw,30px);font-weight:700;color:oklch(0.9 0.06 255);white-space:nowrap;font-variant-numeric:tabular-nums;">{{ siteLatest }} 업데이트</span>
     <div data-m="maker" style="position:absolute;bottom:6px;right:20px;display:flex;align-items:center;gap:4px;">
       <span style="font-size:clamp(17px,1.8vw,22px);font-weight:600;font-style:italic;letter-spacing:0.02em;color:oklch(0.85 0.1 85);white-space:nowrap;">by 대장메린이</span>
-      <img src="maker.png" alt="대장메린이" style="display:block;height:clamp(40px,4.5vw,56px);width:auto;">
+      <img src="img/maker.png" alt="대장메린이" style="display:block;height:clamp(40px,4.5vw,56px);width:auto;">
     </div>
   </div>
 </div>
@@ -671,14 +671,14 @@ body{overflow-x:clip;}
               </div>
               <span style="font-size:20px;font-weight:700;color:#3a3b3f;line-height:1.5;text-align:center;text-wrap:pretty;">{{ s.quest.note }}</span>
               <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;">
-                <img src="quest-adele-1.png" alt="가려진 기억 퀘스트 목록" style="display:block;width:100%;max-width:268px;height:auto;border-radius:8px;">
-                <img src="quest-adele-2.png" alt="페이스 스킬 효과" style="display:block;width:100%;max-width:304px;height:auto;border-radius:8px;">
+                <img src="img/quest-adele-1.png" alt="가려진 기억 퀘스트 목록" style="display:block;width:100%;max-width:268px;height:auto;border-radius:8px;">
+                <img src="img/quest-adele-2.png" alt="페이스 스킬 효과" style="display:block;width:100%;max-width:304px;height:auto;border-radius:8px;">
               </div>
             </div>
           </sc-if>
           <sc-if value="{{ s.hasVm }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;justify-content:center;margin-bottom:14px;">
-              <img src="vmatrix-adele.png" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
+              <img src="img/vmatrix-adele.png" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
             </div>
           </sc-if>
           <sc-if value="{{ s.hasUnion }}" hint-placeholder-val="{{ false }}">
@@ -1835,7 +1835,7 @@ const ABILITY = {
     { name: '사냥 종결', lines: [['L', '아이템 드롭률 20% 증가'], ['L', '메소 획득량 20% 증가']] },
   ],
 };
-const VMATRIX = { '아델': 'vmatrix-adele.png' };
+const VMATRIX = { '아델': 'img/vmatrix-adele.png' };
 const HUNTSPOT = { '아델': [
   ['200~205', '소멸의 여로', '숨겨진 호숫가, 동굴의 동쪽길, 동굴 아래쪽'],
   ['205~210', '리버스 시티', '숨겨진 연구열차'],
@@ -1857,7 +1857,7 @@ const HUNTSPOT = { '아델': [
   ['273~274', '오디움', '잠긴문 뒤 실험실 3, 4'],
 ] };
 const QUEST = { '아델': { reward: '페이스', effect: '크리티컬 데미지 10% · 공격력 10%', quest: '[아델] 가려진 기억 1 ~ 9', note: '가려진 기억 퀘스트를 1부터 9까지 모두 진행하세요.', imgs: ['quest-adele-1.png', 'quest-adele-2.png'] } };
-const HEXA = { '아델': ['hexa-adele-1.png', 'hexa-adele-2.png'] };
+const HEXA = { '아델': ['img/hexa-adele-1.png', 'img/hexa-adele-2.png'] };
 const HYPERSTAT = { '아델': [
   { name: '보스용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280], rows: [
     ['STR', [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]], ['DEX', [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12]],
@@ -2332,7 +2332,7 @@ class Component extends DCLogic {
         unionSets: s.title === '유니온' && UNION[job] ? UNION[job].map(u => { const cell = ([l, c, m, v]) => ({ label: l, cnt: c + ' / ' + m, val: v, bd: c > 0 ? 'oklch(0.78 0.11 75)' : '#3c4654', labelColor: c > 0 ? 'oklch(0.86 0.09 75)' : '#aab3bf', pri: (u.pri || {})[l] || '', hasPri: !!(u.pri || {})[l] });
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
-        artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
+        artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(img/artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
         hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => ({ src, alt: '헥사스킬 강화 순서 ' + (k + 1) })) : [],
         hasHs: s.title === '하이퍼스탯' && !!HYPERSTAT[job],
         hsSets: s.title === '하이퍼스탯' && HYPERSTAT[job] ? HYPERSTAT[job].map(h => ({ name: h.name, range: h.lv[0] + '~' + h.lv[h.lv.length - 1] + 'Lv', lvs: h.lv.map(l => ({ t: l + 'Lv' })),
@@ -2507,7 +2507,7 @@ class Component extends DCLogic {
     if (kind === 'skill' && this.hunt().skillOff && text !== '알림 테스트') return;
     const h = this.hunt(), grp = kind === 'buff' || kind === 'rune' || kind === 'skill' ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
     if (h.beep) {
-      try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
+      try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('sounds/alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
     }
 
   }
@@ -2911,7 +2911,7 @@ class Component extends DCLogic {
           pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = bpk ? null : 'buff:' + b.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 50); } };
         const left = S.end && S.end > Date.now() ? S.end - Date.now() : 0, mm = Math.floor(left / 60000), ss = Math.floor(left % 60000 / 1000);
         const t = !left && S.fail && this._stream ? ['인식 실패', 'oklch(0.95 0.04 25)', 'oklch(0.5 0.19 25)'] : left ? [(S.approx ? '약 ' : '') + mm + ':' + String(ss).padStart(2, '0') + ' 남음', 'oklch(0.48 0.17 255)', '#fff'] : !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : true ? [hasBox ? '시간 대기 중' : '위치 지정 필요', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'] : S.on ? ['버프 켜짐', 'oklch(0.48 0.17 255)', '#fff'] : ['버프 없음', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.12 70)'];
-        return { id: b.id, preset: b.preset, iconBg: 'url(' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
+        return { id: b.id, preset: b.preset, iconBg: 'url(img/' + b.preset + '.png)', beforeVal: String(b.before ?? 0), onBefore: e => sv(list.map(x => x.id === b.id ? { ...x, before: Math.max(0, Number(e.target.value) || 0) } : x)), resetTimer: () => { if (st[b.id]) { st[b.id].end = 0; st[b.id].lastSeen = 0; } this.forceUpdate(); }, hasTimer: !!left, swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start',
           stText: t[0], stBg: t[1], stColor: t[2], ...pickInfo,
           toggle: () => sv(list.map(x => x.id === b.id ? { ...x, on: !on } : x)),
           name: b.name ?? this.buffName(b), onName: e => { const v = e.target.value; sv(list.map(x => x.id === b.id ? { ...x, name: v } : x)); },
@@ -2950,7 +2950,7 @@ class Component extends DCLogic {
     this._tpls = this._tpls || {}; const key = src + '@' + sc;
     if (this._tpls[key] !== undefined) return this._tpls[key];
     this._tpls[key] = null; const n = Math.round(30 * sc);
-    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.onerror = () => { (this._tplFail = this._tplFail || {})[src] = true; }; im.src = src;
+    const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = n; c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, n, n); this._tpls[key] = { w: n, h: n, d: x.getImageData(0, 0, n, n).data }; }; im.onerror = () => { (this._tplFail = this._tplFail || {})[src] = true; }; im.src = /^(data:|https?:|blob:|img\/)/.test(src) ? src : 'img/' + src;
     return null;
   }
   snapIcon(v, W, H, cb, src) {
@@ -3283,7 +3283,7 @@ class Component extends DCLogic {
   }
   findIcon(v, W, H) {
     if (!this._tpl) {
-      if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'skill-yein.png'; }
+      if (!this._tplLoading) { this._tplLoading = true; const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0); this._tpl = { w: im.width, h: im.height, d: x.getImageData(0, 0, im.width, im.height).data }; }; im.src = 'img/skill-yein.png'; }
       return;
     }
     const T = this._tpl, rx = Math.floor(W * 0.5), ry = Math.floor(H * 0.7), rw = W - rx, rh = H - ry;
@@ -3367,7 +3367,7 @@ class Component extends DCLogic {
           ...(() => { const D = (this._det || {})[s.id]; const hasBox = !!(this._video && this._video.videoWidth && s.box && s.box[this._video.videoWidth + 'x' + this._video.videoHeight]);
             const t = true ? '' : !this._stream ? '화면 공유하면 퀵슬롯에서 자동 감지' : D && D.box ? '퀵슬롯 자동 감지 중' + (D.dbg ? ' · 밝기 ' + D.dbg : D.cnt ? ' · ' + D.cnt : '') : '퀵슬롯에서 찾는 중…';
             return { detMsg: t, hasDet: !!t, thumbBg: 'url(' + ((this._stream && D && D.box && D.thumb) || '') + ')', hasThumb: !!(this._stream && D && D.box && D.thumb),
-              refind: () => { if (this._det) delete this._det[s.id]; if (this._run) delete this._run[s.id]; this.forceUpdate(); }, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
+              refind: () => { if (this._det) delete this._det[s.id]; if (this._run) delete this._run[s.id]; this.forceUpdate(); }, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(img/' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2], durV: 1 } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
