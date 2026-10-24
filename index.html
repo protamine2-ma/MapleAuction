@@ -242,9 +242,10 @@ body{overflow-x:clip;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(퀵슬롯 스킬을 지정해주세요)</span></h2><button onClick="{{ toggleSkillAll }}" style="margin-left:auto;display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:oklch(0.3 0.09 255);cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ skillAllSw.swBg }};display:flex;justify-content:{{ skillAllSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>{{ skillAllLabel }}</button><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.skill.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.skill.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(퀵슬롯 스킬을 지정해주세요)</span></h2><button onClick="{{ toggleSkillAll }}" style="margin-left:auto;display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:oklch(0.3 0.09 255);cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ skillAllSw.swBg }};display:flex;justify-content:{{ skillAllSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>{{ skillAllLabel }}</button><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
       <button onClick="{{ addSkill }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 스킬 추가</button>
     </div>
+    <sc-if value="{{ huntFold.skill.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
       <span>작동</span><span>스킬 이름</span><span style="text-align:center;">지속시간(초)</span><span style="text-align:center;">알림 시점(초 전)</span><span style="text-align:center;">남은 시간</span><span></span>
     </div>
@@ -305,15 +306,17 @@ body{overflow-x:clip;}
       </div>
     </sc-if>
     <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;">화면을 공유한 뒤 스킬마다 '위치 지정'을 눌러 퀵슬롯의 그 스킬 칸을 드래그하세요. 스킬을 쓰는 순간 타이머가 시작돼요(예인은 오른쪽 아래 숫자가 바뀔 때). 공유 없이 쓸 때는 스킬을 쓴 직후 스위치를 켜세요.</div>
+    </sc-if>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(2개 이상 등록 후 더블체크하기)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(2개 이상 등록 후 더블체크하기)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
     </div>
+    <sc-if value="{{ huntFold.buff.open }}" hint-placeholder-val="{{ true }}">
     <sc-if value="{{ buffNone }}" hint-placeholder-val="{{ false }}">
       <div style="padding:22px 20px;font-size:14px;color:#9a9ca1;text-align:center;">'+ 버프 추가'를 눌러 알림 받을 버프를 고르세요</div>
     </sc-if>
@@ -337,13 +340,15 @@ body{overflow-x:clip;}
       </div>
     </sc-for>
     <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">'위치 지정'을 누르고 미리보기에서 그 버프 아이콘 한 칸을 드래그하세요. 칸 안의 흰 분 숫자나 노란 남은 시간을 읽어 타이머를 맞춰요. 기본은 버프가 끝날 때 '○○ 종료'라고 알려주고, '초 전 알림'에 숫자를 넣으면 그만큼 미리 알려줘요(0 = 끝날 때).</div>
+    </sc-if>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.rune.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.rune.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ runeStatusBg }};color:{{ runeStatusColor }};font-size:13px;font-weight:700;">{{ runeStatus }}</span>
     </div>
+    <sc-if value="{{ huntFold.rune.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <button onClick="{{ toggleRune }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
@@ -371,14 +376,16 @@ body{overflow-x:clip;}
         </div>
       </div>
     </div>
+    </sc-if>
   </section>
 
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ stopStatusBg }};color:{{ stopStatusColor }};font-size:13px;font-weight:700;">{{ stopStatus }}</span>
     </div>
+    <sc-if value="{{ huntFold.stop.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <button onClick="{{ toggleStop }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
@@ -398,15 +405,17 @@ body{overflow-x:clip;}
         </div>
       </div>
     </div>
+    </sc-if>
   </section>
   </sc-if>
 
   <sc-if value="{{ huntAdmin }}" hint-placeholder-val="{{ false }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(관리자 전용)</span></h2></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(관리자 전용)</span></h2></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
+    <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <button onClick="{{ toggleBoost }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
@@ -428,14 +437,16 @@ body{overflow-x:clip;}
         </div>
       </div>
     </div>
+    </sc-if>
   </section>
   </sc-if>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.timer.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.timer.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label></div>
       <button onClick="{{ addTimer }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 타이머 추가</button>
     </div>
+    <sc-if value="{{ huntFold.timer.open }}" hint-placeholder-val="{{ true }}">
     <sc-for list="{{ timers }}" as="t" hint-placeholder-count="1">
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;border-top:1px solid #efefec;">
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
@@ -506,6 +517,7 @@ body{overflow-x:clip;}
         <sc-if value="{{ m15ShowReset }}" hint-placeholder-val="{{ false }}"><button onClick="{{ m15Reset }}" style="padding:10px 16px;border:1px solid #e3e3e0;border-radius:10px;background:#fff;color:oklch(0.55 0.2 25);font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;">정지</button></sc-if>
       </div>
     </div>
+    </sc-if>
   </section>
 
   <sc-if value="{{ showOldBuff }}" hint-placeholder-val="{{ false }}">
@@ -2505,8 +2517,8 @@ class Component extends DCLogic {
     const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = Number(h.boostMin) || 120, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.streak = seen ? B.streak + 1 : 0; B.gone = seen ? 0 : B.gone + 1;
     if (h.boostOn && !h.paused) {
-      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 1000; B.alerted = false; }
-      if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'timer'); }
+      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 3000; B.alerted = false; }
+      if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
       if (B.done && B.gone >= 5) B.done = false;
     }
@@ -3260,6 +3272,7 @@ class Component extends DCLogic {
     if (!this._runeCv) this._runeCv = React.createRef();
     const sw = on => ({ swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start' });
     const set = (k, v) => this.saveHunt({ ...h, [k]: v });
+    const huntFold = Object.fromEntries(['skill', 'buff', 'rune', 'stop', 'boost', 'timer'].map(k => { const c = !!(h.fold || {})[k]; return [k, { open: !c, icon: c ? '▸' : '▾', toggle: () => set('fold', { ...(h.fold || {}), [k]: !c }) }]; }));
     const upd = (id, k, v) => this.saveHunt({ ...h, skills: h.skills.map(s => s.id === id ? { ...s, [k]: v } : s) });
     const num = v => Math.max(0, Number(v) || 0);
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
@@ -3323,7 +3336,7 @@ class Component extends DCLogic {
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       ...Object.fromEntries([['skill', 'volSkill'], ['buff', 'volBuff'], ['rune', 'volRune'], ['timer', 'volTimer']].map(([k, n]) => { const v = (h.vols || {})[k]; return [n, { val: String(v == null ? 100 : v),
         onChange: e => { set('vols', { ...(h.vols || {}), [k]: Number(e.target.value) }); clearTimeout(this._vt); this._vt = setTimeout(() => this.huntAlert('알림 테스트', k), 250); } }]; })),
-      skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
+      huntFold, skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
       pauseLabel: h.paused ? '전체 다시 켜기' : '전체 비활성화', pauseBg: h.paused ? 'oklch(0.55 0.2 25)' : '#fff', pauseColor: h.paused ? '#fff' : 'oklch(0.5 0.19 25)', pauseBorder: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.85 0.06 25)',
