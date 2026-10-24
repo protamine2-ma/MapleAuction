@@ -2573,7 +2573,7 @@ class Component extends DCLogic {
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = px0 + dx, ny = py0 + dy; if (nx < 0 || ny < 0 || nx >= ow || ny >= oh) continue; const n = ny * ow + nx; if (mk[n] === 1) { mk[n] = 2; q[qt++] = n; } } }
       const ch = y1 - y0 + 1, cw = x1 - x0 + 1;
       if (ch >= minH && cw <= ch * 1.3) for (let t = 0; t < qt; t++) { const i = q[t] * 4; px++; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } }
-    const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = Number(h.boostMin) || 120, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
+    const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 60 : Number(h.boostMin)) || 60, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.streak = seen ? B.streak + 1 : 0; B.gone = seen ? 0 : B.gone + 1;
     if (h.boostOn && !h.paused) {
       if (!B.start && !B.done && B.streak >= 2) { B.start = now - 3000; B.alerted = false; }
@@ -3415,7 +3415,7 @@ class Component extends DCLogic {
         const bs = !h.boostOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : run ? ['부스터 진행 중', 'oklch(0.6 0.2 25)', '#fff'] : ['대기 중', 'oklch(0.48 0.17 255)', '#fff'];
         return { boostCvRef: this._boostCv, boostSw: sw(h.boostOn), toggleBoost: () => { this._boost = null; set('boostOn', !h.boostOn); },
           boostStatus: bs[0], boostStatusBg: bs[1], boostStatusColor: bs[2], boostRemain: run ? Math.ceil(rem / 1000) + '초' : '--', boostPx: this._stream && B.px != null ? String(B.px) : '--',
-          boostMin: String(h.boostMin ?? 120), onBoostMin: e => set('boostMin', Math.max(10, Number(e.target.value) || 120)), boostSec: String(h.boostSec ?? 100), onBoostSec: e => set('boostSec', Math.max(10, Number(e.target.value) || 100)) }; })(),
+          boostMin: String(h.boostMin == null || Number(h.boostMin) === 120 ? 60 : h.boostMin), onBoostMin: e => set('boostMin', Math.max(10, Number(e.target.value) || 60)), boostSec: String(h.boostSec ?? 100), onBoostSec: e => set('boostSec', Math.max(10, Number(e.target.value) || 100)) }; })(),
       runeSw: sw(h.rune), toggleRune: () => { if (!h.rune) { this._rune = {}; this._runeStartAlerted = false; } set('rune', !h.rune); },
       runeStatus: st[0], runeStatusBg: st[1], runeStatusColor: st[2],
       runePx: this._stream && r.res ? String(Math.max(0, r.px - r.base)) : '--',
