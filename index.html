@@ -1076,6 +1076,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
     <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ saveMesoImage }}" title="카드+그래프를 1920×1080 PNG로 저장" style="margin-top:4px;padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
+    </sc-if>
   </div>
 
   <sc-if value="{{ mesoNone }}" hint-placeholder-val="{{ false }}">
@@ -1083,6 +1086,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 
   <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ mesoImgRef }}" style="display:flex;flex-direction:column;gap:20px;"><div data-imgsec="" style="display:flex;flex-direction:column;gap:20px;">
     <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
       <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
         <span style="font-size:13px;font-weight:600;color:#6b6d73;">현재 시세</span>
@@ -1101,7 +1105,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">시세 추이 · {{ mesoRangeLabel }}</h2>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;padding:3px;background:#f0f0ee;border-radius:9px;">
+        <div data-noimg="1" style="display:flex;flex-wrap:wrap;gap:4px;padding:3px;background:#f0f0ee;border-radius:9px;">
           <sc-for list="{{ mesoPeriods }}" as="p" hint-placeholder-count="6">
             <button onClick="{{ p.onClick }}" style="padding:6px 12px;border:none;border-radius:7px;background:{{ p.bg }};color:{{ p.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:{{ p.shadow }};">{{ p.label }}</button>
           </sc-for>
@@ -1124,6 +1128,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <sc-for list="{{ mesoChart.grid }}" as="g" hint-placeholder-count="5">
             <span style="position:absolute;left:{{ g.rl }};top:{{ g.top }};transform:translateY(-50%);text-align:left;font-size:14px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;" data-m="mlab">{{ g.label }}</span>
           </sc-for>
+          <sc-for list="{{ mesoChart.cur }}" as="c" hint-placeholder-count="1">
+            <span style="position:absolute;left:{{ c.rl }};top:{{ c.top }};transform:translateY(-50%);padding:2px 7px;border-radius:5px;background:oklch(0.62 0.15 75);color:#fff;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;" data-m="mlab">{{ c.label }}</span>
+          </sc-for>
           <sc-for list="{{ mesoChart.marks }}" as="d" hint-placeholder-count="1">
             <span style="position:absolute;left:{{ d.left }};top:{{ d.top }};width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid oklch(0.62 0.15 75);box-sizing:border-box;transform:translate(-50%,-50%);pointer-events:none;"></span>
           </sc-for>
@@ -1141,6 +1148,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </div>
       </sc-if>
     </section>
+    </div></div>
   </sc-if>
 
   <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
@@ -1908,7 +1916,7 @@ class Component extends DCLogic {
     const last = allP[allP.length - 1], prev = allP[allP.length - 2];
     let delta = '', dColor = '#9a9ca1';
     if (last && prev) { const d = num(last.v) - num(prev.v), pc = d / num(prev.v) * 100; delta = (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + W(Math.abs(d)) + '원 (' + (d > 0 ? '+' : '') + pc.toFixed(1) + '%) · 직전 ' + prev.date; dColor = d > 0 ? up : d < 0 ? down : '#9a9ca1'; }
-    let chart = { gridPath: '', area: '', pts: '', hoverLine: '', grid: [], marks: [], xl: [] }, tip = null, stats = [];
+    let chart = { gridPath: '', area: '', pts: '', hoverLine: '', grid: [], marks: [], cur: [], xl: [] }, tip = null, stats = [];
     this._mesoXY = [];
     if (n) {
       let lo = Math.min(...vs), hi = Math.max(...vs);
@@ -1939,6 +1947,7 @@ class Component extends DCLogic {
         hoverLine: h != null ? 'M' + xy[h][0].toFixed(1) + ' ' + Y0 + 'V' + Y1 : '',
         grid: ticks.map(v => ({ top: pct(yAt(v), 280), w: pct(X0 - 8, 600), rl: pct(X1 + 8, 600), label: W(Math.round(v)) })),
         marks: [h != null ? h : n - 1].map(i => ({ left: pct(xy[i][0], 600), top: pct(xy[i][1], 280) })),
+        cur: [n - 1].map(i => ({ top: pct(xy[i][1], 280), rl: pct(X1 + 8, 600), label: W(vs[i]) })),
         xl,
       };
       if (h != null) { const fx = xy[h][0] / 600; tip = { left: pct(xy[h][0], 600), top: pct(xy[h][1], 280), tf: 'translate(' + (fx > 0.8 ? '-100%' : fx < 0.2 ? '0' : '-50%') + ', calc(-100% - 12px))', date: pts[h].date, val: W(vs[h]) }; }
@@ -1953,6 +1962,8 @@ class Component extends DCLogic {
     };
     return {
       isMeso, mesoTab: tabBtn, mesoLastDate: last ? last.date : '–',
+      mesoImgRef: this._mesoImgRef || (this._mesoImgRef = el => { this._mesoEl = el; }),
+      saveMesoImage: () => this.saveImage('메소', last ? String(last.date) : '', this._mesoEl, 1064),
       mesoHas: allP.length > 0, mesoNone: allP.length === 0,
       mesoCur: last ? W(num(last.v)) : '–', mesoDelta: delta || (last ? last.date + ' 기준' : ''), mesoDeltaColor: dColor,
       mesoStats: stats, mesoChart: chart, mesoTipShow: !!tip, mesoTip: tip || {},
@@ -3438,8 +3449,8 @@ class Component extends DCLogic {
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
   componentWillUnmount() { if (this._topScroll) window.removeEventListener('scroll', this._topScroll); if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
-  async saveImage(tab, date) {
-    const el = this._pairEl; if (!el || this._imgBusy) return;
+  async saveImage(tab, date, target, capW) {
+    const el = target || this._pairEl; if (!el || this._imgBusy) return;
     let dir = null;
     if (window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
     this._imgBusy = true; this.forceUpdate();
@@ -3447,7 +3458,7 @@ class Component extends DCLogic {
     try {
       if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
       for (const sh of document.styleSheets) { let rs; try { rs = sh.cssRules; } catch (e) { continue; } for (const r of rs) if (r.media && /max-width:\s*760px/.test(r.media.mediaText)) { rules.push([r, r.media.mediaText]); r.media.mediaText = 'not all'; } }
-      const ow = el.style.width, oc = el.style.minWidth; el.style.width = '1040px'; el.style.minWidth = '1040px';
+      const ow = el.style.width, oc = el.style.minWidth; el.style.width = (capW || 1040) + 'px'; el.style.minWidth = (capW || 1040) + 'px';
       if (this.state.narrow) this.setState({ narrow: false });
       await new Promise(r => setTimeout(r, 300));
       let shot;
@@ -3455,7 +3466,7 @@ class Component extends DCLogic {
         const parts = await Promise.all(ws.map(async ([w, n]) => { const res = await fetch(base + n + '.woff2'); if (!res.ok) throw new Error('font'); const b = await res.blob(); const u = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); }); return "@font-face{font-family:'Pretendard';font-weight:" + w + ";src:url(" + u + ") format('woff2');}"; }));
         this._fontCss = parts.join(''); } catch (e) { this._fontCss = null; } }
       const secs = [...el.querySelectorAll('[data-imgsec]')].filter(s => s.offsetHeight > 0), shots = [];
-      try { for (const s of secs) shots.push([s.getAttribute('data-imgsec') || '', await window.htmlToImage.toCanvas(s, { filter: n => !(n.tagName === 'LABEL' && n.title === '이미지 올리기 (관리자)'), pixelRatio: 2, backgroundColor: '#f4f4f2', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' })]); }
+      try { for (const s of secs) shots.push([s.getAttribute('data-imgsec') || '', await window.htmlToImage.toCanvas(s, { filter: n => !(n.tagName === 'LABEL' && n.title === '이미지 올리기 (관리자)') && !(n.dataset && n.dataset.noimg), pixelRatio: 2, backgroundColor: '#f4f4f2', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' })]); }
       finally { el.style.width = ow; el.style.minWidth = oc; rules.forEach(([r, m]) => { r.media.mediaText = m; }); rules.length = 0; }
       for (const [lab, shot] of shots) { const W = 1920, H = 1080, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
       x.fillStyle = '#f4f4f2'; x.fillRect(0, 0, W, H);
