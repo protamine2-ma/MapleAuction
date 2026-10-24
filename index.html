@@ -1323,6 +1323,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <span style="font-size:14px;color:#6b6d73;">업데이트 {{ latestDate }}</span>
       <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ toggleEdit }}" style="padding:9px 16px;border-radius:8px;border:1px solid #1b1c1f;background:#1b1c1f;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">시세 입력</button>
+        <button onClick="{{ saveImage }}" title="표+그래프를 1920×1080 PNG로 저장" style="padding:9px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
       </sc-if>
     </div>
   </header>
@@ -1428,7 +1429,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 등록된 아이템이 없어요.</div>
     </sc-if>
     <sc-for list="{{ pairGroups }}" as="pg" hint-placeholder-count="2">
-    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
+    <div data-imgsec="{{ pg.label }}" style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
       <section style="flex:1.3 1 500px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
           <div style="height:52px;box-sizing:border-box;display:flex;align-items:center;padding:0 22px;background:#f7f7f5;border-bottom:1px solid #ececea;">
@@ -3437,6 +3438,39 @@ class Component extends DCLogic {
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
   componentWillUnmount() { if (this._topScroll) window.removeEventListener('scroll', this._topScroll); if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
+  async saveImage(tab, date) {
+    const el = this._pairEl; if (!el || this._imgBusy) return;
+    let dir = null;
+    if (window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
+    this._imgBusy = true; this.forceUpdate();
+    const rules = [];
+    try {
+      if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+      for (const sh of document.styleSheets) { let rs; try { rs = sh.cssRules; } catch (e) { continue; } for (const r of rs) if (r.media && /max-width:\s*760px/.test(r.media.mediaText)) { rules.push([r, r.media.mediaText]); r.media.mediaText = 'not all'; } }
+      const ow = el.style.width, oc = el.style.minWidth; el.style.width = '1264px'; el.style.minWidth = '1264px';
+      if (this.state.narrow) this.setState({ narrow: false });
+      await new Promise(r => setTimeout(r, 300));
+      let shot;
+      if (!this._fontCss) { try { const base = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-'; const ws = [[400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'], [700, 'Bold'], [800, 'ExtraBold']];
+        const parts = await Promise.all(ws.map(async ([w, n]) => { const res = await fetch(base + n + '.woff2'); if (!res.ok) throw new Error('font'); const b = await res.blob(); const u = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); }); return "@font-face{font-family:'Pretendard';font-weight:" + w + ";src:url(" + u + ") format('woff2');}"; }));
+        this._fontCss = parts.join(''); } catch (e) { this._fontCss = null; } }
+      const secs = [...el.querySelectorAll('[data-imgsec]')].filter(s => s.offsetHeight > 0), shots = [];
+      try { for (const s of secs) shots.push([s.getAttribute('data-imgsec') || '', await window.htmlToImage.toCanvas(s, { pixelRatio: 2, backgroundColor: '#f4f4f2', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' })]); }
+      finally { el.style.width = ow; el.style.minWidth = oc; rules.forEach(([r, m]) => { r.media.mediaText = m; }); rules.length = 0; }
+      for (const [lab, shot] of shots) { const W = 1920, H = 1080, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+      x.fillStyle = '#f4f4f2'; x.fillRect(0, 0, W, H);
+      x.fillStyle = 'oklch(0.3 0.09 255)'; x.fillRect(0, 0, W, 110);
+      x.fillStyle = '#fff'; x.textBaseline = 'middle'; x.font = '800 52px Pretendard, sans-serif'; x.textAlign = 'left'; x.fillText(tab + (lab && lab !== tab ? ' · ' + lab : '') + ' 시세', 60, 56);
+      x.font = '600 30px Pretendard, sans-serif'; x.textAlign = 'right'; x.fillStyle = 'oklch(0.9 0.05 255)'; x.fillText(date ? '업데이트 ' + date : '', W - 60, 56);
+      const top = 140, bot = 80, aw = W - 120, ah = H - top - bot, sc = Math.min(aw / shot.width, ah / shot.height), dw = shot.width * sc, dh = shot.height * sc;
+      x.imageSmoothingQuality = 'high'; x.drawImage(shot, (W - dw) / 2, top + (ah - dh) / 2, dw, dh);
+      x.font = '700 30px Pretendard, sans-serif'; x.textAlign = 'right'; x.fillStyle = 'oklch(0.48 0.17 255)'; x.fillText('mapleauction.kr', W - 60, H - 40);
+      const fname = tab + (lab && lab !== tab ? '_' + lab : '') + '_' + String(date || '').replace(/\//g, '-') + '.png';
+      if (dir) { const blob = await new Promise(r => c.toBlob(r, 'image/png')); const fh = await dir.getFileHandle(fname.replace(/[\\/:*?"<>|]/g, '-'), { create: true }); const w = await fh.createWritable(); await w.write(blob); await w.close(); }
+      else { const a = document.createElement('a'); a.download = fname; a.href = c.toDataURL('image/png'); a.click(); await new Promise(r => setTimeout(r, 500)); } }
+    } catch (e) { rules.forEach(([r, m]) => { r.media.mediaText = m; }); alert('이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+    this._imgBusy = false; this.forceUpdate();
+  }
   async sendContact() {
     const c = this.state.contact || {};
     if (!(c.body || '').trim()) { this.setState({ contactError: '내용을 입력해 주세요.' }); return; }
@@ -3595,7 +3629,7 @@ class Component extends DCLogic {
     const units = [];
     data.items.forEach(it => { const u = unitOf(it); if (!units.includes(u)) units.push(u); });
     const multi = units.length > 1;
-    const unitLabel = u => u || (multi ? '기타' : '');
+    const unitLabel = u => u || (multi ? '기타' : (tab !== REF ? tab : ''));
     const renameUnit = u => () => { if (!admin) return; const v = window.prompt('묶음 이름 수정', unitLabel(u)); if (v == null || !v.trim() || v.trim() === unitLabel(u)) return;
       this.updateTab(tab, y => { y.items.forEach(it => { if (unitOf(it) === u) it.group = v.trim(); }); }); };
     const rowGroups = units.map(u => ({ label: unitLabel(u), showLabel: true, rows: rows.filter(r => r.unit === u), onRename: renameUnit(u), cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '' }));
@@ -3688,6 +3722,7 @@ class Component extends DCLogic {
       latestDate: data.dates[n - 1] || '',
       prevDate: data.dates[n - 2] || '',
       rowGroups, chartGroups, line, pairMainRef: this.pairMainRef,
+      saveImage: () => this.saveImage(tab, data.dates[n - 1] || ''), saveImageLabel: this._imgBusy ? '만드는 중…' : '이미지 저장',
       pairGroups: rowGroups.map((rg, i) => {
         const idx = selItem ? rg.rows.findIndex(r => r.id === selItem.id) : -1;
         const has = idx >= 0;
