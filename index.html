@@ -290,6 +290,9 @@ body{overflow-x:clip;}
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
           <span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.remainColor }};">{{ s.remain }}</span>
           <span style="width:100%;height:4px;border-radius:2px;background:#f0f0ee;overflow:hidden;"><span style="display:block;height:100%;width:{{ s.pct }};background:oklch(0.48 0.17 255);"></span></span>
+          <sc-if value="{{ s.canReset }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ s.resetRun }}" title="남은 시간을 지우고 다음 사용을 기다려요" style="padding:2px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+          </sc-if>
         </div>
         <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
@@ -2488,6 +2491,11 @@ class Component extends DCLogic {
     if (!any && !this._stream) { this._worker.terminate(); this._worker = null; }
     this.forceUpdate();
   }
+  resetSkill(s) {
+    if (this._run) delete this._run[s.id]; if (this._alerted) this._alerted[s.id] = false;
+    const D = this._det && this._det[s.id]; if (D) { D.endAt = 0; D.reCand = 0; D.reAt = 0; D.usedAt = 0; }
+    this.forceUpdate();
+  }
   toggleSkill(s) {
     this._run = this._run || {}; this._alerted = this._alerted || {};
     if (this._run[s.id]) delete this._run[s.id];
@@ -2576,7 +2584,7 @@ class Component extends DCLogic {
     const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 60 : Number(h.boostMin)) || 60, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.streak = seen ? B.streak + 1 : 0; B.gone = seen ? 0 : B.gone + 1;
     if (h.boostOn && !h.paused) {
-      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 3000; B.alerted = false; }
+      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 8000; B.alerted = false; }
       if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
       if (B.done && B.gone >= 5) B.done = false;
@@ -3364,7 +3372,7 @@ class Component extends DCLogic {
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2], durV: 1 } : { ...x, preset: 'custom', name: '' }) }); },
           remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
           pct: on && s.cd ? Math.min(100, rem / (this.skillDur(s) * 1000) * 100).toFixed(1) + '%' : '0%',
-          toggleRun: () => this.toggleSkill(s),
+          toggleRun: () => this.toggleSkill(s), resetRun: () => this.resetSkill(s), canReset: on,
           onName: e => upd(s.id, 'name', e.target.value), onCd: e => { const nv = num(e.target.value), R = this._run && this._run[s.id];
             if (R && nv >= 1) { this._rb = this._rb || {}; let B = this._rb[s.id]; if (!B || B.end !== R) B = this._rb[s.id] = { base: R, cd: Number(s.cd) || 60 };
               const f = c => c, t = B.base + (f(nv) - f(B.cd)) * 1000; this._run[s.id] = t; B.end = t; const D = this._det && this._det[s.id]; if (D && D.endAt) D.endAt = t; this.forceUpdate(); }
