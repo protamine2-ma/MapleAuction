@@ -1871,7 +1871,7 @@ class Component extends DCLogic {
       stats = [
         { label: '기간 최고', val: W(hi), sub: pts[ma].date, color: up },
         { label: '기간 최저', val: W(lo), sub: pts[mi].date, color: down },
-        { label: '기간 평균', val: W(Math.round(avg * 10) / 10), sub: n + '개 기록', color: '#1b1c1f' },
+        { label: '기간 평균', val: W(Math.round(avg * 10) / 10), sub: pts[0].date + ' ~ ' + pts[n - 1].date, color: '#1b1c1f' },
       ];
       if (hi === lo) { hi += 1; lo -= 1; }
       const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
@@ -2379,7 +2379,7 @@ class Component extends DCLogic {
       }
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
-    if (this._stream && now - (this._lastStop || 0) >= 500) { this._lastStop = now; this.checkStop(now); }
+    if (this._stream && now - (this._lastStop || 0) >= 1000) { this._lastStop = now; this.checkStop(now); }
     if (this._stream && !h.paused) { this.detectSkills(now); this.checkBuffsTimer(now); }
     this.b29Tick(now);
     [...(this._tms || []), ...(this._m1 ? [this._m1] : []), ...(this._m15 ? [this._m15] : []), ...(this._m10 ? [this._m10] : []), ...(this._m10b ? [this._m10b] : [])].forEach(tm => { if (tm.end) { any = true;
@@ -2469,7 +2469,7 @@ class Component extends DCLogic {
     if (S.prev && S.prev.length === g.length) { let n = 0; for (let k = 0; k < g.length; k++) if (g[k] !== S.prev[k]) n++; if (n > 3) { S.last = now; S.alertAt = 0; } } else { S.last = now; S.alertAt = 0; }
     S.prev = g;
     const lim = Math.max(3, Number(h.stopSec) || 15) * 1000;
-    if (this.state.admin && h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim) { S.alertAt = now; this.huntAlert('사냥 멈춤', 'timer'); }
+    if (this.state.admin && h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim) { S.alertAt = now; this.huntAlert('사냥 멈춤', 'stop'); }
     const cv = this._stopCv && this._stopCv.current; if (cv) { cv.width = w; cv.height = bh; cv.getContext('2d').putImageData(img, 0, 0); }
     this.forceUpdate();
   }
