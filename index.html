@@ -409,10 +409,10 @@ body{overflow-x:clip;}
   </section>
   </sc-if>
 
-  <sc-if value="{{ huntAdmin }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(관리자 전용)</span></h2></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
@@ -2504,7 +2504,7 @@ class Component extends DCLogic {
     return pick && pick.w > 20 && pick.h > 12 ? { x: pick.x, y: pick.y, w: pick.w, h: pick.h } : null;
   }
   checkBoost(now) {
-    const v = this._video, h = this.hunt(); if (!v || !v.videoWidth || !this.state.admin) return;
+    const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
     const W = v.videoWidth, H = v.videoHeight, sx = Math.round(W * 0.3), sw = Math.round(W * 0.4), sy = Math.round(H * 0.03), sh = Math.round(H * 0.15);
     const ow = Math.min(480, sw), oh = Math.round(sh * ow / sw);
     const c = this._boostC || (this._boostC = document.createElement('canvas')); c.width = ow; c.height = oh;
