@@ -2470,7 +2470,7 @@ class Component extends DCLogic {
     Object.keys(this._run).forEach(id => {
       const s = h.skills.find(x => x.id === id); if (!s) { delete this._run[id]; return; }
       any = true; let end = this._run[id];
-      if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n); }
+      if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n, 'skill', this.skillVoice(s)); }
       if (end <= now && this._alerted[id]) {
         const auto = this._stream && this._det && this._det[id] && this._det[id].box;
         delete this._run[id];
@@ -2502,12 +2502,14 @@ class Component extends DCLogic {
     else { if (!(s.cd > 0)) return; this._run[s.id] = Date.now() + this.skillDur(s) * 1000; this._alerted[s.id] = false; this.ensureTick(); }
     this.forceUpdate();
   }
-  huntAlert(text, kind = 'skill') {
+  skillVoice(s) { const p = String(s.preset || ''), n = String(s.name || '');
+    return p.startsWith('janus') || /야누스/.test(n) ? 'v-janus' : p === 'erda60' || /파운틴/.test(n) ? 'v-erda' : p === 'yein67' || /예인/.test(n) ? 'v-yein' : null; }
+  huntAlert(text, kind = 'skill', voice) {
     if (this.hunt().paused && text !== '알림 테스트') return;
     if (kind === 'skill' && this.hunt().skillOff && text !== '알림 테스트') return;
     const h = this.hunt(), grp = kind === 'buff' || kind === 'rune' || kind === 'skill' ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
     if (h.beep) {
-      try { this._snd = this._snd || {}; const a = this._snd[kind] || (this._snd[kind] = new Audio('sounds/alert-' + kind + '.mp3')); a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => {}); } catch (e) {}
+      try { this._snd = this._snd || {}; const f = voice || 'alert-' + kind, a = this._snd[f] || (this._snd[f] = new Audio('sounds/' + f + '.mp3')); if (voice) a.onerror = () => { delete this._snd[f]; }; a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => { if (voice) { const b = this._snd['alert-' + kind] || (this._snd['alert-' + kind] = new Audio('sounds/alert-' + kind + '.mp3')); b.volume = Math.min(1, vol); b.currentTime = 0; b.play().catch(() => {}); } }); } catch (e) {}
     }
 
   }
