@@ -3138,10 +3138,12 @@ class Component extends DCLogic {
       if (now - D.boxAt < 3000) used = false;
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
       if (used && isJanus && now - (D.usedAt || 0) < 48000) used = false;
+      if (used && isJanus && this._run[s.id] > now) { used = false; if (!D.reCand) D.reCand = now; }
+      if (D.reCand) { if (!(D.on > 0)) D.reCand = 0; else if (now - D.reCand >= 3000) { used = true; D.reAt = D.reCand; D.reCand = 0; } }
       const ocrSkill = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true;
         if (ocrSkill) { D.pend = now; D.ocrLock = false; D.ocrH = []; D.ocrFail = false; }
-        else { D.endAt = now - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; } }
+        else { const t0 = D.reAt || now; D.reAt = 0; D.endAt = t0 - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; } }
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
