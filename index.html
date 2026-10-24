@@ -1704,6 +1704,11 @@ PRESETS['칠흑장신구'] = {
     ...grp('18성 · 유에 21%', 'c18a_', CH, [[39, 35.6, 31.1, 25], [60, 50, 48, 46], [97, 84, 100, 86], [55, 73, 59, 60], [130, 97, 120, 88], [96, 95, 93, 81]]),
     ...grp('18성 · 레에 35%', 'c18b_', CH, [['', '', 73.3, 73.3], ['', '', 116, 110], ['', '', 140, 145], ['', '', 110, 89], ['', '', 160, 138], ['', '', 140, 124]]),
     ...grp('22성 · 쌍레 40% (억)', 'c22_', CH, [[378, 422, 400, 389], [550, 520, 480, 500], [650, 635, 620, 630], [570, 475, 512, 489], [610, 590, 575, 570], [620, 610, 600, 590]]),
+  ],
+};
+PRESETS['미트라'] = {
+  dates: ['9/27', '10/03', '10/10', '10/16'], categoryLabel: '전서버 · 가횟 2이상 · INT 기준',
+  items: [
     ...grp('미트라의 분노 · 노작', 'mtn_', MT, [[11.1, 8.8, 8.5, 12.1], [11.6, 8.9, 8.9, 11.7], [11.8, 8.9, 8.6, 11.9], [11.7, 9, 8.7, 12], [11, 8.6, 8.5, 11.4]]),
     ...grp('미트라의 분노 · 공공방공공', 'mtg_', MT, [['', '', 230, 227], ['', '', 230, 222], ['', '', 198, 198], ['', '', 240, 215], ['', '', 246, 233]]),
     ...grp('미트라의 분노 · 공 51%', 'mt51_', MT, [[550, 496, 549, 515], [510, 455, 498, 480], [570, 530, 575, 520], [550, 580, 540, 530], [520, 498, 470, 430]]),
@@ -1765,7 +1770,7 @@ PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%
   ...ktCol('INT', 'kti_', [39, 36.5, 47.4, 25, 40, 33, 45, 40, 67.7, 82, 110, 74, 104, 118, 264]),
   ...ktCol('LUK', 'ktl_', [25, 26, 29.9, 19, 28, 31, 34.4, 25, 44, 63.3, 81, 48.9, 83, 91.1, 255]),
 ] };
-const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
+const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '미트라', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
 const REF = '드메아이템';
 const MESO_SEED = {"points":[{"date":"2026-01-13","v":2085},{"date":"2026-01-20","v":2152},{"date":"2026-01-27","v":2068},{"date":"2026-02-03","v":2075},{"date":"2026-02-10","v":2099},{"date":"2026-02-14","v":2311},{"date":"2026-02-21","v":2309},{"date":"2026-02-28","v":2388},{"date":"2026-03-03","v":2441},{"date":"2026-03-06","v":2503},{"date":"2026-03-13","v":2497},{"date":"2026-03-20","v":2511},{"date":"2026-03-28","v":2531},{"date":"2026-04-03","v":2569},{"date":"2026-04-09","v":2559},{"date":"2026-04-18","v":2417},{"date":"2026-04-24","v":2402},{"date":"2026-05-01","v":2477},{"date":"2026-05-09","v":2425},{"date":"2026-05-15","v":2335},{"date":"2026-05-23","v":2337},{"date":"2026-05-29","v":2350},{"date":"2026-06-05","v":2440},{"date":"2026-06-12","v":2551},{"date":"2026-06-20","v":2471},{"date":"2026-06-26","v":2480},{"date":"2026-07-03","v":2756},{"date":"2026-07-10","v":2649},{"date":"2026-08-03","v":2202},{"date":"2026-08-07","v":2158},{"date":"2026-08-14","v":2139},{"date":"2026-08-21","v":2024},{"date":"2026-08-28","v":1987},{"date":"2026-09-06","v":2063},{"date":"2026-09-12","v":2271},{"date":"2026-09-18","v":2248},{"date":"2026-09-26","v":2269},{"date":"2026-09-27","v":2290},{"date":"2026-10-03","v":2370},{"date":"2026-10-10","v":2336},{"date":"2026-10-16","v":2250},{"date":"2026-10-24","v":2185}]};
 const JANUS_DUR = { janus120: 120, janus80: 80, janus70: 70, janus60: 60 };
@@ -2167,7 +2172,9 @@ class Component extends DCLogic {
       const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
+      const moved = this.moveMitra(all);
       this.setState({ all, guides, remoteEmpty: false });
+      if (moved && this.state.admin) this.queuePush(['칠흑장신구', '미트라']);
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
   }
@@ -2330,6 +2337,7 @@ class Component extends DCLogic {
   }
   loadAll() {
     const all = {}; TABS.forEach(t => { all[t] = this.loadOne(t); });
+    this.moveMitra(all);
     const ref = all[REF];
     TABS.forEach(t => {
       const x = all[t];
@@ -2339,6 +2347,16 @@ class Component extends DCLogic {
       }
     });
     return all;
+  }
+  moveMitra(all) {
+    const c = all['칠흑장신구']; if (!c || !c.items) return false;
+    const isM = it => (it.group || '').startsWith('미트라');
+    const mv = c.items.filter(isM); if (!mv.length) return false;
+    const ids = new Set(mv.map(it => it.id));
+    const pick = keep => (c.removed || []).map(r => ({ ...r, vals: Object.fromEntries(Object.entries(r.vals || {}).filter(([k]) => ids.has(k) === keep)) }));
+    all['미트라'] = { ...c, items: mv, removed: pick(true) };
+    all['칠흑장신구'] = { ...c, items: c.items.filter(it => !isM(it)), removed: pick(false) };
+    return true;
   }
   commit(all, tabs, trash) {
     const st = { all };
