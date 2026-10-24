@@ -3510,6 +3510,17 @@ class Component extends DCLogic {
       const secs = [...el.querySelectorAll('[data-imgsec]')].filter(s => s.offsetHeight > 0), shots = [];
       try { for (const s of secs) shots.push([s.getAttribute('data-imgsec') || '', await window.htmlToImage.toCanvas(s, { filter: n => !(n.tagName === 'LABEL' && n.title === '이미지 올리기 (관리자)') && !(n.dataset && n.dataset.noimg), pixelRatio: 2, backgroundColor: '#f4f4f2', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' })]); }
       finally { el.style.width = ow; el.style.minWidth = oc; rules.forEach(([r, m]) => { r.media.mediaText = m; }); rules.length = 0; }
+      if ((tab === '여명장신구' || tab === '보스장신구' || tab === '미트라' || tab === '쿨뚝크뎀장갑' || tab === '아케인' || tab === '앱솔랩스' || tab === '카루타') && shots.length > 1) { const per = 2, out = [];
+        for (let i = 0; i < shots.length; i += per) { const g = shots.slice(i, i + per); if (g.length === 1) { out.push(g[0]); continue; }
+          const G = 60, aw = 1800, ah = 860, cs = g.map(s => s[1]);
+          const rW = cs.reduce((a, s) => a + s.width, 0) + G * (cs.length - 1), rH = Math.max(...cs.map(s => s.height));
+          const cW = Math.max(...cs.map(s => s.width)), cH = cs.reduce((a, s) => a + s.height, 0) + G * (cs.length - 1);
+          const row = Math.min(aw / rW, ah / rH) >= Math.min(aw / cW, ah / cH);
+          const m = document.createElement('canvas'); m.width = row ? rW : cW; m.height = row ? rH : cH; const mx = m.getContext('2d');
+          mx.fillStyle = '#f4f4f2'; mx.fillRect(0, 0, m.width, m.height); let o = 0;
+          cs.forEach(s => { if (row) { mx.drawImage(s, o, 0); o += s.width + G; } else { mx.drawImage(s, (cW - s.width) / 2, o); o += s.height + G; } });
+          out.push([g.map(s => s[0]).filter(Boolean).join(' / '), m]); }
+        shots.splice(0, shots.length, ...out); }
       for (const [lab, shot] of shots) { const W = 1920, H = 1080, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
       x.fillStyle = '#f4f4f2'; x.fillRect(0, 0, W, H);
       x.fillStyle = 'oklch(0.3 0.09 255)'; x.fillRect(0, 0, W, 110);
