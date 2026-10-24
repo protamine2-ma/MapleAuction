@@ -393,9 +393,10 @@ body{overflow-x:clip;}
         </button>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>변화 없으면 알림 (초)</span><input type="number" min="3" value="{{ stopSec }}" onChange="{{ onStopSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>알림 반복 횟수</span><input type="number" min="1" value="{{ stopRep }}" onChange="{{ onStopRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ stopIdleColor }};">{{ stopIdle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">화면 맨 아래 경험치 바 가운데의 흰 숫자(초록으로 표시)만 비교해서, 정해진 시간 동안 안 바뀌면 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 다시 알려줘요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">화면 맨 아래 경험치 바 가운데의 흰 숫자(초록으로 표시)만 비교해서, 정해진 시간 동안 안 바뀌면 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <span style="font-size:12px;color:#9a9ca1;">감지 중인 경험치 바 영역</span>
@@ -2532,10 +2533,10 @@ class Component extends DCLogic {
     const img = ctx.getImageData(0, 0, w, bh), d = img.data, g = new Uint8Array(w * bh);
     for (let i = 0, j = 0; i < d.length; i += 4, j++) { const mn = Math.min(d[i], d[i + 1], d[i + 2]), mx = Math.max(d[i], d[i + 1], d[i + 2]); if (mn > 185 && mx - mn < 45) { g[j] = 1; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } }
     const S = this._stop || (this._stop = { last: now, alertAt: 0 });
-    if (S.prev && S.prev.length === g.length) { let n = 0; for (let k = 0; k < g.length; k++) if (g[k] !== S.prev[k]) n++; if (n > 3) { S.last = now; S.alertAt = 0; } } else { S.last = now; S.alertAt = 0; }
+    if (S.prev && S.prev.length === g.length) { let n = 0; for (let k = 0; k < g.length; k++) if (g[k] !== S.prev[k]) n++; if (n > 3) { S.last = now; S.alertAt = 0; S.cnt = 0; } } else { S.last = now; S.alertAt = 0; S.cnt = 0; }
     S.prev = g;
     const lim = Math.max(3, Number(h.stopSec) || 15) * 1000;
-    if (h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim) { S.alertAt = now; this.huntAlert('사냥 멈춤', 'stop'); }
+    if (h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim && (S.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { S.alertAt = now; S.cnt = (S.cnt || 0) + 1; this.huntAlert('사냥 멈춤', 'stop'); }
     const cv = this._stopCv && this._stopCv.current; if (cv) { cv.width = w; cv.height = bh; cv.getContext('2d').putImageData(img, 0, 0); }
     this.forceUpdate();
   }
@@ -3345,7 +3346,7 @@ class Component extends DCLogic {
       sharing: !!this._stream, notSharing: !this._stream, shareErr: this._stream ? '' : this._shareErr || '', hasShareErr: !this._stream && !!this._shareErr, shareRes: r.res || '연결 중', onShare: () => this.startShare(), onStopShare: () => this.stopShare(),
       ...(() => { if (!this._stopCv) this._stopCv = React.createRef(); const S = this._stop || {}, sec = Number(h.stopSec) || 15, idle = this._stream && S.last ? (now - S.last) / 1000 : null, stopped = idle != null && idle >= sec;
         const ss = !h.stopOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.48 0.17 255)', '#fff'];
-        return { huntAdmin: !!this.state.admin, stopCvRef: this._stopCv, stopSw: sw(h.stopOn), toggleStop: () => { this._stop = null; set('stopOn', !h.stopOn); }, stopSec: String(h.stopSec ?? 15), onStopSec: e => set('stopSec', Math.max(3, Number(e.target.value) || 15)),
+        return { huntAdmin: !!this.state.admin, stopCvRef: this._stopCv, stopSw: sw(h.stopOn), toggleStop: () => { this._stop = null; set('stopOn', !h.stopOn); }, stopSec: String(h.stopSec ?? 15), stopRep: String(h.stopRep ?? 3), onStopRep: e => set('stopRep', Math.max(1, Number(e.target.value) || 3)), onStopSec: e => set('stopSec', Math.max(3, Number(e.target.value) || 15)),
           stopStatus: ss[0], stopStatusBg: ss[1], stopStatusColor: ss[2], stopIdle: idle == null ? '--' : Math.floor(idle) + '초', stopIdleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)' }; })(),
       ...(() => { if (!this._boostCv) this._boostCv = React.createRef(); const B = this._boost || {}, dur = (Number(h.boostSec) || 100) * 1000, run = !!B.start, rem = run ? Math.max(0, dur - (now - B.start)) : 0;
         const bs = !h.boostOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : run ? ['부스터 진행 중', 'oklch(0.6 0.2 25)', '#fff'] : ['대기 중', 'oklch(0.48 0.17 255)', '#fff'];
