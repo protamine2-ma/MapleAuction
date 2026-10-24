@@ -359,6 +359,7 @@ body{overflow-x:clip;}
           <span>새로 생긴 룬 색 픽셀</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ runePx }}</span>
           <span>감지 기준 (픽셀 이상)</span><input type="number" min="1" value="{{ runeMin }}" onChange="{{ onRuneMin }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>다시 알림 간격 (초)</span><input type="number" min="3" value="{{ runeEvery }}" onChange="{{ onRuneEvery }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>알림 반복 횟수</span><input type="number" min="1" value="{{ runeRep }}" onChange="{{ onRuneRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
         </div>
         <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">미니맵의 흰 테두리를 찾아 자동으로 영역을 잡고, 맵을 옮겨 미니맵 크기가 바뀌어도 다시 찾아요. 룬이 있는 동안 '룬 생성'을 다시 알려줘요. 맵을 옮기면 룬이 없을 때 '기준 다시 잡기'를 눌러주세요. 공유할 때는 전체 화면이 아니라 메이플스토리 창을 고르세요.</span>
       </div>
@@ -2577,11 +2578,14 @@ class Component extends DCLogic {
     const base = prev0.base == null ? px : Math.min(prev0.base, px);
     const h = this.hunt(), prev = prev0;
     const startHit = prev0.base == null && h.rune && px >= h.runeMin && !this._runeStartAlerted;
-    if (startHit) { this._runeStartAlerted = true; this.huntAlert('룬 생성', 'rune'); }
+    let cnt = prev0.cnt || 0;
+    if (startHit) { this._runeStartAlerted = true; this.huntAlert('룬 생성', 'rune'); cnt = 1; }
     const hit = h.rune && px - base >= h.runeMin;
+    if (!hit && !startHit) cnt = 0;
+    const rep = Math.max(1, Number(h.runeRep) || 3);
     const streak = hit ? (prev.streak || 0) + 1 : 0; let last = hit ? prev.last || 0 : startHit ? Date.now() : 0;
-    if (streak >= 2 && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성', 'rune'); last = Date.now(); }
-    this._rune = { px, base, found: streak >= 2, streak, last, res: W + '×' + H, reg: g };
+    if (streak >= 2 && cnt < rep && Date.now() - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성', 'rune'); last = Date.now(); cnt++; }
+    this._rune = { px, base, found: streak >= 2, streak, last, cnt, res: W + '×' + H, reg: g };
     const cv = this._runeCv && this._runeCv.current;
     this._rune.box = bx;
     this._lastImg = img;
@@ -3370,7 +3374,7 @@ class Component extends DCLogic {
       runePx: this._stream && r.res ? String(Math.max(0, r.px - r.base)) : '--',
       runeBase: this._stream && r.res ? String(r.base) : '--',
       resetRuneBase: () => { if (this._rune) { this._rune.base = null; this._rune.streak = 0; } this.forceUpdate(); }, runeMin: String(h.runeMin), runeEvery: String(h.runeEvery),
-      onRuneMin: e => set('runeMin', Math.max(1, Number(e.target.value) || 1)), onRuneEvery: e => set('runeEvery', Math.max(3, Number(e.target.value) || 3)),
+      onRuneMin: e => set('runeMin', Math.max(1, Number(e.target.value) || 1)), onRuneEvery: e => set('runeEvery', Math.max(3, Number(e.target.value) || 3)), runeRep: String(h.runeRep ?? 3), onRuneRep: e => set('runeRep', Math.max(1, Number(e.target.value) || 1)),
       runeRegion: r.reg ? ' (현재 왼쪽 위 ' + r.reg.w + '×' + r.reg.h + ')' : '',
       runeCvRef: this._runeCv,
       onRuneDown: e => { const p = this.runePt(e); this._drag = { x0: p.x, y0: p.y, x1: p.x, y1: p.y }; this.drawRunePreview(); },
