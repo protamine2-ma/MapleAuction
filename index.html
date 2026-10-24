@@ -154,9 +154,9 @@ body{overflow-x:clip;}
             </sc-if>
             <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="3">
               <sc-if value="{{ r.groupStart }}" hint-placeholder-val="{{ false }}">
-                <div style="margin-top:{{ r.gapTop }};padding:6px 0 2px;font-size:13px;font-weight:700;color:oklch(0.4 0.17 255);border-top:{{ r.gapBorder }};">{{ r.group }}</div>
+                <div style="margin-top:{{ r.gapTop }};padding:6px 0 2px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:oklch(0.4 0.17 255);border-top:{{ r.gapBorder }};"><span>{{ r.group }}</span><button onClick="{{ r.onAddInGroup }}" style="padding:4px 10px;border-radius:6px;border:1px solid #d6d6d2;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">+ 이 묶음에 추가</button></div>
               </sc-if>
-              <div style="display:flex;gap:6px;align-items:center;">
+              <div style="display:flex;gap:6px;align-items:center;opacity:{{ r.rowOpacity }};">
                 <div style="flex:2.2;display:flex;gap:6px;min-width:0;">
                   <input value="{{ r.name }}" onChange="{{ r.onName }}" style="flex:2;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;">
                   <input value="{{ r.short }}" onChange="{{ r.onShort }}" style="flex:1;min-width:0;padding:7px 8px;border:1px solid #d6d6d2;border-radius:6px;font-size:13px;color:#6b6d73;">
@@ -168,6 +168,7 @@ body{overflow-x:clip;}
                   <button onClick="{{ r.onUp }}" disabled="{{ r.upOff }}" title="위로" style="width:26px;height:16px;padding:0;border:none;background:transparent;color:{{ r.upColor }};font-size:11px;line-height:1;cursor:pointer;">▲</button>
                   <button onClick="{{ r.onDown }}" disabled="{{ r.downOff }}" title="아래로" style="width:26px;height:16px;padding:0;border:none;background:transparent;color:{{ r.downColor }};font-size:11px;line-height:1;cursor:pointer;">▼</button>
                 </div>
+                <button onClick="{{ r.onHide }}" title="방문자 화면에서 숨기기/보이기" style="flex:none;padding:6px 8px;border:1px solid #d6d6d2;border-radius:6px;background:{{ r.hideBg }};color:{{ r.hideColor }};font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">{{ r.hideLabel }}</button>
                 <button onClick="{{ r.onDelete }}" title="삭제" style="width:32px;height:32px;border:none;background:transparent;color:#9a9ca1;font-size:18px;cursor:pointer;">×</button>
               </div>
             </sc-for>
@@ -3452,7 +3453,7 @@ class Component extends DCLogic {
     const isSunday = this.state.tab === '썬데이';
     const isMeso = this.state.tab === '메소';
     const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자') ? REF : this.state.tab;
-    const data = all[tab];
+    const data = all[tab] && { ...all[tab], items: all[tab].items.filter(it => !it.hidden) };
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
@@ -3508,7 +3509,9 @@ class Component extends DCLogic {
     const isEditing = editing && admin;
 
     const UNIT_RE = /\s*\((만|억)\)\s*$/;
-    const unitOf = it => { if (it.group) return it.group; const m = (it.name || '').match(UNIT_RE); return m ? m[1] + ' 단위' : ''; };
+    const ownUnit = it => { if (it.group) return it.group; const m = (it.name || '').match(UNIT_RE); return m ? m[1] + ' 단위' : ''; };
+    const unitMap = new Map(); { let prevU = ''; all[tab].items.forEach(it => { const u = ownUnit(it) || prevU; unitMap.set(it, u); prevU = u; }); }
+    const unitOf = it => unitMap.has(it) ? unitMap.get(it) : ownUnit(it);
     const rows = data.items.map(it => {
       const cur = num(it.values[n - 1]), prev = num(it.values[n - 2]);
       let deltaText = '–', deltaColor = '#9a9ca1';
@@ -3691,24 +3694,28 @@ class Component extends DCLogic {
           tab: t,
           category: x.categoryLabel ?? (t === REF ? (this.props.categoryLabel ?? '아이템드랍 1줄') : ''),
           onCategory: e => { const v = e.target.value; this.updateTab(t, y => { y.categoryLabel = v; }); },
-          addItem: () => this.updateTab(t, y => { y.items.push({ id: 'i' + Date.now(), name: '새 아이템', short: '새 아이템', values: y.dates.map(() => '') }); }),
+          addItem: () => this.updateTab(t, y => { const lst = y.items[y.items.length - 1], lm = lst && (lst.name || '').match(/\((만|억)\)\s*$/), lg = lst && (lst.group || (lm ? lm[1] + ' 단위' : '')); y.items.push({ id: 'i' + Date.now(), name: '새 아이템', short: '새 아이템', values: y.dates.map(() => ''), ...(lg ? { group: lg } : {}) }); }),
           dateLabels: x.dates.map(d => d || '–'),
           isEmpty: x.items.length === 0,
-          rows: x.items.map((it, r) => ({
-            groupStart: !!it.group && (r === 0 || x.items[r - 1].group !== it.group),
-            group: it.group || '',
+          rows: x.items.map((it, r) => { const gN = q => { const m = (q.name || '').match(/\((만|억)\)\s*$/); return q.group || (m ? m[1] + ' 단위' : ''); }; let cg = ''; const eg = x.items.map(q => (cg = gN(q) || cg)); return {
+            groupStart: !!eg[r] && (r === 0 || eg[r - 1] !== eg[r]),
+            group: eg[r] || '',
+            onAddInGroup: () => this.updateTab(t, y => { let e = r; while (e + 1 < eg.length && eg[e + 1] === eg[r]) e++; y.items.splice(e + 1, 0, { id: 'i' + Date.now(), name: '새 아이템', short: '새 아이템', values: y.dates.map(() => ''), group: eg[r] }); }),
             gapTop: r === 0 ? '0' : '14px',
             gapBorder: r === 0 ? 'none' : '1px dashed #e3e3e0',
             name: it.name, short: it.short,
             onName: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].name = v; }); },
             onShort: e => { const v = e.target.value; this.updateTab(t, y => { y.items[r].short = v; }); },
             onDelete: () => this.deleteItem(t, r),
-            upOff: r === 0, downOff: r === x.items.length - 1,
-            upColor: r === 0 ? '#d6d6d2' : '#6b6d73', downColor: r === x.items.length - 1 ? '#d6d6d2' : '#6b6d73',
-            onUp: () => { if (r > 0) this.updateTab(t, y => { const a = y.items; [a[r - 1], a[r]] = [a[r], a[r - 1]]; if (a[r].group !== a[r - 1].group) { const g = a[r - 1].group; a[r - 1].group = a[r].group; a[r].group = g; } }); },
-            onDown: () => { if (r < x.items.length - 1) this.updateTab(t, y => { const a = y.items; [a[r], a[r + 1]] = [a[r + 1], a[r]]; if (a[r].group !== a[r + 1].group) { const g = a[r].group; a[r].group = a[r + 1].group; a[r + 1].group = g; } }); },
+            ...(() => { const gOf = q => q ? (q.group || (((q.name || '').match(/\((만|억)\)\s*$/) || [])[1] ? ((q.name || '').match(/\((만|억)\)\s*$/)[1] + ' 단위') : '')) : null, a = x.items, free = gOf(it) === '', uo = r === 0 || (!free && gOf(a[r - 1]) !== gOf(it)), dn = r === a.length - 1 || (!free && gOf(a[r + 1]) !== gOf(it));
+              const adopt = (b, k) => { const g = free && gOf(b[k]); if (g) b[r].group = g; };
+              return { upOff: uo, downOff: dn, upColor: uo ? '#d6d6d2' : '#6b6d73', downColor: dn ? '#d6d6d2' : '#6b6d73',
+                onUp: () => { if (!uo) this.updateTab(t, y => { const b = y.items; adopt(b, r - 1); [b[r - 1], b[r]] = [b[r], b[r - 1]]; }); },
+                onDown: () => { if (!dn) this.updateTab(t, y => { const b = y.items; adopt(b, r + 1); [b[r], b[r + 1]] = [b[r + 1], b[r]]; }); } }; })(),
+            hideLabel: it.hidden ? '숨김' : '보임', hideBg: it.hidden ? 'oklch(0.94 0.03 25)' : '#fff', hideColor: it.hidden ? 'oklch(0.5 0.19 25)' : '#6b6d73', rowOpacity: it.hidden ? '0.5' : '1',
+            onHide: () => this.updateTab(t, y => { y.items[r].hidden = !y.items[r].hidden; }),
             cells: it.values.map((v, c) => ({ value: v ?? '', onPaste: e => this.pasteGrid(e, t, r, c), onChange: e => { const val = e.target.value; this.updateTab(t, y => { y.items[r].values[c] = val; }); } })),
-          })),
+          }; }),
         };
       }),
       addWeek: () => this.addWeek(),
