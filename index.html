@@ -210,7 +210,7 @@ body{overflow-x:clip;}
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">사냥 타이머</h1>
-    <span style="font-size:14px;color:#6b6d73;text-wrap:pretty;">스킬 쿨타임을 알려주고, 게임 화면을 공유하면 미니맵에서 룬을 감지해요.</span>
+    <span style="font-size:14px;color:#6b6d73;text-wrap:pretty;">본 사이트의 기능은 참고용으로 제공되며, 이를 활용한 게임 플레이 결과에 대한 책임은 이용자 본인에게 있습니다.</span>
   </div>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;">
@@ -556,7 +556,6 @@ body{overflow-x:clip;}
     </div>
   </section>
   </sc-if>
-  <p style="margin:12px 0 0;padding-top:16px;border-top:1px solid #e3e3e0;font-size:12px;line-height:1.7;color:#6b6d73;text-align:center;text-wrap:pretty;">본 사이트의 기능은 참고용으로 제공되며, 이를 활용한 게임 플레이 결과에 대한 책임은 이용자 본인에게 있습니다.</p>
 </div>
 </sc-if>
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
@@ -1095,7 +1094,10 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
     <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ saveMesoImage }}" title="카드+그래프를 1920×1080 PNG로 저장" style="margin-top:4px;padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+      <button onClick="{{ saveMesoImage }}" title="카드+그래프를 1920×1080 PNG로 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
+      <button onClick="{{ saveAll }}" title="모든 옥션 탭 이미지를 한 번에 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveAllLabel }}</button>
+      </div>
     </sc-if>
   </div>
 
@@ -1986,7 +1988,7 @@ class Component extends DCLogic {
     return {
       isMeso, mesoTab: tabBtn, mesoLastDate: last ? last.date : '–',
       mesoImgRef: this._mesoImgRef || (this._mesoImgRef = el => { this._mesoEl = el; }),
-      saveMesoImage: () => this.saveImage('메소', last ? String(last.date) : '', this._mesoEl, 1064),
+      saveMesoImage: (this._saveMeso = opt => this.saveImage('메소', last ? String(last.date) : '', this._mesoEl, 1064, opt), () => this._saveMeso()),
       mesoHas: allP.length > 0, mesoNone: allP.length === 0,
       mesoCur: last ? W(num(last.v)) : '–', mesoDelta: delta || (last ? last.date + ' 기준' : ''), mesoDeltaColor: dColor,
       mesoStats: stats, mesoChart: chart, mesoTipShow: !!tip, mesoTip: tip || {},
@@ -3491,10 +3493,24 @@ class Component extends DCLogic {
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
   componentWillUnmount() { if (this._topScroll) window.removeEventListener('scroll', this._topScroll); if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
-  async saveImage(tab, date, target, capW) {
-    const el = target || this._pairEl; if (!el || this._imgBusy) return;
+  async saveAllImages() {
+    if (this._imgBusy || this._allBusy) return;
     let dir = null;
     if (window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
+    const back = this.state.tab; this._allBusy = true;
+    for (const t of TABS) { const d = this.state.all[t]; if (!d || !d.items || !d.items.some(it => !it.hidden)) continue;
+      this._allLabel = '저장 중 ' + (TABS.indexOf(t) + 1) + '/' + TABS.length;
+      await new Promise(r => this.setState({ tab: t }, r)); await new Promise(r => setTimeout(r, 700));
+      await this.saveImage(t, (d.dates || [])[(d.dates || []).length - 1] || '', null, null, { dir: dir || 'none' }); }
+    this._allLabel = '저장 중 · 메소';
+    await new Promise(r => this.setState({ tab: '메소' }, r)); await new Promise(r => setTimeout(r, 900));
+    if (this._saveMeso && this._mesoEl) await this._saveMeso({ dir: dir || 'none' });
+    this._allBusy = false; this._allLabel = ''; this.setState({ tab: back });
+  }
+  async saveImage(tab, date, target, capW, opt) {
+    const el = target || this._pairEl; if (!el || this._imgBusy) return;
+    let dir = opt && opt.dir ? (opt.dir === 'none' ? null : opt.dir) : null;
+    if (!(opt && opt.dir) && window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
     this._imgBusy = true; this.forceUpdate();
     const rules = [];
     try {
@@ -3523,10 +3539,8 @@ class Component extends DCLogic {
         shots.splice(0, shots.length, ...out); }
       for (const [lab, shot] of shots) { const W = 1920, H = 1080, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
       x.fillStyle = '#f4f4f2'; x.fillRect(0, 0, W, H);
-      x.fillStyle = 'oklch(0.3 0.09 255)'; x.fillRect(0, 0, W, 110);
-      x.fillStyle = '#fff'; x.textBaseline = 'middle'; x.font = '800 52px Pretendard, sans-serif'; x.textAlign = 'left'; x.fillText(tab + (lab && lab !== tab ? ' · ' + lab : '') + ' 시세', 60, 56);
-      x.font = '600 30px Pretendard, sans-serif'; x.textAlign = 'right'; x.fillStyle = 'oklch(0.9 0.05 255)'; x.fillText(date ? '업데이트 ' + date : '', W - 60, 56);
-      const top = 140, bot = 80, aw = W - 120, ah = H - top - bot, sc = Math.min(aw / shot.width, ah / shot.height), dw = shot.width * sc, dh = shot.height * sc;
+      x.textBaseline = 'middle';
+      const top = 50, bot = 80, aw = W - 120, ah = H - top - bot, sc = Math.min(aw / shot.width, ah / shot.height), dw = shot.width * sc, dh = shot.height * sc;
       x.imageSmoothingQuality = 'high'; x.drawImage(shot, (W - dw) / 2, top + (ah - dh) / 2, dw, dh);
       x.font = '700 30px Pretendard, sans-serif'; x.textAlign = 'right'; x.fillStyle = 'oklch(0.48 0.17 255)'; x.fillText('mapleauction.kr', W - 60, H - 40);
       const fname = tab + (lab && lab !== tab ? '_' + lab : '') + '_' + String(date || '').replace(/\//g, '-') + '.png';
@@ -3786,7 +3800,7 @@ class Component extends DCLogic {
       latestDate: data.dates[n - 1] || '',
       prevDate: data.dates[n - 2] || '',
       rowGroups, chartGroups, line, pairMainRef: this.pairMainRef,
-      saveImage: () => this.saveImage(tab, data.dates[n - 1] || ''), saveImageLabel: this._imgBusy ? '만드는 중…' : '이미지 저장',
+      saveImage: () => this.saveImage(tab, data.dates[n - 1] || ''), saveImageLabel: this._imgBusy && !this._allBusy ? '만드는 중…' : '이미지 저장', saveAll: () => this.saveAllImages(), saveAllLabel: this._allBusy ? (this._allLabel || '저장 중…') : '전체 이미지 저장',
       pairGroups: rowGroups.map((rg, i) => {
         const idx = selItem ? rg.rows.findIndex(r => r.id === selItem.id) : -1;
         const has = idx >= 0;
