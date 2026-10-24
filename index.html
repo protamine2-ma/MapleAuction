@@ -1018,6 +1018,23 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     </div>
   </section>
 
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;"><h2 style="margin:0;font-size:17px;font-weight:700;">일별 방문 횟수</h2><span style="font-size:12px;color:#9a9ca1;">재방문 포함 · 브라우저를 다시 열 때마다 1회</span></div>
+    <div style="height:200px;display:flex;align-items:flex-end;gap:3px;border-bottom:1px solid #d6d6d2;">
+      <sc-for list="{{ statsVisitBars }}" as="b" hint-placeholder-count="30">
+        <div title="{{ b.title }}" style="flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;">
+          <span style="font-size:10px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ b.n }}</span>
+          <div style="width:100%;height:{{ b.h }};min-height:2px;background:{{ b.color }};border-radius:3px 3px 0 0;"></div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:3px;">
+      <sc-for list="{{ statsLabels }}" as="l" hint-placeholder-count="30">
+        <span style="flex:1;min-width:0;text-align:center;font-size:11px;color:#6b6d73;white-space:nowrap;overflow:visible;">{{ l.label }}</span>
+      </sc-for>
+    </div>
+  </section>
+
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;align-items:start;">
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
       <h2 style="margin:0;font-size:17px;font-weight:700;">많이 본 탭</h2>
@@ -2098,6 +2115,7 @@ class Component extends DCLogic {
       statsKpis: [kpi('오늘', days.slice(-1)), kpi('어제', days.slice(-2, -1)), kpi('최근 7일', days.slice(-7)), kpi('최근 30일', days)],
       statsBars: days.map((d, i) => ({ h: (d.vids.size / max * 100).toFixed(1) + '%', n: d.vids.size || '', title: d.label + ' · 방문자 ' + d.vids.size + '명 · 방문 ' + d.visits + '회', color: i === 29 ? 'oklch(0.48 0.17 255)' : 'oklch(0.78 0.075 255)' })),
       statsLabels: days.map((d, i) => ({ label: (29 - i) % 5 === 0 ? d.label : '' })),
+      statsVisitBars: (() => { const mv = Math.max(1, ...days.map(d => d.visits)); return days.map((d, i) => ({ h: (d.visits / mv * 100).toFixed(1) + '%', n: d.visits || '', title: d.label + ' · 방문 ' + d.visits + '회 · 방문자 ' + d.vids.size + '명', color: i === 29 ? 'oklch(0.55 0.15 150)' : 'oklch(0.82 0.07 150)' })); })(),
       statsTabs: top(tabCount), statsRefs: top(refCount),
       statsNoTabs: !Object.keys(tabCount).length, statsNoRefs: !Object.keys(refCount).length,
       statsEmpty: !!this.state.statsAt && !rows.length && !err,
