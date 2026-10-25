@@ -2586,7 +2586,7 @@ class Component extends DCLogic {
     const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 60 : Number(h.boostMin)) || 60, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.streak = seen ? B.streak + 1 : 0; B.gone = seen ? 0 : B.gone + 1;
     if (h.boostOn && !h.paused) {
-      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 8000; B.alerted = false; }
+      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 5000; B.alerted = false; }
       if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
       if (B.done && B.gone >= 5) B.done = false;
