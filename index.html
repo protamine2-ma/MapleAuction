@@ -2691,8 +2691,7 @@ class Component extends DCLogic {
     if (dr) { c.setLineDash([5, 4]); c.strokeStyle = '#fff'; c.strokeRect(Math.min(dr.x0, dr.x1), Math.min(dr.y0, dr.y1), Math.abs(dr.x1 - dr.x0), Math.abs(dr.y1 - dr.y0)); c.setLineDash([]); }
   }
   pickRegion() { const v = this._video; if (!v || !v.videoWidth) return null; const W = v.videoWidth, H = v.videoHeight;
-    const pks = (this.hunt().skills || []).find(x => x.id === this._pick);
-    if (this._pick === '__buffrow' || String(this._pick).startsWith('buff:') || (pks && pks.preset === 'janusbuff')) { const x = Math.floor(W * 0.45); return { x, y: 0, w: W - x, h: Math.floor(H * 0.3) }; }
+    if (this._pick === '__buffrow' || String(this._pick).startsWith('buff:')) { const x = Math.floor(W * 0.45); return { x, y: 0, w: W - x, h: Math.floor(H * 0.3) }; }
     const x = Math.floor(W * 0.4), y = Math.floor(H * 0.72); return { x, y, w: W - x, h: H - y }; }
   drawPick() {
     const cv = this._pickCv && this._pickCv.current, v = this._video, g = this.pickRegion(); if (!cv || !g) return;
@@ -3452,7 +3451,7 @@ class Component extends DCLogic {
         const isRow = this._stream && this._pick === '__buffrow';
         const pbuf = this._stream && String(this._pick).startsWith('buff:') ? (h.buffs || []).find(x => 'buff:' + x.id === this._pick) : null;
         return { picking: !!ps || isRow || !!pbuf, pickingSkill: !!ps && !isRow && !pbuf, pickingBuff: isRow || !!pbuf, pickName: pbuf ? this.buffName(pbuf) : isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
-          pickWhere: ps && ps.preset === 'janusbuff' ? '버프 즐겨찾기의 야누스 아이콘 한 칸을 드래그하세요 (화면 오른쪽 위)' : '스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)',
+          pickWhere: ps && ps.preset === 'janusbuff' ? '버프 즐겨찾기의 야누스 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)' : '스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)',
           pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
           buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
           saveRowShot: () => { const v = this._video; const row = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); if (!row) { alert('먼저 화면 공유 후 버프 줄을 지정하세요.'); return; }
