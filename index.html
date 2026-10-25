@@ -265,6 +265,11 @@ body{overflow-x:clip;}
                 <option value="{{ p.key }}">{{ p.label }}</option>
               </sc-for>
             </select>
+            <select value="{{ s.sndVal }}" onChange="{{ s.onSnd }}" title="이 스킬 알림 소리" style="box-sizing:border-box;min-width:0;width:100%;padding:5px 8px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;background:#fafaf8;cursor:pointer;">
+              <sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9">
+                <option value="{{ o.key }}" disabled="{{ o.dis }}">소리: {{ o.label }}</option>
+              </sc-for>
+            </select>
             <sc-if value="{{ s.hasDet }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}">
@@ -297,7 +302,7 @@ body{overflow-x:clip;}
         <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
-    <sc-if value="{{ picking }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ pickingSkill }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex;flex-direction:column;gap:8px;padding:14px 20px;border-top:1px solid #efefec;background:oklch(0.97 0.02 255);">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
           <span style="font-size:14px;font-weight:700;color:oklch(0.3 0.09 255);">'{{ pickName }}' 스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)</span>
@@ -314,7 +319,7 @@ body{overflow-x:clip;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(2개 이상 등록 후 더블체크하기)</span><span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label><select value="{{ sndSel.buff.val }}" onChange="{{ sndSel.buff.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
@@ -342,13 +347,24 @@ body{overflow-x:clip;}
         <button onClick="{{ b.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
+    <sc-if value="{{ pickingBuff }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:8px;padding:14px 20px;border-top:1px solid #efefec;background:oklch(0.97 0.02 255);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:14px;font-weight:700;color:oklch(0.3 0.09 255);">'{{ pickName }}' 아이콘 한 칸을 드래그하세요 (화면 오른쪽 위 버프 줄)</span>
+          <button onClick="{{ cancelPick }}" style="padding:5px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">취소</button>
+        </div>
+        <div style="border-radius:10px;background:#1d1e22;display:flex;justify-content:center;overflow:hidden;">
+          <canvas ref="{{ pickCvRef }}" onMouseDown="{{ onPickDown }}" onMouseMove="{{ onPickMove }}" onMouseUp="{{ onPickUp }}" onMouseLeave="{{ onPickUp }}" style="display:block;max-width:100%;height:auto;cursor:crosshair;user-select:none;image-rendering:pixelated;"></canvas>
+        </div>
+      </div>
+    </sc-if>
     <div style="padding:10px 20px;font-size:12px;color:#9a9ca1;border-top:1px solid #efefec;">'위치 지정'을 누르고 미리보기에서 그 버프 아이콘 한 칸을 드래그하세요. 칸 안의 흰 분 숫자나 노란 남은 시간을 읽어 타이머를 맞춰요. 기본은 버프가 끝날 때 '○○ 종료'라고 알려주고, '초 전 알림'에 숫자를 넣으면 그만큼 미리 알려줘요(0 = 끝날 때).</div>
     </sc-if>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.rune.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.rune.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.rune.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.rune.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label><select value="{{ sndSel.rune.val }}" onChange="{{ sndSel.rune.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ runeStatusBg }};color:{{ runeStatusColor }};font-size:13px;font-weight:700;">{{ runeStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.rune.open }}" hint-placeholder-val="{{ true }}">
@@ -386,7 +402,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2><select value="{{ sndSel.stop.val }}" onChange="{{ sndSel.stop.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ stopStatusBg }};color:{{ stopStatusColor }};font-size:13px;font-weight:700;">{{ stopStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.stop.open }}" hint-placeholder-val="{{ true }}">
@@ -417,7 +433,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
@@ -448,7 +464,7 @@ body{overflow-x:clip;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.timer.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.timer.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.timer.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.timer.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label><select value="{{ sndSel.timer.val }}" onChange="{{ sndSel.timer.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <button onClick="{{ addTimer }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 타이머 추가</button>
     </div>
     <sc-if value="{{ huntFold.timer.open }}" hint-placeholder-val="{{ true }}">
@@ -2470,7 +2486,7 @@ class Component extends DCLogic {
     Object.keys(this._run).forEach(id => {
       const s = h.skills.find(x => x.id === id); if (!s) { delete this._run[id]; return; }
       any = true; let end = this._run[id];
-      if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n, 'skill', this.skillVoice(s)); }
+      if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n, 'skill', this.skillVoice(s), s.snd); }
       if (end <= now && this._alerted[id]) {
         const auto = this._stream && this._det && this._det[id] && this._det[id].box;
         delete this._run[id];
@@ -2504,10 +2520,27 @@ class Component extends DCLogic {
   }
   skillVoice(s) { const p = String(s.preset || ''), n = String(s.name || '');
     return p.startsWith('janus') || /야누스/.test(n) ? 'v-janus' : p === 'erda60' || /파운틴/.test(n) ? 'v-erda' : p === 'yein67' || /예인/.test(n) ? 'v-yein' : null; }
-  huntAlert(text, kind = 'skill', voice) {
+  sfx(key, vol) {
+    try {
+      if (!this._ac) this._ac = new (window.AudioContext || window.webkitAudioContext)(); const a = this._ac; if (a.state === 'suspended') a.resume();
+      const T = (f, t, d, type, v) => { const o = a.createOscillator(), g = a.createGain(), s = a.currentTime + t, pk = Math.max(0.0002, v * vol);
+        o.type = type; o.frequency.setValueAtTime(f, s); g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(pk, s + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, s + d);
+        o.connect(g).connect(a.destination); o.start(s); o.stop(s + d + 0.05); };
+      ({ ting: () => { T(1319, 0, 0.5, 'sine', 0.3); T(1760, 0.12, 0.7, 'sine', 0.3); },
+        bibik: () => { T(2000, 0, 0.08, 'square', 0.15); T(2000, 0.13, 0.08, 'square', 0.15); },
+        tiroring: () => { T(784, 0, 0.18, 'sine', 0.3); T(988, 0.1, 0.18, 'sine', 0.3); T(1319, 0.2, 0.45, 'sine', 0.3); },
+        dingdong: () => { T(1047, 0, 0.45, 'sine', 0.32); T(784, 0.28, 0.7, 'sine', 0.32); },
+        ppabam: () => { T(523, 0, 0.12, 'sawtooth', 0.12); T(659, 0, 0.12, 'sawtooth', 0.1); T(784, 0.14, 0.4, 'sawtooth', 0.12); T(1047, 0.14, 0.4, 'sawtooth', 0.1); },
+        beep: () => T(1000, 0, 0.7, 'square', 0.12),
+        ttoreu: () => [1568, 1319, 1175, 1047].forEach((f, i) => T(f, i * 0.06, 0.12, 'triangle', 0.3)) }[key] || (() => {}))();
+    } catch (e) {}
+  }
+  huntAlert(text, kind = 'skill', voice, snd) {
     if (this.hunt().paused && text !== '알림 테스트') return;
     if (kind === 'skill' && this.hunt().skillOff && text !== '알림 테스트') return;
     const h = this.hunt(), grp = kind === 'buff' || kind === 'rune' || kind === 'skill' ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
+    const sg = ['skill', 'buff', 'rune', 'booster', 'stop'].includes(kind) ? kind : 'timer', sel = snd || (sg === 'skill' ? 'seoyun' : (h.snd || {})[sg] || 'seoyun');
+    if (h.beep && sel !== 'seoyun') { this.sfx(sel, Math.min(1, vol)); return; }
     if (h.beep) {
       try { this._snd = this._snd || {}; const f = voice || 'alert-' + kind, a = this._snd[f] || (this._snd[f] = new Audio('sounds/' + f + '.mp3')); if (voice) a.onerror = () => { delete this._snd[f]; }; a.volume = Math.min(1, vol); a.currentTime = 0; a.play().catch(() => { if (voice) { const b = this._snd['alert-' + kind] || (this._snd['alert-' + kind] = new Audio('sounds/alert-' + kind + '.mp3')); b.volume = Math.min(1, vol); b.currentTime = 0; b.play().catch(() => {}); } }); } catch (e) {}
     }
@@ -3360,7 +3393,9 @@ class Component extends DCLogic {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
-          presetVal: pv, hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
+          presetVal: pv, sndVal: s.snd || 'seoyun',
+          onSnd: e => { const v = e.target.value; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : { ...x, snd: v }) }); this.huntAlert('알림 테스트', 'skill', v === 'seoyun' ? this.skillVoice(s) : null, v); },
+          hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
           ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
             return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
               customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' + (this._det[s.id].ocrN != null ? ' · 읽음 ' + this._det[s.id].ocrN : ' · 읽음 없음') : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
@@ -3386,7 +3421,7 @@ class Component extends DCLogic {
         const pt = e => this.runePt(e);
         const isRow = this._stream && this._pick === '__buffrow';
         const pbuf = this._stream && String(this._pick).startsWith('buff:') ? (h.buffs || []).find(x => 'buff:' + x.id === this._pick) : null;
-        return { picking: !!ps || isRow || !!pbuf, pickName: pbuf ? this.buffName(pbuf) : isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
+        return { picking: !!ps || isRow || !!pbuf, pickingSkill: !!ps && !isRow && !pbuf, pickingBuff: isRow || !!pbuf, pickName: pbuf ? this.buffName(pbuf) : isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
           pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
           buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
           saveRowShot: () => { const v = this._video; const row = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); if (!row) { alert('먼저 화면 공유 후 버프 줄을 지정하세요.'); return; }
@@ -3410,6 +3445,9 @@ class Component extends DCLogic {
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
       ...Object.fromEntries([['skill', 'volSkill'], ['buff', 'volBuff'], ['rune', 'volRune'], ['timer', 'volTimer']].map(([k, n]) => { const v = (h.vols || {})[k]; return [n, { val: String(v == null ? 100 : v),
         onChange: e => { set('vols', { ...(h.vols || {}), [k]: Number(e.target.value) }); clearTimeout(this._vt); this._vt = setTimeout(() => this.huntAlert('알림 테스트', k), 250); } }]; })),
+      sndOpts: [{ key: 'seoyun', label: '서윤 (음성)', dis: false }, { key: '-', label: '── 짧은 효과음 ──', dis: true }, ...[['ting', '띠링'], ['bibik', '삐빅'], ['tiroring', '띠로링'], ['dingdong', '딩동'], ['ppabam', '빠밤'], ['beep', '삐-'], ['ttoreu', '또르륵']].map(([key, label]) => ({ key, label, dis: false }))],
+      sndSel: Object.fromEntries([['skill', 'skill'], ['buff', 'buff'], ['rune', 'rune'], ['booster', 'booster'], ['stop', 'stop'], ['timer', 'minute']].map(([k, kind]) => [k, { val: (h.snd || {})[k] || 'seoyun',
+        onChange: e => { const v = e.target.value; set('snd', { ...(h.snd || {}), [k]: v }); this.huntAlert('알림 테스트', kind, null, v); } }])),
       huntFold, skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
