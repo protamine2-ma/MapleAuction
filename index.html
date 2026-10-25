@@ -3086,7 +3086,8 @@ class Component extends DCLogic {
     if (!this._DIG) this.readCd(new Uint8ClampedArray(4), 1, 1);
     let sec = this.readTime(a, bw, bh), yel = 0; if (sec != null && sec >= 600) sec = null;
     for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 180 && g > 140 && b < 120 && r - b > 100) yel++; }
-    const seen = sec != null || yel >= Math.max(4, bw * bh * 0.008), cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
+    const wm = sec == null ? this.readWhiteMins(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
+    const seen = sec != null || N != null || yel >= Math.max(4, bw * bh * 0.008), cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
     if (!D.boxAt) D.boxAt = now;
     if (seen) { if (!D.seenAt) D.seenAt = now; } else D.seenAt = 0;
     const lockout = !D.on && D.usedAt && now - D.usedAt < 48000 && rem != null;
@@ -3099,13 +3100,19 @@ class Component extends DCLogic {
         const ok = D.prev && Math.abs(D.prev[1] - (now - D.prev[0]) / 1000 - sec) <= 1.5; D.prev = [now, sec];
         const JB_LAG = 1000;
         if (ok) { D.approx = false; if (rem == null || sec - rem > 3) { this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; this._alerted[s.id] = false; } else if (Math.abs(rem - sec + JB_LAG / 1000) > 1.5) this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; }
-        D.msg = '버프 숫자 인식 중 · ' + sec + '초';
+        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null;
+      } else if (N != null) {
+        const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
+        if (rem == null || D.wm == null) fresh();
+        else if (N === D.wm - 1) { this._run[s.id] = now + (N * 60 + 59) * 1000 + 500 - L; D.approx = false; }
+        else if (N > D.wm || rem < N * 60 - 5 || rem > N * 60 + 65) fresh();
+        D.wm = N; D.msg = '버프 숫자 인식 중 · ' + N + '분' + (D.approx ? ' (대략)' : '');
       } else {
         if (!wasOn && rem == null) { this._run[s.id] = now + (Number(s.cd) || 120) * 1000 - 1000; this._alerted[s.id] = false; D.approx = true; }
         D.msg = '숫자 인식 안 됨 · 숫자/아이콘이 사라지면 알림';
       }
     } else {
-      D.prev = null;
+      D.prev = null; D.wm = null;
       if (D.on && ++D.miss >= 6) { D.on = false; D.miss = 0;
         if (rem != null && !this._alerted[s.id]) this._run[s.id] = now; else if (rem != null) delete this._run[s.id]; }
       if (!D.on) D.msg = '야누스 버프 기다리는 중';
