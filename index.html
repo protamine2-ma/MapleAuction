@@ -442,9 +442,10 @@ body{overflow-x:clip;}
         </div>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>MP 변화 없으면 알림 (초)</span><input type="number" min="1" value="{{ mp.sec }}" onChange="{{ mp.onSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>알림 반복 횟수</span><input type="number" min="1" value="{{ mp.rep }}" onChange="{{ mp.onRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 MP 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ mp.idleColor }};">{{ mp.idle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 정한 시간 동안 MP가 전혀 안 움직이면(줄지도 차지도 않으면) 바로 '사냥 멈춤'을 알려줘요. 반복 횟수는 위 경험치 설정과 같아요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 정한 시간 동안 MP가 전혀 안 움직이면(줄지도 차지도 않으면) 바로 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -2606,7 +2607,7 @@ class Component extends DCLogic {
   }
   async startShare() {
     try {
-      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 3, max: 3 } }, audio: false, monitorTypeSurfaces: 'include' });
+      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 3, max: 3 }, displaySurface: 'window' }, audio: false, monitorTypeSurfaces: 'include' });
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.srcObject = st; await v.play();
       this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null; this._runeStartAlerted = false;
       const bc = this.buffCfg(); if (Object.keys(bc.box || {}).length) this.saveBuff({ box: {}, sig: {} });
@@ -2709,14 +2710,20 @@ class Component extends DCLogic {
     const minRun = Math.max(12, Math.floor(W * 0.015)), rows = [];
     for (let y = 0; y < hh; y++) { let run = 0, best = 0, bx1 = 0, mnx = w; for (let X = 0; X < w; X++) { if (cy((y * w + X) * 4)) { run++; if (run > best) { best = run; bx1 = X; } } else run = 0; } if (best >= minRun) rows.push({ y, x0: bx1 - best + 1, x1: bx1 }); }
     if (!rows.length) return null;
-    let bestG = null, g = [rows[0]];
-    const flush = () => { if (!bestG || g.length > bestG.length) bestG = g; };
-    for (let k = 1; k < rows.length; k++) { if (rows[k].y - rows[k - 1].y <= 2 && Math.abs(rows[k].x0 - rows[k - 1].x0) <= 4) g.push(rows[k]); else { flush(); g = [rows[k]]; } } flush();
-    if (bestG.length < 3 || bestG.length > H * 0.05) return null;
-    const top = bestG[0].y, bot = bestG[bestG.length - 1].y, bx0 = Math.min(...bestG.map(r => r.x0)), bh = bot - top + 1;
-    let pmax = -1; for (let y = Math.max(0, top - bh * 3); y < top; y++) for (let X = bx0; X < Math.min(w, bx0 + W * 0.45); X++) if (pk((y * w + X) * 4)) pmax = Math.max(pmax, X);
-    const cmax = Math.max(...bestG.map(r => r.x1)), x1 = Math.max(cmax, pmax);
-    return { x: X0 + bx0, y: Y0 + top, w: x1 - bx0 + 1, h: bh };
+    const groups = []; let g = [rows[0]];
+    for (let k = 1; k < rows.length; k++) { if (rows[k].y - rows[k - 1].y <= 2 && Math.abs(rows[k].x0 - rows[k - 1].x0) <= 4) g.push(rows[k]); else { groups.push(g); g = [rows[k]]; } } groups.push(g);
+    let best = null;
+    for (const G of groups) {
+      if (G.length < 3 || G.length > H * 0.05) continue;
+      const top = G[0].y, bot = G[G.length - 1].y, bx0 = Math.min(...G.map(r => r.x0)), bh = bot - top + 1;
+      let pmax = -1, prow = 0;
+      for (let y = Math.max(0, top - Math.round(bh * 1.8)); y < top; y++) { let n = 0, gap = 0, end = -1; for (let X = Math.max(0, bx0 - 2); X < Math.min(w, bx0 + W * 0.45); X++) { if (pk((y * w + X) * 4)) { if (end < 0 && X > bx0 + 6) break; n++; gap = 0; end = X; } else if (end >= 0 && ++gap > Math.max(8, W * 0.012)) break; } if (n >= minRun) { prow++; pmax = Math.max(pmax, end); } }
+      const hasHp = prow >= 3, cand = { top, bot, bx0, bh, pmax, cmax: Math.max(...G.map(r => r.x1)), hasHp };
+      if (!best || (cand.hasHp && !best.hasHp) || (cand.hasHp === best.hasHp && cand.top > best.top)) best = cand;
+    }
+    if (!best) return null;
+    const x1 = Math.max(best.cmax, best.pmax);
+    return { x: X0 + best.bx0, y: Y0 + best.top, w: x1 - best.bx0 + 1, h: best.bh };
   }
   checkMp(now) {
     const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
@@ -2737,7 +2744,7 @@ class Component extends DCLogic {
       else if (Math.abs(edge - M.peak) >= 2) { M.peak = edge; M.last = now; M.alertAt = 0; M.cnt = 0; }
     }
     const lim = Math.max(1, Number(h.mpSec) || 5) * 1000;
-    if (h.mpOn && !h.paused && valid && now - M.last >= lim && now - (M.alertAt || 0) >= lim && (M.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { M.alertAt = now; M.cnt++; this.huntAlert('사냥 멈춤', 'stop'); }
+    if (h.mpOn && !h.paused && valid && now - M.last >= lim && now - (M.alertAt || 0) >= lim && (M.cnt || 0) < Math.max(1, Number(h.mpRep) || 3)) { M.alertAt = now; M.cnt++; this.huntAlert('사냥 멈춤', 'stop'); }
     const cv = this._mpCv && this._mpCv.current; if (cv) { cv.width = b.w; cv.height = b.h; const cc = cv.getContext('2d'); cc.putImageData(img, 0, 0); if (M.edge >= 0) { cc.fillStyle = '#ff3355'; cc.fillRect(M.edge, 0, 2, b.h); } }
   }
   checkRune() {
@@ -3613,6 +3620,7 @@ class Component extends DCLogic {
         const st = !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !found ? ['MP 바 찾는 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.1 70)'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.93 0.06 155)', 'oklch(0.4 0.12 155)'];
         return { cvRef: this._mpCv, cvDisplay: found ? 'block' : 'none', noBar: !found, noBarMsg: !this._stream ? '화면 공유를 시작하면 여기에 MP 바가 보여요' : 'MP 바를 찾는 중이에요 (하늘색 바가 화면에 보여야 해요)',
           swBg: on ? 'oklch(0.55 0.17 255)' : '#d6d6d2', swJustify: on ? 'flex-end' : 'flex-start', toggle: () => { if (this._mp) { this._mp.last = Date.now(); this._mp.cnt = 0; } this.saveHunt({ ...h, mpOn: !on }); },
+          rep: String(Number(h.mpRep) || 3), onRep: e => this.saveHunt({ ...h, mpRep: Math.max(1, Math.floor(Number(e.target.value)) || 1) }),
           sec: String(sec), onSec: e => this.saveHunt({ ...h, mpSec: Math.max(1, Math.floor(Number(e.target.value)) || 5) }),
           idle: idle == null ? '--' : Math.floor(idle) + '초', idleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)',
           status: st[0], stBg: st[1], stColor: st[2], refind: () => { if (this._mp) { this._mp.box = null; this._mp.findAt = 0; } this.forceUpdate(); } }; })(),
