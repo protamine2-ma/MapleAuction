@@ -206,6 +206,9 @@ body{overflow-x:clip;}
   <div style="position:fixed;top:50%;transform:translateY(-50%);left:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;border:1.5px dashed #c9cac6;border-radius:8px;background:#f4f4f2;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;color:#9a9ca1;line-height:1.5;">광고 자리<br>세로형<br>160×600</div>
   <div style="position:fixed;top:50%;transform:translateY(-50%);right:max(12px,calc(50% - 840px));width:160px;height:600px;z-index:4;border:1.5px dashed #c9cac6;border-radius:8px;background:#f4f4f2;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:600;color:#9a9ca1;line-height:1.5;">광고 자리<br>세로형<br>160×600</div>
 </sc-if>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+<span title="관리자만 보여요 · 업데이트마다 1씩 올라가요" style="position:fixed;top:10px;right:12px;z-index:900;padding:4px 10px;border-radius:999px;background:#1b1c1f;color:#fff;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:0 2px 6px rgba(0,0,0,0.2);pointer-events:none;">v{{ appVer }}</span>
+</sc-if>
 <sc-if value="{{ isHunt }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
@@ -4079,7 +4082,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin,
+      isAdmin: admin, appVer: 3,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
