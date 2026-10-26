@@ -290,7 +290,8 @@ body{overflow-x:clip;}
             </sc-if>
           </div>
         </div>
-        <input type="number" min="1" value="{{ s.cdVal }}" onChange="{{ s.onCd }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
+        <sc-if value="{{ s.noCd }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:600;color:#9a9ca1;text-align:center;">숫자 자동 인식</span></sc-if>
+        <sc-if value="{{ s.showCd }}" hint-placeholder-val="{{ true }}"><input type="number" min="1" value="{{ s.cdVal }}" onChange="{{ s.onCd }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;"></sc-if>
         <input type="number" value="{{ s.beforeVal }}" onChange="{{ s.onBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
           <span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.remainColor }};">{{ s.remain }}</span>
@@ -3114,29 +3115,29 @@ class Component extends DCLogic {
     const lockout = !D.on && D.usedAt && now - D.usedAt < 48000 && rem != null;
     const active = seen && now - D.boxAt >= 3000 && (D.on || (!lockout && now - D.seenAt >= 3000));
     if (seen && !D.on && active) D.usedAt = now;
-    if (seen && !active) { D.msg = '야누스 버프 확인 중…'; return; }
+    if (seen && !active) { D.msg = '버프 확인 중…'; return; }
     if (active) {
       const wasOn = D.on; D.on = true; D.miss = 0;
       if (sec != null) {
         const ok = D.prev && Math.abs(D.prev[1] - (now - D.prev[0]) / 1000 - sec) <= 1.5; D.prev = [now, sec];
         const JB_LAG = 1000;
         if (ok) { D.approx = false; if (rem == null || sec - rem > 3) { this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; this._alerted[s.id] = false; } else if (Math.abs(rem - sec + JB_LAG / 1000) > 1.5) this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; }
-        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null;
+        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null; D.noNum = false;
       } else if (N != null) {
         const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
         if (rem == null || D.wm == null) fresh();
         else if (N === D.wm - 1) { this._run[s.id] = now + (N * 60 + 59) * 1000 + 500 - L; D.approx = false; }
         else if (N > D.wm || rem < N * 60 - 5 || rem > N * 60 + 65) fresh();
-        D.wm = N; D.msg = '버프 숫자 인식 중 · ' + N + '분' + (D.approx ? ' (대략)' : '');
+        D.noNum = false; D.wm = N; D.msg = '버프 숫자 인식 중 · ' + N + '분' + (D.approx ? ' (대략)' : '');
       } else {
-        if (!wasOn && rem == null) { this._run[s.id] = now + (Number(s.cd) || 120) * 1000 - 1000; this._alerted[s.id] = false; D.approx = true; }
+        if (!wasOn && rem == null) { this._run[s.id] = now + 3 * 3600000; D.noNum = true; this._alerted[s.id] = false; D.approx = true; }
         D.msg = '숫자 인식 안 됨 · 숫자/아이콘이 사라지면 알림';
       }
     } else {
       D.prev = null; D.wm = null;
       if (D.on && ++D.miss >= 6) { D.on = false; D.miss = 0;
         if (rem != null && !this._alerted[s.id]) this._run[s.id] = now; else if (rem != null) delete this._run[s.id]; }
-      if (!D.on) D.msg = '야누스 버프 기다리는 중';
+      if (!D.on) D.msg = '버프 기다리는 중';
     }
   }
   detectSkills(now) {
@@ -3156,7 +3157,7 @@ class Component extends DCLogic {
     h.skills.forEach(s => {
       const res = W + 'x' + H, cbox = s.box ? s.box[res] : null;
       if (!cbox) return;
-      if (s.preset === 'janusbuff') { this.detectBuffSkill(s, cbox, now, W, H); return; }
+      if (s.preset === 'janusbuff' || s.preset === 'custombuff') { this.detectBuffSkill(s, cbox, now, W, H); return; }
       const icon = cbox ? 'custom:' + cbox.x + ',' + cbox.y + ',' + cbox.w + ',' + cbox.h : this.skillIcon(s); if (!icon) return;
       const D = this._det[s.id] || (this._det[s.id] = { src: icon });
       const isYein = s.preset === 'yein67';
@@ -3469,17 +3470,17 @@ class Component extends DCLogic {
     const PRE = [['janusbuff', J + ' (버프 즐겨찾기)', 120, J, 'skill-janus.png'], ['janus120', J + ' (지속 2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
-      skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }],
+      skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }, { key: 'custombuff', label: '직접 입력 (버프 즐겨찾기)' }],
       huntSkills: h.skills.map(s => {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
         return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
           presetVal: pv, sndVal: s.snd || 'seoyun',
           onSnd: e => { const v = e.target.value; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : { ...x, snd: v }) }); this.huntAlert('알림 테스트', 'skill', ['seoyun', 'eunchae', 'jihyun', 'sena', 'ari', 'arang', 'ruri', 'valkyrie', 'gyogwan', 'ajji'].includes(v) ? this.skillVoice(s) : null, v); },
-          hasIcon: pv !== 'custom', custom: pv === 'custom', dragMode: true,
+          hasIcon: pv !== 'custom' && pv !== 'custombuff', custom: pv === 'custom' || pv === 'custombuff', dragMode: true,
           ...(() => { const v = this._video, res = v && v.videoWidth ? v.videoWidth + 'x' + v.videoHeight : '', has = !!(res && s.box && s.box[res]), pk = this._pick === s.id;
             return { pickLabel: pk ? '지정 중…' : has ? '위치 다시 지정' : '위치 지정', pickBg: pk ? 'oklch(0.48 0.17 255)' : '#fff', pickColor: pk ? '#fff' : 'oklch(0.4 0.17 255)', pickBorder: pk ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
-              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && Date.now() - (this._uiAt || 0) < 3000 ? '다른 창 열림 · 감지 잠시 멈춤 (타이머는 계속)' : s.preset === 'janusbuff' ? (has ? (((this._det || {})[s.id] || {}).msg || '버프 즐겨찾기 감지 중') : '버프 즐겨찾기에서 야누스 아이콘 위치를 지정하세요') : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' + (this._det[s.id].ocrN != null ? ' · 읽음 ' + this._det[s.id].ocrN : ' · 읽음 없음') : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
+              customMsg: !this._stream ? '화면 공유 후 위치를 지정하세요' : has && Date.now() - (this._uiAt || 0) < 3000 ? '다른 창 열림 · 감지 잠시 멈춤 (타이머는 계속)' : s.preset === 'janusbuff' || s.preset === 'custombuff' ? (has ? (((this._det || {})[s.id] || {}).msg || '버프 즐겨찾기 감지 중') : '버프 즐겨찾기에서 아이콘 위치를 지정하세요') : has && s.preset === 'yein67' && !((this._det || {})[s.id] || {}).box ? '예인 아이콘 맞추는 중…' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped === false ? '아이콘을 못 찾아 지정한 칸 그대로 사용 중' : has && s.preset === 'yein67' && ((this._det || {})[s.id] || {}).snapped ? '예인 아이콘에 자동으로 맞춤 · 감지 중' : has && ((this._det || {})[s.id] || {}).pend ? '노란 숫자 읽는 중…' : has && ((this._det || {})[s.id] || {}).ocrFail && this._run && this._run[s.id] ? '숫자 인식 실패 · 쿨타임 기준으로 표시' + (this._det[s.id].ocrN != null ? ' · 읽음 ' + this._det[s.id].ocrN : ' · 읽음 없음') : has ? '지정한 위치 감지 중' + (((this._det || {})[s.id] || {}).dbg ? ' · 밝기 ' + this._det[s.id].dbg : ((this._det || {})[s.id] || {}).cnt ? ' · ' + this._det[s.id].cnt : '') : '퀵슬롯에서 아이콘 위치를 지정하세요',
               customColor: has && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1',
               pickPos: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = pk ? null : s.id; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); } }; })(),
           ...(() => { const D = (this._det || {})[s.id]; const hasBox = !!(this._video && this._video.videoWidth && s.box && s.box[this._video.videoWidth + 'x' + this._video.videoHeight]);
@@ -3487,8 +3488,9 @@ class Component extends DCLogic {
             return { detMsg: t, hasDet: !!t, thumbBg: 'url(' + ((this._stream && D && D.box && D.thumb) || '') + ')', hasThumb: !!(this._stream && D && D.box && D.thumb),
               refind: () => { if (this._det) delete this._det[s.id]; if (this._run) delete this._run[s.id]; this.forceUpdate(); }, detColor: D && D.box && this._stream ? 'oklch(0.45 0.15 150)' : '#9a9ca1' }; })(), iconBg: 'url(img/' + ((PRE.find(p => p[0] === pv) || [])[4] || '') + ')',
           onPreset: e => { const k = e.target.value, p = PRE.find(x => x[0] === k); if (this._run) delete this._run[s.id];
-            this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2], durV: 1 } : { ...x, preset: 'custom', name: '' }) }); },
-          remain: on ? fmt(rem) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
+            this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2], durV: 1 } : k === 'custombuff' ? { ...x, preset: 'custombuff', name: '', cd: 60, durV: 1 } : { ...x, preset: 'custom', name: '' }) }); },
+          showCd: pv !== 'janusbuff' && pv !== 'custombuff', noCd: pv === 'janusbuff' || pv === 'custombuff',
+          remain: on ? (((this._det || {})[s.id] || {}).noNum ? '켜짐' : fmt(rem)) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
           pct: on && s.cd ? Math.min(100, rem / (this.skillDur(s) * 1000) * 100).toFixed(1) + '%' : '0%',
           toggleRun: () => this.toggleSkill(s), resetRun: () => this.resetSkill(s), canReset: on,
           onName: e => upd(s.id, 'name', e.target.value), onCd: e => { const nv = num(e.target.value), R = this._run && this._run[s.id];
@@ -3503,7 +3505,7 @@ class Component extends DCLogic {
         const isRow = this._stream && this._pick === '__buffrow';
         const pbuf = this._stream && String(this._pick).startsWith('buff:') ? (h.buffs || []).find(x => 'buff:' + x.id === this._pick) : null;
         return { picking: !!ps || isRow || !!pbuf, pickingSkill: !!ps && !isRow && !pbuf, pickingBuff: isRow || !!pbuf, pickName: pbuf ? this.buffName(pbuf) : isRow ? '버프 줄' : ps ? (ps.name || '직접 입력') : '', pickCvRef: this._pickCv,
-          pickWhere: ps && ps.preset === 'janusbuff' ? '버프 즐겨찾기의 야누스 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)' : '스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)',
+          pickWhere: ps && (ps.preset === 'janusbuff' || ps.preset === 'custombuff') ? '버프 즐겨찾기의 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)' : '스킬 아이콘 한 칸을 드래그하세요 (화면 오른쪽 아래)',
           pickBuffRow: () => { if (!this._stream) { alert('먼저 게임 화면 공유를 시작하세요.'); return; } this._pick = this._pick === '__buffrow' ? null : '__buffrow'; this._pdrag = null; this.forceUpdate(); setTimeout(() => this.drawPick(), 0); },
           buffRowLabel: (() => { const v = this._video; const has = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); return has ? '버프 줄 다시 지정' : '버프 줄 지정'; })(),
           saveRowShot: () => { const v = this._video; const row = v && v.videoWidth && this.buffRowFor(v.videoWidth, v.videoHeight); if (!row) { alert('먼저 화면 공유 후 버프 줄을 지정하세요.'); return; }
