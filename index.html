@@ -2550,8 +2550,10 @@ class Component extends DCLogic {
     });
     if (this._stream && now - (this._lastRune || 0) >= 1000) { this._lastRune = now; this.checkRune(); }
     if (this._stream && now - (this._lastUi || 0) >= 500) { this._lastUi = now; if (this.uiWindowOpen()) { this._uiAt = now; this._fadeAt = now; } }
-    if (this._stream && now - (this._lastStop || 0) >= 1000) { this._lastStop = now; this.checkStop(now); }
-    if (this._stream && now - (this._lastBoost || 0) >= 1000) { this._lastBoost = now; this.checkBoost(now); }
+    if (this._stream && now - (this._lastStop || 0) >= 1000) { this._lastStop = now;
+      if (h.stopOn) this.checkStop(now); else if (this._stop) this._stop.prev = null;
+      if (h.mpOn) { this.checkMp(now); if (!h.stopOn) this.forceUpdate(); } else if (this._mp) this._mp.prevW = null; }
+    if (this._stream && now - (this._lastBoost || 0) >= 1000) { this._lastBoost = now; if (h.boostOn) this.checkBoost(now); }
     if (this._stream && !h.paused) { if (!h.skillOff) this.detectSkills(now); this.checkBuffsTimer(now); }
     this.b29Tick(now);
     [...(this._tms || []), ...(this._rep ? [this._rep] : []), ...(this._m1 ? [this._m1] : []), ...(this._m15 ? [this._m15] : []), ...(this._m10 ? [this._m10] : []), ...(this._m10b ? [this._m10b] : [])].forEach(tm => { if (tm.end) { any = true;
@@ -2698,7 +2700,6 @@ class Component extends DCLogic {
     const lim = Math.max(3, Number(h.stopSec) || 15) * 1000;
     if (h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim && (S.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { S.alertAt = now; S.cnt = (S.cnt || 0) + 1; this.huntAlert('사냥 멈춤', 'stop'); }
     const cv = this._stopCv && this._stopCv.current; if (cv) { cv.width = w; cv.height = bh; cv.getContext('2d').putImageData(img, 0, 0); }
-    this.checkMp(now);
     this.forceUpdate();
   }
   findMpBar(W, H) {
@@ -3192,7 +3193,7 @@ class Component extends DCLogic {
     const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = y0; Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
     const runs = []; s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
     const gs = []; for (const [a, b] of runs) { let gy0 = y1, gy1 = y0, n = 0; for (let Y = y0; Y <= y1; Y++) for (let X = a; X <= b; X++) if (M[Y * W + X]) { n++; gy0 = Math.min(gy0, Y); gy1 = Math.max(gy1, Y); } const h = gy1 - gy0 + 1; if (n < 3 || h < bh * 0.8) continue; gs.push({ x0: a, x1: b, y0: gy0, y1: gy1, w: b - a + 1, h }); }
-    const cl = []; let cur = []; for (const g of gs) { if (cur.length && g.x0 - cur[cur.length - 1].x1 > Math.max(3, bh * 0.4)) { cl.push(cur); cur = []; } cur.push(g); } if (cur.length) cl.push(cur);
+    const cl = []; let cur = []; for (const g of gs) { if (cur.length && g.x0 - cur[cur.length - 1].x1 > Math.max(5, bh * 0.75)) { cl.push(cur); cur = []; } cur.push(g); } if (cur.length) cl.push(cur);
     if (!cl.length) return null; const cx = W / 2; cl.sort((A, B) => Math.abs((A[0].x0 + A[A.length - 1].x1) / 2 - cx) - Math.abs((B[0].x0 + B[B.length - 1].x1) / 2 - cx));
     const G = cl[0]; if (G.length < 1 || G.length > 2) return null;
     let str = '';
@@ -3233,10 +3234,11 @@ class Component extends DCLogic {
           const exp = rem != null && !D.noNum ? rem + JB_LAG / 1000 : null;
           if (exp == null) { setT(); this._alerted[s.id] = false; D.down = 0; }
           else if (sec > exp + 3) { setT(); if (sec - 1 > (Number(s.before) || 0)) this._alerted[s.id] = false; D.down = 0; }
-          else if (sec < exp - 1.5) { D.down = (D.down || 0) + 1; if (D.down >= 4) { setT(); D.down = 0; } }
+          else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= 4) { setT(); D.down = 0; } }
           else D.down = 0; }
         else if (D.down) D.down = 0;
-        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null; D.noNum = false; if (ok) D.secAt = now;
+        const shown = rem != null && !D.noNum ? Math.max(0, Math.round(rem + JB_LAG / 1000)) : sec;
+        D.msg = '버프 숫자 인식 중 · ' + shown + '초'; D.wm = null; D.noNum = false; if (ok && Math.abs(shown - sec) <= 1.5) D.secAt = now;
       } else if (N != null) {
         const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
         if (rem == null || D.wm == null) fresh();
@@ -3650,7 +3652,7 @@ class Component extends DCLogic {
         onChange: e => { const v = e.target.value; set('snd', { ...(h.snd || {}), [k]: v }); this.huntAlert('알림 테스트', kind, null, v); } }])),
       sndAll: (() => { const sn = h.snd || {}, vals = [...['buff', 'rune', 'booster', 'stop', 'timer'].map(k => sn[k] || 'seoyun'), ...h.skills.map(s => s.snd || 'seoyun')], same = vals.every(v => v === vals[0]);
         return { val: same ? (vals[0] || 'seoyun') : 'mixed', onChange: e => { const v = e.target.value; this.saveHunt({ ...h, snd: { buff: v, rune: v, booster: v, stop: v, timer: v, skill: v }, skills: h.skills.map(s => ({ ...s, snd: v })) }); this.huntAlert('알림 테스트', 'minute', null, v); } }; })(),
-      mp: (() => { if (!this._mpCv) this._mpCv = React.createRef(); const M = this._mp || {}, now2 = Date.now(), on = !!h.mpOn, sec = Number(h.mpSec) || 5, found = !!(this._stream && M.box), idle = found ? (now2 - M.last) / 1000 : null, stopped = on && idle != null && idle >= sec;
+      mp: (() => { if (!this._mpCv) this._mpCv = React.createRef(); const M = this._mp || {}, now2 = Date.now(), on = !!h.mpOn, sec = Number(h.mpSec) || 5, found = !!(this._stream && M.box), idle = on && found ? (now2 - M.last) / 1000 : null, stopped = on && idle != null && idle >= sec;
         const st = !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !found ? ['MP 바 찾는 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.1 70)'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.93 0.06 155)', 'oklch(0.4 0.12 155)'];
         return { cvRef: this._mpCv, cvDisplay: found ? 'block' : 'none', noBar: !found, noBarMsg: !this._stream ? '화면 공유를 시작하면 여기에 MP 바가 보여요' : 'MP 바를 찾는 중이에요 (하늘색 바가 화면에 보여야 해요)',
           swBg: on ? 'oklch(0.55 0.17 255)' : '#d6d6d2', swJustify: on ? 'flex-end' : 'flex-start', toggle: () => { if (this._mp) { this._mp.last = Date.now(); this._mp.cnt = 0; } this.saveHunt({ ...h, mpOn: !on }); },
@@ -3665,7 +3667,7 @@ class Component extends DCLogic {
       isPaused: !!h.paused,
       togglePause: () => { const p = !h.paused; if (p) { this._run = {}; this._alerted = {}; this._det = {}; this._bst = {}; this._useAt = 0; this._buffOn = false; } this._rune = {}; this._runeStartAlerted = false; set('paused', p); },
       sharing: !!this._stream, notSharing: !this._stream, shareErr: this._stream ? '' : this._shareErr || '', hasShareErr: !this._stream && !!this._shareErr, shareRes: r.res || '연결 중', onShare: () => this.startShare(), onStopShare: () => this.stopShare(),
-      ...(() => { if (!this._stopCv) this._stopCv = React.createRef(); const S = this._stop || {}, sec = Number(h.stopSec) || 15, idle = this._stream && S.last ? (now - S.last) / 1000 : null, stopped = idle != null && idle >= sec;
+      ...(() => { if (!this._stopCv) this._stopCv = React.createRef(); const S = this._stop || {}, sec = Number(h.stopSec) || 15, idle = h.stopOn && this._stream && S.last ? (now - S.last) / 1000 : null, stopped = idle != null && idle >= sec;
         const ss = !h.stopOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.48 0.17 255)', '#fff'];
         return { buffVidOn: !!this.state.buffVid, buffVidTop: this.state.buffVidTop || 0, buffVidLeft: this.state.buffVidLeft || 0, buffVidShow: e => { const r = e.currentTarget.getBoundingClientRect(), w = Math.min(480, window.innerWidth * 0.8); this.setState({ buffVid: true, buffVidTop: r.bottom + 8, buffVidLeft: Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) }); }, buffVidHide: () => this.setState({ buffVid: false }), huntAdmin: !!this.state.admin, stopCvRef: this._stopCv, stopSw: sw(h.stopOn), toggleStop: () => { this._stop = null; set('stopOn', !h.stopOn); }, stopSec: String(h.stopSec ?? 15), stopRep: String(h.stopRep ?? 3), onStopRep: e => set('stopRep', Math.max(1, Number(e.target.value) || 3)), onStopSec: e => set('stopSec', Math.max(3, Number(e.target.value) || 15)),
           stopStatus: ss[0], stopStatusBg: ss[1], stopStatusColor: ss[2], stopIdle: idle == null ? '--' : Math.floor(idle) + '초', stopIdleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)' }; })(),
