@@ -2585,8 +2585,12 @@ class Component extends DCLogic {
       const mins = t.sel === 'c' ? Number(t.custom) || 0 : typeof t.sel === 'number' ? t.sel : 30, tot = Math.max(left, mins * 60000);
       rows.push(row(nm + (t.end > now ? '' : ' (멈춤)'), r.tmLeft, (left / tot * 100).toFixed(1) + '%', t.end > now && left <= 60000, !(t.end > now))); });
     const M = this._rep; if (M && (M.end > now || M.pausedLeft > 0)) { const ev = Math.max(5, (M.every || 0) * 60 + (M.sec || 0)) * 1000, left = M.end > now ? M.end - now : M.pausedLeft; rows.push(row('반복 타이머', v.repLeft, Math.min(100, left / ev * 100).toFixed(1) + '%', false, false)); }
-    const bad = [v.runeStatus === '룬 감지!' && '룬 감지!', v.stopStatus === '사냥 멈춤!' && '사냥 멈춤!'].filter(Boolean);
-    const foot = !this._stream ? ['#9a9ca1', '화면 공유 꺼짐'] : h.paused ? ['#9a9ca1', '일시정지'] : bad.length ? ['oklch(0.68 0.21 25)', bad.join(' · ')] : ['oklch(0.72 0.17 150)', '룬 · 사냥 정상'];
+    const SX = this._stop || {}, MX = this._mp || {}, huntOn = h.stopOn || h.mpOn;
+    const expStop = h.stopOn && SX.last && (now - SX.last) / 1000 >= (Number(h.stopSec) || 15);
+    const mpStop = h.mpOn && MX.box && MX.last && (now - MX.last) / 1000 >= (Number(h.mpSec) || 5);
+    const bad = [h.rune && (this._rune || {}).found && '룬 감지!', (expStop || mpStop) && '사냥 멈춤!'].filter(Boolean);
+    const okTxt = [h.rune && '룬', huntOn && '사냥'].filter(Boolean).join(' · ');
+    const foot = !this._stream ? ['#9a9ca1', '화면 공유 꺼짐'] : h.paused ? ['#9a9ca1', '일시정지'] : bad.length ? ['oklch(0.68 0.21 25)', bad.join(' · ')] : okTxt ? ['oklch(0.72 0.17 150)', okTxt + ' 정상'] : ['#6b6d73', '룬 · 사냥 감지 꺼짐'];
     this._pipRoot.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;padding:10px;">' + (rows.join('') || '<span style="font-size:12px;color:#9a9ca1;">사냥 탭에서 스킬이나 부스터를 켜 주세요</span>') +
       '<div style="display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid #34353a;font-size:11px;font-weight:700;color:' + (bad.length ? foot[0] : '#9a9ca1') + ';"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:' + foot[0] + ';"></span>' + esc(foot[1]) + '</div></div>';
     const w = this._pipWin, ch = this._pipRoot.offsetHeight;
@@ -4148,7 +4152,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 10,
+      isAdmin: admin, appVer: 11,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
