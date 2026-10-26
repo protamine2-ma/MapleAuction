@@ -407,6 +407,8 @@ body{overflow-x:clip;}
       <span style="padding:5px 12px;border-radius:999px;background:{{ stopStatusBg }};color:{{ stopStatusColor }};font-size:13px;font-weight:700;">{{ stopStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.stop.open }}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{ huntFold.stopExp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopExp.icon }}</span>경험치 바 감지</button>
+    <sc-if value="{{ huntFold.stopExp.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <button onClick="{{ toggleStop }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
@@ -427,6 +429,35 @@ body{overflow-x:clip;}
         </div>
       </div>
     </div>
+    </sc-if>
+    <button onClick="{{ huntFold.stopMp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-top:1px solid #efefec;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopMp.icon }}</span>마나 사용 감지</button>
+    <sc-if value="{{ huntFold.stopMp.open }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <button onClick="{{ mp.toggle }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
+            <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ mp.swBg }};display:flex;justify-content:{{ mp.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>마나 사용 감지
+          </button>
+          <span style="padding:4px 10px;border-radius:999px;background:{{ mp.stBg }};color:{{ mp.stColor }};font-size:12px;font-weight:700;">{{ mp.status }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
+          <span>MP 변화 없으면 알림 (초)</span><input type="number" min="1" value="{{ mp.sec }}" onChange="{{ mp.onSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>마지막 MP 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ mp.idleColor }};">{{ mp.idle }}</span>
+        </div>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 정한 시간 동안 MP가 전혀 안 움직이면(줄지도 차지도 않으면) 바로 '사냥 멈춤'을 알려줘요. 반복 횟수는 위 경험치 설정과 같아요.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <span style="font-size:12px;color:#9a9ca1;">감지 중인 MP 바 (빨간 선 = 현재 MP 끝)</span>
+          <button onClick="{{ mp.refind }}" style="padding:4px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">MP 바 다시 찾기</button>
+        </div>
+        <div style="min-height:60px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;">
+          <canvas ref="{{ mp.cvRef }}" style="display:{{ mp.cvDisplay }};max-width:100%;height:auto;image-rendering:pixelated;"></canvas>
+          <sc-if value="{{ mp.noBar }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#8a8c92;">{{ mp.noBarMsg }}</span></sc-if>
+        </div>
+      </div>
+    </div>
+    </sc-if>
     </sc-if>
   </section>
   </sc-if>
@@ -2666,7 +2697,48 @@ class Component extends DCLogic {
     const lim = Math.max(3, Number(h.stopSec) || 15) * 1000;
     if (h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim && (S.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { S.alertAt = now; S.cnt = (S.cnt || 0) + 1; this.huntAlert('사냥 멈춤', 'stop'); }
     const cv = this._stopCv && this._stopCv.current; if (cv) { cv.width = w; cv.height = bh; cv.getContext('2d').putImageData(img, 0, 0); }
+    this.checkMp(now);
     this.forceUpdate();
+  }
+  findMpBar(W, H) {
+    const v = this._video, X0 = Math.floor(W * 0.15), Y0 = Math.floor(H * 0.45), w = Math.floor(W * 0.7), hh = H - Y0;
+    const c = this._mpFc || (this._mpFc = document.createElement('canvas')); c.width = w; c.height = hh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, X0, Y0, w, hh, 0, 0, w, hh); const d = x.getImageData(0, 0, w, hh).data;
+    const cy = (i) => { const r = d[i], g = d[i + 1], b = d[i + 2]; return b > 150 && g > 110 && r < 100 && b - r > 100; };
+    const pk = (i) => { const r = d[i], g = d[i + 1], b = d[i + 2]; return r > 190 && g < 110 && b > 70 && b < 170; };
+    const minRun = Math.max(12, Math.floor(W * 0.015)), rows = [];
+    for (let y = 0; y < hh; y++) { let run = 0, best = 0, bx1 = 0, mnx = w; for (let X = 0; X < w; X++) { if (cy((y * w + X) * 4)) { run++; if (run > best) { best = run; bx1 = X; } } else run = 0; } if (best >= minRun) rows.push({ y, x0: bx1 - best + 1, x1: bx1 }); }
+    if (!rows.length) return null;
+    let bestG = null, g = [rows[0]];
+    const flush = () => { if (!bestG || g.length > bestG.length) bestG = g; };
+    for (let k = 1; k < rows.length; k++) { if (rows[k].y - rows[k - 1].y <= 2 && Math.abs(rows[k].x0 - rows[k - 1].x0) <= 4) g.push(rows[k]); else { flush(); g = [rows[k]]; } } flush();
+    if (bestG.length < 3 || bestG.length > H * 0.05) return null;
+    const top = bestG[0].y, bot = bestG[bestG.length - 1].y, bx0 = Math.min(...bestG.map(r => r.x0)), bh = bot - top + 1;
+    let pmax = -1; for (let y = Math.max(0, top - bh * 3); y < top; y++) for (let X = bx0; X < Math.min(w, bx0 + W * 0.45); X++) if (pk((y * w + X) * 4)) pmax = Math.max(pmax, X);
+    const cmax = Math.max(...bestG.map(r => r.x1)), x1 = Math.max(cmax, pmax);
+    return { x: X0 + bx0, y: Y0 + top, w: x1 - bx0 + 1, h: bh };
+  }
+  checkMp(now) {
+    const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
+    const W = v.videoWidth, H = v.videoHeight, res = W + 'x' + H;
+    const M = this._mp || (this._mp = { last: now, alertAt: 0, cnt: 0 });
+    if (M.res !== res) { M.res = res; M.box = null; M.findAt = 0; }
+    if (!M.box) { if (now - (M.findAt || 0) < 2000) return; M.findAt = now; M.box = this.findMpBar(W, H); M.peak = -1; M.last = now; M.alertAt = 0; M.cnt = 0; M.miss = 0; if (!M.box) return; }
+    const b = M.box, c = this._mpC || (this._mpC = document.createElement('canvas')); c.width = b.w; c.height = b.h;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, b.x, b.y, b.w, b.h, 0, 0, b.w, b.h); const img = x.getImageData(0, 0, b.w, b.h), d = img.data;
+    let edge = -1, cyn = 0, dark = 0;
+    for (let y = 0; y < b.h; y++) for (let X = 0; X < b.w; X++) { const i = (y * b.w + X) * 4, r = d[i], g = d[i + 1], bb = d[i + 2];
+      if (bb > 150 && g > 110 && r < 100 && bb - r > 100) { cyn++; if (X > edge) edge = X; } else if (Math.max(r, g, bb) < 90) dark++; }
+    const valid = cyn + dark > b.w * b.h * 0.5;
+    if (!valid || this._fadeAt && now - this._fadeAt < 3000) { if (!valid && ++M.miss >= 15) M.box = null; M.last = Math.max(M.last, now - 1000); }
+    else {
+      M.miss = 0; M.edge = edge;
+      if (M.peak < 0) M.peak = edge;
+      else if (Math.abs(edge - M.peak) >= 2) { M.peak = edge; M.last = now; M.alertAt = 0; M.cnt = 0; }
+    }
+    const lim = Math.max(1, Number(h.mpSec) || 5) * 1000;
+    if (h.mpOn && !h.paused && valid && now - M.last >= lim && now - (M.alertAt || 0) >= lim && (M.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { M.alertAt = now; M.cnt++; this.huntAlert('사냥 멈춤', 'stop'); }
+    const cv = this._mpCv && this._mpCv.current; if (cv) { cv.width = b.w; cv.height = b.h; const cc = cv.getContext('2d'); cc.putImageData(img, 0, 0); if (M.edge >= 0) { cc.fillStyle = '#ff3355'; cc.fillRect(M.edge, 0, 2, b.h); } }
   }
   checkRune() {
     const v = this._video; if (!v || !v.videoWidth) return;
@@ -3464,7 +3536,7 @@ class Component extends DCLogic {
     if (!this._runeCv) this._runeCv = React.createRef();
     const sw = on => ({ swBg: on ? 'oklch(0.48 0.17 255)' : '#d6d7d3', swJustify: on ? 'flex-end' : 'flex-start' });
     const set = (k, v) => this.saveHunt({ ...h, [k]: v });
-    const huntFold = Object.fromEntries(['skill', 'buff', 'rune', 'stop', 'boost', 'timer'].map(k => { const c = !!(h.fold || {})[k]; return [k, { open: !c, icon: c ? '▸' : '▾', toggle: () => set('fold', { ...(h.fold || {}), [k]: !c }) }]; }));
+    const huntFold = Object.fromEntries(['skill', 'buff', 'rune', 'stop', 'stopExp', 'stopMp', 'boost', 'timer'].map(k => { const c = !!(h.fold || {})[k]; return [k, { open: !c, icon: c ? '▸' : '▾', toggle: () => set('fold', { ...(h.fold || {}), [k]: !c }) }]; }));
     const upd = (id, k, v) => this.saveHunt({ ...h, skills: h.skills.map(s => s.id === id ? { ...s, [k]: v } : s) });
     const num = v => Math.max(0, Number(v) || 0);
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
@@ -3537,6 +3609,13 @@ class Component extends DCLogic {
         onChange: e => { const v = e.target.value; set('snd', { ...(h.snd || {}), [k]: v }); this.huntAlert('알림 테스트', kind, null, v); } }])),
       sndAll: (() => { const sn = h.snd || {}, vals = [...['buff', 'rune', 'booster', 'stop', 'timer'].map(k => sn[k] || 'seoyun'), ...h.skills.map(s => s.snd || 'seoyun')], same = vals.every(v => v === vals[0]);
         return { val: same ? (vals[0] || 'seoyun') : 'mixed', onChange: e => { const v = e.target.value; this.saveHunt({ ...h, snd: { buff: v, rune: v, booster: v, stop: v, timer: v, skill: v }, skills: h.skills.map(s => ({ ...s, snd: v })) }); this.huntAlert('알림 테스트', 'minute', null, v); } }; })(),
+      mp: (() => { if (!this._mpCv) this._mpCv = React.createRef(); const M = this._mp || {}, now2 = Date.now(), on = !!h.mpOn, sec = Number(h.mpSec) || 5, found = !!(this._stream && M.box), idle = found ? (now2 - M.last) / 1000 : null, stopped = on && idle != null && idle >= sec;
+        const st = !on ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : !found ? ['MP 바 찾는 중', 'oklch(0.95 0.05 85)', 'oklch(0.45 0.1 70)'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.93 0.06 155)', 'oklch(0.4 0.12 155)'];
+        return { cvRef: this._mpCv, cvDisplay: found ? 'block' : 'none', noBar: !found, noBarMsg: !this._stream ? '화면 공유를 시작하면 여기에 MP 바가 보여요' : 'MP 바를 찾는 중이에요 (하늘색 바가 화면에 보여야 해요)',
+          swBg: on ? 'oklch(0.55 0.17 255)' : '#d6d6d2', swJustify: on ? 'flex-end' : 'flex-start', toggle: () => { if (this._mp) { this._mp.last = Date.now(); this._mp.cnt = 0; } this.saveHunt({ ...h, mpOn: !on }); },
+          sec: String(sec), onSec: e => this.saveHunt({ ...h, mpSec: Math.max(1, Math.floor(Number(e.target.value)) || 5) }),
+          idle: idle == null ? '--' : Math.floor(idle) + '초', idleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)',
+          status: st[0], stBg: st[1], stColor: st[2], refind: () => { if (this._mp) { this._mp.box = null; this._mp.findAt = 0; } this.forceUpdate(); } }; })(),
       huntFold, skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
