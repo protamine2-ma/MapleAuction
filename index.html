@@ -495,7 +495,8 @@ body{overflow-x:clip;}
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
         <span style="font-size:15px;font-weight:800;color:oklch(0.3 0.09 255);min-width:58px;">반복알람</span>
         <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#3a3b3f;">
-          <input type="number" min="1" max="120" value="{{ repEvery }}" onChange="{{ onRepEvery }}" disabled="{{ repLocked }}" style="box-sizing:border-box;width:64px;padding:5px 6px;border:1px solid #e3e3e0;border-radius:6px;font-size:14px;text-align:center;background:#fff;">분마다
+          <input type="number" min="0" max="120" value="{{ repEvery }}" onChange="{{ onRepEvery }}" disabled="{{ repLocked }}" style="box-sizing:border-box;width:64px;padding:5px 6px;border:1px solid #e3e3e0;border-radius:6px;font-size:14px;text-align:center;background:#fff;">분
+          <input type="number" min="0" max="59" value="{{ repSec }}" onChange="{{ onRepSec }}" disabled="{{ repLocked }}" style="box-sizing:border-box;width:64px;padding:5px 6px;border:1px solid #e3e3e0;border-radius:6px;font-size:14px;text-align:center;background:#fff;">초마다
         </label>
         <span style="font-size:14px;font-weight:600;color:#6b6d73;">{{ repStep }}</span>
       </div>
@@ -2449,9 +2450,11 @@ class Component extends DCLogic {
     return {
       timers: L.map((tm, i) => ({ ...this.timerRow(tm), num: '타이머 ' + (i + 1), canRemove: L.length > 1, remove: () => { this._tms = L.filter(x => x !== tm); this.forceUpdate(); } })),
       addTimer: () => { L.push({ id: 't' + Date.now(), sel: 30, custom: '', end: 0 }); this.forceUpdate(); },
-      ...(() => { const M = this._rep || (this._rep = { id: 'rep', sel: 'rep', custom: '', every: Number(localStorage.getItem(KEY + ':repEvery')) || 10, end: 0 }), r = this.timerRow(M), now = Date.now(), ev = Math.max(1, M.every || 10), total = Math.floor(120 / ev);
+      ...(() => { const M = this._rep || (this._rep = { id: 'rep', sel: 'rep', custom: '', every: Number(localStorage.getItem(KEY + ':repEvery') ?? 10), sec: Number(localStorage.getItem(KEY + ':repSec')) || 0, end: 0 }), r = this.timerRow(M), now = Date.now(), evS = Math.max(5, (M.every || 0) * 60 + (M.sec || 0)), total = Math.floor(7200 / evS);
         const busy = M.end > now || M.pausedLeft > 0, step = M.end > now ? (M.lastMin || 0) : 0;
-        return { repEvery: String(M.every || ''), repLocked: busy, onRepEvery: e => { const n = Math.min(120, Math.max(0, Math.floor(Number(e.target.value) || 0))); M.every = n; if (n) localStorage.setItem(KEY + ':repEvery', n); this.forceUpdate(); },
+        return { repEvery: String(M.every ?? 0), repSec: String(M.sec ?? 0), repLocked: busy,
+          onRepEvery: e => { const n = Math.min(120, Math.max(0, Math.floor(Number(e.target.value) || 0))); M.every = n; localStorage.setItem(KEY + ':repEvery', n); this.forceUpdate(); },
+          onRepSec: e => { const n = Math.min(59, Math.max(0, Math.floor(Number(e.target.value) || 0))); M.sec = n; localStorage.setItem(KEY + ':repSec', n); this.forceUpdate(); },
           repLeft: r.tmLeft, repColor: r.tmColor, repBtn: r.tmBtn, repBtnBg: r.tmBtnBg, repToggle: r.tmToggle, repReset: r.tmReset, repShowReset: r.showReset, repStatus: r.tmStatus, repStBg: r.tmStBg, repStColor: r.tmStColor,
           repStep: busy ? step + ' / ' + total + '회' : '2시간 동안 알림 (' + total + '회)' }; })(),
       ...(() => { const M = this._m1 || (this._m1 = { id: 'm1', sel: 'm1', custom: '', end: 0 }), r = this.timerRow(M), now = Date.now();
@@ -2522,7 +2525,7 @@ class Component extends DCLogic {
     [...(this._tms || []), ...(this._rep ? [this._rep] : []), ...(this._m1 ? [this._m1] : []), ...(this._m15 ? [this._m15] : []), ...(this._m10 ? [this._m10] : []), ...(this._m10b ? [this._m10b] : [])].forEach(tm => { if (tm.end) { any = true;
       if (now >= tm.end) { tm.end = 0; tm.done = now; this.huntAlert(tm.sel === 'm1' ? '1분알람 끝' : tm.sel === 'm15' ? '15분알람 끝' : tm.sel === 'm10' || tm.sel === 'm10b' ? '10분알람 끝' : '타이머 끝', tm.sel === 'm15' ? '15min' : tm.sel === 'm10' || tm.sel === 'm10b' ? '10min' : 'timer'); }
       else if (tm.sel === 'm10b') { const M = [10, 15, 20], el = (now - tm.start) / 60000; while ((tm.lastMin || 0) < M.length && el >= M[tm.lastMin || 0]) { const m = M[tm.lastMin || 0]; tm.lastMin = (tm.lastMin || 0) + 1; this.huntAlert(m + '분', m === 15 ? '15min' : '10min'); } }
-      else if (tm.sel === 'rep') { const ev = Math.max(1, tm.every || 10), k = Math.floor((now - tm.start) / (ev * 60000)); if (k > (tm.lastMin || 0)) { tm.lastMin = k; this.huntAlert(k * ev + '분', ev === 1 ? 'minute' : ev === 10 ? '10min' : ev === 15 ? '15min' : 'timer'); } }
+      else if (tm.sel === 'rep') { const evS = Math.max(5, (tm.every || 0) * 60 + (tm.sec || 0)), k = Math.floor((now - tm.start) / (evS * 1000)); if (k > (tm.lastMin || 0)) { tm.lastMin = k; this.huntAlert('반복 ' + k + '회', 'repeat'); } }
       else if (tm.sel === 'm10') { const k = Math.floor((now - tm.start) / 600000); if (k > (tm.lastMin || 0)) { tm.lastMin = k; this.huntAlert(k * 10 + '분', '10min'); } }
       else if (tm.sel === 'm15') { const k = Math.floor((now - tm.start) / 900000); if (k > (tm.lastMin || 0)) { tm.lastMin = k; this.huntAlert(k * 15 + '분', '15min'); } }
       else if (tm.sel === 'm1') { const k = Math.floor((now - tm.start) / 60000); if (k > (tm.lastMin || 0)) { tm.lastMin = k; this.huntAlert(k + '분', 'minute'); } } } });
