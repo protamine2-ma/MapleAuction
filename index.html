@@ -430,7 +430,7 @@ body{overflow-x:clip;}
       </div>
     </div>
     </sc-if>
-    <button onClick="{{ huntFold.stopMp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-top:1px solid #efefec;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopMp.icon }}</span>마나 사용 감지</button>
+    <button onClick="{{ huntFold.stopMp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-top:1px solid #efefec;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopMp.icon }}</span>마나 사용 감지<span style="padding:2px 8px;border-radius:999px;background:oklch(0.95 0.05 85);color:oklch(0.45 0.1 70);font-size:11px;font-weight:700;">테스트중</span></button>
     <sc-if value="{{ huntFold.stopMp.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
@@ -445,11 +445,11 @@ body{overflow-x:clip;}
           <span>알림 반복 횟수</span><input type="number" min="1" value="{{ mp.rep }}" onChange="{{ mp.onRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 MP 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ mp.idleColor }};">{{ mp.idle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 정한 시간 동안 MP가 전혀 안 움직이면(줄지도 차지도 않으면) 바로 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 바 위의 흰 MP 숫자(초록으로 표시)가 정한 시간 동안 안 바뀌면 바로 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-          <span style="font-size:12px;color:#9a9ca1;">감지 중인 MP 바 (빨간 선 = 현재 MP 끝)</span>
+          <span style="font-size:12px;color:#9a9ca1;">감지 중인 MP 바 (초록 = 비교하는 MP 숫자)</span>
           <button onClick="{{ mp.refind }}" style="padding:4px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">MP 바 다시 찾기</button>
         </div>
         <div style="min-height:60px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;">
@@ -2733,19 +2733,19 @@ class Component extends DCLogic {
     if (!M.box) { if (now - (M.findAt || 0) < 2000) return; M.findAt = now; M.box = this.findMpBar(W, H); M.peak = -1; M.last = now; M.alertAt = 0; M.cnt = 0; M.miss = 0; if (!M.box) return; }
     const b = M.box, c = this._mpC || (this._mpC = document.createElement('canvas')); c.width = b.w; c.height = b.h;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, b.x, b.y, b.w, b.h, 0, 0, b.w, b.h); const img = x.getImageData(0, 0, b.w, b.h), d = img.data;
-    let edge = -1, cyn = 0, dark = 0;
-    for (let y = 0; y < b.h; y++) for (let X = 0; X < b.w; X++) { const i = (y * b.w + X) * 4, r = d[i], g = d[i + 1], bb = d[i + 2];
-      if (bb > 150 && g > 110 && r < 100 && bb - r > 100) { cyn++; if (X > edge) edge = X; } else if (Math.max(r, g, bb) < 90) dark++; }
-    const valid = cyn + dark > b.w * b.h * 0.5;
-    if (!valid || this._fadeAt && now - this._fadeAt < 3000) { if (!valid && ++M.miss >= 15) M.box = null; M.last = Math.max(M.last, now - 1000); }
+    let cyn = 0, dark = 0; const wm = new Uint8Array(b.w * b.h);
+    for (let y = 0; y < b.h; y++) for (let X = 0; X < b.w; X++) { const j = y * b.w + X, i = j * 4, r = d[i], g = d[i + 1], bb = d[i + 2], mn = Math.min(r, g, bb);
+      if (mn > 200) { wm[j] = 1; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } else if (bb > 150 && g > 110 && r < 100 && bb - r > 100) cyn++; else if (Math.max(r, g, bb) < 90) dark++; }
+    const valid = cyn + dark > b.w * b.h * 0.4;
+    if (!valid || this._fadeAt && now - this._fadeAt < 3000) { if (!valid && ++M.miss >= 15) M.box = null; M.last = Math.max(M.last, now - 1000); M.prevW = null; }
     else {
-      M.miss = 0; M.edge = edge;
-      if (M.peak < 0) M.peak = edge;
-      else if (Math.abs(edge - M.peak) >= 2) { M.peak = edge; M.last = now; M.alertAt = 0; M.cnt = 0; }
+      M.miss = 0;
+      if (M.prevW && M.prevW.length === wm.length) { let n = 0; for (let k = 0; k < wm.length; k++) if (wm[k] !== M.prevW[k]) n++; if (n > 3) { M.last = now; M.alertAt = 0; M.cnt = 0; } }
+      M.prevW = wm;
     }
     const lim = Math.max(1, Number(h.mpSec) || 5) * 1000;
     if (h.mpOn && !h.paused && valid && now - M.last >= lim && now - (M.alertAt || 0) >= lim && (M.cnt || 0) < Math.max(1, Number(h.mpRep) || 3)) { M.alertAt = now; M.cnt++; this.huntAlert('사냥 멈춤', 'stop'); }
-    const cv = this._mpCv && this._mpCv.current; if (cv) { cv.width = b.w; cv.height = b.h; const cc = cv.getContext('2d'); cc.putImageData(img, 0, 0); if (M.edge >= 0) { cc.fillStyle = '#ff3355'; cc.fillRect(M.edge, 0, 2, b.h); } }
+    const cv = this._mpCv && this._mpCv.current; if (cv) { cv.width = b.w; cv.height = b.h; const cc = cv.getContext('2d'); cc.putImageData(img, 0, 0); }
   }
   checkRune() {
     const v = this._video; if (!v || !v.videoWidth) return;
@@ -3181,6 +3181,30 @@ class Component extends DCLogic {
     }
     return rows >= 6;
   }
+  readFavSec(d, W, H) {
+    const T = {"0":"111111101110001100011000110001100011101111111","2":"111110000100001000010001100110011001100011111","3":"111100001100001000110111000011000010001111110","4":"001110011101111011111101111011111110001100011","5":"111111000010000110001111000011000010001111110","6":"111111100010000100001111110001100011101111111","7":"111110001100011001110011000110011000110011000","8":"111111000110001110111111111011100011101111111","9":"111111001110001100111111100001000010001111111"};
+    const GW = 5, GH = 9, M = new Uint8Array(W * H), dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 200;
+    for (let Y = 0; Y < H; Y++) for (let X = 0; X < W; X++) { const i = (Y * W + X) * 4, r = d[i], g = d[i + 1], b = d[i + 2]; if (!(r > 170 && g > 140 && b < 160 && r - b > 50)) continue; let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (ok) M[Y * W + X] = 1; }
+    const rc = []; for (let Y = 0; Y < H; Y++) { let k = 0; for (let X = 0; X < W; X++) k += M[Y * W + X]; rc.push(k); }
+    let best = null, s = -1, gap = 0;
+    for (let Y = 0; Y <= H; Y++) { const on = Y < H && rc[Y] > 0; if (on) { if (s < 0) s = Y; gap = 0; } else if (s >= 0) { if (++gap > 1 || Y >= H) { const e = Y - gap; if (!best || e - s > best[1] - best[0]) best = [s, e]; s = -1; gap = 0; } } }
+    if (!best) return null; const y0 = best[0], y1 = best[1], bh = y1 - y0 + 1; if (bh < 7 || bh > 16) return null;
+    const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = y0; Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
+    const runs = []; s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
+    const gs = []; for (const [a, b] of runs) { let gy0 = y1, gy1 = y0, n = 0; for (let Y = y0; Y <= y1; Y++) for (let X = a; X <= b; X++) if (M[Y * W + X]) { n++; gy0 = Math.min(gy0, Y); gy1 = Math.max(gy1, Y); } const h = gy1 - gy0 + 1; if (n < 3 || h < bh * 0.8) continue; gs.push({ x0: a, x1: b, y0: gy0, y1: gy1, w: b - a + 1, h }); }
+    const cl = []; let cur = []; for (const g of gs) { if (cur.length && g.x0 - cur[cur.length - 1].x1 > Math.max(3, bh * 0.4)) { cl.push(cur); cur = []; } cur.push(g); } if (cur.length) cl.push(cur);
+    if (!cl.length) return null; const cx = W / 2; cl.sort((A, B) => Math.abs((A[0].x0 + A[A.length - 1].x1) / 2 - cx) - Math.abs((B[0].x0 + B[B.length - 1].x1) / 2 - cx));
+    const G = cl[0]; if (G.length < 1 || G.length > 2) return null;
+    let str = '';
+    for (const g of G) {
+      if (g.w <= Math.max(3, g.h * 0.42)) { str += '1'; continue; }
+      if (g.w > g.h) return null;
+      let m = ''; for (let gy = 0; gy < GH; gy++) for (let gx = 0; gx < GW; gx++) { const xa = g.x0 + gx * g.w / GW, xb = g.x0 + (gx + 1) * g.w / GW, ya = g.y0 + gy * g.h / GH, yb = g.y0 + (gy + 1) * g.h / GH; let on = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xb); X++) if (M[Y * W + X]) on = 1; m += on; }
+      let bk = null, bd = 99; for (const k in T) { let dd = 0; for (let i = 0; i < 45; i++) if (m[i] !== T[k][i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
+      if (bd > 6) return null; str += bk;
+    }
+    const v = Number(str); return v >= 1 && v <= 59 ? v : null;
+  }
   detectBuffSkill(s, bx, now, W, H) {
     const res = W + 'x' + H; let D = this._det[s.id]; if (!D || D.res !== res || D.kind !== 'jb') D = this._det[s.id] = { kind: 'jb', res };
     D.box = bx; if (now - (D.at || 0) < 500) return; D.at = now;
@@ -3188,7 +3212,8 @@ class Component extends DCLogic {
     const c = this._jbc || (this._jbc = document.createElement('canvas')); c.width = bw; c.height = bh;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, x0, y0, bw, bh, 0, 0, bw, bh); const a = x.getImageData(0, 0, bw, bh).data;
     if (!this._DIG) this.readCd(new Uint8ClampedArray(4), 1, 1);
-    let sec = this.readTime(a, bw, bh), yel = 0; if (sec != null && sec >= 600) sec = null;
+    let sec = this.readTime(a, bw, bh, false), yel = 0; if (sec != null && sec >= 600) sec = null;
+    if (sec == null) sec = this.readFavSec(a, bw, bh);
     for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 180 && g > 140 && b < 120 && r - b > 100) yel++; }
     const wm = sec == null ? this.readWhiteMins(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
     const seen = sec != null || N != null || yel >= Math.max(4, bw * bh * 0.008), cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
@@ -3412,7 +3437,7 @@ class Component extends DCLogic {
     for (const k in S) { const R = S[k].split('|'), h = R.length, w = R[0].length; let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor((gx + 0.5) * w / 6), Y = Math.floor((gy + 0.5) * h / 10); m += R[Y][X]; } out.push([k, m]); }
     return (this._YD = out);
   }
-  readTime(a, bw, bh) { const r = this.readTimeMode(a, bw, bh, 0); return r != null ? r : this.readTimeMode(a, bw, bh, 1); }
+  readTime(a, bw, bh, allowSec) { this._allowSec = !!allowSec; const r = this.readTimeMode(a, bw, bh, 0), out = r != null ? r : this.readTimeMode(a, bw, bh, 1); this._allowSec = false; return out; }
   readTimeMode(a, bw, bh, mode) {
     const M = new Uint8Array(bw * bh), dk = (X, Y) => X >= 0 && Y >= 0 && X < bw && Y < bh && a[(Y * bw + X) * 4] + a[(Y * bw + X) * 4 + 1] + a[(Y * bw + X) * 4 + 2] < 200;
     for (let Y = 0; Y < bh; Y++) for (let X = 0; X < bw; X++) { const i = (Y * bw + X) * 4;
@@ -3447,8 +3472,8 @@ class Component extends DCLogic {
       for (const [k, t] of YD) { let dd = 0; for (let i = 0; i < 60; i++) if (t[i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       if (bk == null || bd > 16) { str += '?'; continue; } str += bk;
     }
-    const mm = str.match(/^\?*(\d):([0-5]\d)\?*$/); if (!mm) return null;
-    return Number(mm[1]) * 60 + Number(mm[2]);
+    const mm = str.match(/^\?*(\d):([0-5]\d)\?*$/); if (mm) return Number(mm[1]) * 60 + Number(mm[2]);
+    const ms = this._allowSec && str.replace(/^:+|:+$/g, '').match(/^([1-5]?\d)$/); return ms ? Number(ms[1]) : null;
   }
   readCd(a, bw, bh) {
     const DIG = {"0":"011110100001100001100001100001100001100001100001110011011110","2":"111111000001000001000001000011000011001110011100110000111111","3":"111110000001000001000011011110011110000001000001000011111110","4":"000110000110001110001010010010010010010010111111000010000010","5":"111111100000100000100000111110111110000001000001000011111110","6":"011111110000100000100000111110111110100001100001110011011110","7":"111111000011000010000110000100000100000100001000001000010000","8":"011110100001100001110010011110011110110011100001110011011110","9":"011110100001100001100001011111011111000001000001000011111100"};
