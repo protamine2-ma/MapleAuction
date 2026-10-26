@@ -3542,7 +3542,7 @@ class Component extends DCLogic {
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
     const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
-    const PRE = [['janusbuff', J + ' (버프 즐겨찾기)', 120, J, 'skill-janus.png'], ['janus120', J + ' (지속 2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
+    const PRE = [['janusbuff', J + ' (버프 즐겨찾기 · 5석펫)', 120, J, 'skill-janus.png'], ['janus120', J + ' (지속 2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
       skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }, { key: 'custombuff', label: '직접 입력 (버프 즐겨찾기)' }],
