@@ -2550,7 +2550,7 @@ class Component extends DCLogic {
   }
   async startShare() {
     try {
-      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5, displaySurface: 'window' }, audio: false, preferCurrentTab: false, selfBrowserSurface: 'exclude', surfaceSwitching: 'exclude', monitorTypeSurfaces: 'exclude' });
+      const st = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 5, displaySurface: 'window' }, audio: false, preferCurrentTab: false, selfBrowserSurface: 'exclude', surfaceSwitching: 'exclude', monitorTypeSurfaces: 'include' });
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.srcObject = st; await v.play();
       this._stream = st; this._video = v; this._rune = {}; this._autoIcon = null; this._mkStable = null; this._runeStartAlerted = false;
       const bc = this.buffCfg(); if (Object.keys(bc.box || {}).length) this.saveBuff({ box: {}, sig: {} });
