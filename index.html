@@ -3214,9 +3214,9 @@ class Component extends DCLogic {
     if (!this._DIG) this.readCd(new Uint8ClampedArray(4), 1, 1);
     let sec = this.readTime(a, bw, bh, false), yel = 0; if (sec != null && sec >= 600) sec = null;
     if (sec == null) sec = this.readFavSec(a, bw, bh);
-    for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 180 && g > 140 && b < 120 && r - b > 100) yel++; }
+    for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 170 && g > 140 && b < 160 && r - b > 50) yel++; }
     const wm = sec == null ? this.readWhiteMins(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
-    const seen = sec != null || N != null || yel >= Math.max(4, bw * bh * 0.008), cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
+    const seen = sec != null || N != null || yel >= 6, cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
     if (!D.boxAt) D.boxAt = now;
     if (seen) { if (!D.seenAt) D.seenAt = now; } else D.seenAt = 0;
     const lockout = !D.on && D.usedAt && now - D.usedAt < 48000 && rem != null;
@@ -3228,8 +3228,15 @@ class Component extends DCLogic {
       if (sec != null) {
         const ok = D.prev && Math.abs(D.prev[1] - (now - D.prev[0]) / 1000 - sec) <= 1.5; D.prev = [now, sec];
         const JB_LAG = 1000;
-        if (ok) { D.approx = false; if (rem == null || sec - rem > 3) { this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; this._alerted[s.id] = false; } else if (Math.abs(rem - sec + JB_LAG / 1000) > 1.5) this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; }
-        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null; D.noNum = false;
+        const setT = () => { this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; };
+        if (ok) { D.approx = false;
+          const exp = rem != null && !D.noNum ? rem + JB_LAG / 1000 : null;
+          if (exp == null) { setT(); this._alerted[s.id] = false; D.down = 0; }
+          else if (sec > exp + 3) { setT(); if (sec - 1 > (Number(s.before) || 0)) this._alerted[s.id] = false; D.down = 0; }
+          else if (sec < exp - 1.5) { D.down = (D.down || 0) + 1; if (D.down >= 4) { setT(); D.down = 0; } }
+          else D.down = 0; }
+        else if (D.down) D.down = 0;
+        D.msg = '버프 숫자 인식 중 · ' + sec + '초'; D.wm = null; D.noNum = false; if (ok) D.secAt = now;
       } else if (N != null) {
         const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
         if (rem == null || D.wm == null) fresh();
@@ -3242,9 +3249,11 @@ class Component extends DCLogic {
       }
     } else {
       D.prev = null; D.wm = null;
-      if (D.on && ++D.miss >= 6) { D.on = false; D.miss = 0;
+      const trusted = D.secAt && rem != null && rem > 5 && now - D.secAt < 90000;
+      if (D.on && trusted) D.msg = '숫자 잠깐 안 보임 · 타이머는 계속';
+      if (D.on && ++D.miss >= (trusted ? 20 : 6)) { D.on = false; D.miss = 0; D.secAt = 0;
         if (rem != null && !this._alerted[s.id]) this._run[s.id] = now; else if (rem != null) delete this._run[s.id]; }
-      if (!D.on) D.msg = '버프 기다리는 중';
+      if (!D.on) { D.msg = '버프 기다리는 중'; D.secAt = 0; }
     }
   }
   detectSkills(now) {
@@ -3574,10 +3583,10 @@ class Component extends DCLogic {
     const fmt = ms => { const t = Math.ceil(ms / 1000); return t >= 60 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : t + '초'; };
     const st = !h.rune ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : r.found ? ['룬 감지!', 'oklch(0.6 0.2 25)', '#fff'] : ['감시 중', 'oklch(0.48 0.17 255)', '#fff'];
     const J = '솔 야누스 : 새벽', E = '에르다 파운틴';
-    const PRE = [['janusbuff', J + ' (버프 즐겨찾기 · 5석펫)', 120, J, 'skill-janus.png'], ['janus120', J + ' (지속 2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
+    const PRE = [['janusbuff', J + ' (버프 즐겨찾기 · 5석펫) 테스트중', 120, J, 'skill-janus.png'], ['janus120', J + ' (지속 2분)', 120, J, 'skill-janus.png'], ['janus80', J + ' (지속 80초)', 80, J, 'skill-janus.png'], ['janus70', J + ' (지속 70초)', 70, J, 'skill-janus.png'], ['janus60', J + ' (지속 60초)', 60, J, 'skill-janus.png'], ['erda60', E + ' (1분)', 60, E, 'skill-erda.png'], ['yein67', '매화검 3초식 : 예인 VI', 67, '예인', 'skill-yein.png']];
     const presetOf = s => s.preset || (s.name === J ? (PRE.find(p => p[2] === s.cd) || [''])[0] : '') || 'custom';
     return {
-      skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }, { key: 'custombuff', label: '직접 입력 (버프 즐겨찾기)' }],
+      skillPresets: [...PRE.map(p => ({ key: p[0], label: p[1] })), { key: 'custom', label: '직접 입력' }, { key: 'custombuff', label: '직접 입력 (버프 즐겨찾기) 테스트중' }],
       huntSkills: h.skills.map(s => {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
