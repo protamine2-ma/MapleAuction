@@ -2553,14 +2553,16 @@ class Component extends DCLogic {
     if (this._pipWin) { this._pipWin.close(); return; }
     if (!window.documentPictureInPicture) { alert('작은 창 기능은 PC 크롬·엣지에서만 돼요.'); return; }
     try {
-      const n = (this.hunt().skills || []).length + 3;
-      const w = await window.documentPictureInPicture.requestWindow({ width: 190, height: Math.min(520, 70 + n * 40) });
+      const hh = this.hunt(), now0 = Date.now(), live = t => t && (t.end > now0 || t.pausedLeft > 0);
+      const n = Math.max(1, (hh.skills || []).length + (hh.boostOn ? 1 : 0) + (hh.buffs || []).filter(b => b.on !== false).length + [...(this._tms || []), this._rep, this._m1, this._m15, this._m10, this._m10b].filter(live).length);
+      const w = await window.documentPictureInPicture.requestWindow({ width: 145, height: Math.min(600, 58 + n * 41) });
       w.document.title = '사냥';
       w.document.body.style.cssText = "margin:0;background:#1b1c1f;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;";
       const root = w.document.createElement('div'); w.document.body.appendChild(root);
-      this._pipWin = w; this._pipRoot = root; this._pipAt = 0;
+      this._pipWin = w; this._pipRoot = root; this._pipAt = 0; this._pipH = 0;
       w.addEventListener('pagehide', () => { this._pipWin = null; this._pipRoot = null; this.forceUpdate(); });
       this.ensureTick(); this.paintPip(true); this.forceUpdate();
+      setTimeout(() => { try { if (w.innerWidth > 160) w.resizeBy(Math.round(w.innerWidth * 0.75) - w.innerWidth, 0); } catch (e) {} }, 300);
     } catch (e) { alert('작은 창을 열지 못했어요.'); }
   }
   paintPip(force) {
@@ -2573,11 +2575,22 @@ class Component extends DCLogic {
     const rows = [];
     (v.huntSkills || []).forEach(s => { const on = s.remain !== '--'; rows.push(row(short(s.name), s.remain, s.pct, on && s.remainColor && s.remainColor.includes('25)'), !on)); });
     if (h.boostOn) { const B = this._boost || {}, dur = (Number(h.boostSec) || 100) * 1000, rem = B.start ? Math.max(0, dur - (now - B.start)) : 0; rows.push(row('부스터', v.boostRemain, (rem / dur * 100).toFixed(1) + '%', B.start && rem <= 10000, !B.start)); }
+    const bst = this._bst || {};
+    (h.buffs || []).forEach(b => { if (b.on === false) return; const S = bst[b.id] || {}, left = S.end && S.end > now ? S.end - now : 0; if (left) S.pipMax = Math.max(S.pipMax || 0, left); else S.pipMax = 0;
+      const t = Math.ceil(left / 1000), txt = !left ? '--' : t >= 3600 ? Math.floor(t / 3600) + ':' + String(Math.floor(t % 3600 / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0') : Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+      rows.push(row(this.buffName(b), txt, left ? (left / S.pipMax * 100).toFixed(1) + '%' : '0%', left && left <= Math.max(60, (Number(b.before) || 0)) * 1000, !left)); });
+    const tmName = { m1: '1분 알람', m15: '15분 알람', m10: '10분 알람', m10b: '10분 알람' };
+    [...(this._tms || []).map((t, i) => [t, '타이머 ' + (i + 1)]), ...['m1', 'm15', 'm10', 'm10b'].map(k => [this['_' + k], tmName[k]])].forEach(([t, nm]) => {
+      if (!t || !(t.end > now || t.pausedLeft > 0)) return; const r = this.timerRow(t), left = t.end > now ? t.end - now : t.pausedLeft;
+      const mins = t.sel === 'c' ? Number(t.custom) || 0 : typeof t.sel === 'number' ? t.sel : 30, tot = Math.max(left, mins * 60000);
+      rows.push(row(nm + (t.end > now ? '' : ' (멈춤)'), r.tmLeft, (left / tot * 100).toFixed(1) + '%', t.end > now && left <= 60000, !(t.end > now))); });
     const M = this._rep; if (M && (M.end > now || M.pausedLeft > 0)) { const ev = Math.max(5, (M.every || 0) * 60 + (M.sec || 0)) * 1000, left = M.end > now ? M.end - now : M.pausedLeft; rows.push(row('반복 타이머', v.repLeft, Math.min(100, left / ev * 100).toFixed(1) + '%', false, false)); }
     const bad = [v.runeStatus === '룬 감지!' && '룬 감지!', v.stopStatus === '사냥 멈춤!' && '사냥 멈춤!'].filter(Boolean);
     const foot = !this._stream ? ['#9a9ca1', '화면 공유 꺼짐'] : h.paused ? ['#9a9ca1', '일시정지'] : bad.length ? ['oklch(0.68 0.21 25)', bad.join(' · ')] : ['oklch(0.72 0.17 150)', '룬 · 사냥 정상'];
-    this._pipRoot.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;padding:12px;">' + (rows.join('') || '<span style="font-size:12px;color:#9a9ca1;">사냥 탭에서 스킬이나 부스터를 켜 주세요</span>') +
+    this._pipRoot.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;padding:10px;">' + (rows.join('') || '<span style="font-size:12px;color:#9a9ca1;">사냥 탭에서 스킬이나 부스터를 켜 주세요</span>') +
       '<div style="display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid #34353a;font-size:11px;font-weight:700;color:' + (bad.length ? foot[0] : '#9a9ca1') + ';"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:' + foot[0] + ';"></span>' + esc(foot[1]) + '</div></div>';
+    const w = this._pipWin, ch = this._pipRoot.offsetHeight;
+    if (w && ch && ch !== this._pipH) { this._pipH = ch; const d = ch - w.innerHeight; if (Math.abs(d) > 6) { try { w.resizeBy(0, d); } catch (e) {} } }
   }
   huntTick() {
     this.paintPip();
@@ -3275,15 +3288,16 @@ class Component extends DCLogic {
         const ok = D.prev && Math.abs(D.prev[1] - (now - D.prev[0]) / 1000 - sec) <= 1.5; D.prev = [now, sec];
         const JB_LAG = 1000;
         const setT = () => { this._run[s.id] = now + sec * 1000 + 500 - JB_LAG; };
+        const fake = D.noNum || (rem != null && rem > 900);
         if (ok) { D.approx = false;
-          const exp = rem != null && !D.noNum ? rem + JB_LAG / 1000 : null;
+          const exp = rem != null && !fake ? rem + JB_LAG / 1000 : null;
           if (exp == null) { setT(); this._alerted[s.id] = false; D.down = 0; }
           else if (sec > exp + 3) { setT(); if (sec - 1 > (Number(s.before) || 0)) this._alerted[s.id] = false; D.down = 0; }
           else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= 4) { setT(); D.down = 0; } }
           else D.down = 0; }
         else if (D.down) D.down = 0;
-        const shown = rem != null && !D.noNum ? Math.max(0, Math.round(rem + JB_LAG / 1000)) : sec;
-        D.msg = '버프 숫자 인식 중 · ' + shown + '초'; D.wm = null; D.noNum = false; if (ok && Math.abs(shown - sec) <= 1.5) D.secAt = now;
+        const shown = rem != null && !fake ? Math.max(0, Math.round(rem + JB_LAG / 1000)) : sec;
+        D.msg = '버프 숫자 인식 중 · ' + shown + '초'; D.wm = null; if (ok) D.noNum = false; if (ok && Math.abs(shown - sec) <= 1.5) D.secAt = now;
       } else if (N != null) {
         const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
         if (rem == null || D.wm == null) fresh();
@@ -3292,6 +3306,7 @@ class Component extends DCLogic {
         D.noNum = false; D.wm = N; D.msg = '버프 숫자 인식 중 · ' + N + '분' + (D.approx ? ' (대략)' : '');
       } else {
         if (!wasOn && rem == null) { this._run[s.id] = now + 3 * 3600000; D.noNum = true; this._alerted[s.id] = false; D.approx = true; }
+        else if (rem != null && rem > 900) D.noNum = true;
         D.msg = '숫자 인식 안 됨 · 숫자/아이콘이 사라지면 알림';
       }
     } else {
@@ -4133,7 +4148,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 8,
+      isAdmin: admin, appVer: 10,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
