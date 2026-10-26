@@ -258,7 +258,7 @@ body{overflow-x:clip;}
     </sc-if>
     <sc-for list="{{ huntSkills }}" as="s" hint-placeholder-count="1">
       <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0ee;">
-        <button onClick="{{ s.toggleRun }}" title="스킬 사용 직후에 켜세요" style="width:44px;height:24px;border-radius:999px;border:none;padding:2px;background:{{ s.swBg }};display:flex;justify-content:{{ s.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
+        <button onClick="{{ s.toggleRun }}" title="끄면 이 스킬 알림을 쓰지 않아요" style="width:44px;height:24px;border-radius:999px;border:none;padding:2px;background:{{ s.swBg }};display:flex;justify-content:{{ s.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
           <sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ false }}">
             <span style="width:26px;height:26px;border-radius:5px;flex:none;image-rendering:pixelated;background-size:cover;background-image:{{ s.iconBg }};"></span>
@@ -2573,7 +2573,7 @@ class Component extends DCLogic {
     const short = n => String(n || '스킬').split(' (')[0].replace(' : 새벽', '').replace('매화검 3초식 : ', '');
     const row = (name, left, pct, hot, dim) => '<div style="display:flex;flex-direction:column;gap:5px;opacity:' + (dim ? 0.45 : 1) + ';"><div style="display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:700;color:' + (hot ? 'oklch(0.8 0.12 25)' : '#d6d7da') + ';"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(name) + '</span><span style="font-variant-numeric:tabular-nums;color:' + (hot ? 'oklch(0.8 0.12 25)' : '#fff') + ';">' + esc(left) + '</span></div><span style="display:block;height:6px;border-radius:3px;background:#34353a;overflow:hidden;"><span style="display:block;width:' + (pct || '0%') + ';height:100%;background:' + (hot ? 'oklch(0.65 0.2 25)' : 'oklch(0.65 0.15 255)') + ';"></span></span></div>';
     const rows = [];
-    (v.huntSkills || []).forEach(s => { const on = s.remain !== '--'; rows.push(row(short(s.name), s.remain, s.pct, on && s.remainColor && s.remainColor.includes('25)'), !on)); });
+    (v.huntSkills || []).forEach(s => { if (s.off) return; const on = s.remain !== '--'; rows.push(row(short(s.name), s.remain, s.pct, on && s.remainColor && s.remainColor.includes('25)'), !on)); });
     if (h.boostOn) { const B = this._boost || {}, dur = (Number(h.boostSec) || 100) * 1000, rem = B.start ? Math.max(0, dur - (now - B.start)) : 0; rows.push(row('부스터', v.boostRemain, (rem / dur * 100).toFixed(1) + '%', B.start && rem <= 10000, !B.start)); }
     const bst = this._bst || {};
     (h.buffs || []).forEach(b => { if (b.on === false) return; const S = bst[b.id] || {}, left = S.end && S.end > now ? S.end - now : 0; if (left) S.pipMax = Math.max(S.pipMax || 0, left); else S.pipMax = 0;
@@ -2601,7 +2601,7 @@ class Component extends DCLogic {
     const h = this.hunt(), now = Date.now(); let any = false;
     this._run = this._run || {}; this._alerted = this._alerted || {};
     Object.keys(this._run).forEach(id => {
-      const s = h.skills.find(x => x.id === id); if (!s) { delete this._run[id]; return; }
+      const s = h.skills.find(x => x.id === id); if (!s || s.off) { delete this._run[id]; return; }
       any = true; let end = this._run[id];
       if (!this._alerted[id] && end - now <= s.before * 1000) { this._alerted[id] = true; const n = s.name || '스킬'; this.huntAlert(s.before > 0 ? n + ' ' + s.before + '초 전' : n, 'skill', this.skillVoice(s), s.snd); }
       if (end <= now && this._alerted[id]) {
@@ -2634,10 +2634,9 @@ class Component extends DCLogic {
     this.forceUpdate();
   }
   toggleSkill(s) {
-    this._run = this._run || {}; this._alerted = this._alerted || {};
-    if (this._run[s.id]) delete this._run[s.id];
-    else { if (!(s.cd > 0)) return; this._run[s.id] = Date.now() + this.skillDur(s) * 1000; this._alerted[s.id] = false; this.ensureTick(); }
-    this.forceUpdate();
+    this._run = this._run || {}; const h = this.hunt(), off = !s.off;
+    if (off) { delete this._run[s.id]; if (this._det) delete this._det[s.id]; }
+    this.saveHunt({ ...h, skills: h.skills.map(x => x.id === s.id ? { ...x, off } : x) });
   }
   skillVoice(s) { const p = String(s.preset || ''), n = String(s.name || '');
     return p.startsWith('janus') || /야누스/.test(n) ? 'v-janus' : p === 'erda60' || /파운틴/.test(n) ? 'v-erda' : p === 'yein67' || /예인/.test(n) ? 'v-yein' : null; }
@@ -3337,6 +3336,7 @@ class Component extends DCLogic {
     }
     let searched = false;
     h.skills.forEach(s => {
+      if (s.off) return;
       const res = W + 'x' + H, cbox = s.box ? s.box[res] : null;
       if (!cbox) return;
       if (s.preset === 'janusbuff' || s.preset === 'custombuff') { this.detectBuffSkill(s, cbox, now, W, H); return; }
@@ -3656,7 +3656,7 @@ class Component extends DCLogic {
       huntSkills: h.skills.map(s => {
         const end = run[s.id], on = !!end, rem = on ? Math.max(0, end - now) : 0, soon = on && rem <= s.before * 1000;
         const pv = presetOf(s);
-        return { ...s, ...sw(on), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
+        return { ...s, ...sw(!s.off), cdVal: String(s.cd ?? ''), beforeVal: String(s.before ?? ''),
           presetVal: pv, sndVal: s.snd || 'seoyun',
           onSnd: e => { const v = e.target.value; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : { ...x, snd: v }) }); this.huntAlert('알림 테스트', 'skill', ['seoyun', 'eunchae', 'jihyun', 'sena', 'ari', 'arang', 'ruri', 'valkyrie', 'gyogwan', 'ajji'].includes(v) ? this.skillVoice(s) : null, v); },
           hasIcon: pv !== 'custom' && pv !== 'custombuff', custom: pv === 'custom' || pv === 'custombuff', dragMode: true, isBm: pv === 'janusbuff' || pv === 'custombuff', bmShow: this.state.bmHover === s.id, bmTop: (this.state.bmPos || {}).top || 0, bmLeft: (this.state.bmPos || {}).left || 0,
@@ -4152,7 +4152,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 11,
+      isAdmin: admin, appVer: 12,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
