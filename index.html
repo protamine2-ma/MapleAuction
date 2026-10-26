@@ -469,7 +469,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><span style="font-size:13px;font-weight:600;color:oklch(0.4 0.08 255);">인식이 잘 안될 경우 감지 기준을 낮춰주세요</span><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
@@ -481,8 +481,8 @@ body{overflow-x:clip;}
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>남은 시간</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ boostRemain }}</span>
           <span>타이머 숫자 픽셀</span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ boostPx }}</span>
-          <span>감지 기준 (픽셀 이상)</span><input type="number" min="10" value="{{ boostMin }}" onChange="{{ onBoostMin }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
-          <span>부스터 시간 (초)</span><input type="number" min="10" value="{{ boostSec }}" onChange="{{ onBoostSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>감지 기준 (픽셀 이상)</span><input type="text" inputmode="numeric" placeholder="예: 80" value="{{ boostMin }}" onChange="{{ onBoostMin }}" onBlur="{{ onBoostMinBlur }}" onKeyDown="{{ onNumEnter }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
+          <span>부스터 시간 (초)</span><input type="text" inputmode="numeric" value="{{ boostSec }}" onChange="{{ onBoostSec }}" onBlur="{{ onBoostSecBlur }}" onKeyDown="{{ onNumEnter }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
         </div>
         <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">화면 위쪽 가운데의 '남은시간' 주황색 숫자가 2초 이상 보이면 부스터 시작으로 보고, 처음 보인 때부터 부스터 시간이 지나면 '부스터 끝'을 알려줘요. 타이머가 사라진 뒤 다시 뜨면 새로 시작해요.</span>
       </div>
@@ -2680,10 +2680,10 @@ class Component extends DCLogic {
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = px0 + dx, ny = py0 + dy; if (nx < 0 || ny < 0 || nx >= ow || ny >= oh) continue; const n = ny * ow + nx; if (mk[n] === 1) { mk[n] = 2; q[qt++] = n; } } }
       const ch = y1 - y0 + 1, cw = x1 - x0 + 1;
       if (ch >= minH && cw <= ch * 1.3) for (let t = 0; t < qt; t++) { const i = q[t] * 4; px++; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } }
-    const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 60 : Number(h.boostMin)) || 60, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
+    const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 50 : Number(h.boostMin)) || 50, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.streak = seen ? B.streak + 1 : 0; B.gone = seen ? 0 : B.gone + 1;
     if (h.boostOn && !h.paused) {
-      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 5000; B.alerted = false; }
+      if (!B.start && !B.done && B.streak >= 2) { B.start = now - 3000; B.alerted = false; }
       if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
       if (B.done && B.gone >= 5) B.done = false;
@@ -3678,7 +3678,13 @@ class Component extends DCLogic {
         const bs = !h.boostOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : run ? ['부스터 진행 중', 'oklch(0.6 0.2 25)', '#fff'] : ['대기 중', 'oklch(0.48 0.17 255)', '#fff'];
         return { boostCvRef: this._boostCv, boostSw: sw(h.boostOn), toggleBoost: () => { this._boost = null; set('boostOn', !h.boostOn); },
           boostStatus: bs[0], boostStatusBg: bs[1], boostStatusColor: bs[2], boostRemain: run ? Math.ceil(rem / 1000) + '초' : '--', boostPx: this._stream && B.px != null ? String(B.px) : '--',
-          boostMin: String(h.boostMin == null || Number(h.boostMin) === 120 ? 60 : h.boostMin), onBoostMin: e => set('boostMin', Math.max(10, Number(e.target.value) || 60)), boostSec: String(h.boostSec ?? 100), onBoostSec: e => set('boostSec', Math.max(10, Number(e.target.value) || 100)) }; })(),
+          boostMin: this.state.boostMinDraft ?? String(h.boostMin == null || Number(h.boostMin) === 120 ? 50 : h.boostMin),
+          onBoostMin: e => this.setState({ boostMinDraft: e.target.value.replace(/\D/g, '') }),
+          onBoostMinBlur: () => { const v = this.state.boostMinDraft; if (v != null) { set('boostMin', Math.max(10, Number(v) || 50)); this.setState({ boostMinDraft: null }); } },
+          boostSec: this.state.boostSecDraft ?? String(h.boostSec ?? 100),
+          onBoostSec: e => this.setState({ boostSecDraft: e.target.value.replace(/\D/g, '') }),
+          onBoostSecBlur: () => { const v = this.state.boostSecDraft; if (v != null) { set('boostSec', Math.max(10, Number(v) || 100)); this.setState({ boostSecDraft: null }); } },
+          onNumEnter: e => { if (e.key === 'Enter') e.target.blur(); } }; })(),
       runeSw: sw(h.rune), toggleRune: () => { if (!h.rune) { this._rune = {}; this._runeStartAlerted = false; } set('rune', !h.rune); },
       runeStatus: st[0], runeStatusBg: st[1], runeStatusColor: st[2],
       runePx: this._stream && r.res ? String(Math.max(0, r.px - r.base)) : '--',
@@ -4082,7 +4088,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 3,
+      isAdmin: admin, appVer: 4,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
