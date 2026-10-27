@@ -3404,13 +3404,15 @@ class Component extends DCLogic {
     const rc = []; for (let Y = 0; Y < H; Y++) { let k = 0; for (let X = 0; X < W; X++) k += M[Y * W + X]; rc.push(k); }
     let best = null, s = -1, gap = 0;
     for (let Y = 0; Y <= H; Y++) { const on = Y < H && rc[Y] > 0; if (on) { if (s < 0) s = Y; gap = 0; } else if (s >= 0) { if (++gap > 1 || Y >= H) { const e = Y - gap; if (!best || e - s > best[1] - best[0]) best = [s, e]; s = -1; gap = 0; } } }
-    if (!best) return null; const y0 = best[0], y1 = best[1], bh = y1 - y0 + 1; if (bh < 7 || bh > 16) return null;
+    if (!best) return null; const y0 = best[0], y1 = best[1], bh = y1 - y0 + 1; if (bh < 7 || bh > 16 * (this._sc1080 || 1) + 1) return null;
     const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = y0; Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
     const runs = []; s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
     const gs = []; for (const [a, b] of runs) { let gy0 = y1, gy1 = y0, n = 0; for (let Y = y0; Y <= y1; Y++) for (let X = a; X <= b; X++) if (M[Y * W + X]) { n++; gy0 = Math.min(gy0, Y); gy1 = Math.max(gy1, Y); } const h = gy1 - gy0 + 1; if (n < 3 || h < bh * 0.8) continue; gs.push({ x0: a, x1: b, y0: gy0, y1: gy1, w: b - a + 1, h }); }
     const cl = []; let cur = []; for (const g of gs) { if (cur.length && g.x0 - cur[cur.length - 1].x1 > Math.max(5, bh * 0.75)) { cl.push(cur); cur = []; } cur.push(g); } if (cur.length) cl.push(cur);
     if (!cl.length) return null; const cx = W / 2; cl.sort((A, B) => Math.abs((A[0].x0 + A[A.length - 1].x1) / 2 - cx) - Math.abs((B[0].x0 + B[B.length - 1].x1) / 2 - cx));
     const G = cl[0]; if (G.length < 1 || G.length > 2) return null;
+    if (cl.some(K => K !== G && K[K.length - 1].x1 < G[0].x0 && G[0].x0 - K[K.length - 1].x1 < bh * 2.5)) return null;
+    { let dots = 0; for (let Y = y0; Y <= y1; Y++) for (let X = Math.max(0, G[0].x0 - Math.round(bh * 0.9)); X < G[0].x0; X++) if (M[Y * W + X]) dots++; if (dots >= 2) return null; }
     let str = '';
     for (const g of G) {
       if (g.w <= Math.max(3, g.h * 0.42)) { str += '1'; continue; }
@@ -3419,9 +3421,11 @@ class Component extends DCLogic {
       let bk = null, bd = 99; for (const k in T) { let dd = 0; for (let i = 0; i < 45; i++) if (m[i] !== T[k][i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       if (bd > 6) return null; str += bk;
     }
+    if (str.length === 2 && str[0] === '0') return null;
     const v = Number(str); return v >= 1 && v <= 59 ? v : null;
   }
   detectBuffSkill(s, bx, now, W, H) {
+    this._sc1080 = Math.max(1, H / 1080);
     const res = W + 'x' + H; let D = this._det[s.id]; if (!D || D.res !== res || D.kind !== 'jb') D = this._det[s.id] = { kind: 'jb', res };
     D.box = bx; if (now - (D.at || 0) < 500) return; D.at = now;
     const v = this._video, x0 = Math.max(0, bx.x - 3), y0 = Math.max(0, bx.y - 3), bw = Math.min(W - x0, bx.w + 6), bh = Math.min(H - y0, bx.h + 6);
@@ -3485,7 +3489,8 @@ class Component extends DCLogic {
     const avg = this._lumAvg || lum, fading = lum < 25 || lum < avg * 0.6;
     if (fading) this._fadeAt = now; else this._lumAvg = avg * 0.9 + lum * 0.1;
     if (now - (this._fadeAt || 0) < 3000) {
-      Object.values(this._det).forEach(D => { D.boxAt = now; D.mk = null; D.cand = null; D.on = 0; D.off = 0; D.offSince = 0; if (D.ready === true) D.ready = undefined; });
+      Object.values(this._det).forEach(D => { if (D.kind === 'jb') return; D.boxAt = now; D.mk = null; D.cand = null; D.on = 0; D.off = 0; D.offSince = 0; if (D.ready === true) D.ready = undefined; });
+      if (lum >= 12) { const res = W + 'x' + H; h.skills.forEach(s => { if (s.off || !(s.preset === 'janusbuff' || s.preset === 'custombuff')) return; const b = s.box ? s.box[res] : null; if (b) this.detectBuffSkill(s, b, now, W, H); }); }
       return;
     }
     let searched = false;
@@ -3675,7 +3680,7 @@ class Component extends DCLogic {
       let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (ok) M[Y * bw + X] = 1; }
     { const fr = []; for (let Y = 0; Y < bh; Y++) { let k = 0, n = 0; for (let X = Math.floor(bw * 0.15); X < Math.ceil(bw * 0.85); X++) { n++; if (dk(X, Y)) k++; } fr.push(k / n); }
       let best = null, s0 = -1; for (let Y = 0; Y <= bh; Y++) { const on = Y < bh && fr[Y] >= 0.35; if (on && s0 < 0) s0 = Y; if (!on && s0 >= 0) { if (!best || Y - s0 > best[1] - best[0]) best = [s0, Y]; s0 = -1; } }
-      if (best && best[1] - best[0] >= 8 && best[1] - best[0] <= 24) for (let Y = 0; Y < bh; Y++) if (Y < best[0] - 1 || Y > best[1]) for (let X = 0; X < bw; X++) M[Y * bw + X] = 0; }
+      if (best && best[1] - best[0] >= 8 && best[1] - best[0] <= 24 * (this._sc1080 || 1) + 1) for (let Y = 0; Y < bh; Y++) if (Y < best[0] - 1 || Y > best[1]) for (let X = 0; X < bw; X++) M[Y * bw + X] = 0; }
     const isY = i => M[i >> 2] === 1;
     const cols = []; for (let X = 0; X < bw; X++) { let k = 0; for (let y = 0; y < bh; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
     const runs = []; let s = -1;
@@ -4313,7 +4318,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 24,
+      isAdmin: admin, appVer: 25,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
