@@ -60,6 +60,8 @@ body{overflow-x:clip;}
 [data-m="spot"]{grid-template-columns:auto minmax(0,1fr)!important;gap:4px 10px!important;padding:10px 12px!important;}
 [data-m="spot"]>span:nth-child(3){grid-column:1/-1;}
 [data-m="g1"]{grid-template-columns:minmax(0,1fr)!important;}
+[data-m="hhead"]{grid-template-columns:minmax(0,1fr)!important;}
+[data-m="hhead"]>*{grid-column:1!important;grid-row:auto!important;justify-self:stretch!important;max-width:none!important;}
 [data-m="abil"]{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important;grid-auto-flow:row!important;}
 [data-m="top"]{right:14px!important;bottom:14px!important;width:46px!important;height:46px!important;}
 }
@@ -211,13 +213,12 @@ body{overflow-x:clip;}
 </sc-if>
 <sc-if value="{{ isHunt }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
-  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">사냥 타이머</h1>
-    <span style="font-size:14px;color:#6b6d73;text-wrap:pretty;">본 사이트의 기능은 참고용으로 제공되며, 이를 활용한 게임 플레이 결과에 대한 책임은 이용자 본인에게 있습니다.</span>
-  </div>
+  <div data-m="hhead" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:6px 20px;">
+    <h1 data-m="h1" style="grid-column:2;grid-row:1;margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">사냥 타이머</h1>
+    <span style="grid-column:1/-1;grid-row:2;font-size:14px;color:#6b6d73;text-wrap:pretty;text-align:center;">본 사이트의 기능은 참고용으로 제공되며, 이를 활용한 게임 플레이 결과에 대한 책임은 이용자 본인에게 있습니다.</span>
 
   <sc-if value="{{ huntNoteShow }}" hint-placeholder-val="{{ false }}">
-    <section style="background:oklch(0.97 0.02 255);border:1px solid oklch(0.88 0.04 255);border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;gap:8px;">
+    <section style="grid-column:3;grid-row:1;justify-self:end;width:100%;max-width:360px;box-sizing:border-box;background:oklch(0.97 0.02 255);border:1px solid oklch(0.88 0.04 255);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
           <strong style="font-size:15px;color:oklch(0.4 0.15 255);">업데이트 소식</strong>
@@ -242,10 +243,11 @@ body{overflow-x:clip;}
         </sc-if>
       </sc-if>
       <sc-if value="{{ huntNoteView }}" hint-placeholder-val="{{ false }}">
-        <div style="font-size:14px;line-height:1.7;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;">{{ huntNote }}</div>
+        <div style="font-size:13px;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;">{{ huntNote }}</div>
       </sc-if>
     </section>
   </sc-if>
+  </div>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;">
     <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}">
@@ -4214,7 +4216,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 18,
+      isAdmin: admin, appVer: 19,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
