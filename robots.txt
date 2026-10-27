@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /rest/
+Disallow: /storage/
+Disallow: /auth/
+Disallow: /%7B%7B
+Disallow: /{{
 
 Sitemap: https://mapleauction.kr/sitemap.xml

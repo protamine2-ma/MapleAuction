@@ -903,7 +903,7 @@ body{overflow-x:clip;}
                   <div style="border:1px solid #e3e3e0;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
                     <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);margin-bottom:2px;">{{ a.name }}</span>
                     <sc-for list="{{ a.lines }}" as="l" hint-placeholder-count="3">
-                      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:{{ l.bg }};border-left:4px solid {{ l.bd }};">
+                      <div style="display:flex;align-items:center;justify-content:{{ l.jc }};gap:8px;padding:7px 10px;border-radius:8px;background:{{ l.bg }};border-left:4px solid {{ l.bd }};">
                         <span style="font-size:15px;font-weight:600;color:#2a2b2f;">{{ l.text }}</span>
                       </div>
                     </sc-for>
@@ -1946,6 +1946,31 @@ const ABILITY = {
     { name: '사냥 종결', lines: [['L', '아이템 드롭률 20% 증가'], ['L', '메소 획득량 20% 증가']] },
   ],
 };
+(() => {
+  const T = { B20: '보스 몬스터 공격 시 데미지 20% 증가', B10: '보스 몬스터 공격 시 데미지 10% 증가', CD20: '스킬 사용 시 20% 확률로 재사용 대기시간 미적용', CD10: '스킬 사용 시 10% 확률로 재사용 대기시간 미적용',
+    PS: '패시브 스킬 레벨 1 증가', ATK: '공격력 21 증가', MAG: '마력 21 증가', CRI: '크리티컬 확률 20% 증가', BUF: '버프 스킬의 지속 시간 38% 증가', ST: '상태 이상에 걸린 대상 공격 시 데미지 8% 증가' };
+  const P = { cd: 'CD20 B10 ST', atk: 'B20 ATK ST', mag: 'B20 MAG ST', cri: 'B20 CRI ST', buf: 'B20 BUF ST', cd10: 'B20 CD10 ST', ps: 'PS B10 ST' };
+  const mk = s => s.split(' ').map((k, i) => [i ? 'U' : 'L', T[k]]);
+  const OR = [['O', '또는']];
+  const J = { '히어로': 'atk', '팔라딘': 'atk', '다크나이트': 'cd10', '아크메이지(불,독)': 'mag', '아크메이지(썬,콜)': 'mag', '비숍': 'mag', '보우마스터': 'cri', '신궁': 'cri', '패스파인더': 'CD20 CRI ST',
+    '나이트로드': 'atk', '섀도어': 'atk', '듀얼블레이드': 'atk|buf', '바이퍼': 'atk', '캡틴': 'cd', '캐논마스터': 'atk', '소울마스터': 'atk', '미하일': 'cd10', '플레임위자드': 'ps', '윈드브레이커': 'cri',
+    '나이트워커': 'atk|buf', '스트라이커': 'atk', '블래스터': 'atk', '배틀메이지': 'mag', '와일드헌터': 'cri', '메카닉': 'buf', '제논': 'atk|buf', '데몬슬레이어': 'buf', '데몬어벤져': 'cd',
+    '아란': 'atk', '에반': 'cd10', '루미너스': 'cd', '메르세데스': 'cri', '팬텀': 'cd10', '은월': 'atk', '카이저': 'CD20 B10 BUF', '카인': 'cri', '카데나': 'cd', '엔젤릭버스터': 'buf',
+    '일리움': 'mag', '칼리': 'cd', '아크': 'cd', '라라': 'ps', '호영': 'ps', '렌': 'atk', '제로': 'atk', '키네시스': 'mag|buf', '레테': 'cd' };
+  const EK = { '패': '패시브 스킬 레벨 1 증가', '보': '보스 몬스터 공격 시 데미지 20% 증가', '재': '스킬 사용 시 20% 확률로 재사용 대기시간 미적용', '공': '공격력 30 증가', '마': '마력 30 증가', '피': '최대 HP 20% 증가', '크': '크리티컬 확률 30% 증가', '상': '상태 이상에 걸린 대상 공격 시 데미지 10% 증가' };
+  const MAGE = ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍', '플레임위자드', '배틀메이지', '에반', '루미너스', '일리움', '라라', '키네시스'];
+  const E = { '나이트로드': '패보상', '나이트워커': '보상공', '다크나이트': '패보재', '데몬슬레이어': '보상공', '데몬어벤져': '재보피', '듀얼블레이드': '보상공', '라라': '패보상', '레테': '재보상', '렌': '패보상',
+    '루미너스': '재보상', '메르세데스': '패보크', '메카닉': '보상공', '미하일': '보상공', '바이퍼': '패보상', '배틀메이지': '패보상', '보우마스터': '패보크', '블래스터': '보상공', '비숍': '보상공', '섀도어': '패보상',
+    '소울마스터': '패보상', '스트라이커': '패보상', '신궁': '패보크', '아델': '패보재', '아란': '패보상', '아크': '패재보', '아크메이지(불,독)': '보상공', '아크메이지(썬,콜)': '보상공', '에반': '보재상',
+    '엔젤릭버스터': '패보상', '와일드헌터': '패보크', '윈드브레이커': '패보크', '은월': '패보상', '일리움': '패보상', '제논': '보상공', '제로': '재보상', '카데나': '재보상', '카이저': '재보상', '카인': '패보크',
+    '칼리': '재보상', '캐논마스터': '패보상', '캡틴': '재보상', '키네시스': '보상공', '팔라딘': '패보상', '패스파인더': '재보크', '팬텀': '패보재', '플레임위자드': '패보상', '호영': '패보상', '히어로': '패보상' };
+  const endOf = job => [...(E[job] || '')].map(c => ['L', EK[c === '공' && MAGE.includes(job) ? '마' : c]]);
+  Object.entries(J).forEach(([job, v]) => {
+    const lines = v.split('|').map(x => mk(P[x] || x)).reduce((a, b) => a.concat(OR, b));
+    ABILITY[job] = [{ name: '보스용', lines }, { name: '보스 종결', lines: endOf(job) }, ...ABILITY['아델'].slice(2)];
+  });
+  ABILITY['아델'][1] = { name: '보스 종결', lines: endOf('아델') };
+})();
 const VMATRIX = { '아델': 'img/vmatrix-adele.png' };
 const HUNTSPOT = { '아델': [
   ['200~205', '소멸의 여로', '숨겨진 호숫가, 동굴의 동쪽길, 동굴 아래쪽'],
@@ -2462,7 +2487,7 @@ class Component extends DCLogic {
         hsSets: s.title === '하이퍼스탯' && HYPERSTAT[job] ? HYPERSTAT[job].map(h => ({ name: h.name, range: h.lv[0] + '~' + h.lv[h.lv.length - 1] + 'Lv', lvs: h.lv.map(l => ({ t: l + 'Lv' })),
           rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
-        abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
+        abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, jc: g === 'O' ? 'center' : 'flex-start', grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
         isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
@@ -4004,7 +4029,9 @@ class Component extends DCLogic {
             const gv = isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: true };
             return { ...gv, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
               growTitle: isGuide && job ? job : g, growSub: isGuide && !job ? '직업가이드에 마우스를 올려 직업을 선택하세요.' : '준비 중이에요.',
-              jobGroups: JG.map(([name, jobs]) => ({ name, jobs: jobs.map(n => ({ name: n, bg: n === job && isGuide ? 'oklch(0.48 0.17 255)' : 'transparent', color: n === job && isGuide ? '#fff' : '#3a3b3f',
+              jobGroups: (() => { const CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', M = {};
+                JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')).forEach(n => { const c = n.charCodeAt(0) - 0xAC00; const k = c >= 0 && c < 11172 ? CH[Math.floor(c / 588)] : n[0]; (M[k] = M[k] || []).push(n); });
+                return Object.entries(M); })().map(([name, jobs]) => ({ name, jobs: jobs.map(n => ({ name: n, bg: n === job && isGuide ? 'oklch(0.48 0.17 255)' : 'transparent', color: n === job && isGuide ? '#fff' : '#3a3b3f',
                 onClick: () => { try { localStorage.setItem(KEY + ':job', n); localStorage.setItem(KEY + ':growTab', '직업가이드'); } catch (e) {} this.setState({ job: n, growTab: '직업가이드', jobMenu: false }); } })) })),
               growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
@@ -4216,7 +4243,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 21,
+      isAdmin: admin, appVer: 22,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
