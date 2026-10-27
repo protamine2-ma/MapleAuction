@@ -792,6 +792,32 @@ body{overflow-x:clip;}
               <img src="img/vmatrix-adele.png" alt="V매트릭스 코어 세팅" style="display:block;width:100%;max-width:488px;height:auto;border-radius:10px;">
             </div>
           </sc-if>
+          <sc-if value="{{ s.hasVmx }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:14px;">
+              <div style="position:relative;width:100%;max-width:{{ s.vmxW }};">
+                <img src="{{ s.vmxImg }}" alt="V매트릭스 코어 세팅" style="display:block;width:100%;height:auto;border-radius:10px;">
+                <sc-for list="{{ s.vmxCores }}" as="c" hint-placeholder-count="6">
+                  <button onClick="{{ c.onClick }}" title="{{ c.tip }}" style="position:absolute;left:{{ c.left }};top:{{ c.top }};width:{{ c.w }};aspect-ratio:1;padding:0;border:none;background:transparent;cursor:{{ c.cursor }};">
+                    <span style="position:absolute;left:-8%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(45deg);opacity:{{ c.op }};"></span>
+                    <span style="position:absolute;left:-8%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(-45deg);opacity:{{ c.op }};"></span>
+                  </button>
+                </sc-for>
+                <sc-for list="{{ s.vmxNums }}" as="c" hint-placeholder-count="24">
+                  <div style="position:absolute;left:{{ c.left }};top:{{ c.top }};width:8%;height:6%;display:flex;align-items:center;justify-content:center;">
+                    <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
+                      <input value="{{ c.val }}" onChange="{{ c.onChange }}" maxlength="2" style="box-sizing:border-box;width:100%;height:100%;padding:0;border:1px dashed rgba(255,255,255,0.45);border-radius:4px;background:rgba(0,0,0,0.25);color:#ff2222;font-family:inherit;font-size:clamp(14px,4.6vw,24px);font-weight:900;text-align:center;text-shadow:0 0 2px #fff,0 0 2px #fff;outline:none;">
+                    </sc-if>
+                    <sc-if value="{{ c.show }}" hint-placeholder-val="{{ false }}">
+                      <span style="color:#ff2222;font-size:clamp(14px,4.6vw,24px);font-weight:900;line-height:1;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;">{{ c.val }}</span>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12px;color:#6b6d73;">관리자: 강화 코어를 누르면 ✕ 표시, 직업·공용 코어 오른쪽 위 칸에 숫자를 적으면 빨간 숫자로 보여요.</span>
+              </sc-if>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasUnion }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-bottom:14px;">
               <sc-for list="{{ s.unionSets }}" as="u" hint-placeholder-count="2">
@@ -1972,6 +1998,12 @@ const ABILITY = {
   ABILITY['아델'][1] = { name: '보스 종결', lines: endOf('아델') };
 })();
 const VMATRIX = { '아델': 'img/vmatrix-adele.png' };
+const VMX = {
+  '메르세데스': { img: 'img/vmatrix-mercedes.png', w: 489, h: 614, X: [48, 127, 205, 283, 362, 440], ey: 182, jy: 77, cy: [337, 417, 497, 577] },
+  '신궁': { img: 'img/vmatrix-sniper.png', w: 483, h: 615, X: [46, 124, 202, 280, 358, 436], ey: 184, jy: 75, cy: [339, 417, 495, 573] },
+};
+[['듀얼블레이드', 'dualblade', 482, 611, -1, -1], ['레테', 'lethe', 482, 610, -2, -2], ['렌', 'ren', 484, 615, 0, 0], ['나이트로드', 'nightlord', 485, 616, -2, 0], ['데몬어벤져', 'demonavenger', 479, 611, -3, -3], ['블래스터', 'blaster', 482, 612, -2, -1], ['메카닉', 'mechanic', 481, 614, -2, -1], ['바이퍼', 'viper', 482, 613, -1, -2], ['보우마스터', 'bowmaster', 482, 612, -3, -2], ['소울마스터', 'soulmaster', 484, 615, -1, 0], ['아크메이지(썬,콜)', 'archmageil', 484, 612, 0, -1], ['아크', 'ark', 482, 612, -2, -2], ['나이트워커', 'nightwalker', 485, 610, -1, -2], ['루미너스', 'luminous', 484, 615, -2, -1], ['엔젤릭버스터', 'angelicbuster', 484, 613, 0, 0], ['와일드헌터', 'wildhunter', 482, 615, -2, 2], ['은월', 'eunwol', 483, 613, -2, 1], ['제논', 'xenon', 487, 614, 1, -1], ['제로', 'zero', 480, 614, -3, -1], ['카이저', 'kaiser', 483, 612, -2, 0], ['팔라딘', 'paladin', 484, 614, -2, 0], ['패스파인더', 'pathfinder', 488, 611, 1, -3], ['팬텀', 'phantom', 487, 611, 0, -1], ['호영', 'hoyoung', 485, 611, -1, -2], ['배틀메이지', 'battlemage', 480, 614, -3, -2], ['다크나이트', 'darkknight', 482, 611, -1, -2], ['데몬슬레이어', 'demonslayer', 484, 614, -2, -1], ['라라', 'lara', 483, 613, -2, -2], ['미하일', 'mihile', 481, 619, -2, 1], ['카데나', 'cadena', 485, 615, 0, 0], ['아크메이지(불,독)', 'archmagefp', 484, 618, -1, 0], ['비숍', 'bishop', 484, 616, -2, 0], ['섀도어', 'shadower', 481, 614, -2, 0], ['스트라이커', 'striker', 482, 613, -3, -1], ['아란', 'aran', 480, 614, -3, 0], ['에반', 'evan', 487, 611, 0, -2], ['윈드브레이커', 'windbreaker', 489, 610, 3, -3], ['일리움', 'illium', 480, 614, -3, 0], ['플레임위자드', 'flamewizard', 485, 613, -1, -1], ['히어로', 'hero', 480, 615, -3, 0], ['카인', 'kain', 482, 613, -2, -1], ['칼리', 'khali', 482, 613, -2, -1], ['캐논마스터', 'cannonmaster', 483, 617, -1, 0], ['캡틴', 'captain', 483, 612, 0, -1], ['키네시스', 'kinesis', 486, 609, -1, -3]]
+  .forEach(([j, f, w, h, dx, dy]) => { VMX[j] = { img: 'img/vmatrix-' + f + '.png', w, h, X: [46, 124, 202, 280, 358, 436].map(v => v + dx), ey: 184 + dy, jy: 75 + dy, cy: [339, 417, 495, 573].map(v => v + dy) }; });
 const HUNTSPOT = { '아델': [
   ['200~205', '소멸의 여로', '숨겨진 호숫가, 동굴의 동쪽길, 동굴 아래쪽'],
   ['205~210', '리버스 시티', '숨겨진 연구열차'],
@@ -1992,6 +2024,10 @@ const HUNTSPOT = { '아델': [
   ['271~272', '오디움', '볕 드는 실험실 2, 3'],
   ['273~274', '오디움', '잠긴문 뒤 실험실 3, 4'],
 ] };
+['히어로', '팔라딘', '다크나이트', '아크메이지(불,독)', '아크메이지(썬,콜)', '비숍', '보우마스터', '신궁', '패스파인더', '나이트로드', '섀도어', '듀얼블레이드', '바이퍼', '캡틴', '캐논마스터',
+  '소울마스터', '미하일', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커', '블래스터', '배틀메이지', '와일드헌터', '메카닉', '제논', '데몬슬레이어', '데몬어벤져',
+  '아란', '에반', '루미너스', '메르세데스', '팬텀', '은월', '카이저', '카인', '카데나', '엔젤릭버스터', '일리움', '칼리', '아크', '라라', '호영', '렌', '제로', '키네시스', '레테']
+  .forEach(j => { if (!HUNTSPOT[j]) HUNTSPOT[j] = HUNTSPOT['아델']; });
 const QUEST = { '아델': { reward: '페이스', effect: '크리티컬 데미지 10% · 공격력 10%', quest: '[아델] 가려진 기억 1 ~ 9', note: '가려진 기억 퀘스트를 1부터 9까지 모두 진행하세요.', imgs: ['quest-adele-1.png', 'quest-adele-2.png'] } };
 const HEXA = { '아델': ['img/hexa-adele-1.png', 'img/hexa-adele-2.png'] };
 const HYPERSTAT = { '아델': [
@@ -2002,6 +2038,17 @@ const HYPERSTAT = { '아델': [
     ['STR', [3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5]], ['DEX', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['크확', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], ['크뎀', [8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10]],
     ['방무', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]], ['데미지', [10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12]], ['일몹 데미지', [11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12]], ['공마', [4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6]], ['획득 경험치', [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]]] },
 ] };
+const JOB_STAT = { 'STR/DEX': '히어로 팔라딘 다크나이트 소울마스터 미하일 블래스터 데몬슬레이어 아란 카이저 제로 바이퍼 캐논마스터 스트라이커 은월 아크 렌',
+    'DEX/STR': '보우마스터 신궁 패스파인더 윈드브레이커 와일드헌터 메카닉 메르세데스 카인 엔젤릭버스터 캡틴',
+    'INT/LUK': '아크메이지(불,독) 아크메이지(썬,콜) 비숍 플레임위자드 배틀메이지 에반 루미너스 일리움 라라 키네시스 레테',
+    'LUK/DEX': '나이트로드 섀도어 듀얼블레이드 나이트워커 팬텀 카데나 칼리 호영', 'HP/STR': '데몬어벤져' };
+(() => {
+  const S = JOB_STAT;
+  Object.entries(S).forEach(([ms, jobs]) => { const [m, s] = ms.split('/');
+    jobs.split(' ').forEach(job => { if (!HYPERSTAT[job]) HYPERSTAT[job] = HYPERSTAT['아델'].map(h => ({ ...h, rows: h.rows.map((r, i) => i === 0 ? [m, r[1]] : i === 1 ? [s, r[1]] : r) })); }); });
+  if (!HYPERSTAT['제논']) HYPERSTAT['제논'] = HYPERSTAT['아델'].map((h, hi) => ({ ...h, rows: h.rows.map(r => hi === 0 && r[0] === 'STR' ? ['STR', Array(11).fill(5)] : hi === 0 && r[0] === 'DEX' ? ['DEX', [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]] : r[0] === '크확' ? ['LUK', hi === 0 ? Array(11).fill(4) : r[1]] : r) }));
+  { const hs = HYPERSTAT['제논'][1]; if (hs) hs.rows = hs.rows.map(r => { const v = { STR: 3, DEX: 2, LUK: 0 }[r[0]]; return v == null ? r : [r[0], r[1].map((x, k) => k < 2 ? v : k < 9 ? (r[0] === 'LUK' ? 3 : v) : ({ STR: 4, DEX: 2, LUK: 3 }[r[0]]))]; }); }
+})();
 const UNION_BASE = [['STR', 15, 15, '75'], ['DEX', 0, 15, '0'], ['INT', 0, 15, '0'], ['LUK', 0, 15, '0'], ['공격력', 15, 15, '15'], ['마력', 0, 15, '0'], ['최대 HP', 0, 15, '0'], ['최대 MP', 0, 15, '0']];
 const UNION = {
   '아델': [
@@ -2009,6 +2056,19 @@ const UNION = {
     { name: '사냥용 유니온', server: '일반서버', pri: { 'STR': 4, 'DEX': 7, '공격력': 5, '크리티컬 데미지': 3, '방어율 무시': 6, '일반몹 데미지': 2, '획득 경험치': 1 }, note: '크리티컬 확률은 부족한 만큼 채워주세요', base: UNION_BASE, extra: [['크리티컬 데미지', 40, 40, '20.00%'], ['보스 데미지', 0, 40, '0%'], ['방어율 무시', 16, 40, '16%'], ['크리티컬 확률', 0, 40, '0%'], ['버프 지속 시간', 0, 40, '0%'], ['일반몹 데미지', 40, 40, '40%'], ['획득 경험치', 40, 40, '10.0%'], ['상태 이상 내성', 0, 40, '0']] },
   ],
 };
+(() => {
+  const NM = { HP: '최대 HP' };
+  Object.entries(JOB_STAT).forEach(([ms, jobs]) => { const [m, s] = ms.split('/').map(x => NM[x] || x);
+    jobs.split(' ').forEach(job => { if (UNION[job]) return;
+      UNION[job] = UNION['아델'].map(u => { const pri = {};
+        const isMag = m === 'INT';
+        Object.entries(u.pri).forEach(([k, v]) => { pri[v === 4 ? m : v === 7 ? s : v === 5 && isMag ? '마력' : k] = v; });
+        const st = u.base.find(r => r[0] === 'STR'), at = u.base.find(r => r[0] === '공격력');
+        let base = u.base.map(r => r[0] === 'STR' ? ['STR', 0, r[2], '0'] : r);
+        if (isMag) base = base.map(r => r[0] === '공격력' ? ['공격력', 0, r[2], '0'] : r[0] === '마력' ? ['마력', at[1], at[2], at[3]] : r);
+        const bi = base.findIndex(r => r[0] === m); if (bi >= 0) base[bi] = [m, st[1], st[2], m === '최대 HP' ? '3750' : st[3]];
+        return { ...u, pri, base }; }); }); });
+})();
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -2475,6 +2535,16 @@ class Component extends DCLogic {
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasVm: s.title === 'V매트릭스' && !!VMATRIX[job], vmImg: VMATRIX[job] || '',
+        hasVmx: s.title === 'V매트릭스' && !!VMX[job], vmxImg: (VMX[job] || {}).img || '', vmxW: ((VMX[job] || {}).w || 489) + 'px',
+        vmxCores: s.title === 'V매트릭스' && VMX[job] ? VMX[job].X.map((cx, k) => { const L = VMX[job], on = (g.vmX || []).includes(k);
+          return { left: ((cx - 23.5) / L.w * 100).toFixed(2) + '%', top: (L.ey / L.h * 100).toFixed(2) + '%', w: (47 / L.w * 100).toFixed(2) + '%', op: on ? 1 : 0, cursor: admin ? 'pointer' : 'default', tip: admin ? '눌러서 ✕ 표시' : '',
+            onClick: () => { if (!admin) return; upd(n => { const a = n.vmX || []; n.vmX = a.includes(k) ? a.filter(x => x !== k) : [...a, k]; }); } }; }) : [],
+        vmxNums: s.title === 'V매트릭스' && VMX[job] ? (() => { const L = VMX[job], X = L.X, P = [];
+          X.slice(0, 4).forEach((x, k) => P.push(['j' + k, x, L.jy]));
+          L.cy.forEach((y, r) => X.forEach((x, k) => { if (r < 3 || k < 2) P.push(['c' + (r * 6 + k), x, y]); }));
+          return P.map(([key, x, y]) => { const v = String((g.vmN || {})[key] || '');
+            return { left: ((x + 8) / L.w * 100).toFixed(2) + '%', top: ((y - 34) / L.h * 100).toFixed(2) + '%', val: v, show: !admin && !!v,
+              onChange: e => { const t = e.target.value.replace(/\D/g, '').slice(0, 2); upd(n => { n.vmN = { ...(n.vmN || {}), [key]: t }; if (!t) delete n.vmN[key]; }); } }; }); })() : [],
         hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
         hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {},
         hasUnion: s.title === '유니온' && !!UNION[job],
@@ -2488,7 +2558,7 @@ class Component extends DCLogic {
           rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, jc: g === 'O' ? 'center' : 'flex-start', grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && VMATRIX[job]) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && !(s.title === '아티팩트' && ARTIFACT[job]), hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
@@ -4243,7 +4313,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 22,
+      isAdmin: admin, appVer: 24,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
