@@ -2730,8 +2730,8 @@ class Component extends DCLogic {
     for (let i = 0, j = 0; i < d.length; i += 4, j++) if (Math.max(d[i], d[i + 1], d[i + 2]) < 50) dark[j] = 1;
     let px = 0; const mk = new Uint8Array(ow * oh);
     for (let y = 0; y < oh; y++) for (let x = 0; x < ow; x++) { const j = y * ow + x, i = j * 4, r = d[i], g = d[i + 1], b = d[i + 2];
-      if (r > 185 && g > 100 && g < 250 && b < 130 && r - b > 100) { let nd = false; for (let k = -4; k <= 4 && !nd; k++) { const xx = x + k; if (xx >= 0 && xx < ow && dark[j + k]) nd = true; } if (nd) mk[j] = 1; } }
-    const minH = 14, q = new Int32Array(ow * oh);
+      if (r > 170 && g > 90 && r >= g - 10 && b < g - 50 && r - b > 70) { let nd = false; for (let k = -4; k <= 4 && !nd; k++) { const xx = x + k; if (xx >= 0 && xx < ow && dark[j + k]) nd = true; } if (nd) mk[j] = 1; } }
+    const minH = 7, q = new Int32Array(ow * oh);
     for (let s = 0; s < mk.length; s++) { if (mk[s] !== 1) continue;
       let qh = 0, qt = 0, x0 = ow, x1 = 0, y0 = oh, y1 = 0; q[qt++] = s; mk[s] = 2;
       while (qh < qt) { const p = q[qh++], px0 = p % ow, py0 = (p - px0) / ow; if (px0 < x0) x0 = px0; if (px0 > x1) x1 = px0; if (py0 < y0) y0 = py0; if (py0 > y1) y1 = py0;
@@ -2745,7 +2745,7 @@ class Component extends DCLogic {
       if (!B.start && !B.done && B.streak >= 2 && now - B.seenAt >= 2000) { B.start = B.seenAt - 3000; B.alerted = false; }
       if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
-      if (B.done && B.gone >= 5) B.done = false;
+      if (B.done && B.gone >= 3) B.done = false;
     }
     const cv = this._boostCv && this._boostCv.current; if (cv) { cv.width = ow; cv.height = oh; cv.getContext('2d').putImageData(img, 0, 0); }
   }
@@ -4157,7 +4157,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 14,
+      isAdmin: admin, appVer: 15,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
