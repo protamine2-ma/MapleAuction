@@ -235,7 +235,7 @@ body{overflow-x:clip;}
               <strong style="font-size:15px;color:oklch(0.4 0.15 255);">업데이트 소식</strong>
               <span style="font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ huntNoteAt }}</span>
             </div>
-            <div style="font-size:14.5px;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ huntNote }}</div>
+            <div style="font-size:14.5px;font-weight:700;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ huntNote }}</div>
           </div>
         </sc-if>
         <sc-if value="{{ huntNoteEmpty }}" hint-placeholder-val="{{ true }}">
@@ -243,7 +243,7 @@ body{overflow-x:clip;}
         </sc-if>
       </sc-if>
       <sc-if value="{{ huntNoteView }}" hint-placeholder-val="{{ false }}">
-        <div style="font-size:14.5px;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ huntNote }}</div>
+        <div style="font-size:14.5px;font-weight:700;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ huntNote }}</div>
       </sc-if>
     </section>
   </sc-if>
@@ -4216,7 +4216,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 20,
+      isAdmin: admin, appVer: 21,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
