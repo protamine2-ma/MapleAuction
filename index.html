@@ -2839,10 +2839,13 @@ class Component extends DCLogic {
     const prev0 = this._rune || {};
     const base = prev0.base == null ? px : Math.min(prev0.base, px);
     const h = this.hunt(), prev = prev0;
-    const startHit = prev0.base == null && h.rune && px >= h.runeMin && !this._runeStartAlerted;
+    const startOk = prev0.base == null && h.rune && this._boxMode !== 'none' && px >= h.runeMin && !this._runeStartAlerted;
+    this._runeStartN = startOk ? (this._runeStartN || 0) + 1 : 0;
+    const startHit = startOk && this._runeStartN >= 3;
+    const waitStart = startOk && !startHit;
     let cnt = prev0.cnt || 0;
     if (startHit) { this._runeStartAlerted = true; this.huntAlert('룬 생성', 'rune'); cnt = 1; }
-    const hit = h.rune && px - base >= h.runeMin;
+    const hit = h.rune && !waitStart && px - base >= h.runeMin;
     const now = Date.now();
     let goneAt = hit || startHit ? 0 : prev.goneAt || now;
     let last = prev.last || 0;
@@ -2851,7 +2854,7 @@ class Component extends DCLogic {
     const rep = Math.max(1, Number(h.runeRep) || 3);
     const streak = hit ? (prev.streak || 0) + 1 : 0;
     if (streak >= 2 && cnt < rep && now - last >= Math.max(3, h.runeEvery) * 1000) { this.huntAlert('룬 생성', 'rune'); last = now; cnt++; }
-    this._rune = { px, base, found: streak >= 2, streak, last, cnt, goneAt, res: W + '×' + H, reg: g };
+    this._rune = { px, base: waitStart ? null : base, found: streak >= 2, streak, last, cnt, goneAt, res: W + '×' + H, reg: g };
     const cv = this._runeCv && this._runeCv.current;
     this._rune.box = bx;
     this._lastImg = img;
@@ -4162,7 +4165,7 @@ class Component extends DCLogic {
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
       legend: chartDates.map((d, i) => ({ label: d, color: colors[i] })),
       editing: isEditing, viewing: !isEditing,
-      isAdmin: admin, appVer: 16,
+      isAdmin: admin, appVer: 17,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
