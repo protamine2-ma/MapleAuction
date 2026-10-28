@@ -2863,7 +2863,7 @@ class Component extends DCLogic {
   checkBoost(now) {
     const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
     const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768);
-    const sw = Math.min(W, Math.round(260 * us)), sx = Math.max(0, Math.round(W / 2 - sw / 2)), sy = Math.round(40 * us), sh = Math.min(H - sy, Math.round(80 * us));
+    const sw = Math.min(W, Math.round(260 * us)), sx = Math.max(0, Math.round(W / 2 - sw / 2)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
     const ow = Math.round(sw / us), oh = Math.round(sh / us);
     const c = this._boostC || (this._boostC = document.createElement('canvas')); c.width = ow; c.height = oh;
     const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(v, sx, sy, sw, sh, 0, 0, ow, oh);
@@ -2902,8 +2902,15 @@ class Component extends DCLogic {
     const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(v, x, y, w, bh, 0, 0, w, bh);
     const img = ctx.getImageData(0, 0, w, bh), d = img.data, g = new Uint8Array(w * bh);
     for (let i = 0, j = 0; i < d.length; i += 4, j++) { const mn = Math.min(d[i], d[i + 1], d[i + 2]), mx = Math.max(d[i], d[i + 1], d[i + 2]); if (mn > 185 && mx - mn < 45) { g[j] = 1; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } }
+    { const rc = new Array(bh).fill(0), xa = Math.floor(w * 0.3), xe = Math.ceil(w * 0.7); for (let Y = 0; Y < bh; Y++) for (let X = xa + 1; X < xe; X++) if (g[Y * w + X] && !g[Y * w + X - 1]) rc[Y]++;
+      let my = 0; for (let Y = 1; Y < bh; Y++) if (rc[Y] > rc[my]) my = Y;
+      if (rc[my] >= 3) { let t = my, b = my; while (t > 0 && rc[t - 1] >= 2) t--; while (b < bh - 1 && rc[b + 1] >= 2) b++; t = Math.max(0, t - 1); b = Math.min(bh - 1, b + 1);
+        let cx0 = w, cx1 = 0; for (let Y = t; Y <= b; Y++) for (let X = xa; X < xe; X++) if (g[Y * w + X]) { if (X < cx0) cx0 = X; if (X > cx1) cx1 = X; }
+        cx0 = Math.max(0, cx0 - 12); cx1 = Math.min(w - 1, cx1 + 12);
+        for (let Y = 0; Y < bh; Y++) for (let X = 0; X < w; X++) { if (Y >= t && Y <= b && X >= cx0 && X <= cx1) continue; const j = Y * w + X; if (g[j]) { g[j] = 0; const i = j * 4; d[i] = 70; d[i + 1] = 70; d[i + 2] = 70; } } } }
     const S = this._stop || (this._stop = { last: now, alertAt: 0 });
-    if (S.prev && S.prev.length === g.length) { let n = 0; for (let k = 0; k < g.length; k++) if (g[k] !== S.prev[k]) n++; if (n > 3) { S.last = now; S.alertAt = 0; S.cnt = 0; } } else { S.last = now; S.alertAt = 0; S.cnt = 0; }
+    let gw = 0; for (let k = 0; k < g.length; k++) gw += g[k];
+    if (S.prev && S.prev.length === g.length) { let n = 0; const P = S.prev, nb = (A, j) => { const X = j % w, Y = (j - X) / w; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = X + dx, yy = Y + dy; if (xx >= 0 && yy >= 0 && xx < w && yy < bh && A[yy * w + xx]) return true; } return false; }; for (let k = 0; k < g.length; k++) if (g[k] !== P[k] && !(g[k] ? nb(P, k) : nb(g, k))) n++; if (n > 3) { S.last = now; S.alertAt = 0; S.cnt = 0; } } else { S.last = now; S.alertAt = 0; S.cnt = 0; }
     S.prev = g;
     const lim = Math.max(3, Number(h.stopSec) || 15) * 1000;
     if (h.stopOn && !h.paused && now - S.last >= lim && now - (S.alertAt || 0) >= lim && (S.cnt || 0) < Math.max(1, Number(h.stopRep) || 3)) { S.alertAt = now; S.cnt = (S.cnt || 0) + 1; this.huntAlert('사냥 멈춤', 'stop'); }
@@ -3461,7 +3468,10 @@ class Component extends DCLogic {
         D.msg = '버프 숫자 인식 중 · ' + shown + '초'; D.wm = null; if (ok) D.noNum = false; if (ok && Math.abs(shown - sec) <= 1.5) D.secAt = now;
       } else if (N != null) {
         const L = 1000, fresh = () => { this._run[s.id] = now + (N * 60 + 30) * 1000 - L; this._alerted[s.id] = false; D.approx = true; };
-        if (rem == null || D.wm == null) fresh();
+        const recentSec = D.secAt && now - D.secAt < 20000, fits = rem != null && rem <= N * 60 + 65 && rem >= (N - 1) * 60 - 5;
+        D.wmc = D.wmLast === N ? (D.wmc || 0) + 1 : 1; D.wmLast = N;
+        if (rem != null && (fits || (recentSec && N * 60 > rem + 5) || D.wmc < 3)) { if (D.wm == null && fits) D.wm = N; }
+        else if (rem == null || D.wm == null) fresh();
         else if (N === D.wm - 1) { this._run[s.id] = now + (N * 60 + 59) * 1000 + 500 - L; D.approx = false; }
         else if (N > D.wm || rem < N * 60 - 5 || rem > N * 60 + 65) fresh();
         D.noNum = false; D.wm = N; D.msg = '버프 숫자 인식 중 · ' + N + '분' + (D.approx ? ' (대략)' : '');
@@ -3486,10 +3496,11 @@ class Component extends DCLogic {
     const sc = this._sc || (this._sc = document.createElement('canvas')); sc.width = 48; sc.height = 27;
     const sx = sc.getContext('2d', { willReadFrequently: true }); sx.drawImage(v, 0, 0, 48, 27);
     const sd = sx.getImageData(0, 0, 48, 27).data; let lum = 0; for (let i = 0; i < sd.length; i += 4) lum += sd[i] + sd[i + 1] + sd[i + 2]; lum /= sd.length / 4 * 3;
-    const avg = this._lumAvg || lum, fading = lum < 25 || lum < avg * 0.6;
-    if (fading) this._fadeAt = now; else this._lumAvg = avg * 0.9 + lum * 0.1;
-    if (now - (this._fadeAt || 0) < 3000) {
-      Object.values(this._det).forEach(D => { if (D.kind === 'jb') return; D.boxAt = now; D.mk = null; D.cand = null; D.on = 0; D.off = 0; D.offSince = 0; if (D.ready === true) D.ready = undefined; });
+    const avg = this._lumAvg || lum, black = lum < 25, fading = black || lum < avg * 0.6;
+    if (black) this._fadeAt = now; else if (!fading) this._lumAvg = avg * 0.9 + Math.min(lum, avg * 1.1) * 0.1;
+    if (now - (this._fadeAt || 0) < 3000 || fading) {
+      if (!(now - (this._fadeAt || 0) < 3000)) { if (now - (this._dimAt || 0) > 1500) this._dimFrom = now; this._dimAt = now; if (now - this._dimFrom > 4000) this._lumAvg = lum; }
+      if (now - (this._fadeAt || 0) < 3000) Object.values(this._det).forEach(D => { if (D.kind === 'jb') return; D.boxAt = now; D.mk = null; D.cand = null; D.on = 0; D.off = 0; D.offSince = 0; if (D.ready === true) D.ready = undefined; });
       if (lum >= 12) { const res = W + 'x' + H; h.skills.forEach(s => { if (s.off || !(s.preset === 'janusbuff' || s.preset === 'custombuff')) return; const b = s.box ? s.box[res] : null; if (b) this.detectBuffSkill(s, b, now, W, H); }); }
       return;
     }
@@ -3530,9 +3541,11 @@ class Component extends DCLogic {
         let tw = 0; const yEnd = Math.floor(bh * 0.55);
         for (let y = 0; y < yEnd; y++) for (let X = 0; X < bw; X++) { const i = (y * bw + X) * 4, mx = Math.max(a[i], a[i + 1], a[i + 2]), mn = Math.min(a[i], a[i + 1], a[i + 2]); if (mn > 185 && mx - mn < 35) tw++; }
         const thr = Math.max(8, Math.round(bw * yEnd * 0.08)), busy = D.pend || this._run[s.id] > now;
-        if (D.twBase == null) D.twBase = tw;
-        const occ = !busy && tw > D.twBase + thr;
-        if (!occ) { D.twBase = D.twBase * 0.95 + tw * 0.05; D.occFrom = 0; } else { D.occAt = now; if (!D.occFrom) D.occFrom = now; else if (now - D.occFrom > 6000) { D.twBase = tw; D.occFrom = 0; } }
+        let yq = 0; for (let y = Math.floor(bh * 0.18); y < Math.ceil(bh * 0.64); y++) for (let X = Math.floor(bw * 0.1); X < Math.ceil(bw * 0.8); X++) { const i = (y * bw + X) * 4; if (a[i] > 185 && a[i + 1] > 155 && a[i + 2] < 80 && a[i] - a[i + 2] > 150) yq++; }
+        const tk = yq >= 5 ? 'twCd' : 'twRdy';
+        if (D[tk] == null) D[tk] = tw;
+        const occ = !busy && tw > D[tk] + thr;
+        if (!occ) { D[tk] = D[tk] * 0.95 + tw * 0.05; D.occFrom = 0; } else { D.occAt = now; if (!D.occFrom) D.occFrom = now; else if (now - D.occFrom > 4000) { D[tk] = tw; D.occFrom = 0; } }
         if (!busy && now - (D.occAt || 0) < 1200) { D.dbg = '아이콘 가려짐'; D.on = 0; D.yrn = 0; D.yc = null; D.yc2 = null; D.cand = null; D.cand2 = null; D.ocrH = []; return; }
       }
       let used = false;
@@ -3591,8 +3604,10 @@ class Component extends DCLogic {
           const dif = (p, q) => { if (!p || !q || p.length !== q.length) return 999; let k = 0; for (let i = 0; i < p.length; i++) if (p[i] !== q[i]) k++; return k; };
           const wc = m => m.reduce((p, q) => p + q, 0), base = D.ymk ? wc(D.ymk) : 0, lim = Math.max(4, Math.round(Math.max(base, wc(mk)) * 0.25));
           // 숫자를 직접 읽어서 '줄어들 때'만 사용으로 판단 (늘어날 때 = 충전 → 무시)
-          let rv = null; try { const wm = this.readWhiteMins(a, bw, bh).filter(n => n.x > bw * 0.4 && n.y > bh * 0.4); if (wm.length) rv = Math.max(...wm.map(n => n.v)); } catch (e) {}
-          const rk = rv == null ? (wc(mk) < 3 ? 'none' : 'unk') : rv;
+          const bigY = bw >= 44 && bh >= 44; let rv = null;
+          if (bigY) { rv = this.readYeinCharge(a, bw, bh); D.yRead = true; }
+          else try { const wm = this.readWhiteMins(a, bw, bh).filter(n => n.x > bw * 0.4 && n.y > bh * 0.4); if (wm.length) rv = Math.max(...wm.map(n => n.v)); } catch (e) {}
+          const rk = rv == null ? (bigY || wc(mk) < 3 ? 'none' : 'unk') : rv;
           if (rk === D.yr1) D.yrn = (D.yrn || 0) + 1; else { D.yr1 = rk; D.yrn = 1; }
           if (D.yrn >= 3 && rk !== 'unk' && (typeof rk !== 'number' || rk <= 9)) {
             if (typeof rk === 'number') D.yRead = true;
@@ -3640,6 +3655,16 @@ class Component extends DCLogic {
       if (ocrSkill && D.pend && !D.ocrLock && now - D.pend > 8000) { D.ocrFail = true; D.endAt = D.pend - 2250 + this.skillDur(s) * 1000; this._run[s.id] = D.endAt; this._alerted[s.id] = false; D.pend = 0; this.ensureTick(); }
     });
   }
+  readYeinCharge(a, bw, bh) {
+    const dk = (X, Y) => { const i = (Y * bw + X) * 4; return a[i] + a[i + 1] + a[i + 2] < 150; };
+    const K = Math.max(3, Math.round(bw * 0.11)), x0 = Math.floor(bw * 0.68), x1 = Math.ceil(bw * 0.95), y0 = Math.floor(bh * 0.6), y1 = Math.ceil(bh * 0.97), cc = {};
+    for (let Y = y0; Y < y1; Y++) for (let X = x0; X < x1; X++) { const i = (Y * bw + X) * 4; if (!(a[i] > 170 && a[i + 1] > 110 && (a[i] - a[i + 2] > 40 || a[i + 2] > 170))) continue; let l = false, r = false; for (let k = 1; k <= K; k++) { if (X - k >= 0 && dk(X - k, Y)) l = true; if (X + k < bw && dk(X + k, Y)) r = true; } if (l && r) cc[X] = (cc[X] || 0) + 1; }
+    const cs = Object.keys(cc).map(Number).filter(c => cc[c] >= 2).sort((p, q) => p - q); if (!cs.length) return null;
+    const gr = []; for (const c of cs) { const g = gr[gr.length - 1]; if (g && c - g[1] <= 1) g[1] = c; else gr.push([c, c]); }
+    let best = null, hb = 0; for (const g of gr) { let h = 0; for (let c = g[0]; c <= g[1]; c++) h = Math.max(h, cc[c]); if (h > hb) { hb = h; best = g; } }
+    if (hb < bh * 0.12) return null; const w = best[1] - best[0] + 1;
+    return w <= Math.max(2, Math.round(bw * 0.045)) ? 1 : w >= Math.round(bw * 0.07) ? 2 : null;
+  }
   skillDur(s) { return Number(s.cd) || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
@@ -3647,15 +3672,19 @@ class Component extends DCLogic {
   readWhiteBig(d, W, H) {
     const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' }; const dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 120;
     const M = new Uint8Array(W * H), ya = Math.floor(H * 0.55), xb = Math.floor(W * 0.7);
-    for (let Y = ya; Y < H; Y++) for (let X = 0; X < xb; X++) { const i = (Y * W + X) * 4; if (!(d[i] + d[i + 1] + d[i + 2] > 450 && Math.min(d[i], d[i + 1], d[i + 2]) > 110)) continue; if (dk(X - 1, Y) || dk(X + 1, Y) || dk(X, Y - 1) || dk(X, Y + 1) || dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2)) M[Y * W + X] = 1; }
+    const Wt = new Uint8Array(W * H), q = [];
+    for (let Y = ya; Y < H; Y++) for (let X = 0; X < xb; X++) { const i = (Y * W + X) * 4; if (!(d[i] + d[i + 1] + d[i + 2] > 450 && Math.min(d[i], d[i + 1], d[i + 2]) > 110)) continue; Wt[Y * W + X] = 1; if (dk(X - 1, Y) || dk(X + 1, Y) || dk(X, Y - 1) || dk(X, Y + 1) || dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2)) { M[Y * W + X] = 1; q.push(Y * W + X); } }
+    if (this._wbFill === true) for (let k = 0; k < q.length; k++) { const p = q[k], X = p % W, Y = (p - X) / W; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = X + dx, ny = Y + dy; if (nx < 0 || ny < ya || nx >= xb || ny >= H) continue; const n = ny * W + nx; if (Wt[n] && !M[n] && Math.abs(nx - (q[0] % W)) < W) { let near = false; for (let r = 1; r <= 4 && !near; r++) if (dk(nx - r, ny) || dk(nx + r, ny) || dk(nx, ny - r) || dk(nx, ny + r)) near = true; if (near) { M[n] = 1; q.push(n); } } } }
     const h = Math.round(Math.min(W, H) * 0.26); let y1 = -1; for (let Y = H - 1; Y >= ya && y1 < 0; Y--) { let k = 0; for (let X = 0; X < xb; X++) k += M[Y * W + X]; if (k >= 3) y1 = Y; } if (y1 < 0) return []; const y0 = y1 - h + 1;
     const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = Math.max(0, y0); Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
     const runs = []; let s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
     const samp = (a, w, gw) => { let m = ''; for (let gy = 0; gy < 9; gy++) for (let gx = 0; gx < gw; gx++) { const xa = a + gx * w / gw, xe = a + (gx + 1) * w / gw, yA = y0 + gy * h / 9, yB = y0 + (gy + 1) * h / 9; let on = 0, nn = 0; for (let Y = Math.max(0, Math.floor(yA)); Y < Math.ceil(yB); Y++) for (let X = Math.floor(xa); X < Math.ceil(xe); X++) { nn++; on += M[Y * W + X]; } m += nn && on / nn >= 0.4 ? '1' : '0'; } return m; };
+    const runs2 = []; for (const [a, b] of runs) { const w = b - a + 1; if (w > h * 0.95 && w < h * 2.2) { let m = a + Math.floor(w / 2), mv = 1e9; for (let X = a + Math.floor(w * 0.3); X <= a + Math.ceil(w * 0.7); X++) if (cc[X] < mv) { mv = cc[X]; m = X; } runs2.push([a, m - 1], [m + 1, b]); } else runs2.push([a, b]); }
     let str = '', x0 = -1;
-    for (const [a, b] of runs) { const w = b - a + 1; let n = 0; for (let Y = Math.max(0, y0); Y <= y1; Y++) for (let X = a; X <= b; X++) n += M[Y * W + X]; if (n < h) continue; let bk = null, bd = 0.2;
-      if (w / h >= 0.5) { const m = samp(a, w, 6); for (const k in G) { if (k === '1') continue; let dd = 0; for (let i = 0; i < 54; i++) if (m[i] !== G[k][i]) dd++; if (dd / 54 < bd) { bd = dd / 54; bk = k; } } }
-      if (w / h < 0.75) { const m = samp(a, w, 3); let dd = 0; for (let i = 0; i < 27; i++) if (m[i] !== G[1][i]) dd++; if (dd / 27 < bd) { bd = dd / 27; bk = '1'; } }
+    for (const [a, b] of runs2) { const w = b - a + 1; let n = 0; for (let Y = Math.max(0, y0); Y <= y1; Y++) for (let X = a; X <= b; X++) n += M[Y * W + X]; if (n < h) continue; let bk = null, bd = 0.27, b2 = 9;
+      if (w / h >= 0.5) { const m = samp(a, w, 6); for (const k in G) { if (k === '1') continue; let dd = 0; for (let i = 0; i < 54; i++) if (m[i] !== G[k][i]) dd++; const v = dd / 54; if (v < bd) { if (bk != null) b2 = Math.min(b2, bd); bd = v; bk = k; } else b2 = Math.min(b2, v); } }
+      if (w / h < 0.75) { const m = samp(a, w, 3); let dd = 0; for (let i = 0; i < 27; i++) if (m[i] !== G[1][i]) dd++; if (dd / 27 < bd) { if (bk != null) b2 = Math.min(b2, bd); bd = dd / 27; bk = '1'; } }
+      if (bk != null && bd > 0.2 && b2 - bd < 0.03) bk = null; if (w > h * 0.95) bk = null;
       if (bk == null) return []; if (x0 < 0) x0 = a; str += bk; }
     const v = Number(str); return str.length >= 1 && str.length <= 2 && v >= 1 && v <= 59 ? [{ x: x0, y: y0, v }] : [];
   }
@@ -4334,7 +4363,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 26,
+      isAdmin: admin, appVer: 27,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
