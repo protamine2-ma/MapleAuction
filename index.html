@@ -3230,7 +3230,7 @@ class Component extends DCLogic {
       const x0 = Math.max(0, bx.x - 3), y0 = Math.max(0, bx.y - 3), bw = Math.min(W - x0, bx.w + 6), bh = Math.min(H - y0, bx.h + 6);
       const c = this._bbc || (this._bbc = document.createElement('canvas')); c.width = bw; c.height = bh;
       const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, x0, y0, bw, bh, 0, 0, bw, bh); const a = x.getImageData(0, 0, bw, bh).data;
-      const sec = this.readTime(a, bw, bh), wm = sec == null ? this.readWhiteMins(a, bw, bh) : [], N = wm.length ? wm[0].v : null;
+      const sec = this.readTime(a, bw, bh), wm = sec == null ? this.readWhiteAny(a, bw, bh) : [], N = wm.length ? wm[0].v : null;
       if (sec != null && sec < 600) {
         S.lastSeen = now; S.fail = false;
         if (S.mode !== 'y') { S.mode = 'y'; S.h = []; S.lock = false; }
@@ -3399,14 +3399,14 @@ class Component extends DCLogic {
   }
   readFavSec(d, W, H) {
     const T = {"0":"111111101110001100011000110001100011101111111","2":"111110000100001000010001100110011001100011111","3":"111100001100001000110111000011000010001111110","4":"001110011101111011111101111011111110001100011","5":"111111000010000110001111000011000010001111110","6":"111111100010000100001111110001100011101111111","7":"111110001100011001110011000110011000110011000","8":"111111000110001110111111111011100011101111111","9":"111111001110001100111111100001000010001111111"};
-    const GW = 5, GH = 9, M = new Uint8Array(W * H), dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 200;
-    for (let Y = 0; Y < H; Y++) for (let X = 0; X < W; X++) { const i = (Y * W + X) * 4, r = d[i], g = d[i + 1], b = d[i + 2]; if (!(r > 170 && g > 140 && b < 160 && r - b > 50)) continue; let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (ok) M[Y * W + X] = 1; }
+    const big = W >= 50 && H >= 50, GW = 5, GH = 9, M = new Uint8Array(W * H), dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 200;
+    for (let Y = 0; Y < H; Y++) for (let X = 0; X < W; X++) { const i = (Y * W + X) * 4, r = d[i], g = d[i + 1], b = d[i + 2]; if (!(r > 170 && g > 140 && b < 160 && r - b > 50)) continue; let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (!ok && big) ok = dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2); if (ok) M[Y * W + X] = 1; }
     const rc = []; for (let Y = 0; Y < H; Y++) { let k = 0; for (let X = 0; X < W; X++) k += M[Y * W + X]; rc.push(k); }
     let best = null, s = -1, gap = 0;
-    for (let Y = 0; Y <= H; Y++) { const on = Y < H && rc[Y] > 0; if (on) { if (s < 0) s = Y; gap = 0; } else if (s >= 0) { if (++gap > 1 || Y >= H) { const e = Y - gap; if (!best || e - s > best[1] - best[0]) best = [s, e]; s = -1; gap = 0; } } }
+    for (let Y = 0; Y <= H; Y++) { const on = Y < H && rc[Y] > 0; if (on) { if (s < 0) s = Y; gap = 0; } else if (s >= 0) { if (++gap > (big ? 2 : 1) || Y >= H) { const e = Y - gap; if (!best || e - s > best[1] - best[0]) best = [s, e]; s = -1; gap = 0; } } }
     if (!best) return null; const y0 = best[0], y1 = best[1], bh = y1 - y0 + 1; if (bh < 7 || bh > 16 * (this._sc1080 || 1) + 1) return null;
     const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = y0; Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
-    const runs = []; s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
+    const runs = []; s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { const l = runs[runs.length - 1]; if (big && l && s - l[1] - 1 <= 1) l[1] = X - 1; else runs.push([s, X - 1]); s = -1; } }
     const gs = []; for (const [a, b] of runs) { let gy0 = y1, gy1 = y0, n = 0; for (let Y = y0; Y <= y1; Y++) for (let X = a; X <= b; X++) if (M[Y * W + X]) { n++; gy0 = Math.min(gy0, Y); gy1 = Math.max(gy1, Y); } const h = gy1 - gy0 + 1; if (n < 3 || h < bh * 0.8) continue; gs.push({ x0: a, x1: b, y0: gy0, y1: gy1, w: b - a + 1, h }); }
     const cl = []; let cur = []; for (const g of gs) { if (cur.length && g.x0 - cur[cur.length - 1].x1 > Math.max(5, bh * 0.75)) { cl.push(cur); cur = []; } cur.push(g); } if (cur.length) cl.push(cur);
     if (!cl.length) return null; const cx = W / 2; cl.sort((A, B) => Math.abs((A[0].x0 + A[A.length - 1].x1) / 2 - cx) - Math.abs((B[0].x0 + B[B.length - 1].x1) / 2 - cx));
@@ -3417,9 +3417,9 @@ class Component extends DCLogic {
     for (const g of G) {
       if (g.w <= Math.max(3, g.h * 0.42)) { str += '1'; continue; }
       if (g.w > g.h) return null;
-      let m = ''; for (let gy = 0; gy < GH; gy++) for (let gx = 0; gx < GW; gx++) { const xa = g.x0 + gx * g.w / GW, xb = g.x0 + (gx + 1) * g.w / GW, ya = g.y0 + gy * g.h / GH, yb = g.y0 + (gy + 1) * g.h / GH; let on = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xb); X++) if (M[Y * W + X]) on = 1; m += on; }
+      let m = ''; for (let gy = 0; gy < GH; gy++) for (let gx = 0; gx < GW; gx++) { const xa = g.x0 + gx * g.w / GW, xb = g.x0 + (gx + 1) * g.w / GW, ya = g.y0 + gy * g.h / GH, yb = g.y0 + (gy + 1) * g.h / GH; let on = 0, nn = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xb); X++) { nn++; if (M[Y * W + X]) on++; } m += big ? (on / nn >= 0.3 ? 1 : 0) : (on ? 1 : 0); }
       let bk = null, bd = 99; for (const k in T) { let dd = 0; for (let i = 0; i < 45; i++) if (m[i] !== T[k][i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
-      if (bd > 6) return null; str += bk;
+      if (bd > (big ? 11 : 6)) return null; str += bk;
     }
     if (str.length === 2 && str[0] === '0') return null;
     const v = Number(str); return v >= 1 && v <= 59 ? v : null;
@@ -3435,7 +3435,7 @@ class Component extends DCLogic {
     let sec = this.readTime(a, bw, bh, false), yel = 0; if (sec != null && sec >= 600) sec = null;
     if (sec == null) sec = this.readFavSec(a, bw, bh);
     for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 170 && g > 140 && b < 160 && r - b > 50) yel++; }
-    const wm = sec == null ? this.readWhiteMins(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
+    const wm = sec == null ? this.readWhiteAny(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
     const seen = sec != null || N != null || yel >= 6, cur = this._run[s.id], rem = cur && cur > now ? (cur - now) / 1000 : null;
     if (!D.boxAt) D.boxAt = now;
     if (seen) { if (!D.seenAt) D.seenAt = now; } else D.seenAt = 0;
@@ -3643,6 +3643,22 @@ class Component extends DCLogic {
   skillDur(s) { return Number(s.cd) || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
+  readWhiteAny(d, W, H) { if (W >= 50 && H >= 50 && W <= 120 && H <= 120) { const r = this.readWhiteBig(d, W, H); if (r.length) return r; } return this.readWhiteMins(d, W, H); }
+  readWhiteBig(d, W, H) {
+    const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' }; const dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 120;
+    const M = new Uint8Array(W * H), ya = Math.floor(H * 0.55), xb = Math.floor(W * 0.7);
+    for (let Y = ya; Y < H; Y++) for (let X = 0; X < xb; X++) { const i = (Y * W + X) * 4; if (!(d[i] + d[i + 1] + d[i + 2] > 450 && Math.min(d[i], d[i + 1], d[i + 2]) > 110)) continue; if (dk(X - 1, Y) || dk(X + 1, Y) || dk(X, Y - 1) || dk(X, Y + 1) || dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2)) M[Y * W + X] = 1; }
+    const h = Math.round(Math.min(W, H) * 0.26); let y1 = -1; for (let Y = H - 1; Y >= ya && y1 < 0; Y--) { let k = 0; for (let X = 0; X < xb; X++) k += M[Y * W + X]; if (k >= 3) y1 = Y; } if (y1 < 0) return []; const y0 = y1 - h + 1;
+    const cc = []; for (let X = 0; X < W; X++) { let k = 0; for (let Y = Math.max(0, y0); Y <= y1; Y++) k += M[Y * W + X]; cc.push(k); }
+    const runs = []; let s = -1; for (let X = 0; X <= W; X++) { const on = X < W && cc[X] > 0; if (on && s < 0) s = X; if (!on && s >= 0) { runs.push([s, X - 1]); s = -1; } }
+    const samp = (a, w, gw) => { let m = ''; for (let gy = 0; gy < 9; gy++) for (let gx = 0; gx < gw; gx++) { const xa = a + gx * w / gw, xe = a + (gx + 1) * w / gw, yA = y0 + gy * h / 9, yB = y0 + (gy + 1) * h / 9; let on = 0, nn = 0; for (let Y = Math.max(0, Math.floor(yA)); Y < Math.ceil(yB); Y++) for (let X = Math.floor(xa); X < Math.ceil(xe); X++) { nn++; on += M[Y * W + X]; } m += nn && on / nn >= 0.4 ? '1' : '0'; } return m; };
+    let str = '', x0 = -1;
+    for (const [a, b] of runs) { const w = b - a + 1; let n = 0; for (let Y = Math.max(0, y0); Y <= y1; Y++) for (let X = a; X <= b; X++) n += M[Y * W + X]; if (n < h) continue; let bk = null, bd = 0.2;
+      if (w / h >= 0.5) { const m = samp(a, w, 6); for (const k in G) { if (k === '1') continue; let dd = 0; for (let i = 0; i < 54; i++) if (m[i] !== G[k][i]) dd++; if (dd / 54 < bd) { bd = dd / 54; bk = k; } } }
+      if (w / h < 0.75) { const m = samp(a, w, 3); let dd = 0; for (let i = 0; i < 27; i++) if (m[i] !== G[1][i]) dd++; if (dd / 27 < bd) { bd = dd / 27; bk = '1'; } }
+      if (bk == null) return []; if (x0 < 0) x0 = a; str += bk; }
+    const v = Number(str); return str.length >= 1 && str.length <= 2 && v >= 1 && v <= 59 ? [{ x: x0, y: y0, v }] : [];
+  }
   readWhiteMins(d, W, H) {
     const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' };
     const blk = (X, Y) => { if (X < 0 || Y < 0 || X >= W || Y >= H) return false; const i = (Y * W + X) * 4; return d[i] + d[i + 1] + d[i + 2] < 90; };
@@ -3696,11 +3712,11 @@ class Component extends DCLogic {
     const H = Math.max(...info.map(g => g.h)), top = Math.min(...info.filter(g => g.h >= H * 0.75).map(g => g.y0));
     for (let i = 0; i < info.length - 1; i++) { const g = info[i], nx = info[i + 1];
       if (g.h < H * 0.75 && g.y1 <= top + H * 0.45 && nx.r[0] - g.r[1] <= 2) { nx.r = [g.r[0], nx.r[1]]; nx.y0 = Math.min(nx.y0, g.y0); nx.y1 = Math.max(nx.y1, g.y1); nx.n += g.n; nx.w = nx.r[1] - nx.r[0] + 1; nx.h = nx.y1 - nx.y0 + 1; info.splice(i, 1); i--; } }
-    let str = '';
+    const BIG = bw >= 50 && bh >= 50; let str = '';
     for (const g of info) {
-      if (g.h < H * 0.75) { str += ':'; continue; }
-      if (g.w <= Math.max(3, H * 0.34)) { str += '1'; continue; }
-      let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
+      if (g.h < H * 0.75) { if (BIG && (g.y1 < top + H * 0.2 || g.y0 > top + H * 0.95)) continue; str += ':'; continue; }
+      if (g.w <= Math.max(3, H * (BIG ? 0.4 : 0.34))) { str += '1'; continue; }
+      let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { if (BIG) { const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += M[Y * bw + X] || (gy > 0 && gy < 9 && (M[(Y - 1) * bw + X] || M[(Y + 1) * bw + X])) ? '1' : '0'; continue; } const X = Math.floor(g.r[0] + (gx + 0.5) * g.w / 6), Y = Math.floor(g.y0 + (gy + 0.5) * g.h / 10); m += isY((Y * bw + X) * 4) ? '1' : '0'; }
       const DIG = this._DIG || {}, YD = this.yDig(); let bk = null, bd = 1e9;
       for (const k in DIG) { let dd = 0; for (let i = 0; i < 60; i++) if (DIG[k][i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       for (const [k, t] of YD) { let dd = 0; for (let i = 0; i < 60; i++) if (t[i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
@@ -4318,7 +4334,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 25,
+      isAdmin: admin, appVer: 26,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
