@@ -3439,7 +3439,7 @@ class Component extends DCLogic {
     const c = this._jbc || (this._jbc = document.createElement('canvas')); c.width = bw; c.height = bh;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, x0, y0, bw, bh, 0, 0, bw, bh); const a = x.getImageData(0, 0, bw, bh).data;
     if (!this._DIG) this.readCd(new Uint8ClampedArray(4), 1, 1);
-    let sec = this.readTime(a, bw, bh, false), yel = 0; if (sec != null && sec >= 600) sec = null;
+    let sec = this.readTime(a, bw, bh, false), yel = 0; const secMax = s.preset === 'janusbuff' ? Math.max(130, (Number(s.cd) || 120) + 10) : 600; if (sec != null && sec >= secMax) sec = null;
     if (sec == null) sec = this.readFavSec(a, bw, bh);
     for (let i = 0; i < a.length; i += 4) { const r = a[i], g = a[i + 1], b = a[i + 2]; if (r > 170 && g > 140 && b < 160 && r - b > 50) yel++; }
     const wm = sec == null ? this.readWhiteAny(a, bw, bh) : [], N = wm.length && wm[0].v >= 1 && wm[0].v <= 30 ? wm[0].v : null;
@@ -3716,11 +3716,12 @@ class Component extends DCLogic {
     for (const k in S) { const R = S[k].split('|'), h = R.length, w = R[0].length; let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor((gx + 0.5) * w / 6), Y = Math.floor((gy + 0.5) * h / 10); m += R[Y][X]; } out.push([k, m]); }
     return (this._YD = out);
   }
-  readTime(a, bw, bh, allowSec) { this._allowSec = !!allowSec; const r = this.readTimeMode(a, bw, bh, 0), out = r != null ? r : this.readTimeMode(a, bw, bh, 1); this._allowSec = false; return out; }
+  readTime(a, bw, bh, allowSec) { this._allowSec = !!allowSec; let r = this.readTimeMode(a, bw, bh, 0); if (r == null) r = this.readTimeMode(a, bw, bh, 1); if (r == null && bw >= 50 && bh >= 50) r = this.readTimeMode(a, bw, bh, 2); const out = r; this._allowSec = false; return out; }
   readTimeMode(a, bw, bh, mode) {
     const M = new Uint8Array(bw * bh), dk = (X, Y) => X >= 0 && Y >= 0 && X < bw && Y < bh && a[(Y * bw + X) * 4] + a[(Y * bw + X) * 4 + 1] + a[(Y * bw + X) * 4 + 2] < 200;
     for (let Y = 0; Y < bh; Y++) for (let X = 0; X < bw; X++) { const i = (Y * bw + X) * 4;
       if (mode === 0) { if (a[i] > 200 && a[i + 1] > 180 && a[i + 2] < 90) M[Y * bw + X] = 1; continue; }
+      if (mode === 2) { if (a[i] > 165 && a[i + 1] > 140 && a[i + 2] < 140 && a[i] - a[i + 2] > 55 && a[i + 1] - a[i + 2] > 35) M[Y * bw + X] = 1; continue; }
       if (!(a[i] > 185 && a[i + 1] > 165 && a[i + 2] < 150 && a[i] - a[i + 2] > 60)) continue;
       let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (ok) M[Y * bw + X] = 1; }
     { const fr = []; for (let Y = 0; Y < bh; Y++) { let k = 0, n = 0; for (let X = Math.floor(bw * 0.15); X < Math.ceil(bw * 0.85); X++) { n++; if (dk(X, Y)) k++; } fr.push(k / n); }
@@ -4363,7 +4364,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 27,
+      isAdmin: admin, appVer: 28,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
