@@ -366,7 +366,7 @@ body{overflow-x:clip;}
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label><select value="{{ sndSel.buff.val }}" onChange="{{ sndSel.buff.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span><span style="align-self:center;font-size:12px;font-weight:600;color:oklch(0.42 0.12 255);">게임 설정: 퀵슬롯&amp;버프 시간표시 <b>중앙, 크게</b> · 표시방식 <b>분 + 초</b></span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label><select value="{{ sndSel.buff.val }}" onChange="{{ sndSel.buff.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
       </div>
@@ -3407,7 +3407,8 @@ class Component extends DCLogic {
   readFavSec(d, W, H) {
     const T = {"0":"111111101110001100011000110001100011101111111","2":"111110000100001000010001100110011001100011111","3":"111100001100001000110111000011000010001111110","4":"001110011101111011111101111011111110001100011","5":"111111000010000110001111000011000010001111110","6":"111111100010000100001111110001100011101111111","7":"111110001100011001110011000110011000110011000","8":"111111000110001110111111111011100011101111111","9":"111111001110001100111111100001000010001111111"};
     const big = W >= 50 && H >= 50, GW = 5, GH = 9, M = new Uint8Array(W * H), dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 200;
-    for (let Y = 0; Y < H; Y++) for (let X = 0; X < W; X++) { const i = (Y * W + X) * 4, r = d[i], g = d[i + 1], b = d[i + 2]; if (!(r > 170 && g > 140 && b < 160 && r - b > 50)) continue; let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (!ok && big) ok = dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2); if (ok) M[Y * W + X] = 1; }
+    const eg = big ? 5 : 2;
+    for (let Y = 0; Y < H; Y++) for (let X = eg; X < W - eg; X++) { const i = (Y * W + X) * 4, r = d[i], g = d[i + 1], b = d[i + 2]; if (!(r > 170 && g > 140 && b < 160 && r - b > 50)) continue; let ok = false; for (let dy = -1; dy <= 1 && !ok; dy++) for (let dx = -1; dx <= 1; dx++) if (dk(X + dx, Y + dy)) { ok = true; break; } if (!ok && big) ok = dk(X - 2, Y) || dk(X + 2, Y) || dk(X, Y - 2) || dk(X, Y + 2); if (ok) M[Y * W + X] = 1; }
     const rc = []; for (let Y = 0; Y < H; Y++) { let k = 0; for (let X = 0; X < W; X++) k += M[Y * W + X]; rc.push(k); }
     let best = null, s = -1, gap = 0;
     for (let Y = 0; Y <= H; Y++) { const on = Y < H && rc[Y] > 0; if (on) { if (s < 0) s = Y; gap = 0; } else if (s >= 0) { if (++gap > (big ? 2 : 1) || Y >= H) { const e = Y - gap; if (!best || e - s > best[1] - best[0]) best = [s, e]; s = -1; gap = 0; } } }
@@ -3426,7 +3427,7 @@ class Component extends DCLogic {
       if (g.w > g.h) return null;
       let m = ''; for (let gy = 0; gy < GH; gy++) for (let gx = 0; gx < GW; gx++) { const xa = g.x0 + gx * g.w / GW, xb = g.x0 + (gx + 1) * g.w / GW, ya = g.y0 + gy * g.h / GH, yb = g.y0 + (gy + 1) * g.h / GH; let on = 0, nn = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xb); X++) { nn++; if (M[Y * W + X]) on++; } m += big ? (on / nn >= 0.3 ? 1 : 0) : (on ? 1 : 0); }
       let bk = null, bd = 99; for (const k in T) { let dd = 0; for (let i = 0; i < 45; i++) if (m[i] !== T[k][i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
-      if (bd > (big ? 11 : 6)) return null; str += bk;
+      if (bd > (big ? 11 : 6)) return null; if (big && bk === '6' && m[25] === '0' && m[30] === '0') bk = '5'; str += bk;
     }
     if (str.length === 2 && str[0] === '0') return null;
     const v = Number(str); return v >= 1 && v <= 59 ? v : null;
@@ -3668,7 +3669,64 @@ class Component extends DCLogic {
   skillDur(s) { return Number(s.cd) || 0; }
   skillIcon(s) { const m = { janus120: 'qs-janus.png', janus80: 'qs-janus.png', janus70: 'qs-janus.png', janus60: 'qs-janus.png', erda60: 'qs-erda.png', yein67: 'qs-yein.png' }; return m[s.preset] || (s.name === '솔 야누스 : 새벽' ? 'qs-janus.png' : ''); }
   skillMode(s) { return 'cd'; }
-  readWhiteAny(d, W, H) { if (W >= 50 && H >= 50 && W <= 120 && H <= 120) { const r = this.readWhiteBig(d, W, H); if (r.length) return r; } return this.readWhiteMins(d, W, H); }
+  readWhiteAny(d, W, H) { if (W >= 50 && H >= 50 && W <= 120 && H <= 120) { const r = this.readWhiteVote(d, W, H); if (r.length) return r; } return this.readWhiteMins(d, W, H); }
+  readWhiteVote(d, W, H) {
+    const rs = [this.readWhiteBig(d, W, H), this.readWhiteBig2(d, W, H), this.readWhiteBig3(d, W, H)], vs = rs.map(r => r.length ? r[0].v : null), ok = vs.filter(v => v != null); if (!ok.length) return [];
+    const cnt = {}; const two = ok.filter(v => v >= 10);
+    if (two.length) { two.forEach(v => cnt[v] = (cnt[v] || 0) + 1); const ks = Object.keys(cnt).sort((p, q) => cnt[q] - cnt[p]); if (ks.length > 1 && cnt[ks[0]] === cnt[ks[1]]) return []; const v = Number(ks[0]); return [rs[vs.indexOf(v)][0]]; }
+    if (vs[0] == null || ok.length < 2 || ok.some(v => v !== vs[0])) return []; return [rs[0][0]];
+  }
+  readWhiteBig2(d, W, H) {
+    const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' };
+    const lum = (X, Y) => { const i = (Y * W + X) * 4; return d[i] + d[i + 1] + d[i + 2]; };
+    const dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && lum(X, Y) < 150;
+    const M = new Uint8Array(W * H), S = Math.min(W, H);
+    for (let Y = 1; Y < H - 1; Y++) for (let X = 1; X < W - 1; X++) { const i = (Y * W + X) * 4; if (!(d[i] + d[i + 1] + d[i + 2] > 450 && Math.min(d[i], d[i + 1], d[i + 2]) > 110)) continue; let ok = false; for (let r = 1; r <= 2 && !ok; r++) ok = dk(X - r, Y) || dk(X + r, Y) || dk(X, Y - r) || dk(X, Y + r); if (ok) M[Y * W + X] = 1; }
+    const seen = new Uint8Array(W * H), comps = [];
+    for (let p = 0; p < W * H; p++) { if (!M[p] || seen[p]) continue; const q = [p]; seen[p] = 1; let x0 = W, x1 = 0, y0 = H, y1 = 0;
+      for (let k = 0; k < q.length; k++) { const c = q[k], X = c % W, Y = (c - X) / W; if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = X + dx, ny = Y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const n = ny * W + nx; if (M[n] && !seen[n]) { seen[n] = 1; q.push(n); } } }
+      if (q.length >= 2) comps.push({ x0, x1, y0, y1, n: q.length }); }
+    for (let ch = true; ch;) { ch = false; for (let i = 0; i < comps.length && !ch; i++) for (let j = i + 1; j < comps.length; j++) { const A = comps[i], B = comps[j]; const ov = Math.min(A.x1, B.x1) - Math.max(A.x0, B.x0) + 1, gap = Math.max(A.y0, B.y0) - Math.min(A.y1, B.y1) - 1; const inX = (P, Q) => P.x0 >= Q.x0 - 1 && P.x1 <= Q.x1 + 1, hh = Math.max(A.y1, B.y1) - Math.min(A.y0, B.y0) + 1; if ((inX(A, B) || inX(B, A)) && ov >= 2 && gap <= 1 && hh <= S * 0.36 && Math.max(A.y1, B.y1) >= H * 0.55) { A.x0 = Math.min(A.x0, B.x0); A.x1 = Math.max(A.x1, B.x1); A.y0 = Math.min(A.y0, B.y0); A.y1 = Math.max(A.y1, B.y1); A.n += B.n; comps.splice(j, 1); ch = true; break; } } }
+    for (let i = comps.length - 1; i >= 0; i--) { const c = comps[i]; c.w = c.x1 - c.x0 + 1; c.h = c.y1 - c.y0 + 1; if (!(c.h >= S * 0.18 && c.h <= S * 0.4 && c.w <= c.h * 0.9 && c.y1 >= H * 0.55 && c.n >= c.h)) comps.splice(i, 1); }
+    if (!comps.length) return [];
+    comps.sort((a, b) => a.x0 - b.x0);
+    const groups = []; for (const c of comps) { const g = groups.find(g => { const l = g[g.length - 1]; return Math.abs(l.y1 - c.y1) <= 2 && Math.abs(l.h - c.h) <= 3 && c.x0 - l.x1 <= l.h * 0.5 && c.x0 > l.x1 - 1; }); if (g) g.push(c); else groups.push([c]); }
+    groups.sort((a, b) => b[0].y1 - a[0].y1 || a[0].x0 - b[0].x0);
+    const samp = (g, gw) => { let m = ''; for (let gy = 0; gy < 9; gy++) for (let gx = 0; gx < gw; gx++) { const xa = g.x0 + gx * g.w / gw, xe = g.x0 + (gx + 1) * g.w / gw, ya = g.y0 + gy * g.h / 9, yb = g.y0 + (gy + 1) * g.h / 9; let on = 0, nn = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xe); X++) { nn++; on += M[Y * W + X]; } m += nn && on / nn >= 0.4 ? '1' : '0'; } return m; };
+    for (const grp of groups) { if (grp.length > 2) continue; let str = '';
+      for (const g of grp) { let bk = null, bd = 1;
+        if (g.w / g.h < 0.42) { const m = samp(g, 3); let dd = 0; for (let i = 0; i < 27; i++) if (m[i] !== G[1][i]) dd++; bd = dd / 27; bk = '1'; }
+        else { const m = samp(g, 6); for (const k in G) { if (k === '1') continue; let dd = 0; for (let i = 0; i < 54; i++) if (m[i] !== G[k][i]) dd++; if (dd / 54 < bd) { bd = dd / 54; bk = k; } } }
+        if (bd > 0.25) { str = ''; break; } str += bk; }
+      const v = Number(str); if (str && v >= 1 && v <= 59 && !(str.length === 2 && str[0] === '0')) return [{ x: grp[0].x0, y: grp[0].y0, v }]; }
+    return [];
+  }
+  readWhiteBig3(d, W, H) {
+    const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' };
+    const lum = (X, Y) => { const i = (Y * W + X) * 4; return d[i] + d[i + 1] + d[i + 2]; };
+    const dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && lum(X, Y) < 150;
+    const M = new Uint8Array(W * H), S = Math.min(W, H);
+    for (let Y = 1; Y < H - 1; Y++) for (let X = 1; X < W - 1; X++) { const i = (Y * W + X) * 4; if (!(d[i] + d[i + 1] + d[i + 2] > 450 && Math.min(d[i], d[i + 1], d[i + 2]) > 110)) continue; let ok = false; for (let r = 1; r <= 2 && !ok; r++) ok = dk(X - r, Y) || dk(X + r, Y) || dk(X, Y - r) || dk(X, Y + r); if (ok) M[Y * W + X] = 1; }
+    const seen = new Uint8Array(W * H), comps = [];
+    for (let p = 0; p < W * H; p++) { if (!M[p] || seen[p]) continue; const q = [p]; seen[p] = 1; let x0 = W, x1 = 0, y0 = H, y1 = 0;
+      for (let k = 0; k < q.length; k++) { const c = q[k], X = c % W, Y = (c - X) / W; if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = X + dx, ny = Y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const n = ny * W + nx; if (M[n] && !seen[n]) { seen[n] = 1; q.push(n); } } }
+      if (q.length >= 2) comps.push({ x0, x1, y0, y1, n: q.length }); }
+    for (let i = comps.length - 1; i >= 0; i--) { const c = comps[i]; c.w = c.x1 - c.x0 + 1; c.h = c.y1 - c.y0 + 1; if (!(c.h >= S * 0.18 && c.h <= S * 0.4 && c.w <= c.h * 0.9 && c.y1 >= H * 0.55 && c.n >= c.h)) comps.splice(i, 1); }
+    if (!comps.length) return [];
+    comps.sort((a, b) => a.x0 - b.x0);
+    const groups = []; for (const c of comps) { const g = groups.find(g => { const l = g[g.length - 1]; return Math.abs(l.y1 - c.y1) <= 2 && Math.abs(l.h - c.h) <= 3 && c.x0 - l.x1 <= l.h * 0.5 && c.x0 > l.x1 - 1; }); if (g) g.push(c); else groups.push([c]); }
+    groups.sort((a, b) => b[0].y1 - a[0].y1 || a[0].x0 - b[0].x0);
+    const samp = (g, gw) => { let m = ''; for (let gy = 0; gy < 9; gy++) for (let gx = 0; gx < gw; gx++) { const xa = g.x0 + gx * g.w / gw, xe = g.x0 + (gx + 1) * g.w / gw, ya = g.y0 + gy * g.h / 9, yb = g.y0 + (gy + 1) * g.h / 9; let on = 0, nn = 0; for (let Y = Math.floor(ya); Y < Math.ceil(yb); Y++) for (let X = Math.floor(xa); X < Math.ceil(xe); X++) { nn++; on += M[Y * W + X]; } m += nn && on / nn >= 0.4 ? '1' : '0'; } return m; };
+    for (const grp of groups) { if (grp.length > 2) continue; let str = '';
+      for (const g of grp) { let bk = null, bd = 1;
+        if (g.w / g.h < 0.42) { const m = samp(g, 3); let dd = 0; for (let i = 0; i < 27; i++) if (m[i] !== G[1][i]) dd++; bd = dd / 27; bk = '1'; }
+        else { const m = samp(g, 6); for (const k in G) { if (k === '1') continue; let dd = 0; for (let i = 0; i < 54; i++) if (m[i] !== G[k][i]) dd++; if (dd / 54 < bd) { bd = dd / 54; bk = k; } } }
+        if (bd > 0.25) { str = ''; break; } str += bk; }
+      const v = Number(str); if (str && v >= 1 && v <= 59 && !(str.length === 2 && str[0] === '0')) return [{ x: grp[0].x0, y: grp[0].y0, v }]; }
+    return [];
+  }
   readWhiteBig(d, W, H) {
     const G = { 0: '011110100001100001100001100001100001100001100001011110', 1: '001111001001001001001001001', 2: '011110100001000001000001000010001100010000100000111111', 3: '011110100001000001000001001110000001000001100001011110', 4: '000010000110001010010010100010111101000010000010000010', 5: '111111100000100000111110000001000001000001100001011110', 6: '001110010000100000111110100001100001100001100001011110', 7: '111111000001000010000010000100000100001000001000010000', 8: '011110100001100001100001011110100001100001100001011110', 9: '011110100001100001100001100001011111000001000001011110' }; const dk = (X, Y) => X >= 0 && Y >= 0 && X < W && Y < H && d[(Y * W + X) * 4] + d[(Y * W + X) * 4 + 1] + d[(Y * W + X) * 4 + 2] < 120;
     const M = new Uint8Array(W * H), ya = Math.floor(H * 0.55), xb = Math.floor(W * 0.7);
@@ -3714,6 +3772,7 @@ class Component extends DCLogic {
     const S = { 3: '11110|00001|00001|00001|01110|00001|00001|00011|11110', 2: '11111|00001|00001|00001|00010|00110|01100|01000|11111', 7: '111111|000011|000010|000010|000100|000100|001000|001000|010000', 4: '000110|000110|001110|001010|010010|010010|111111|000010|000010', 9: '011110|100001|100001|100001|011111|000001|000001|000010|011100', 6: '011111|110000|100000|100000|111110|100001|100001|110011|011110' };
     const out = [];
     for (const k in S) { const R = S[k].split('|'), h = R.length, w = R[0].length; let m = ''; for (let gy = 0; gy < 10; gy++) for (let gx = 0; gx < 6; gx++) { const X = Math.floor((gx + 0.5) * w / 6), Y = Math.floor((gy + 0.5) * h / 10); m += R[Y][X]; } out.push([k, m]); }
+    out.push(['4', '100010100110000110001100001010011111011111000000010000000000']);
     return (this._YD = out);
   }
   readTime(a, bw, bh, allowSec) { this._allowSec = !!allowSec; let r = this.readTimeMode(a, bw, bh, 0); if (r == null) r = this.readTimeMode(a, bw, bh, 1); if (r == null && bw >= 50 && bh >= 50) r = this.readTimeMode(a, bw, bh, 2); const out = r; this._allowSec = false; return out; }
@@ -3727,6 +3786,7 @@ class Component extends DCLogic {
     { const fr = []; for (let Y = 0; Y < bh; Y++) { let k = 0, n = 0; for (let X = Math.floor(bw * 0.15); X < Math.ceil(bw * 0.85); X++) { n++; if (dk(X, Y)) k++; } fr.push(k / n); }
       let best = null, s0 = -1; for (let Y = 0; Y <= bh; Y++) { const on = Y < bh && fr[Y] >= 0.35; if (on && s0 < 0) s0 = Y; if (!on && s0 >= 0) { if (!best || Y - s0 > best[1] - best[0]) best = [s0, Y]; s0 = -1; } }
       if (best && best[1] - best[0] >= 8 && best[1] - best[0] <= 24 * (this._sc1080 || 1) + 1) for (let Y = 0; Y < bh; Y++) if (Y < best[0] - 1 || Y > best[1]) for (let X = 0; X < bw; X++) M[Y * bw + X] = 0; }
+    if (bw >= 50 && bh >= 50) for (let Y = 0; Y < bh; Y++) for (const X of [0, 1, 2, 3, 4, bw - 5, bw - 4, bw - 3, bw - 2, bw - 1]) M[Y * bw + X] = 0;
     const isY = i => M[i >> 2] === 1;
     const cols = []; for (let X = 0; X < bw; X++) { let k = 0; for (let y = 0; y < bh; y++) if (isY((y * bw + X) * 4)) k++; cols.push(k); }
     const runs = []; let s = -1;
@@ -3752,7 +3812,7 @@ class Component extends DCLogic {
       for (const [k, t] of YD) { let dd = 0; for (let i = 0; i < 60; i++) if (t[i] !== m[i]) dd++; if (dd < bd) { bd = dd; bk = k; } }
       if (bk == null || bd > 16) { str += '?'; continue; } str += bk;
     }
-    const mm = str.match(/^\?*(\d):([0-5]\d)\?*$/); if (mm) return Number(mm[1]) * 60 + Number(mm[2]);
+    const mm = str.match(/^[?:]*?(\d):([0-5]\d)\?*$/); if (mm) return Number(mm[1]) * 60 + Number(mm[2]);
     const ms = this._allowSec && str.replace(/^:+|:+$/g, '').match(/^([1-5]?\d)$/); return ms ? Number(ms[1]) : null;
   }
   readCd(a, bw, bh) {
@@ -4364,7 +4424,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 28,
+      isAdmin: admin, appVer: 29,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
