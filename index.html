@@ -1629,6 +1629,43 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     </sc-if>
     <sc-for list="{{ pairGroups }}" as="pg" hint-placeholder-count="2">
     <div data-imgsec="{{ pg.label }}" style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
+      <sc-if value="{{ pg.isKt }}" hint-placeholder-val="{{ false }}">
+      <section style="flex:1.3 1 500px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
+          <div style="height:52px;box-sizing:border-box;display:flex;align-items:center;padding:0 22px;background:#f7f7f5;border-bottom:1px solid #ececea;">
+            <span style="flex:1;min-width:0;font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ categoryLabel }}</span>
+          </div>
+        </sc-if>
+        <div style="min-height:44px;box-sizing:border-box;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:4px 18px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;">
+          <span style="font-size:17px;font-weight:800;color:oklch(0.36 0.17 255);margin-right:6px;">{{ pg.label }}</span>
+          <sc-for list="{{ pg.ktChips }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="padding:3px 12px;line-height:20px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;padding:8px 8px 8px 10px;font-size:14px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">
+          <span style="flex:1;min-width:0;padding-left:8px;">아이템</span>
+          <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4"><span style="width:58px;flex:none;text-align:center;">{{ td.label }}</span></sc-for>
+          <span style="width:68px;flex:none;text-align:center;">등락폭</span>
+        </div>
+        <sc-for list="{{ pg.ktRows }}" as="row" hint-placeholder-count="4">
+          <div style="padding:10px 8px 10px 10px;border-top:1px solid #f0f0ee;background:{{ row.bg }};">
+            <div style="display:flex;gap:4px;align-items:center;">
+              <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
+                <div style="position:relative;width:40px;height:40px;flex:none;">
+                <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
+                <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
+                <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
+                </div>
+                <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+              </div>
+              <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4"><span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span></sc-for>
+              <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;color:{{ row.deltaColor }};font-variant-numeric:tabular-nums;">{{ row.deltaText }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+      </sc-if>
+      <sc-if value="{{ pg.normal }}" hint-placeholder-val="{{ true }}">
       <section style="flex:1.3 1 500px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
           <div style="height:52px;box-sizing:border-box;display:flex;align-items:center;padding:0 22px;background:#f7f7f5;border-bottom:1px solid #ececea;">
@@ -1659,6 +1696,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           </div>
         </sc-for>
       </section>
+      </sc-if>
       <sc-if value="{{ pg.hasLine }}" hint-placeholder-val="{{ false }}">
       <section style="flex:1 1 340px;min-width:0;margin-top:{{ pg.lineTop }};background:#fff;border:2px solid oklch(0.48 0.17 255);border-radius:14px;padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 24px rgba(20,30,60,.08);">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1712,7 +1750,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </sc-if>
       </section>
       </sc-if>
-      <sc-if value="{{ pg.noLine }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ pg.noLineNormal }}" hint-placeholder-val="{{ true }}">
       <section style="flex:1 1 340px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <sc-if value="{{ pg.first }}" hint-placeholder-val="{{ false }}">
           <div style="height:52px;box-sizing:border-box;padding:0 22px;display:flex;align-items:center;background:#f7f7f5;border-bottom:1px solid #ececea;">
@@ -1962,6 +2000,7 @@ PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%
 ] };
 const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '미트라', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
 const REF = '드메아이템';
+const HIDDEN_TABS = ['깡통30%'];
 const MESO_SEED = {"points":[{"date":"2026-01-13","v":2085},{"date":"2026-01-20","v":2152},{"date":"2026-01-27","v":2068},{"date":"2026-02-03","v":2075},{"date":"2026-02-10","v":2099},{"date":"2026-02-14","v":2311},{"date":"2026-02-21","v":2309},{"date":"2026-02-28","v":2388},{"date":"2026-03-03","v":2441},{"date":"2026-03-06","v":2503},{"date":"2026-03-13","v":2497},{"date":"2026-03-20","v":2511},{"date":"2026-03-28","v":2531},{"date":"2026-04-03","v":2569},{"date":"2026-04-09","v":2559},{"date":"2026-04-18","v":2417},{"date":"2026-04-24","v":2402},{"date":"2026-05-01","v":2477},{"date":"2026-05-09","v":2425},{"date":"2026-05-15","v":2335},{"date":"2026-05-23","v":2337},{"date":"2026-05-29","v":2350},{"date":"2026-06-05","v":2440},{"date":"2026-06-12","v":2551},{"date":"2026-06-20","v":2471},{"date":"2026-06-26","v":2480},{"date":"2026-07-03","v":2756},{"date":"2026-07-10","v":2649},{"date":"2026-08-03","v":2202},{"date":"2026-08-07","v":2158},{"date":"2026-08-14","v":2139},{"date":"2026-08-21","v":2024},{"date":"2026-08-28","v":1987},{"date":"2026-09-06","v":2063},{"date":"2026-09-12","v":2271},{"date":"2026-09-18","v":2248},{"date":"2026-09-26","v":2269},{"date":"2026-09-27","v":2290},{"date":"2026-10-03","v":2370},{"date":"2026-10-10","v":2336},{"date":"2026-10-16","v":2250},{"date":"2026-10-24","v":2185}]};
 const JANUS_DUR = { janus120: 120, janus80: 80, janus70: 70, janus60: 60 };
 const RAMP = ['oklch(0.89 0.035 255)', 'oklch(0.78 0.075 255)', 'oklch(0.64 0.12 255)', 'oklch(0.48 0.17 255)'];
@@ -2423,9 +2462,10 @@ class Component extends DCLogic {
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
-      const moved = this.moveMitra(all);
+      const moved = this.moveMitra(all), movedK = this.moveKt(all);
       this.setState({ all, guides, remoteEmpty: false });
       if (moved && this.state.admin) this.queuePush(['칠흑장신구', '미트라']);
+      if (movedK && this.state.admin) this.queuePush(['깡통30%', '여명장신구', '보스장신구', '칠흑장신구']);
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
   }
@@ -2610,7 +2650,7 @@ class Component extends DCLogic {
   }
   loadAll() {
     const all = {}; TABS.forEach(t => { all[t] = this.loadOne(t); });
-    this.moveMitra(all);
+    this.moveMitra(all); this.moveKt(all);
     const ref = all[REF];
     TABS.forEach(t => {
       const x = all[t];
@@ -2620,6 +2660,27 @@ class Component extends DCLogic {
       }
     });
     return all;
+  }
+  moveKt(all) { const a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return a || b || c; }
+  moveKtTo(all, dest, NM) {
+    const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
+    const isY = it => NM.includes(it.name);
+    const mv = k.items.filter(isY);
+    if (mv.length) {
+      const kd = k.dates || [], yd = y.dates || [], ids = new Set(mv.map(it => it.id));
+      const moved = mv.map(it => ({ ...it, group: '노작 · ' + (it.group || '') + ' 30%', values: yd.map(d => { const i = kd.indexOf(d); return i >= 0 ? (it.values || [])[i] ?? '' : ''; }) }));
+      const kRem = (k.removed || []).map(r => ({ ...r, vals: Object.fromEntries(Object.entries(r.vals || {}).filter(([id]) => !ids.has(id))) }));
+      const yRem = (y.removed || []).slice(); (k.removed || []).forEach(r => { const v = Object.fromEntries(Object.entries(r.vals || {}).filter(([id]) => ids.has(id))); if (!Object.keys(v).length) return; const t = yRem.find(x => x.date === r.date); if (t) t.vals = { ...(t.vals || {}), ...v }; else yRem.push({ ...r, vals: v }); });
+      all[dest] = { ...y, items: [...moved, ...y.items], removed: yRem };
+      all['깡통30%'] = { ...k, items: k.items.filter(it => !isY(it)), removed: kRem };
+    }
+    const D = all[dest], SO = ['STR', 'DEX', 'INT', 'LUK'], isK = it => /^노작 · (STR|DEX|INT|LUK) 30%$/.test(it.group || '');
+    const kt = D.items.filter(isK), rest = D.items.filter(it => !isK(it));
+    const key = it => SO.indexOf(it.group.slice(5, 8)) * 100 + (NM.indexOf(it.name) < 0 ? 99 : NM.indexOf(it.name));
+    const sorted = kt.slice().sort((a, b) => key(a) - key(b)), next = [...sorted, ...rest];
+    const changed = next.some((it, i) => it !== D.items[i]);
+    if (changed) all[dest] = { ...D, items: next };
+    return !!mv.length || changed;
   }
   moveMitra(all) {
     const c = all['칠흑장신구']; if (!c || !c.items) return false;
@@ -4213,7 +4274,7 @@ class Component extends DCLogic {
     let dir = null;
     if (window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
     const back = this.state.tab; this._allBusy = true;
-    for (const t of TABS) { const d = this.state.all[t]; if (!d || !d.items || !d.items.some(it => !it.hidden)) continue;
+    for (const t of TABS) { if (HIDDEN_TABS.includes(t)) continue; const d = this.state.all[t]; if (!d || !d.items || !d.items.some(it => !it.hidden)) continue;
       this._allLabel = '저장 중 ' + (TABS.indexOf(t) + 1) + '/' + TABS.length;
       await new Promise(r => this.setState({ tab: t }, r)); await new Promise(r => setTimeout(r, 700));
       await this.saveImage(t, (d.dates || [])[(d.dates || []).length - 1] || '', null, null, { dir: dir || 'none' }); }
@@ -4293,7 +4354,7 @@ class Component extends DCLogic {
     const isPop = this.state.tab === '인구수';
     const isSunday = this.state.tab === '썬데이';
     const isMeso = this.state.tab === '메소';
-    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자') ? REF : this.state.tab;
+    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
     const data = all[tab] && { ...all[tab], items: all[tab].items.filter(it => !it.hidden) };
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
@@ -4512,7 +4573,7 @@ class Component extends DCLogic {
       syncMsg: this.state.syncMsg || '',
       syncNow: () => this.pushAll(),
       title: tab,
-      tabs: TABS.map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
+      tabs: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
       isEmpty: data.items.length === 0,
       server: this.props.server ?? '전서버',
       categoryLabel: data.categoryLabel ?? this.props.categoryLabel ?? '아이템드랍 1줄',
@@ -4521,12 +4582,24 @@ class Component extends DCLogic {
       prevDate: data.dates[n - 2] || '',
       rowGroups, chartGroups, line, pairMainRef: this.pairMainRef,
       saveImage: () => this.saveImage(tab, data.dates[n - 1] || ''), saveImageLabel: this._imgBusy && !this._allBusy ? '만드는 중…' : '이미지 저장', saveAll: () => this.saveAllImages(), saveAllLabel: this._allBusy ? (this._allLabel || '저장 중…') : '전체 이미지 저장',
-      pairGroups: rowGroups.map((rg, i) => {
+      pairGroups: (() => { const pgs = rowGroups.map((rg, i) => {
         const idx = selItem ? rg.rows.findIndex(r => r.id === selItem.id) : -1;
         const has = idx >= 0;
-        return { label: rg.label, rows: rg.rows, onRename: rg.onRename, cursor: rg.cursor, tip: rg.tip, first: i === 0, cgs: [chartGroups[i]], hasLine: has, noLine: !has,
+        return { label: rg.label, rows: rg.rows, onRename: rg.onRename, cursor: rg.cursor, tip: rg.tip, first: i === 0, cgs: [chartGroups[i]], hasLine: has, noLine: !has, normal: true, isKt: false, noLineNormal: !has,
           lineTop: has && !this.state.narrow && i === 0 ? '52px' : '0' };
-      }),
+      });
+        if (!['여명장신구', '보스장신구', '칠흑장신구'].includes(tab)) return pgs;
+        const KRE = /^노작 · (STR|DEX|INT|LUK) 30%$/, ks = pgs.filter(p => KRE.test(p.label)); if (!ks.length) return pgs;
+        const stats = ks.map(p => p.label.match(KRE)[1]), st = stats.includes(this.state.ktStat) ? this.state.ktStat : stats[0], sp = ks[stats.indexOf(st)];
+        const byId = new Map(data.items.map(it => [it.id, it])), curOf = r => num((byId.get(r.id) || {}).values ? byId.get(r.id).values[n - 1] : null);
+        const mx = Math.max(1, ...sp.rows.map(r => curOf(r) || 0));
+        const anyHas = ks.some(p => p.hasLine), fi = pgs.indexOf(ks[0]);
+        const kg = { label: '노작 30%', first: ks[0].first, normal: false, isKt: true, noLineNormal: !anyHas, cgs: sp.cgs, hasLine: anyHas, noLine: !anyHas, lineTop: anyHas && !this.state.narrow && ks[0].first ? '52px' : '0',
+          ktPrev: data.dates[n - 2] || '', ktCur: data.dates[n - 1] || '',
+          ktChips: stats.map(s => { const on = s === st; return { label: s, onClick: () => this.setState({ ktStat: s }), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }),
+          ktRows: sp.rows.map(r => { const c = curOf(r), L = r.vals.length; return { ...r, prevText: L > 1 ? r.vals[L - 2].text : '–', curText: L ? r.vals[L - 1].text : '–', barW: c === null ? '0%' : (c / mx * 100).toFixed(1) + '%' }; }) };
+        const out = pgs.filter(p => !ks.includes(p)); out.splice(fi, 0, kg); return out;
+      })(),
       showLine: false, showBars: true,
       clearSelect: () => this.setState({ selected: null }),
       tableDates: chartDates.map((d, i) => ({ label: d, weight: i === chartDates.length - 1 ? 800 : 600 })),
@@ -4537,10 +4610,10 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 37,
+      isAdmin: admin, appVer: 38,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
-      editSections: TABS.map(t => {
+      editSections: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => {
         const x = all[t];
         return {
           tab: t,

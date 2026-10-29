@@ -2,6 +2,7 @@
 // 1) 이번 주·지난주 유니온 랭킹을 비교해 유니온 레벨/전투력이 바뀐 계정 → 활동 (추가 호출 없음)
 // 2) 최근 8주 안에 활동했던 계정 중 랭킹 변화가 없는 계정만 본캐 접속/레벨/경험치, 아티팩트를 조회
 // 3) 8주 넘게 활동이 없던 휴면 계정은 랭킹이 바뀌지 않으면 조회하지 않음
+// FULL=1 이면 휴면·처음 보는 계정까지 전부 본캐 접속을 확인 (한 번씩 수동 실행)
 
 const BASE = 'https://open.api.nexon.com/maplestory/v1';
 const SB = process.env.SUPABASE_URL || 'https://qjldhyiwffeqhzmnppta.supabase.co';
@@ -11,6 +12,7 @@ const RPS = Number(process.env.RPS || 480);
 const CONC = Number(process.env.CONCURRENCY || 120);
 const KEEP_DAYS = Number(process.env.KEEP_DAYS || 56);
 const FORCE = process.env.FORCE === '1';
+const FULL = process.env.FULL === '1';
 const WORLDS = ['스카니아', '베라', '루나', '제니스', '크로아', '유니온', '엘리시움', '이노시스', '레드', '오로라', '아케인', '노바', '에오스', '핼리오스'];
 
 if (!NX || !SK) { console.error('NEXON_API_KEY / SUPABASE_SERVICE_KEY 가 필요해요'); process.exit(1); }
@@ -118,22 +120,23 @@ await pool(entries, async ([world, name, [ul, up]]) => {
   const pr = prv[world].get(name);
   let active = pr ? (pr[0] !== ul || pr[1] !== up) : prv[world].size > 0;
   if (active) { stats[world].active++; out.push({ ...(row || { world, name }), last_active: D }); return; }
-  if (!row || !row.last_active || row.last_active < CUTOFF) return;
+  if (!FULL && (!row || !row.last_active || row.last_active < CUTOFF)) return;
   checked++;
-  let ocid = row.ocid;
+  const base = row || { world, name };
+  let ocid = base.ocid;
   if (!ocid) { const j = await api('/id', { character_name: name }); ocid = j && j.ocid; }
   if (!ocid) return;
-  const snap = { ...row, ocid };
+  const snap = { ...base, ocid };
   const b = await api('/character/basic', { ocid, date: D });
   if (b) { snap.clevel = b.character_level ?? null; snap.cexp = b.character_exp ?? null; }
-  active = (b && String(b.access_flag) === 'true') || diff(snap, row, ['clevel', 'cexp']);
+  active = (b && String(b.access_flag) === 'true') || diff(snap, base, ['clevel', 'cexp']);
   if (!active) {
     const u = await api('/user/union', { ocid, date: D });
     if (u) { snap.alevel = u.union_artifact_level ?? null; snap.aexp = u.union_artifact_exp ?? null; snap.apoint = u.union_artifact_point ?? null; }
-    active = diff(snap, row, ['alevel', 'aexp', 'apoint']);
+    active = diff(snap, base, ['alevel', 'aexp', 'apoint']);
   }
   if (active) { stats[world].active++; snap.last_active = D; }
-  out.push(snap);
+  if (active || row) out.push(snap);
   if (checked % 20000 === 0) console.log(`접속 확인 ${checked.toLocaleString()}개 · 호출 ${calls.toLocaleString()} · ${mins()}분`);
 });
 console.log(`판정 완료 · 접속 확인 ${checked.toLocaleString()}개 · 호출 ${calls.toLocaleString()} · ${mins()}분`);
