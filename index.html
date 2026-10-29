@@ -1221,9 +1221,45 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     </div>
   </section>
 
+  <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+    <sc-for list="{{ statsDayChips }}" as="c" hint-placeholder-count="3">
+      <button onClick="{{ c.onClick }}" style="padding:6px 12px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ c.label }}</button>
+    </sc-for>
+    <select value="{{ statsDaySel }}" onChange="{{ onStatsDay }}" style="padding:6px 8px;border:1px solid #d6d6d2;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;">
+      <sc-for list="{{ statsDayOpts }}" as="o" hint-placeholder-count="0">
+        <option value="{{ o.value }}">{{ o.label }}</option>
+      </sc-for>
+    </select>
+    <span style="font-size:13px;color:#6b6d73;font-weight:600;">{{ statsDayLabel }}</span>
+  </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;align-items:start;">
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
-      <h2 style="margin:0;font-size:17px;font-weight:700;">많이 본 탭</h2>
+      <h2 style="margin:0;font-size:17px;font-weight:700;">많이 본 탭 <span style="font-size:13px;font-weight:600;color:#6b6d73;">하루</span></h2>
+      <sc-if value="{{ statsDayNoTabs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
+      <sc-for list="{{ statsDayTabs }}" as="s" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:10px;align-items:center;">
+          <span style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.label }}</span>
+          <div style="height:12px;background:#f0f0ee;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ s.w }};background:oklch(0.64 0.12 255);"></div></div>
+          <span style="font-size:13px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;">{{ s.n }}</span>
+        </div>
+      </sc-for>
+    </section>
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <h2 style="margin:0;font-size:17px;font-weight:700;">유입 경로 <span style="font-size:13px;font-weight:600;color:#6b6d73;">하루</span></h2>
+      <sc-if value="{{ statsDayNoRefs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
+      <sc-for list="{{ statsDayRefs }}" as="s" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:136px minmax(0,1fr) 44px;gap:10px;align-items:center;">
+          <span style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.label }}</span>
+          <div style="height:12px;background:#f0f0ee;border-radius:3px;overflow:hidden;"><div style="height:100%;width:{{ s.w }};background:oklch(0.64 0.12 255);"></div></div>
+          <span style="font-size:13px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;">{{ s.n }}</span>
+        </div>
+      </sc-for>
+    </section>
+  </div>
+  <h2 style="margin:8px 0 0;font-size:17px;font-weight:800;">최근 30일 누적</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px;align-items:start;">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+      <h2 style="margin:0;font-size:17px;font-weight:700;">많이 본 탭 <span style="font-size:13px;font-weight:600;color:#6b6d73;">30일</span></h2>
       <sc-if value="{{ statsNoTabs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
       <sc-for list="{{ statsTabs }}" as="s" hint-placeholder-count="5">
         <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:10px;align-items:center;">
@@ -1234,7 +1270,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </sc-for>
     </section>
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
-      <h2 style="margin:0;font-size:17px;font-weight:700;">유입 경로</h2>
+      <h2 style="margin:0;font-size:17px;font-weight:700;">유입 경로 <span style="font-size:13px;font-weight:600;color:#6b6d73;">30일</span></h2>
       <sc-if value="{{ statsNoRefs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#9a9ca1;">기록 없음</span></sc-if>
       <sc-for list="{{ statsRefs }}" as="s" hint-placeholder-count="5">
         <div style="display:grid;grid-template-columns:136px minmax(0,1fr) 44px;gap:10px;align-items:center;">
@@ -2383,12 +2419,13 @@ class Component extends DCLogic {
     const days = [];
     for (let i = 29; i >= 0; i--) { const d = new Date(t0.getTime() - i * 864e5); days.push({ key: dayKey(d), label: (d.getMonth() + 1) + '/' + d.getDate(), vids: new Set(), visits: 0 }); }
     const map = {}; days.forEach(d => { map[d.key] = d; });
-    const tabCount = {}, refCount = {};
+    const tabCount = {}, refCount = {}, tabDay = {}, refDay = {}, SD = this.state.statsDay || dayKey(t0);
     rows.forEach(r => {
-      const d = map[dayKey(r.created_at)]; if (!d) return;
+      const k0 = dayKey(r.created_at), d = map[k0]; if (!d) return;
       d.vids.add(r.vid);
-      if (r.kind === 'visit') { d.visits++; const k = r.ref || '직접 방문 · 북마크'; refCount[k] = (refCount[k] || 0) + 1; }
-      if (r.tab) tabCount[r.tab] = (tabCount[r.tab] || 0) + 1;
+      if (r.kind === 'visit') d.visits++;
+      const add = (T, R) => { if (r.kind === 'visit') { const k = r.ref || '직접 방문 · 북마크'; R[k] = (R[k] || 0) + 1; } if (r.tab) T[r.tab] = (T[r.tab] || 0) + 1; };
+      add(tabCount, refCount); if (k0 === SD) add(tabDay, refDay);
     });
     const uniq = arr => { const s = new Set(); arr.forEach(d => d.vids.forEach(v => s.add(v))); return s.size; };
     const visitsOf = arr => arr.reduce((a, d) => a + d.visits, 0);
@@ -2404,6 +2441,12 @@ class Component extends DCLogic {
       statsLabels: days.map((d, i) => ({ label: (29 - i) % 5 === 0 ? d.label : '' })),
       statsVisitBars: (() => { const mv = Math.max(1, ...days.map(d => d.visits)); return days.map((d, i) => ({ h: (d.visits / mv * 100).toFixed(1) + '%', n: d.visits || '', title: d.label + ' · 방문 ' + d.visits + '회 · 방문자 ' + d.vids.size + '명', color: i === 29 ? 'oklch(0.55 0.15 150)' : 'oklch(0.82 0.07 150)' })); })(),
       statsTabs: top(tabCount), statsRefs: top(refCount),
+      ...(() => { const ch = (label, key) => { const on = SD === key; return { label, onClick: () => this.setState({ statsDay: key }), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; };
+        const dl = days.find(d => d.key === SD);
+        return { statsDayChips: [ch('오늘', days[29].key), ch('어제', days[28].key)],
+          statsDayOpts: days.slice().reverse().map(d => ({ value: d.key, label: d.label })), statsDaySel: SD, onStatsDay: e => this.setState({ statsDay: e.target.value || days[29].key }),
+          statsDayLabel: (dl ? dl.label : '') + ' 하루',
+          statsDayTabs: top(tabDay), statsDayRefs: top(refDay), statsDayNoTabs: !Object.keys(tabDay).length, statsDayNoRefs: !Object.keys(refDay).length }; })(),
       statsNoTabs: !Object.keys(tabCount).length, statsNoRefs: !Object.keys(refCount).length,
       statsEmpty: !!this.state.statsAt && !rows.length && !err,
       statsSetup: err === 'setup', statsFail: err === 'fail',
@@ -2438,7 +2481,7 @@ class Component extends DCLogic {
     const sBase = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? '' : 'https://mapleauction.kr/';
     fetch(sBase + 'sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
     if (this.state.tab === '인구수') this.loadPop();
-    try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); this.logVisit('visit', this.state.tab); } } catch (e) {}
+    try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); let ar = null; try { ar = localStorage.getItem(KEY + ':area'); } catch (e) {} this.logVisit('visit', ar === '사냥' || (ar === '육성' && this.state.admin) ? ar : this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
   }
   iconKey(slotId) { return 'i_' + Array.from(new TextEncoder().encode(slotId)).map(b => b.toString(16).padStart(2, '0')).join('') + '.png'; }
@@ -4447,7 +4490,7 @@ class Component extends DCLogic {
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
           areas: AREAS.map(l => ({ label: l, beta: l === '사냥', soon: l === '육성' || l === '강화', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
-            onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); } })),
+            onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
         };
       })(),
       sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isSunday ? 700 : 500, border: isSunday ? 'oklch(0.48 0.17 255)' : 'transparent' },
@@ -4672,7 +4715,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 42,
+      isAdmin: admin, appVer: 43,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
