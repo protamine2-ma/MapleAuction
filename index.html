@@ -2661,7 +2661,13 @@ class Component extends DCLogic {
     });
     return all;
   }
-  moveKt(all) { const a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return a || b || c; }
+  addKt27(all) { let ch = false;
+    for (const t of ['여명장신구', '보스장신구']) { const y = all[t]; if (!y || !y.items || y.kt27 || y.items.some(it => / 27%$/.test(it.group || ''))) continue;
+      const src = y.items.filter(it => /^노작 · (STR|DEX|INT|LUK) 30%$/.test(it.group || '')); if (!src.length) continue;
+      const add = src.map(it => ({ ...it, id: it.id + '_27', group: it.group.replace(' 30%', ' 27%'), values: (y.dates || []).map(() => '') }));
+      all[t] = { ...y, kt27: true, items: [...add, ...y.items] }; ch = true; }
+    return ch; }
+  moveKt(all) { const z = this.addKt27(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return z || a || b || c; }
   moveKtTo(all, dest, NM) {
     const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
     const isY = it => NM.includes(it.name);
@@ -2674,9 +2680,9 @@ class Component extends DCLogic {
       all[dest] = { ...y, items: [...moved, ...y.items], removed: yRem };
       all['깡통30%'] = { ...k, items: k.items.filter(it => !isY(it)), removed: kRem };
     }
-    const D = all[dest], SO = ['STR', 'DEX', 'INT', 'LUK'], isK = it => /^노작 · (STR|DEX|INT|LUK) 30%$/.test(it.group || '');
+    const D = all[dest], SO = ['STR', 'DEX', 'INT', 'LUK'], isK = it => /^노작 · (STR|DEX|INT|LUK) (27|30)%$/.test(it.group || '');
     const kt = D.items.filter(isK), rest = D.items.filter(it => !isK(it));
-    const key = it => SO.indexOf(it.group.slice(5, 8)) * 100 + (NM.indexOf(it.name) < 0 ? 99 : NM.indexOf(it.name));
+    const key = it => (it.group.endsWith('27%') ? 0 : 1000) + SO.indexOf(it.group.slice(5, 8)) * 100 + (NM.indexOf(it.name) < 0 ? 99 : NM.indexOf(it.name));
     const sorted = kt.slice().sort((a, b) => key(a) - key(b)), next = [...sorted, ...rest];
     const changed = next.some((it, i) => it !== D.items[i]);
     if (changed) all[dest] = { ...D, items: next };
@@ -3360,7 +3366,7 @@ class Component extends DCLogic {
     const list = this.hunt().buffs || [], st = this._bst || {};
     list.forEach(b => { const S = st[b.id]; if (!S || !S.end) return; const bf = Math.max(0, Number(b.before) || 0);
       if (!S.alerted && now >= S.end - bf * 1000) { S.alerted = true; if (b.on !== false) this.huntAlert(this.buffName(b) + (bf ? ' ' + bf + '초 전' : ' 종료'), 'buff'); }
-      if (now >= S.end) { S.end = 0; S.pending = false; S.doneAt = now; } });
+      if (now >= S.end) { S.end = 0; S.pending = false; S.doneAt = now; S.lock = false; S.h = []; S.wm = null; S.mode = null; S.approx = false; } });
   }
   checkBuffBoxes(now) {
     const v = this._video; if (!v || !v.videoWidth) return;
@@ -3380,6 +3386,7 @@ class Component extends DCLogic {
         if (S.mode !== 'y') { S.mode = 'y'; S.h = []; S.lock = false; }
         const Hh = (S.h = (S.h || []).concat([[now, sec]]).slice(-3));
         const okSeq = n => { if (Hh.length < n) return false; const T = Hh.slice(-n); for (let i = 1; i < T.length; i++) { const el = (T[i][0] - T[i - 1][0]) / 1000, dn = T[i - 1][1] - T[i][1]; if (Math.abs(dn - el) > 1.5) return false; } return true; };
+        if (S.lock && (!S.end || S.end <= now)) { S.lock = false; S.h = [[now, sec]]; }
         if (S.lock) {
           const r = (S.end - now) / 1000;
           if (S.end > now && Math.abs(r - sec) > 5 && sec > r && okSeq(3)) { S.end = now + sec * 1000 + 500; S.alerted = false; }
@@ -3389,7 +3396,7 @@ class Component extends DCLogic {
         if (okSeq(2)) { S.lock = true; S.approx = false; S.end = now + sec * 1000 + 500; }
       } else if (N != null) {
         S.lastSeen = now; S.fail = false;
-        if (S.mode !== 'w') { S.mode = 'w'; S.wm = null; }
+        if (S.mode !== 'w') { S.mode = 'w'; S.wm = null; S.lock = false; }
         const fresh = () => { S.end = now + (N * 60 + 30) * 1000; S.approx = true; S.lock = false; S.alerted = false; };
         if (S.wm == null || !S.end || S.end < now) fresh();
         else if (N === S.wm - 1) { S.end = now + (N * 60 + 59) * 1000 + 500; S.approx = false; S.lock = true; }
@@ -4589,16 +4596,21 @@ class Component extends DCLogic {
           lineTop: has && !this.state.narrow && i === 0 ? '52px' : '0' };
       });
         if (!['여명장신구', '보스장신구', '칠흑장신구'].includes(tab)) return pgs;
-        const KRE = /^노작 · (STR|DEX|INT|LUK) 30%$/, ks = pgs.filter(p => KRE.test(p.label)); if (!ks.length) return pgs;
-        const stats = ks.map(p => p.label.match(KRE)[1]), st = stats.includes(this.state.ktStat) ? this.state.ktStat : stats[0], sp = ks[stats.indexOf(st)];
+        let out = pgs;
+        for (const pct of ['27', '30']) {
+        const KRE = new RegExp('^노작 · (STR|DEX|INT|LUK) ' + pct + '%$'), ks = out.filter(p => KRE.test(p.label)); if (!ks.length) continue;
+        const SK = pct === '30' ? 'ktStat' : 'ktStat' + pct;
+        const stats = ks.map(p => p.label.match(KRE)[1]), st = stats.includes(this.state[SK]) ? this.state[SK] : stats[0], sp = ks[stats.indexOf(st)];
         const byId = new Map(data.items.map(it => [it.id, it])), curOf = r => num((byId.get(r.id) || {}).values ? byId.get(r.id).values[n - 1] : null);
         const mx = Math.max(1, ...sp.rows.map(r => curOf(r) || 0));
-        const anyHas = ks.some(p => p.hasLine), fi = pgs.indexOf(ks[0]);
-        const kg = { label: '노작 30%', first: ks[0].first, normal: false, isKt: true, noLineNormal: !anyHas, cgs: sp.cgs, hasLine: anyHas, noLine: !anyHas, lineTop: anyHas && !this.state.narrow && ks[0].first ? '52px' : '0',
+        const anyHas = ks.some(p => p.hasLine), fi = out.indexOf(ks[0]);
+        const kg = { label: '노작 ' + pct + '%', first: ks[0].first, normal: false, isKt: true, noLineNormal: !anyHas, cgs: sp.cgs, hasLine: anyHas, noLine: !anyHas, lineTop: anyHas && !this.state.narrow && ks[0].first ? '52px' : '0',
           ktPrev: data.dates[n - 2] || '', ktCur: data.dates[n - 1] || '',
-          ktChips: stats.map(s => { const on = s === st; return { label: s, onClick: () => this.setState({ ktStat: s }), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }),
+          ktChips: stats.map(s => { const on = s === st; return { label: s, onClick: () => this.setState({ [SK]: s }), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }),
           ktRows: sp.rows.map(r => { const c = curOf(r), L = r.vals.length; return { ...r, prevText: L > 1 ? r.vals[L - 2].text : '–', curText: L ? r.vals[L - 1].text : '–', barW: c === null ? '0%' : (c / mx * 100).toFixed(1) + '%' }; }) };
-        const out = pgs.filter(p => !ks.includes(p)); out.splice(fi, 0, kg); return out;
+        out = out.filter(p => !ks.includes(p)); out.splice(fi, 0, kg);
+        }
+        return out;
       })(),
       showLine: false, showBars: true,
       clearSelect: () => this.setState({ selected: null }),
@@ -4610,7 +4622,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 38,
+      isAdmin: admin, appVer: 39,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => {
