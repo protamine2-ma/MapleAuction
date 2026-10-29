@@ -1,0 +1,30 @@
+name: specialcore
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: '직업당 확인할 활성 유저 수'
+        default: '300'
+      only:
+        description: '특정 직업만 (쉼표로 구분, 비우면 전 직업)'
+        default: ''
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          node scripts/alljobs.mjs
+        env:
+          NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+          COUNT: ${{ inputs.count }}
+          ONLY: ${{ inputs.only }}
+          SCRIPTS: specialcore
