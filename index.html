@@ -2481,7 +2481,7 @@ class Component extends DCLogic {
       const moved = this.moveMitra(all), movedK = this.moveKt(all);
       this.setState({ all, guides, remoteEmpty: false });
       if (moved && this.state.admin) this.queuePush(['칠흑장신구', '미트라']);
-      if (movedK && this.state.admin) this.queuePush(['깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '캐시아이템']);
+      if (movedK && this.state.admin) this.queuePush(['깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '캐시아이템', '보조무기']);
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
   }
@@ -2708,7 +2708,10 @@ class Component extends DCLogic {
     const t = y.items.filter(isT), c = y.items.filter(isC), at = y.items.findIndex(it => isT(it) || isC(it));
     const items = y.items.filter(it => !isT(it) && !isC(it)); if (at >= 0) items.splice(at, 0, ...c, ...t);
     all['캐시아이템'] = { ...y, codi1: true, items }; return true; }
-  moveKt(all) { const cf = this.codiFirst(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return cf || e || s || f2 || z || a || b || c; }
+  bjSwap(all) { const y = all['보조무기']; if (!y || !y.items || y.bjSw) return false;
+    const isB = it => it.group === '쌍레 5줄 · 방무 포함', b = y.items.filter(isB); if (!b.length) return false;
+    all['보조무기'] = { ...y, bjSw: true, items: [...b, ...y.items.filter(it => !isB(it))] }; return true; }
+  moveKt(all) { const bj = this.bjSwap(all), cf = this.codiFirst(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return bj || cf || e || s || f2 || z || a || b || c; }
   moveKtTo(all, dest, NM) {
     const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
     const isY = it => NM.includes(it.name);
@@ -4669,7 +4672,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 40,
+      isAdmin: admin, appVer: 41,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
