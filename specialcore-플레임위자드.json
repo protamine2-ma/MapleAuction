@@ -1,0 +1,36 @@
+{
+  "job": "플레임위자드",
+  "date": "2026-10-28",
+  "sample": 300,
+  "none": 6,
+  "items": [
+    {
+      "name": "일격필살 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBND",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 일격필살 I을 획득한다.",
+      "count": 150,
+      "pct": 50
+    },
+    {
+      "name": "룬의 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMH",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 룬의 경험 I을 획득한다.",
+      "count": 134,
+      "pct": 44.7
+    },
+    {
+      "name": "극복하는 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNB",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 극복하는 경험을 획득한다.",
+      "count": 7,
+      "pct": 2.3
+    },
+    {
+      "name": "자동회복",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJAME",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 자동회복을 획득한다.",
+      "count": 3,
+      "pct": 1
+    }
+  ]
+}
