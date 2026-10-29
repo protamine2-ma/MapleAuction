@@ -1,0 +1,64 @@
+{
+  "job": "보우마스터",
+  "date": "2026-10-28",
+  "sample": 300,
+  "none": 2,
+  "items": [
+    {
+      "name": "룬의 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMH",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 룬의 경험 I을 획득한다.",
+      "count": 153,
+      "pct": 51
+    },
+    {
+      "name": "보스 슬레이어 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMI",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 보스 슬레이어 I을 획득한다.",
+      "count": 57,
+      "pct": 19
+    },
+    {
+      "name": "일격필살 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBND",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 일격필살 I을 획득한다.",
+      "count": 49,
+      "pct": 16.3
+    },
+    {
+      "name": "치명적인 일격 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMD",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 치명적인 일격 I을 획득한다.",
+      "count": 18,
+      "pct": 6
+    },
+    {
+      "name": "한놈만 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNH",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 한놈만 I을 획득한다.",
+      "count": 13,
+      "pct": 4.3
+    },
+    {
+      "name": "극복하는 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNB",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 극복하는 경험을 획득한다.",
+      "count": 6,
+      "pct": 2
+    },
+    {
+      "name": "보스 슬레이어 II",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNE",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 보스 슬레이어 II를 획득한다.",
+      "count": 1,
+      "pct": 0.3
+    },
+    {
+      "name": "자동회복",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJAME",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 자동회복을 획득한다.",
+      "count": 1,
+      "pct": 0.3
+    }
+  ]
+}
