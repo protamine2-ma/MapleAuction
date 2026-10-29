@@ -2897,10 +2897,12 @@ class Component extends DCLogic {
   }
   checkBoost(now) {
     const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
-    const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768), gs = this.gameSpan(v, W, H, now);
-    const sw = Math.min(gs.w, Math.round(260 * us)), sx = Math.max(0, Math.round(gs.x + gs.w / 2 - sw / 2)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
+    const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768);
+    const sw = Math.min(W, Math.round(260 * us)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
     const ow = Math.round(sw / us), oh = Math.round(sh / us);
-    const c = this._boostC || (this._boostC = document.createElement('canvas')); c.width = ow; c.height = oh;
+    const cens = [Math.round(H * 2 / 3), Math.round(H * 8 / 9)].filter((x, i, A) => A.findIndex(y => Math.abs(y - x) < 20) === i);
+    const scan = (cx) => { const sx = Math.max(0, Math.min(W - sw, Math.round(cx - sw / 2)));
+    const c = document.createElement('canvas'); c.width = ow; c.height = oh;
     const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(v, sx, sy, sw, sh, 0, 0, ow, oh);
     const img = ctx.getImageData(0, 0, ow, oh), d = img.data, dark = new Uint8Array(ow * oh);
     for (let i = 0, j = 0; i < d.length; i += 4, j++) if (Math.max(d[i], d[i + 1], d[i + 2]) < 50) dark[j] = 1;
@@ -2919,7 +2921,13 @@ class Component extends DCLogic {
     const tall = comps.filter(o => o.ch >= 16);
     if (tall.length) { const ys = tall.map(o => (o.y0 + o.y1) / 2).sort((a, b) => a - b), my = ys[ys.length >> 1], hh = Math.max(...tall.map(o => o.ch)) / 2 + 2;
       for (const o of comps) { if (o.y0 < my - hh || o.y1 > my + hh) continue; for (let t = 0; t < o.pts.length; t++) { const i = o.pts[t] * 4; px++; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } } }
-    const B = this._boost || (this._boost = { streak: 0, gone: 0 }), min = (Number(h.boostMin) === 120 ? 50 : Number(h.boostMin)) || 50, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
+    return { px, img }; };
+    const BB = this._boost || (this._boost = { streak: 0, gone: 0 }); let best = null, bi = 0;
+    cens.forEach(cx => { const r = scan(cx); if (!best || r.px > best.px || (r.px === best.px && cx === BB.cx)) { best = r; bi = cx; } });
+    if (best.px === 0 && BB.cx != null) { const k = cens.findIndex(x => Math.abs(x - BB.cx) < 20); if (k >= 0) { bi = cens[k]; best = scan(bi); } }
+    if (best.px > 0) BB.cx = bi;
+    const px = best.px, img = best.img;
+    const B = BB, min = (Number(h.boostMin) === 120 ? 50 : Number(h.boostMin)) || 50, dur = (Number(h.boostSec) || 100) * 1000, seen = px >= min;
     B.px = px; B.gone = seen ? 0 : B.gone + 1; B.streak = seen ? B.streak + 1 : B.gone >= 2 ? 0 : B.streak;
     if (seen) { if (!B.seenAt) B.seenAt = now; } else if (B.gone >= 2) B.seenAt = 0;
     if (h.boostOn && !h.paused) {
@@ -4494,7 +4502,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 34,
+      isAdmin: admin, appVer: 35,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
