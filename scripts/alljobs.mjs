@@ -5,6 +5,7 @@ const BASE = 'https://open.api.nexon.com/maplestory/v1';
 const NX = process.env.NEXON_API_KEY;
 const COUNT = process.env.COUNT || '1000';
 const ONLY = (process.env.ONLY || '').split(',').map(s => s.trim()).filter(Boolean);
+const SCRIPTS = (process.env.SCRIPTS || 'petbuff,linkskill,hyperpassive').split(',').map(s => s.trim()).filter(Boolean);
 if (!NX) { console.error('NEXON_API_KEY 가 필요해요'); process.exit(1); }
 
 const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
@@ -40,8 +41,8 @@ for (const [group, jobs] of JG) for (const job of jobs) {
   if (!cls) { console.log(`✗ ${job}: 랭킹 직업명을 찾지 못했어요`); fails.push(job); continue; }
   console.log(`\n===== ${job} (${cls}) =====`);
   const env = { JOB: job, CLASS: cls, COUNT };
-  const codes = await Promise.all(['scripts/petbuff.mjs', 'scripts/linkskill.mjs', 'scripts/hyperpassive.mjs'].map(f => run(f, env)));
+  const codes = await Promise.all(SCRIPTS.map(f => run(`scripts/${f}.mjs`, env)));
   if (codes.some(c => c)) fails.push(job);
-  try { execSync(`git add petbuff-*.json linkskill-*.json hyperpassive-*.json && (git commit -m "전 직업 집계: ${job}" || true) && git push`, { stdio: 'inherit', shell: '/bin/bash' }); } catch (e) { console.log('커밋 실패', e.message); }
+  try { execSync(`git add ${SCRIPTS.map(f => f + '-*.json').join(' ')} && (git commit -m "전 직업 집계: ${job}" || true) && git push`, { stdio: 'inherit', shell: '/bin/bash' }); } catch (e) { console.log('커밋 실패', e.message); }
 }
 console.log(fails.length ? `\n실패한 직업: ${fails.join(', ')}` : '\n전 직업 완료');

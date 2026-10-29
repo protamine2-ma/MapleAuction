@@ -701,8 +701,38 @@ body{overflow-x:clip;}
     </div>
     <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">보약</button>
     <button onClick="{{ growTabs.2.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.2.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.2.weight }};color:{{ growTabs.2.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">환산별템세팅</button>
+    <sc-if value="{{ growAdminTab }}" hint-placeholder-val="{{ false }}"><button onClick="{{ growTabs.3.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.3.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.3.weight }};color:{{ growTabs.3.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">관리자 정보</button></sc-if>
   </div>
 </nav>
+<sc-if value="{{ adminInfo }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1320px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <span style="padding:7px 16px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:14px;font-weight:700;">특수코어</span>
+    <span style="font-size:13px;color:#9a9ca1;">직업별 많이 쓰는 특수코어 · 직업당 활성 유저 300명 기준 (specialcore 집계)</span>
+  </div>
+  <sc-for list="{{ spcGroups }}" as="gr" hint-placeholder-count="3">
+    <section style="display:flex;flex-direction:column;gap:10px;">
+      <span style="font-size:15px;font-weight:800;color:oklch(0.3 0.09 255);">{{ gr.name }}</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:10px;">
+        <sc-for list="{{ gr.jobs }}" as="j" hint-placeholder-count="3">
+          <div style="background:#fff;border:1px solid #e3e3e0;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;"><span style="font-size:15px;font-weight:800;color:#2a2b2f;">{{ j.job }}</span><span style="font-size:11px;color:#9a9ca1;white-space:nowrap;">{{ j.note }}</span></div>
+            <sc-for list="{{ j.rows }}" as="p" hint-placeholder-count="3">
+              <div title="{{ p.tip }}" style="display:grid;grid-template-columns:16px 24px minmax(0,1fr) auto;align-items:center;gap:8px;">
+                <span style="font-size:13px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
+                <span style="width:24px;height:24px;background-image:{{ p.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+                <span style="font-size:14px;font-weight:600;color:#2a2b2f;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.name }}</span>
+                <span style="font-size:13px;font-weight:700;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ p.pctText }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ j.empty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#b0b2b7;">집계 없음</span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</sc-if>
 <sc-if value="{{ noGuide }}" hint-placeholder-val="{{ true }}">
 <div data-m="wrap" style="max-width:760px;margin:0 auto;padding:80px 28px 96px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
   <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">{{ growTitle }}</h1>
@@ -2494,7 +2524,7 @@ class Component extends DCLogic {
     this._pb[key] = null; job = key;
     const f = kind + '-' + encodeURIComponent(key.slice(kind.length + 1)) + '.json?t=' + Date.now();
     const get = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-    get(f).then(j => j && (j.items || j.boss) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && (j.items || j.boss)) { this._pb[job] = j; this.forceUpdate(); } });
+    get(f).then(j => j && (j.items || j.boss) ? j : get(f.split('?')[0])).then(j => j && (j.items || j.boss) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && (j.items || j.boss)) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
   tipOf(key, o) {
@@ -4279,7 +4309,7 @@ class Component extends DCLogic {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(() => {
-            const GT = ['직업가이드', '보약', '환산별템세팅'];
+            const GT = ['직업가이드', '보약', '환산별템세팅', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
             if (!GT.includes(g)) g = GT[0];
             const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
@@ -4287,8 +4317,11 @@ class Component extends DCLogic {
               ['영웅', ['아란', '에반', '루미너스', '메르세데스', '팬텀', '은월']], ['노바', ['카이저', '카인', '카데나', '엔젤릭버스터']], ['레프', ['아델', '일리움', '칼리', '아크']], ['아니마', ['라라', '호영', '렌']], ['기타', ['제로', '키네시스', '레테']]];
             let job = this.state.job || (() => { try { return localStorage.getItem(KEY + ':job'); } catch (e) { return null; } })();
             const isGuide = g === '직업가이드';
-            const gv = isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: true };
-            return { ...gv, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
+            const isAI = g === '관리자 정보';
+            const gv = isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI };
+            const spcGroups = isAI ? [{ name: '전체 직업 (이름순)', jobs: JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')) }].map(({ name, jobs }) => ({ name, jobs: jobs.map(jb => { const sc = this.loadPetBuff(jb, 'specialcore'), rows = sc && sc.items ? sc.items.filter(x => x.pct >= 3).slice(0, 5).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', tip: x.name + ' · ' + x.count + '명' })) : [];
+              return { job: jb, note: sc ? (sc.date || '') + ' · ' + sc.sample + '명' : '', rows, empty: !rows.length }; }) })) : [];
+            return { ...gv, adminInfo: isAI, growAdminTab: !!this.state.admin, spcGroups, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
               growTitle: isGuide && job ? job : g, growSub: isGuide && !job ? '직업가이드에 마우스를 올려 직업을 선택하세요.' : '준비 중이에요.',
               jobGroups: (() => { const CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', M = {};
                 JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')).forEach(n => { const c = n.charCodeAt(0) - 0xAC00; const k = c >= 0 && c < 11172 ? CH[Math.floor(c / 588)] : n[0]; (M[k] = M[k] || []).push(n); });
@@ -4504,7 +4537,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 36,
+      isAdmin: admin, appVer: 37,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
