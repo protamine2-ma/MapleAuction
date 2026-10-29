@@ -2884,10 +2884,21 @@ class Component extends DCLogic {
     }
     return pick && pick.w > 20 && pick.h > 12 ? { x: pick.x, y: pick.y, w: pick.w, h: pick.h } : null;
   }
+  gameSpan(v, W, H, now) {
+    const G = this._gspan; if (G && G.W === W && G.H === H && now - G.at < 3000) return G;
+    const sw = 320, sh = Math.max(40, Math.round(320 * H / W)), c = this._gsC || (this._gsC = document.createElement('canvas')); c.width = sw; c.height = sh;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, 0, 0, W, H, 0, 0, sw, sh); const d = x.getImageData(0, 0, sw, sh).data;
+    const y0 = Math.round(sh * 0.1), on = [];
+    for (let X = 0; X < sw; X++) { let mn = 999, mx = -1; for (let y = y0; y < sh; y++) { const i = (y * sw + X) * 4, l = d[i] + d[i + 1] + d[i + 2]; if (l < mn) mn = l; if (l > mx) mx = l; } on.push(mx - mn > 30); }
+    let a = on.indexOf(true), b = on.lastIndexOf(true);
+    const R = { W, H, at: now, x: 0, w: W };
+    if (a >= 0 && b - a + 1 > sw * 0.3) { R.x = Math.round(a * W / sw); R.w = Math.round((b - a + 1) * W / sw); }
+    return (this._gspan = R);
+  }
   checkBoost(now) {
     const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
-    const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768);
-    const sw = Math.min(W, Math.round(260 * us)), sx = Math.max(0, Math.round(W / 2 - sw / 2)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
+    const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768), gs = this.gameSpan(v, W, H, now);
+    const sw = Math.min(gs.w, Math.round(260 * us)), sx = Math.max(0, Math.round(gs.x + gs.w / 2 - sw / 2)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
     const ow = Math.round(sw / us), oh = Math.round(sh / us);
     const c = this._boostC || (this._boostC = document.createElement('canvas')); c.width = ow; c.height = oh;
     const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(v, sx, sy, sw, sh, 0, 0, ow, oh);
@@ -4483,7 +4494,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 33,
+      isAdmin: admin, appVer: 34,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
