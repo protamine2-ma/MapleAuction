@@ -1313,6 +1313,24 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 
 <sc-if value="{{ isMeso }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div data-m="hdr" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px;align-items:start;">
+    <div data-m="hide" style="min-width:0;display:flex;justify-content:flex-start;">
+      <sc-if value="{{ aucNoteShow }}" hint-placeholder-val="{{ false }}">
+        <section data-noimg="1" style="width:100%;max-width:360px;box-sizing:border-box;background:oklch(0.97 0.02 255);border:1px solid oklch(0.88 0.04 255);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <strong style="font-size:15px;color:oklch(0.4 0.15 255);">공지사항</strong>
+            <span style="font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ aucNoteAt }}</span>
+            <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#6b6d73;">{{ aucNoteMsg }}</span></sc-if>
+          </div>
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+            <textarea value="{{ aucNote }}" onChange="{{ onAucNote }}" placeholder="옥션 방문자에게 보여줄 공지를 적어주세요. 비워두면 안 보여요." rows="4" style="box-sizing:border-box;width:100%;padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-family:inherit;font-size:14px;line-height:1.5;resize:vertical;background:#fff;"></textarea>
+          </sc-if>
+          <sc-if value="{{ aucNoteView }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14.5px;font-weight:700;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ aucNote }}</div>
+          </sc-if>
+        </section>
+      </sc-if>
+    </div>
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
     <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
     <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
@@ -1322,6 +1340,8 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <button onClick="{{ saveAll }}" title="모든 옥션 탭 이미지를 한 번에 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveAllLabel }}</button>
       </div>
     </sc-if>
+  </div>
+    <div data-m="hide"></div>
   </div>
 
   <sc-if value="{{ mesoNone }}" hint-placeholder-val="{{ false }}">
@@ -1567,7 +1587,23 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <sc-if value="{{ isData }}" hint-placeholder-val="{{ true }}">
 <div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:28px;">
   <header data-m="dhdr" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;">
-    <div data-m="hide"></div>
+    <div data-m="hide" style="min-width:0;display:flex;justify-content:flex-start;">
+      <sc-if value="{{ aucNoteShow }}" hint-placeholder-val="{{ false }}">
+        <section data-noimg="1" style="width:100%;max-width:360px;box-sizing:border-box;background:oklch(0.97 0.02 255);border:1px solid oklch(0.88 0.04 255);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <strong style="font-size:15px;color:oklch(0.4 0.15 255);">공지사항</strong>
+            <span style="font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ aucNoteAt }}</span>
+            <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#6b6d73;">{{ aucNoteMsg }}</span></sc-if>
+          </div>
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+            <textarea value="{{ aucNote }}" onChange="{{ onAucNote }}" placeholder="옥션 방문자에게 보여줄 공지를 적어주세요. 비워두면 안 보여요." rows="4" style="box-sizing:border-box;width:100%;padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-family:inherit;font-size:14px;line-height:1.5;resize:vertical;background:#fff;"></textarea>
+          </sc-if>
+          <sc-if value="{{ aucNoteView }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14.5px;font-weight:700;line-height:1.6;color:#3a3b3f;white-space:pre-wrap;text-wrap:pretty;text-align:center;">{{ aucNote }}</div>
+          </sc-if>
+        </section>
+      </sc-if>
+    </div>
     <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
     <div data-m="dmeta" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #e3e3e0;font-size:14px;font-weight:600;">{{ server }}</span>
@@ -2519,6 +2555,7 @@ class Component extends DCLogic {
       rows.forEach(row => { if (TABS.includes(row.tab) && row.data && row.data.dates) all[row.tab] = row.data; });
       const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
+      const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
       const moved = this.moveMitra(all), movedK = this.moveKt(all);
@@ -2593,16 +2630,17 @@ class Component extends DCLogic {
     }
     return g;
   }
-  saveHuntNote(text) {
-    this._hnDirty = true; this.setState({ huntNote: text, huntNoteMsg: '저장 중…' });
-    clearTimeout(this._hnT);
-    this._hnT = setTimeout(async () => {
-      const token = await this.ensureToken(); if (!token) { this.setState({ huntNoteMsg: '로그인이 만료됐어요.' }); return; }
+  saveHuntNote(text, kind) {
+    const A = kind === 'auc', K = A ? 'aucNote' : 'huntNote', M = K + 'Msg', T = A ? '_anT' : '_hnT';
+    this[A ? '_anDirty' : '_hnDirty'] = true; this.setState({ [K]: text, [M]: '저장 중…' });
+    clearTimeout(this[T]);
+    this[T] = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ [M]: '로그인이 만료됐어요.' }); return; }
       try {
-        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'huntnote', data: { text, at: new Date().toISOString() }, updated_at: new Date().toISOString() }]) });
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: A ? 'aucnote' : 'huntnote', data: { text, at: new Date().toISOString() }, updated_at: new Date().toISOString() }]) });
         if (!r.ok) throw new Error();
-        this.setState({ huntNoteAtIso: new Date().toISOString(), huntNoteMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
-      } catch (e) { this.setState({ huntNoteMsg: '저장 실패 — 다시 시도해 주세요.' }); }
+        this.setState({ [K + 'AtIso']: new Date().toISOString(), [M]: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
+      } catch (e) { this.setState({ [M]: '저장 실패 — 다시 시도해 주세요.' }); }
     }, 900);
   }
   saveGuide(job, g) {
@@ -4714,8 +4752,9 @@ class Component extends DCLogic {
       huntNoteShow: !!admin || !!(this.state.huntNote || '').trim(), huntNoteView: !admin && !!(this.state.huntNote || '').trim(),
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
-      huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 43,
+      huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
+      aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
+      isAdmin: admin, appVer: 44,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
