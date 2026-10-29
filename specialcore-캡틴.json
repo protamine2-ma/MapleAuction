@@ -1,0 +1,36 @@
+{
+  "job": "캡틴",
+  "date": "2026-10-28",
+  "sample": 300,
+  "none": 1,
+  "items": [
+    {
+      "name": "룬의 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMH",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 룬의 경험 I을 획득한다.",
+      "count": 144,
+      "pct": 48
+    },
+    {
+      "name": "일격필살 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBND",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 일격필살 I을 획득한다.",
+      "count": 141,
+      "pct": 47
+    },
+    {
+      "name": "극복하는 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNB",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 극복하는 경험을 획득한다.",
+      "count": 13,
+      "pct": 4.3
+    },
+    {
+      "name": "보스 슬레이어 II",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNE",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 보스 슬레이어 II를 획득한다.",
+      "count": 1,
+      "pct": 0.3
+    }
+  ]
+}
