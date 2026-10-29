@@ -1,0 +1,29 @@
+{
+  "job": "일리움",
+  "date": "2026-10-28",
+  "sample": 78,
+  "none": 0,
+  "items": [
+    {
+      "name": "룬의 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBMH",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 룬의 경험 I을 획득한다.",
+      "count": 42,
+      "pct": 53.8
+    },
+    {
+      "name": "일격필살 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBND",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 일격필살 I을 획득한다.",
+      "count": 28,
+      "pct": 35.9
+    },
+    {
+      "name": "극복하는 경험 I",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KBPCLHJBNB",
+      "desc": "[마스터 레벨 : 1]\r\n특수 코어의 힘 극복하는 경험을 획득한다.",
+      "count": 8,
+      "pct": 10.3
+    }
+  ]
+}
