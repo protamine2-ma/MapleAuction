@@ -492,7 +492,7 @@ body{overflow-x:clip;}
           <span>알림 반복 횟수</span><input type="number" min="1" value="{{ mp.rep }}" onChange="{{ mp.onRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 MP 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ mp.idleColor }};">{{ mp.idle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 바 위의 흰 MP 숫자(초록으로 표시)가 정한 시간 동안 안 바뀌면 바로 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
+        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 바 위의 흰 MP 숫자(초록으로 표시)가 정한 시간 동안 줄지 않으면 바로 '사냥 멈춤'을 알려줘요. MP가 회복돼서 바가 늘어난 건 사용으로 치지 않아요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -2977,11 +2977,12 @@ class Component extends DCLogic {
     for (let y = 0; y < b.h; y++) for (let X = 0; X < b.w; X++) { const j = y * b.w + X, i = j * 4, r = d[i], g = d[i + 1], bb = d[i + 2], mn = Math.min(r, g, bb);
       if (mn > 200) { wm[j] = 1; d[i] = 40; d[i + 1] = 255; d[i + 2] = 110; } else if (bb > 150 && g > 110 && r < 100 && bb - r > 100) cyn++; else if (Math.max(r, g, bb) < 90) dark++; }
     const valid = cyn + dark > b.w * b.h * 0.4;
+    let fill = 0; for (let X = 0; X < b.w; X++) { for (let y = 0; y < b.h; y++) { const i = (y * b.w + X) * 4; if (wm[y * b.w + X]) continue; if (d[i + 2] > 150 && d[i + 1] > 110 && d[i] < 100 && d[i + 2] - d[i] > 100) { fill++; break; } } }
     if (!valid || this._fadeAt && now - this._fadeAt < 3000) { if (!valid && ++M.miss >= 15) M.box = null; M.last = Math.max(M.last, now - 1000); M.prevW = null; }
     else {
       M.miss = 0;
-      if (M.prevW && M.prevW.length === wm.length) { let n = 0; for (let k = 0; k < wm.length; k++) if (wm[k] !== M.prevW[k]) n++; if (n > 3) { M.last = now; M.alertAt = 0; M.cnt = 0; } }
-      M.prevW = wm;
+      if (M.prevW && M.prevW.length === wm.length) { let n = 0; for (let k = 0; k < wm.length; k++) if (wm[k] !== M.prevW[k]) n++; if (n > 3 && !(M.prevFill != null && fill > M.prevFill)) { M.last = now; M.alertAt = 0; M.cnt = 0; } }
+      M.prevW = wm; M.prevFill = fill;
     }
     const lim = Math.max(1, Number(h.mpSec) || 5) * 1000;
     if (h.mpOn && !h.paused && valid && now - M.last >= lim && now - (M.alertAt || 0) >= lim && (M.cnt || 0) < Math.max(1, Number(h.mpRep) || 3)) { M.alertAt = now; M.cnt++; this.huntAlert('사냥 멈춤', 'stop'); }
@@ -4482,7 +4483,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 32,
+      isAdmin: admin, appVer: 33,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
