@@ -1,0 +1,25 @@
+name: active-full
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '집계할 날짜 (목요일, 예: 2026-10-29 · 비우면 지난 목요일)'
+        default: ''
+permissions:
+  contents: read
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/active.mjs
+        env:
+          NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          DATE: ${{ inputs.date }}
+          FULL: '1'
+          FORCE: '1'
