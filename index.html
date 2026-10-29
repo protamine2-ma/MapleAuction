@@ -2897,10 +2897,12 @@ class Component extends DCLogic {
   }
   checkBoost(now) {
     const v = this._video, h = this.hunt(); if (!v || !v.videoWidth) return;
-    const W = v.videoWidth, H = v.videoHeight, us = Math.max(1, H / 768);
-    const sw = Math.min(W, Math.round(260 * us)), sy = Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
+    const W = v.videoWidth, H = v.videoHeight;
+    let top = 0, gh = H; for (const c of [720, 768, 900, 1050, 1080, 1200, 1440, 1600, 2160]) { const dd = H - c; if (dd >= 0 && dd <= 60 && (gh === H || dd < top)) { top = dd; gh = c; } }
+    const us = Math.max(1, gh / 768);
+    const sw = Math.min(W, Math.round(260 * us)), sy = top + Math.round(20 * us), sh = Math.min(H - sy, Math.round(100 * us));
     const ow = Math.round(sw / us), oh = Math.round(sh / us);
-    const cens = [Math.round(H * 2 / 3), Math.round(H * 8 / 9)].filter((x, i, A) => A.findIndex(y => Math.abs(y - x) < 20) === i);
+    const cens = [Math.round(gh * 2 / 3), Math.round(gh * 8 / 9)].filter((x, i, A) => A.findIndex(y => Math.abs(y - x) < 20) === i);
     const scan = (cx) => { const sx = Math.max(0, Math.min(W - sw, Math.round(cx - sw / 2)));
     const c = document.createElement('canvas'); c.width = ow; c.height = oh;
     const ctx = c.getContext('2d', { willReadFrequently: true }); ctx.drawImage(v, sx, sy, sw, sh, 0, 0, ow, oh);
@@ -4502,7 +4504,7 @@ class Component extends DCLogic {
       onHuntNote: e => this.saveHuntNote(e.target.value),
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 35,
+      isAdmin: admin, appVer: 36,
       toggleEdit: () => { this.setState(s => ({ editing: !s.editing })); window.scrollTo(0, 0); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       editSections: TABS.map(t => {
