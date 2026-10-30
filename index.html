@@ -4168,7 +4168,7 @@ class Component extends DCLogic {
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (yel <= 1) { if (!D.clearSince) D.clearSince = now; } else D.clearSince = 0;
         const needOn = s.preset === 'yein67' ? 3 : 2, reRun = this._run[s.id] > now, yOk = s.preset === 'yein67' ? (yel >= 8 && dark) : reRun && (s.preset === 'erda60' || JANUS_DUR[s.preset]) ? (yel >= 8 && dark && D.on >= 3) : true;
-        if (D.on >= needOn && D.on <= needOn + 1 && yOk && D.ready === true && (!reRun || ((s.preset === 'erda60' || JANUS_DUR[s.preset]) && now - (D.usedAt || 0) >= (JANUS_DUR[s.preset] ? 48 : Math.max(20, 119 - (Number(s.cd) || 60))) * 1000))) { used = true; D.ready = false; }
+        if (D.on >= needOn && D.on <= needOn + 1 && yOk && D.ready === true && (!reRun || ((s.preset === 'erda60' || JANUS_DUR[s.preset]) && now - (D.usedAt || 0) >= (JANUS_DUR[s.preset] ? 48 : 40) * 1000))) { used = true; D.ready = false; }
         if (false && s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
           const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
@@ -5069,7 +5069,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 47,
+      isAdmin: admin, appVer: 48,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
