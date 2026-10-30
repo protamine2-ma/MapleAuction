@@ -690,9 +690,161 @@ body{overflow-x:clip;}
 </div>
 </sc-if>
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
-<div data-m="wrap" style="max-width:760px;margin:0 auto;padding:80px 28px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
-  <h1 data-m="h1" style="margin:0;font-size:36px;font-weight:800;letter-spacing:-0.03em;">강화</h1>
-  <span style="font-size:15px;color:#6b6d73;">준비 중이에요.</span>
+<nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
+  <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;justify-content:center;gap:4px;">
+    <button style="padding:16px 12px 13px;border:none;border-bottom:3px solid oklch(0.48 0.17 255);background:transparent;font-family:inherit;font-size:15px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;">스타포스</button>
+  </div>
+</nav>
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">스타포스 시뮬레이터</h1>
+    <span style="font-size:13px;font-weight:600;color:#6b6d73;">2026.03.19 강화 개편 기준 · 실패 시 유지 · 파괴 시 흔적 복구</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start;">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">장비와 목표</h2></div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 레벨</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+              <sc-for list="{{ sf.lvOpts }}" as="o" hint-placeholder-count="5"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
+              <input type="number" min="1" max="300" value="{{ sf.lv }}" onChange="{{ sf.onLv }}" title="직접 입력" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;">
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;flex-direction:row-reverse;gap:16px;align-items:flex-start;">
+          <sc-if value="{{ sf.hasItems }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:0 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:10px;background:#fafaf8;">
+            <span style="font-size:12px;color:#8a8c92;">아이템을 누르면 렙제와 스페어 가격(옥션 노작 최근 시세)이 바로 들어가요</span>
+            <sc-for list="{{ sf.itemGroups }}" as="g" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ g.items }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.pick }}" title="{{ o.tip }}" style="width:48px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px 3px;border:1px solid {{ o.border }};border-radius:7px;background:{{ o.bg }};font-family:inherit;cursor:pointer;" style-hover="border-color:oklch(0.48 0.17 255);"><span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ o.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ o.iconSrc }}" alt="" style="max-width:24px;max-height:24px;"></sc-if><sc-if value="{{ o.noIcon }}" hint-placeholder-val="{{ true }}"><span style="width:20px;height:20px;border-radius:5px;background:#ececea;"></span></sc-if></span><span style="max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:700;color:{{ o.color }};">{{ o.short }}</span></button></sc-for>
+              </div>
+            </div>
+            </sc-for>
+          </div>
+          </sc-if>
+          <div style="flex:1 1 220px;min-width:200px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <span style="font-size:13px;font-weight:700;color:#6b6d73;">현재 스타포스</span>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button onClick="{{ sf.curDn }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">−</button>
+                <input type="number" min="0" max="24" value="{{ sf.cur }}" onChange="{{ sf.onCur }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.5 0.14 75);">
+                <button onClick="{{ sf.curUp }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">+</button>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <span style="font-size:13px;font-weight:700;color:#6b6d73;">목표 스타포스</span>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <button onClick="{{ sf.tgtDn }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">−</button>
+                <input type="number" min="1" max="25" value="{{ sf.tgt }}" onChange="{{ sf.onTgt }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.45 0.17 255);">
+                <button onClick="{{ sf.tgtUp }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">+</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">스페어 가격 (같은 장비 1개)</span>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="text" inputmode="decimal" placeholder="0" value="{{ sf.spare }}" onChange="{{ sf.onSpare }}" style="box-sizing:border-box;flex:1;min-width:0;padding:9px 12px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;"><span style="font-size:14px;font-weight:700;color:#6b6d73;">억 메소</span></label>
+          </div>
+          </div>
+          </div>
+        </div>
+      </section>
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">강화 조건</h2></div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">파괴방지 (비용 3배)</span><button onClick="{{ sf.protAll }}" style="padding:0;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:oklch(0.48 0.17 255);cursor:pointer;">모두 선택</button></div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;">
+              <sc-for list="{{ sf.prot }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:9px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">파괴되면 흔적 복구</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ sf.modes }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:999px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
+              <sc-for list="{{ sf.rest }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;cursor:pointer;"><span style="font-size:14px;font-weight:800;">{{ o.label }}</span><span style="font-size:11px;font-weight:600;">{{ o.sub }}</span></button></sc-for>
+            </div>
+            <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">파란 칸 = 그 자리 복구(메소 + 스페어 여러 개), 흰 칸 = 12성 복구(스페어 1개). 23성 이상에서 파괴되면 흔적은 22성이에요. 복구 메소는 200제 기준값을 레벨에 맞춰 환산했어요.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">스타포스 이벤트</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:6px;">
+              <sc-for list="{{ sf.evs }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};font-family:inherit;text-align:left;cursor:pointer;"><span style="flex:none;width:10px;height:10px;margin-top:4px;border-radius:50%;background:{{ o.dot }};"></span><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;font-weight:700;color:{{ o.color }};">{{ o.label }}</span><sc-if value="{{ o.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#8a8c92;">{{ o.sub }}</span></sc-if></span></button></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">강화 비용 할인 <span style="font-weight:500;color:#9a9ca1;">(17성 미만만)</span></span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ sf.mvps }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">MVP {{ o.label }}</button></sc-for>
+              <button onClick="{{ sf.pcBtn.pick }}" style="padding:7px 12px;border:1px solid {{ sf.pcBtn.border }};border-radius:8px;background:{{ sf.pcBtn.bg }};color:{{ sf.pcBtn.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ sf.pcBtn.label }}</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">시뮬레이션 횟수</span>
+            <div style="display:flex;gap:6px;">
+              <sc-for list="{{ sf.nOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 16px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}번</button></sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div style="display:flex;gap:10px;">
+        <sc-if value="{{ sf.notRunning }}" hint-placeholder-val="{{ true }}"><button onClick="{{ sf.run }}" style="flex:1;padding:15px;border:none;border-radius:12px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:17px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">시뮬레이션 돌리기</button></sc-if>
+        <sc-if value="{{ sf.running }}" hint-placeholder-val="{{ false }}"><div style="flex:1;position:relative;overflow:hidden;padding:15px;border-radius:12px;background:oklch(0.94 0.035 255);text-align:center;font-size:16px;font-weight:800;color:oklch(0.3 0.09 255);"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ sf.prog }};background:oklch(0.86 0.07 255);"></div><span style="position:relative;">계산 중 {{ sf.prog }}</span></div><button onClick="{{ sf.cancel }}" style="padding:15px 22px;border:1px solid #e3e3e0;border-radius:12px;background:#fff;color:oklch(0.55 0.2 25);font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;">취소</button></sc-if>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <sc-if value="{{ sf.noRes }}" hint-placeholder-val="{{ true }}">
+      <section style="background:#fff;border:1px dashed #d6d7da;border-radius:14px;padding:60px 20px;text-align:center;font-size:15px;color:#8a8c92;">조건을 고르고 <b style="color:oklch(0.3 0.09 255);">시뮬레이션 돌리기</b>를 눌러주세요.</section>
+      </sc-if>
+      <sc-if value="{{ sf.hasRes }}" hint-placeholder-val="{{ false }}">
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">결과</h2><span style="font-size:13px;font-weight:700;color:oklch(0.4 0.08 255);">{{ sf.R.title }}</span></div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
+            <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;"><span style="font-size:12px;font-weight:700;">평균 강화 메소</span><span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;">{{ sf.R.mean }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:#fafaf8;border:1px solid #efefec;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">평균 스페어</span><span style="font-size:20px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ sf.R.spMean }}</span></div>
+            <sc-if value="{{ sf.R.hasP }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:#fafaf8;border:1px solid #efefec;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">스페어 포함 평균</span><span style="font-size:20px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ sf.R.total }}</span></div></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:14px;font-weight:800;color:#2a2b2f;">강화 메소 분포</span>
+            <div style="position:relative;height:200px;display:flex;align-items:flex-end;gap:2px;padding-bottom:1px;border-bottom:1px solid #d9dadd;">
+              <sc-for list="{{ sf.R.bars }}" as="b" hint-placeholder-count="36"><div title="{{ b.tip }}" style="flex:1;height:{{ b.h }};min-height:1px;border-radius:3px 3px 0 0;background:oklch(0.8 0.08 255);" style-hover="background:oklch(0.6 0.15 255);"></div></sc-for>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;"><path d="{{ sf.R.cdf }}" fill="none" stroke="oklch(0.62 0.16 60)" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#8a8c92;font-variant-numeric:tabular-nums;"><sc-for list="{{ sf.R.ticks }}" as="t" hint-placeholder-count="5"><span>{{ t }}</span></sc-for></div>
+            <div style="display:flex;gap:14px;font-size:11px;color:#8a8c92;"><span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:oklch(0.8 0.08 255);"></span>횟수</span><span style="display:flex;align-items:center;gap:5px;"><span style="width:14px;height:2px;background:oklch(0.62 0.16 60);"></span>누적 (그 금액 안에 끝난 비율)</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));border:1px solid #efefec;border-radius:10px;overflow:hidden;">
+            <sc-for list="{{ sf.R.qs }}" as="q" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-right:1px solid #efefec;"><span style="font-size:11px;font-weight:700;color:#8a8c92;">{{ q.label }}</span><span style="font-size:14px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ q.val }}</span></div></sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;">
+            <label style="display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:10px;background:#fafaf8;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">운 상위 몇 %면 얼마?</span><span style="display:flex;align-items:center;gap:6px;"><input type="text" inputmode="decimal" value="{{ sf.R.qIn }}" onChange="{{ sf.R.onQ }}" style="box-sizing:border-box;width:70px;padding:6px;border:1px solid #e3e3e0;border-radius:6px;font-size:14px;text-align:center;"><span style="font-size:13px;color:#6b6d73;">% →</span><b style="font-size:15px;color:oklch(0.3 0.09 255);">{{ sf.R.qOut }}</b></span></label>
+            <label style="display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:10px;background:#fafaf8;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">이 메소로 끝낼 확률은?</span><span style="display:flex;align-items:center;gap:6px;"><input type="text" inputmode="decimal" placeholder="예: 100" value="{{ sf.R.mIn }}" onChange="{{ sf.R.onM }}" style="box-sizing:border-box;width:70px;padding:6px;border:1px solid #e3e3e0;border-radius:6px;font-size:14px;text-align:center;"><span style="font-size:13px;color:#6b6d73;">억 →</span><b style="font-size:15px;color:oklch(0.3 0.09 255);">{{ sf.R.mOut }}</b></span></label>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:14px;font-weight:800;color:#2a2b2f;">스페어 소모 개수</span>
+            <sc-for list="{{ sf.R.spRows }}" as="r" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:64px minmax(0,1fr) 60px;align-items:center;gap:10px;font-size:13px;"><span style="font-weight:700;color:#3a3b3f;">{{ r.label }}</span><div style="height:14px;border-radius:4px;background:#f1f1ef;overflow:hidden;"><div style="width:{{ r.w }};height:100%;background:oklch(0.82 0.1 75);"></div></div><span style="text-align:right;font-weight:700;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ r.pct }}</span></div></sc-for>
+            <span style="font-size:12px;color:#9a9ca1;">복구 방식: {{ sf.R.restTxt }}</span>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">단계별 확률 · 1회 비용</h2></div>
+        <div style="overflow-x:auto;">
+          <div style="min-width:460px;display:grid;grid-template-columns:70px 70px 76px minmax(0,1fr) minmax(0,1.3fr);font-size:13px;">
+            <span style="padding:9px 12px;font-weight:700;color:#8a8c92;border-bottom:1px solid #efefec;">단계</span><span style="padding:9px 6px;font-weight:700;color:#8a8c92;border-bottom:1px solid #efefec;">성공</span><span style="padding:9px 6px;font-weight:700;color:#8a8c92;border-bottom:1px solid #efefec;">파괴</span><span style="padding:9px 6px;font-weight:700;color:#8a8c92;border-bottom:1px solid #efefec;">1회 비용</span><span style="padding:9px 12px 9px 6px;font-weight:700;color:#8a8c92;border-bottom:1px solid #efefec;">파괴 시 복구</span>
+            <sc-for list="{{ sf.rows }}" as="r" hint-placeholder-count="10"><span style="padding:8px 12px;font-weight:800;color:#2a2b2f;border-bottom:1px solid #f4f4f2;">{{ r.lab }}</span><span style="padding:8px 6px;color:#3a3b3f;border-bottom:1px solid #f4f4f2;font-variant-numeric:tabular-nums;">{{ r.p }}</span><span style="padding:8px 6px;color:oklch(0.55 0.18 25);border-bottom:1px solid #f4f4f2;font-variant-numeric:tabular-nums;">{{ r.d }}</span><span style="padding:8px 6px;color:#3a3b3f;border-bottom:1px solid #f4f4f2;font-variant-numeric:tabular-nums;">{{ r.c }}</span><span style="padding:8px 12px 8px 6px;color:{{ r.restColor }};font-weight:600;border-bottom:1px solid #f4f4f2;">{{ r.rest }}</span></sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
 </div>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
@@ -823,14 +975,15 @@ body{overflow-x:clip;}
                   <span style="font-size:20px;font-weight:800;color:oklch(0.3 0.09 255);">{{ s.quest.quest }}</span>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.04 75);">
-                  <span style="font-size:14px;font-weight:700;color:#6b6d73;">완료 보상 · {{ s.quest.reward }} (마스터 Lv.10)</span>
+                  <span style="font-size:14px;font-weight:700;color:#6b6d73;">완료 보상 · {{ s.quest.reward }} {{ s.quest.rewardSub }}</span>
                   <span style="font-size:20px;font-weight:800;color:oklch(0.42 0.12 60);">{{ s.quest.effect }}</span>
                 </div>
               </div>
               <span style="font-size:20px;font-weight:700;color:#3a3b3f;line-height:1.5;text-align:center;text-wrap:pretty;">{{ s.quest.note }}</span>
               <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:14px;">
-                <img src="img/quest-adele-1.png" alt="가려진 기억 퀘스트 목록" style="display:block;width:100%;max-width:268px;height:auto;border-radius:8px;">
-                <img src="img/quest-adele-2.png" alt="페이스 스킬 효과" style="display:block;width:100%;max-width:304px;height:auto;border-radius:8px;">
+                <sc-for list="{{ s.questImgs }}" as="qi" hint-placeholder-count="2">
+                  <img src="{{ qi.src }}" alt="{{ qi.alt }}" style="display:block;width:100%;max-width:{{ qi.mw }};height:auto;border-radius:8px;">
+                </sc-for>
               </div>
             </div>
           </sc-if>
@@ -2186,7 +2339,13 @@ const HUNTSPOT = { '아델': [
   '소울마스터', '미하일', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커', '블래스터', '배틀메이지', '와일드헌터', '메카닉', '제논', '데몬슬레이어', '데몬어벤져',
   '아란', '에반', '루미너스', '메르세데스', '팬텀', '은월', '카이저', '카인', '카데나', '엔젤릭버스터', '일리움', '칼리', '아크', '라라', '호영', '렌', '제로', '키네시스', '레테']
   .forEach(j => { if (!HUNTSPOT[j]) HUNTSPOT[j] = HUNTSPOT['아델']; });
-const QUEST = { '아델': { reward: '페이스', effect: '크리티컬 데미지 10% · 공격력 10%', quest: '[아델] 가려진 기억 1 ~ 9', note: '가려진 기억 퀘스트를 1부터 9까지 모두 진행하세요.', imgs: ['quest-adele-1.png', 'quest-adele-2.png'] } };
+const QUEST = { '아델': { reward: '페이스', rewardSub: '(마스터 Lv.10)', effect: '크리티컬 데미지 10% · 공격력 10%', quest: '[아델] 가려진 기억 1 ~ 9', note: '가려진 기억 퀘스트를 1부터 9까지 모두 진행하세요.', imgs: [['quest-adele-1.png', '가려진 기억 퀘스트 목록', 268], ['quest-adele-2.png', '페이스 스킬 효과', 304]] } };
+QUEST['에반'] = { reward: '계승된 의지', rewardSub: '(마스터 Lv.1)', effect: '마력 10 · 올스탯 10', quest: '[크로스 헌터] 마지막 오닉스 드래곤', note: '크로스헌터 챕터2까지 클리어한 뒤 불타는 리프레로 넘어가고, 그다음 마지막 오닉스 드래곤 퀘스트를 진행하세요.', imgs: [['quest-evan-1.png', '계승된 의지 스킬 효과', 314], ['quest-evan-2.png', '마지막 오닉스 드래곤 퀘스트', 280]] };
+QUEST['레테'] = { reward: '언다잉 엠버', rewardSub: '(마스터 Lv.1)', effect: '2400초 동안 공격력 · 마력 4% 증가', quest: '[레테] 돌아온 마음', note: '퀘스트 창 → 스토리 → 시작 가능에 있는 [레테] 돌아온 마음 퀘스트를 진행하세요.', imgs: [['quest-lethe-1.png', '언다잉 엠버 스킬 효과', 339], ['quest-lethe-2.png', '[레테] 돌아온 마음 퀘스트', 408]] };
+['히어로', '팔라딘', '다크나이트', '아크메이지(불,독)', '아크메이지(썬,콜)', '비숍', '보우마스터', '신궁', '패스파인더', '나이트로드', '섀도어', '듀얼블레이드', '바이퍼', '캡틴', '캐논마스터'].forEach(j => { QUEST[j] = { reward: '영웅의 메아리', rewardSub: '(마스터 Lv.1)', effect: '2400초 동안 공격력 · 마력 4% 증가', quest: '오르비스 탑 8층 · 조각상', note: '월드맵에서 "조각상"을 검색한 뒤 오르비스 탑 8층으로 이동해 조각상 퀘스트를 진행하세요.', imgs: [['quest-explorer-1.png', '영웅의 메아리 스킬 효과', 400], ['quest-explorer-2.png', '조각상 검색 후 오르비스 8층 이동', 420], ['quest-explorer-3.png', '오르비스 탑 8층 조각상', 300]] }; });
+QUEST['호영'] = { reward: '괴이봉인', rewardSub: '(마스터 Lv.10)', effect: '공격력 10% · 최종 데미지 10%', quest: '[호영] 괴이봉인 : 요정학원 엘리넬의 장', note: '괴이봉인 퀘스트를 진행하세요.', imgs: [['quest-hoyoung-1.png', '괴이봉인 스킬 효과', 400], ['quest-hoyoung-2.png', '괴이봉인 퀘스트', 340]] };
+QUEST['아란'] = { reward: '되찾은 기억', rewardSub: '(마스터 Lv.1)', effect: '공격력 5% · 방어력 300', quest: '[메인] 크로스 헌터 S.O.S. 요청', note: '퀘스트 창 → 스토리 → 시작 가능에 있는 크로스 헌터 S.O.S. 요청 퀘스트를 진행하세요.', imgs: [['quest-aran-1.png', '되찾은 기억 스킬 효과', 315], ['quest-aran-2.png', '크로스 헌터 S.O.S. 요청 퀘스트', 318]] };
+['소울마스터', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커', '미하일'].forEach(j => { QUEST[j] = { reward: '초월자 시그너스의 축복', rewardSub: '(마스터 Lv.30)', effect: '45초 동안 데미지 72% · 피격 데미지 5% 감소', quest: 'Lv.245 문브릿지 · 나인하트에게 말 걸기', note: '레벨 245 이상이면 시그너스 옆에 있는 나인하트에게 말을 걸어 보상을 받으세요.', imgs: [['quest-cygnus-1.png', '초월자 시그너스의 축복 스킬 효과', 414], ['quest-cygnus-2.png', 'Lv.245~249 문브릿지', 346], ['quest-cygnus-3.png', '나인하트 위치', 400]] }; });
 const HEXA = { '아델': ['img/hexa-adele-1.png', 'img/hexa-adele-2.png'] };
 const HYPERSTAT = { '아델': [
   { name: '보스용', lv: [260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280], rows: [
@@ -2231,6 +2390,159 @@ const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
 class Component extends DCLogic {
+  sfS() {
+    if (this.state.sf) return this.state.sf;
+    let d = { lv: 200, cur: 12, tgt: 22, spare: '', n: 100000, prot: {}, restMode: 'auto', rest: {}, ev: 'none', mvp: 0, pc: false };
+    try { const j = JSON.parse(localStorage.getItem(KEY + ':sf') || 'null'); if (j) d = { ...d, ...j }; } catch (e) {}
+    return d;
+  }
+  sfSet(p) { const sf = { ...this.sfS(), ...p }; try { localStorage.setItem(KEY + ':sf', JSON.stringify(sf)); } catch (e) {} this.setState({ sf }); }
+  sfModel(sf) {
+    const SUC = [95,90,85,85,80,75,70,65,60,55,50,45,40,35,30,30,30,15,15,15,30,15,15,10,10,10,7,5,3,1];
+    const DES = { 15: 2.1, 16: 2.1, 17: 6.8, 18: 6.8, 19: 8.5, 20: 10.5, 21: 12.75, 22: 17, 23: 18, 24: 18, 25: 18, 26: 18.6, 27: 19, 28: 19.4, 29: 19.8 };
+    const DIV = { 10: 571, 11: 314, 12: 214, 13: 157, 14: 107, 17: 150, 18: 70, 19: 45, 21: 125 };
+    const REST = { 15: 4.33, 16: 10.5, 17: 17.7, 18: 40.1, 19: 66.5, 20: 118, 21: 148, 22: 242 }, SPN = { 15: 1, 16: 1, 17: 1, 18: 1, 19: 2, 20: 2, 21: 3, 22: 4 };
+    const L = sf.lv, L3 = L * L * L, ev = sf.ev, sh = ev === 'shine' || ev === 'shine2';
+    const ev30 = ev === 'c30' || sh, evD = ev === 'd30' || sh, evR = ev === 'r20' || sh, ev51 = ev === 's100' || ev === 'shine2', ev11 = ev === 'oneplus';
+    const disc = (sf.mvp || 0) + (sf.pc ? 0.05 : 0);
+    const st = [];
+    for (let s = 0; s < 30; s++) {
+      const b = Math.round((s < 10 ? 1000 + L3 * (s + 1) / 36 : 1000 + L3 * Math.pow(s + 1, 2.7) / (DIV[s] || 200)) / 100) * 100;
+      let p = Math.min(1, SUC[s] * 1.05 / 100); if (ev51 && (s === 5 || s === 10 || s === 15)) p = 1;
+      let d = s >= 15 && p < 1 ? DES[s] / 100 * (1 - p) / (1 - SUC[s] / 100) : 0;
+      const prot = s >= 15 && s <= 17 && !!(sf.prot || {})[s];
+      if (evD && s <= 21) d *= 0.7; if (prot) d = 0;
+      const c = b * (1 - (s < 17 ? disc : 0)) * (ev30 ? 0.7 : 1) + (prot ? b * 2 : 0);
+      st.push({ b, p, d, c, prot, next: ev11 && s <= 10 ? Math.max(s + 1, Math.min(s + 2, 12)) : s + 1 });
+    }
+    const scale = L3 / 8e6;
+    return { st, rest: t => ({ m: REST[t] * 1e8 * scale * (evR ? 0.8 : 1), n: SPN[t] }) };
+  }
+  sfPolicy(sf, M) {
+    if (sf.restMode === 'all12') return {};
+    if (sf.restMode === 'manual') return { ...(sf.rest || {}) };
+    const P = (parseFloat(sf.spare) || 0) * 1e8, T = sf.tgt, lo = Math.min(sf.cur, 12);
+    const V = new Array(32).fill(0), pol = {};
+    for (let it = 0; it < 4000; it++) {
+      let ch = 0;
+      for (let s = T - 1; s >= lo; s--) {
+        const x = M.st[s], t = s >= 23 ? 22 : s; let dc = 0;
+        if (x.d > 0) { const a = P + V[12], r = M.rest(t), b = r.m + r.n * P + V[t]; pol[t] = b < a; dc = Math.min(a, b); }
+        const nv = (x.c + x.p * V[Math.min(x.next, T)] + x.d * dc) / (x.p + x.d);
+        ch = Math.max(ch, Math.abs(nv - V[s]) / (nv || 1)); V[s] = nv;
+      }
+      if (ch < 1e-9) break;
+    }
+    return pol;
+  }
+  sfRun() {
+    const sf = this.sfS(); if (sf.tgt <= sf.cur) return;
+    if (this.sfJob) this.sfJob.cancel = true;
+    const M = this.sfModel(sf), pol = this.sfPolicy(sf, M), N = sf.n, T = sf.tgt;
+    const cost = new Float64Array(N), spare = new Uint16Array(N), job = { i: 0, cancel: false };
+    this.sfJob = job; this.setState({ sfProg: 0 });
+    const step = () => {
+      if (job.cancel) return;
+      const t0 = performance.now();
+      while (job.i < N && performance.now() - t0 < 40) {
+        let s = sf.cur, c = 0, sp = 0, g = 0;
+        while (s < T && g++ < 3e6) {
+          const x = M.st[s]; c += x.c; const r = Math.random();
+          if (r < x.p) s = x.next;
+          else if (r < x.p + x.d) { const t = s >= 23 ? 22 : s; if (pol[t]) { const R = M.rest(t); c += R.m; sp += R.n; s = t; } else { sp += 1; s = 12; } }
+        }
+        cost[job.i] = c; spare[job.i] = sp; job.i++;
+      }
+      if (job.i < N) { this.setState({ sfProg: job.i / N }); setTimeout(step, 0); return; }
+      const sc = Float64Array.from(cost).sort(); let sum = 0, ss = 0, mx = 0;
+      for (let i = 0; i < N; i++) { sum += cost[i]; ss += spare[i]; if (spare[i] > mx) mx = spare[i]; }
+      const spCnt = new Array(mx + 1).fill(0); for (let i = 0; i < N; i++) spCnt[spare[i]]++;
+      this.sfJob = null;
+      this.setState({ sfProg: null, sfRes: { sc, spCnt, N, mean: sum / N, spMean: ss / N, P: (parseFloat(sf.spare) || 0) * 1e8, pol, cur: sf.cur, tgt: sf.tgt, lv: sf.lv } });
+    };
+    setTimeout(step, 0);
+  }
+  sfVals() {
+    const sf = this.sfS(), M = this.sfModel(sf), pol = this.sfPolicy(sf, M), set = p => this.sfSet(p);
+    const on = v => v ? { bg: 'oklch(0.48 0.17 255)', color: '#fff', border: 'oklch(0.48 0.17 255)' } : { bg: '#fff', color: '#3a3b3f', border: '#e3e3e0' };
+    const fmtL = v => { v = Math.round(v); if (v <= 0) return '0'; const jo = Math.floor(v / 1e12), ok = Math.floor(v % 1e12 / 1e8), man = Math.floor(v % 1e8 / 1e4); const a = []; if (jo) a.push(jo.toLocaleString() + '조'); if (ok) a.push(ok.toLocaleString() + '억'); if (man && !jo) a.push(man.toLocaleString() + '만'); return a.join(' ') || v.toLocaleString(); };
+    const fmtS = v => v >= 1e12 ? (v / 1e12).toFixed(1) + '조' : v >= 1e10 ? Math.round(v / 1e8) + '억' : v >= 1e8 ? (v / 1e8).toFixed(1) + '억' : Math.round(v / 1e4) + '만';
+    const pc = x => (Math.round(x * 10000) / 100) + '%';
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const setCur = v => { const cur = clamp(v, 0, 24); set({ cur, tgt: Math.max(sf.tgt, cur + 1) }); };
+    const setTgt = v => { const tgt = clamp(v, 1, 25); set({ tgt, cur: Math.min(sf.cur, tgt - 1) }); };
+    const EV = [['none', '없음', ''], ['shine', '샤이닝 스타포스', '비용 30%↓ · 21성 이하 파괴 30%↓ · 복구 20%↓'], ['shine2', '샤이닝 + 5·10·15성 100%', '샤이닝 효과 + 5·10·15성 무조건 성공'], ['c30', '강화 비용 30% 할인', ''], ['d30', '21성 이하 파괴 30% 감소', ''], ['s100', '5·10·15성 100% 성공', ''], ['oneplus', '10성 이하 1+1', '성공하면 한 단계 더 (최대 12성)'], ['r20', '흔적 복구 메소 20% 할인', '']];
+    const res = this.state.sfRes, running = this.state.sfProg != null;
+    let R = null;
+    if (res) {
+      const { sc, N } = res, lo = sc[Math.floor(N * 0.001)], hi = sc[Math.min(N - 1, Math.floor(N * 0.999))], B = 36, w = (hi - lo) / B || 1;
+      const cnt = new Array(B).fill(0); let below = 0;
+      for (let i = 0; i < N; i++) { const v = sc[i]; if (v < lo) { below++; continue; } if (v > hi) continue; cnt[Math.min(B - 1, Math.floor((v - lo) / w))]++; }
+      const mx = Math.max(...cnt) || 1; let cum = below; const pts = [];
+      const bars = cnt.map((c, i) => { cum += c; pts.push((i + 1) / B * 100 + ',' + (100 - cum / N * 100)); return { h: (c / mx * 100) + '%', tip: fmtS(lo + i * w) + ' ~ ' + fmtS(lo + (i + 1) * w) + ' · ' + pc(c / N) }; });
+      const q = p => sc[clamp(Math.floor(N * p), 0, N - 1)];
+      const qIn = this.state.sfQ ?? '50', qv = parseFloat(qIn), mIn = this.state.sfM ?? '';
+      const mv = parseFloat(mIn) * 1e8; let below2 = 0; if (mv > 0) { let a = 0, b = N; while (a < b) { const m = (a + b) >> 1; if (sc[m] <= mv) a = m + 1; else b = m; } below2 = a; }
+      const spN = res.spCnt, spMx = Math.max(...spN), CAP = 10;
+      const spRows = []; for (let k = 0; k < spN.length && k <= CAP; k++) { const c = k === CAP ? spN.slice(CAP).reduce((a, b) => a + b, 0) : spN[k]; if (!c && k) continue; spRows.push({ label: k === CAP ? CAP + '개 이상' : k + '개', pct: pc(c / N), w: (c / Math.max(spMx, 1) * 100) + '%' }); }
+      const restList = Object.keys(res.pol).filter(k => res.pol[k]).map(Number).sort((a, b) => a - b);
+      R = {
+        title: res.lv + '제 · ' + res.cur + '성 → ' + res.tgt + '성 · ' + res.N.toLocaleString() + '회',
+        mean: fmtL(res.mean), total: fmtL(res.mean + res.spMean * res.P), spMean: (Math.round(res.spMean * 100) / 100) + '개', hasP: res.P > 0,
+        qs: [[0.1, '운 좋은 10%'], [0.25, '상위 25%'], [0.5, '중간 (50%)'], [0.75, '하위 25%'], [0.9, '운 나쁜 10%']].map(([p, l]) => ({ label: l, val: fmtL(q(p)) })),
+        bars, cdf: 'M0,100 L' + pts.join(' L'), ticks: [0, 1, 2, 3, 4].map(i => fmtS(lo + (hi - lo) * i / 4)),
+        spRows, restTxt: restList.length ? restList.map(s => s + '성').join(' · ') + '은 그 자리 복구, 나머지는 12성 복구' : '전부 12성 복구 (스페어 1개)',
+        qIn, qOut: qv > 0 && qv <= 100 ? fmtL(q(qv / 100)) : '–', mIn, mOut: mv > 0 ? pc(below2 / N) : '–',
+        onQ: e => this.setState({ sfQ: e.target.value }), onM: e => this.setState({ sfM: e.target.value }),
+      };
+    }
+    const SF_LV = { '여명의가디언엔젤링': 160, '에스텔라이어링': 160, '데이브레이크펜던트': 140, '트와일라이트마크': 140, '데아시두스이어링': 130, '골든클로버벨트': 140, '분노한자쿰의벨트': 150, '블랙빈마크': 135, '파풀라투스마크': 145, '도미네이트펜던트': 140, '도미네이터펜던트': 140, '마이스터링': 140,
+      '루즈컨트롤머신마크': 160, '마력이깃든안대': 160, '몽환의벨트': 200, '커맨더포스이어링': 200, '거대한공포': 200, '고통의근원': 160, '컴플리트언더컨트롤': 200, '저주받은마도서': 160, '창세의뱃지': 250 };
+    const lvOf = nk => SF_LV[nk] || (/^에테르넬/.test(nk) ? 250 : /^아케인셰이드/.test(nk) ? 200 : /^앱솔랩스/.test(nk) ? 160 : 0);
+    const lastV = it => { for (let i = (it.values || []).length - 1; i >= 0; i--) { const v = parseFloat(it.values[i]); if (v > 0) return v; } return null; };
+    const allD = this.state.all || {};
+    const itemGroups = ['여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '아케인'].map(tab => {
+      const d = allD[tab]; if (!d || !d.items) return null;
+      const m = new Map();
+      d.items.forEach(it => {
+        const name = (it.name || '').replace(/\s*\((만|억)\)\s*$/, '').replace('도미네이트 펜던트', '도미네이터 펜던트'), nk = name.replace(/\s+/g, ''); if (!nk || !lvOf(nk) || nk === '저주받은마도서' || nk === '창세의뱃지') return;
+        if (!m.has(nk)) m.set(nk, { name, short: it.short || name, nk, price: null, exact: false });
+        const o = m.get(nk), g = it.group || '', v = lastV(it);
+        if (/^노작/.test(g) && v != null) { const ex = g === '노작'; if (ex && !o.exact) { o.price = v; o.exact = true; } else if (!o.exact && (o.price == null || v < o.price)) o.price = v; }
+      });
+      const items = [...m.values()].map(o => {
+        const slotId = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[o.nk] || o.nk), ik = this.iconKey(slotId), iv = (this.state.icons || {})[ik], lv = lvOf(o.nk), picked = sf.item === o.nk;
+        return { short: o.short, tip: o.name + ' · ' + lv + '제' + (o.price != null ? ' · 노작 ' + o.price + '억' : ''), hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+          bg: picked ? 'oklch(0.94 0.035 255)' : '#fff', border: picked ? 'oklch(0.48 0.17 255)' : '#efefec', color: picked ? 'oklch(0.3 0.09 255)' : '#3a3b3f',
+          pick: () => set({ item: o.nk, lv, ...(o.price != null ? { spare: String(o.price) } : {}) }) };
+      });
+      return items.length ? { tab, items } : null;
+    }).filter(Boolean);
+    const rows = []; for (let s = sf.cur; s < sf.tgt; s++) { const x = M.st[s], t = s >= 23 ? 22 : s, r = s >= 15 ? M.rest(t) : null; rows.push({ lab: s + '→' + x.next, p: pc(x.p), d: x.d ? pc(x.d) : (x.prot ? '파괴방지' : '–'), c: fmtL(x.c), rest: x.d ? (pol[t] ? t + '성 유지 · ' + fmtS(r.m) + ' + ' + r.n + '개' : '12성 · 1개') : '–', restColor: x.d && pol[t] ? 'oklch(0.45 0.15 255)' : '#6b6d73' }); }
+    return {
+      sf: {
+        lv: sf.lv, cur: sf.cur, tgt: sf.tgt, spare: sf.spare, itemGroups, hasItems: itemGroups.length > 0,
+        lvOpts: [140, 150, 160, 200, 250].map(v => ({ label: v + '제', ...on(sf.lv === v), pick: () => set({ lv: v, item: null }) })),
+        onLv: e => { const v = parseInt(e.target.value); if (v > 0) set({ lv: clamp(v, 1, 300), item: null }); },
+        curDn: () => setCur(sf.cur - 1), curUp: () => setCur(sf.cur + 1), tgtDn: () => setTgt(sf.tgt - 1), tgtUp: () => setTgt(sf.tgt + 1),
+        onCur: e => setCur(parseInt(e.target.value) || 0), onTgt: e => setTgt(parseInt(e.target.value) || 1),
+        stars: Array.from({ length: 25 }, (_, i) => ({ ch: '★', color: i < sf.cur ? 'oklch(0.62 0.16 75)' : i < sf.tgt ? 'oklch(0.48 0.17 255)' : '#d9dadd', gap: i % 5 === 4 && i < 24 ? '8px' : '0', pick: () => setTgt(i + 1), tip: (i + 1) + '성을 목표로' })),
+        onSpare: e => set({ spare: e.target.value }),
+        nOpts: [[10000, '1만'], [30000, '3만'], [100000, '10만']].map(([v, l]) => ({ label: l, ...on(sf.n === v), pick: () => set({ n: v }) })),
+        prot: [15, 16, 17].map(s => ({ label: s + '성', ...on(!!(sf.prot || {})[s]), pick: () => set({ prot: { ...(sf.prot || {}), [s]: !(sf.prot || {})[s] } }) })),
+        protAll: () => { const all = [15, 16, 17].every(s => (sf.prot || {})[s]); set({ prot: all ? {} : { 15: true, 16: true, 17: true } }); },
+        modes: [['auto', '유리한 쪽 자동'], ['manual', '직접 고르기'], ['all12', '항상 12성 복구']].map(([k, l]) => ({ label: l, ...on(sf.restMode === k), pick: () => set({ restMode: k, ...(k === 'manual' && sf.restMode !== 'manual' ? { rest: { ...pol } } : {}) }) })),
+        rest: [15, 16, 17, 18, 19, 20, 21, 22].map(s => { const r = M.rest(s), v = !!pol[s]; return { label: s + '성', sub: fmtS(r.m) + ' + ' + r.n + '개', bg: v ? 'oklch(0.94 0.035 255)' : '#fff', color: v ? 'oklch(0.3 0.09 255)' : '#9a9ca1', border: v ? 'oklch(0.48 0.17 255)' : '#e3e3e0', pick: () => set({ restMode: 'manual', rest: { ...pol, [s]: !v } }) }; }),
+        evs: EV.map(([k, l, sub]) => { const o = sf.ev === k; return { label: l, sub, hasSub: !!sub, bg: o ? 'oklch(0.94 0.035 255)' : '#fff', border: o ? 'oklch(0.48 0.17 255)' : '#e3e3e0', dot: o ? 'oklch(0.48 0.17 255)' : '#d0d1d4', color: o ? 'oklch(0.3 0.09 255)' : '#3a3b3f', pick: () => set({ ev: k }) }; }),
+        mvps: [[0, '없음'], [0.03, '실버'], [0.05, '골드'], [0.1, '다이아']].map(([v, l]) => ({ label: l, ...on((sf.mvp || 0) === v), pick: () => set({ mvp: v }) })),
+        pcBtn: { label: 'PC방', ...on(!!sf.pc), pick: () => set({ pc: !sf.pc }) },
+        rows,
+        run: () => this.sfRun(), cancel: () => { if (this.sfJob) this.sfJob.cancel = true; this.sfJob = null; this.setState({ sfProg: null }); },
+        running, notRunning: !running, prog: Math.round((this.state.sfProg || 0) * 100) + '%',
+        hasRes: !!R, noRes: !R && !running, R: R || {},
+      },
+    };
+  }
   state = (() => {
     let tab = '메소';
     let trash = [];
@@ -2714,7 +3026,7 @@ class Component extends DCLogic {
             return { left: ((x + 8) / L.w * 100).toFixed(2) + '%', top: ((y - 34) / L.h * 100).toFixed(2) + '%', val: v, show: !admin && !!v,
               onChange: e => { const t = e.target.value.replace(/\D/g, '').slice(0, 2); upd(n => { n.vmN = { ...(n.vmN || {}), [key]: t }; if (!t) delete n.vmN[key]; }); } }; }); })() : [],
         hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
-        hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {},
+        hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {}, questImgs: ((QUEST[job] || {}).imgs || []).map(([f, alt, w]) => ({ src: 'img/' + f, alt, mw: w + 'px' })),
         hasUnion: s.title === '유니온' && !!UNION[job],
         unionSets: s.title === '유니온' && UNION[job] ? UNION[job].map(u => { const cell = ([l, c, m, v]) => ({ label: l, cnt: c + ' / ' + m, val: v, bd: c > 0 ? 'oklch(0.78 0.11 75)' : '#3c4654', labelColor: c > 0 ? 'oklch(0.86 0.09 75)' : '#aab3bf', pri: (u.pri || {})[l] || '', hasPri: !!(u.pri || {})[l] });
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
@@ -4505,6 +4817,7 @@ class Component extends DCLogic {
         return {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
+          ...(area === '강화' ? this.sfVals() : {}),
           ...(() => {
             const GT = ['직업가이드', '보약', '환산별템세팅', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
@@ -4730,7 +5043,7 @@ class Component extends DCLogic {
         const specs = [...['27', '30', '33'].map(pct => ({ KRE: new RegExp('^노작 · (STR|DEX|INT|LUK) ' + pct + '%$'), SK: pct === '30' ? 'ktStat' : 'ktStat' + pct, title: '노작 ' + pct + '%' })),
           ...bases.map(b => ({ KRE: new RegExp('^' + esc(b) + ' · (STR|INT)$'), SK: 'ktStat_' + b, title: b }))];
         for (const { KRE, SK, title } of specs) {
-        const SO4 = ['STR', 'DEX', 'INT', 'LUK'], ks = out.filter(p => KRE.test(p.label)).sort((a, b) => SO4.indexOf(a.label.match(KRE)[1]) - SO4.indexOf(b.label.match(KRE)[1])); if (!ks.length) continue;
+        const SO4 = ['INT', 'STR', 'DEX', 'LUK'], ks = out.filter(p => KRE.test(p.label)).sort((a, b) => SO4.indexOf(a.label.match(KRE)[1]) - SO4.indexOf(b.label.match(KRE)[1])); if (!ks.length) continue;
         const stats = ks.map(p => p.label.match(KRE)[1]), st = stats.includes(this.state[SK]) ? this.state[SK] : stats[0], sp = ks[stats.indexOf(st)];
         const byId = new Map(data.items.map(it => [it.id, it])), curOf = r => num((byId.get(r.id) || {}).values ? byId.get(r.id).values[n - 1] : null);
         const mx = Math.max(1, ...sp.rows.map(r => curOf(r) || 0));
@@ -4754,7 +5067,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 44,
+      isAdmin: admin, appVer: 45,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
