@@ -3084,15 +3084,16 @@ class Component extends DCLogic {
         y.items.filter(x => x.group === it.group).forEach(x => out.push({ ...x, id: x.id + '_s', group: x.group + ' · STR', values: (y.dates || []).map(() => '') })); });
       all[t] = { ...y, [F]: true, items: out }; ch = true; }
     return ch; }
-  strFirst(all) { let ch = false, R = /^(\d+성 · .+) · (STR|INT)$/;
-    for (const t of ['여명장신구', '보스장신구', '칠흑장신구']) { const y = all[t]; if (!y || !y.items) continue;
+  strFirst(all) { let ch = false, SO = ['INT', 'STR'], R = /^(\d+성 · .+) · (STR|INT)$/, E = /^노작 · (STR|INT) 33%$/;
+    const key = g => { let m = g.match(R); if (m) return [m[1], m[2]]; m = g.match(E); return m ? ['e33', m[1]] : null; };
+    for (const t of ['여명장신구', '보스장신구', '칠흑장신구', '에테르넬']) { const y = all[t]; if (!y || !y.items) continue;
       const done = new Set(), out = [];
-      y.items.forEach(it => { const m = (it.group || '').match(R); if (!m) { out.push(it); return; } if (done.has(m[1])) return; done.add(m[1]);
-        ['STR', 'INT'].forEach(s => y.items.forEach(x => { if ((x.group || '') === m[1] + ' · ' + s) out.push(x); })); });
+      y.items.forEach(it => { const k = key(it.group || ''); if (!k) { out.push(it); return; } if (done.has(k[0])) return; done.add(k[0]);
+        SO.forEach(s => y.items.forEach(x => { const kx = key(x.group || ''); if (kx && kx[0] === k[0] && kx[1] === s) out.push(x); })); });
       if (out.some((it, i) => it !== y.items[i])) { all[t] = { ...y, items: out }; ch = true; } }
     return ch; }
   addE33(all) { const y = all['에테르넬']; if (!y || !y.items || y.e33 || y.items.some(it => / 33%$/.test(it.group || ''))) return false;
-    const add = ['STR', 'INT'].flatMap(s => ET6.map((nm, i) => ({ id: 'en33' + s[0].toLowerCase() + '_' + i, group: '노작 · ' + s + ' 33%', name: nm[0], short: nm[1], values: (y.dates || []).map(() => '') })));
+    const add = ['INT', 'STR'].flatMap(s => ET6.map((nm, i) => ({ id: 'en33' + s[0].toLowerCase() + '_' + i, group: '노작 · ' + s + ' 33%', name: nm[0], short: nm[1], values: (y.dates || []).map(() => '') })));
     let at = -1; y.items.forEach((it, i) => { if (it.group === '노작') at = i; });
     const items = y.items.slice(); items.splice(at + 1, 0, ...add);
     all['에테르넬'] = { ...y, e33: true, items }; return true; }
@@ -3117,7 +3118,7 @@ class Component extends DCLogic {
       all[dest] = { ...y, items: [...moved, ...y.items], removed: yRem };
       all['깡통30%'] = { ...k, items: k.items.filter(it => !isY(it)), removed: kRem };
     }
-    const D = all[dest], SO = ['STR', 'DEX', 'INT', 'LUK'], isK = it => /^노작 · (STR|DEX|INT|LUK) (27|30)%$/.test(it.group || '');
+    const D = all[dest], SO = ['INT', 'STR', 'DEX', 'LUK'], isK = it => /^노작 · (STR|DEX|INT|LUK) (27|30)%$/.test(it.group || '');
     const kt = D.items.filter(isK), pn = D.items.filter(it => it.group === '노작'), rest = D.items.filter(it => !isK(it) && it.group !== '노작');
     const key = it => (it.group.endsWith('27%') ? 0 : 1000) + SO.indexOf(it.group.slice(5, 8)) * 100 + (NM.indexOf(it.name) < 0 ? 99 : NM.indexOf(it.name));
     const sorted = kt.slice().sort((a, b) => key(a) - key(b)), next = [...pn, ...sorted, ...rest];
@@ -5067,7 +5068,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 45,
+      isAdmin: admin, appVer: 46,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
