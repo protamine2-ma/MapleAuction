@@ -4178,8 +4178,8 @@ class Component extends DCLogic {
         if (!cd && yel < 3 && (!D.bright || br > D.bright * 0.9)) D.bright = D.bright ? D.bright * 0.8 + br * 0.2 : br;
         D.on = cd ? (D.on || 0) + 1 : 0; D.off = cd ? 0 : (D.off || 0) + 1;
         if (yel <= 1) { if (!D.clearSince) D.clearSince = now; } else D.clearSince = 0;
-        const needOn = s.preset === 'yein67' ? 3 : 2, reRun = this._run[s.id] > now, yOk = s.preset === 'yein67' ? (yel >= 8 && dark) : reRun && (s.preset === 'erda60' || JANUS_DUR[s.preset]) ? (yel >= 8 && (dark || yel >= 15) && D.on >= 3) : true, reP = reRun && (s.preset === 'erda60' || JANUS_DUR[s.preset]);
-        if (D.on >= needOn && D.on <= (reP ? 15 : needOn + 1) && yOk && D.ready === true && (!reRun || ((s.preset === 'erda60' || JANUS_DUR[s.preset]) && now - (D.usedAt || 0) >= (JANUS_DUR[s.preset] ? 48 : 40) * 1000))) { used = true; D.ready = false; }
+        const needOn = s.preset === 'yein67' ? 3 : 2, reRun = this._run[s.id] > now, yOk = s.preset === 'yein67' ? (yel >= 8 && dark) : reRun && (s.preset === 'erda60' || JANUS_DUR[s.preset]) ? (yel >= 6 && (dark || yel >= 12) && D.on >= 2) : true, reP = reRun && (s.preset === 'erda60' || JANUS_DUR[s.preset]);
+        if (D.on >= needOn && D.on <= (reP ? 40 : needOn + 1) && yOk && D.ready === true && (!reRun || ((s.preset === 'erda60' || JANUS_DUR[s.preset]) && now - (D.usedAt || 0) >= (JANUS_DUR[s.preset] ? 48 : 40) * 1000))) { used = true; D.ready = false; }
         if (false && s.preset && (s.preset.startsWith('janus') || s.preset === 'erda60')) {
           const N = this.readCd(a, bw, bh), extra = JANUS_DUR[s.preset] ? (Number(s.cd) || 60) : s.preset === 'erda60' ? 60 - (Number(s.cd) || 60) : 0;
           if (!cd && D.off >= 3) { D.ocrLock = false; D.ocrH = []; }
@@ -4242,7 +4242,7 @@ class Component extends DCLogic {
       const isJanus = this.skillIcon(s) === 'qs-janus.png';
       if (used && isJanus && now - (D.usedAt || 0) < 48000) used = false;
       if (used && isJanus && this._run[s.id] > now) { used = false; if (!D.reCand) D.reCand = now; }
-      if (D.reCand) { if (!(D.on > 0)) D.reCand = 0; else if (now - D.reCand >= 3000) { used = true; D.reAt = D.reCand; D.reCand = 0; } }
+      if (D.reCand) { if (D.on > 0) D.reOnAt = now; if (!(D.on > 0) && now - (D.reOnAt || D.reCand) > 700) D.reCand = 0; else if (now - D.reCand >= 3000) { used = true; D.reAt = D.reCand; D.reCand = 0; } }
       const ocrSkill = false;
       if (used && now - (D.usedAt || 0) > 1500 && s.cd > 0) { D.usedAt = now; D.everUsed = true;
         if (ocrSkill) { D.pend = now; D.ocrLock = false; D.ocrH = []; D.ocrFail = false; }
@@ -5081,7 +5081,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 50,
+      isAdmin: admin, appVer: 51,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
