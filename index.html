@@ -697,56 +697,58 @@ body{overflow-x:clip;}
 </nav>
 <div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
-    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">스타포스 시뮬레이터</h1>
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">별 기댓값</h1>
     <span style="font-size:13px;font-weight:600;color:#6b6d73;">2026.03.19 강화 개편 기준 · 실패 시 유지 · 파괴 시 흔적 복구</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start;">
+  <div style="display:flex;flex-direction:column;gap:18px;">
     <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:18px;align-items:start;">
       <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">장비와 목표</h2></div>
-        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px;">
+        <div style="padding:18px 12px;display:flex;flex-direction:column;gap:16px;">
           <div style="display:flex;flex-direction:column;gap:8px;">
             <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 레벨</span>
             <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
               <sc-for list="{{ sf.lvOpts }}" as="o" hint-placeholder-count="5"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
-              <input type="number" min="1" max="300" value="{{ sf.lv }}" onChange="{{ sf.onLv }}" title="직접 입력" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;">
             </div>
+            <label style="display:flex;align-items:center;gap:8px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">직접 입력</span><input type="number" min="1" max="300" value="{{ sf.lv }}" onChange="{{ sf.onLv }}" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"></label>
           </div>
-          <div style="display:flex;flex-wrap:wrap;flex-direction:row-reverse;gap:16px;align-items:flex-start;">
+          <div style="display:flex;flex-direction:column-reverse;gap:16px;">
           <sc-if value="{{ sf.hasItems }}" hint-placeholder-val="{{ false }}">
-          <div style="flex:0 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:10px;background:#fafaf8;">
+          <div style="min-width:0;display:flex;flex-direction:column;gap:10px;padding:10px 4px;border-radius:10px;background:#fafaf8;">
             <span style="font-size:12px;color:#8a8c92;">아이템을 누르면 렙제와 스페어 가격(옥션 노작 최근 시세)이 바로 들어가요</span>
             <sc-for list="{{ sf.itemGroups }}" as="g" hint-placeholder-count="5">
             <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <sc-for list="{{ g.items }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.pick }}" title="{{ o.tip }}" style="width:48px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px 3px;border:1px solid {{ o.border }};border-radius:7px;background:{{ o.bg }};font-family:inherit;cursor:pointer;" style-hover="border-color:oklch(0.48 0.17 255);"><span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ o.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ o.iconSrc }}" alt="" style="max-width:24px;max-height:24px;"></sc-if><sc-if value="{{ o.noIcon }}" hint-placeholder-val="{{ true }}"><span style="width:20px;height:20px;border-radius:5px;background:#ececea;"></span></sc-if></span><span style="max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:700;color:{{ o.color }};">{{ o.short }}</span></button></sc-for>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <sc-for list="{{ g.items }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.pick }}" title="{{ o.tip }}" style="width:42px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 1px 2px;border:1px solid {{ o.border }};border-radius:7px;background:{{ o.bg }};font-family:inherit;cursor:pointer;" style-hover="border-color:oklch(0.48 0.17 255);"><span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;"><sc-if value="{{ o.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ o.iconSrc }}" alt="" style="max-width:24px;max-height:24px;"></sc-if><sc-if value="{{ o.noIcon }}" hint-placeholder-val="{{ true }}"><span style="width:20px;height:20px;border-radius:5px;background:#ececea;"></span></sc-if></span><span style="max-width:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:700;color:{{ o.color }};">{{ o.short }}</span></button></sc-for>
               </div>
             </div>
             </sc-for>
           </div>
           </sc-if>
-          <div style="flex:1 1 220px;min-width:200px;display:flex;flex-direction:column;gap:14px;">
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <div style="flex:1 1 130px;min-width:0;max-width:200px;display:flex;flex-direction:column;gap:8px;">
               <span style="font-size:13px;font-weight:700;color:#6b6d73;">현재 스타포스</span>
               <div style="display:flex;align-items:center;gap:6px;">
                 <button onClick="{{ sf.curDn }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">−</button>
-                <input type="number" min="0" max="24" value="{{ sf.cur }}" onChange="{{ sf.onCur }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.5 0.14 75);">
+                <input type="text" inputmode="numeric" value="{{ sf.cur }}" onChange="{{ sf.onCur }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;padding:0;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.5 0.14 75);">
                 <button onClick="{{ sf.curUp }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">+</button>
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="flex:1 1 130px;min-width:0;max-width:200px;display:flex;flex-direction:column;gap:8px;">
               <span style="font-size:13px;font-weight:700;color:#6b6d73;">목표 스타포스</span>
               <div style="display:flex;align-items:center;gap:6px;">
                 <button onClick="{{ sf.tgtDn }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">−</button>
-                <input type="number" min="1" max="25" value="{{ sf.tgt }}" onChange="{{ sf.onTgt }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.45 0.17 255);">
+                <input type="text" inputmode="numeric" value="{{ sf.tgt }}" onChange="{{ sf.onTgt }}" style="box-sizing:border-box;flex:1;min-width:0;height:38px;padding:0;border:1px solid #e3e3e0;border-radius:8px;font-size:17px;font-weight:800;text-align:center;color:oklch(0.45 0.17 255);">
                 <button onClick="{{ sf.tgtUp }}" style="width:36px;height:38px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:18px;font-weight:700;color:#3a3b3f;cursor:pointer;">+</button>
               </div>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             <span style="font-size:13px;font-weight:700;color:#6b6d73;">스페어 가격 (같은 장비 1개)</span>
-            <label style="display:flex;align-items:center;gap:8px;"><input type="text" inputmode="decimal" placeholder="0" value="{{ sf.spare }}" onChange="{{ sf.onSpare }}" style="box-sizing:border-box;flex:1;min-width:0;padding:9px 12px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;"><span style="font-size:14px;font-weight:700;color:#6b6d73;">억 메소</span></label>
+            <label style="display:flex;align-items:center;gap:8px;max-width:260px;"><input type="text" inputmode="numeric" placeholder="0" value="{{ sf.spare }}" onChange="{{ sf.onSpare }}" style="box-sizing:border-box;flex:1;min-width:0;padding:9px 12px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;"><span style="font-size:14px;font-weight:700;color:#6b6d73;">메소</span></label>
+            <span style="font-size:12px;font-weight:600;color:#6b6d73;">{{ sf.spareTxt }}</span>
           </div>
           </div>
           </div>
@@ -754,44 +756,47 @@ body{overflow-x:clip;}
       </section>
       <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">강화 조건</h2></div>
-        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">파괴방지 (비용 3배)</span><button onClick="{{ sf.protAll }}" style="padding:0;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:oklch(0.48 0.17 255);cursor:pointer;">모두 선택</button></div>
+        <div style="display:flex;flex-direction:column;gap:1px;background:#efefec;">
+          <div style="display:flex;flex-direction:column;gap:10px;padding:16px 20px;background:#fff;">
+            <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-size:15px;font-weight:800;color:#2a2b2f;">파괴방지 <span style="font-size:13px;font-weight:600;color:#8a8c92;">비용 3배</span></span><button onClick="{{ sf.protAll }}" style="padding:0;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:oklch(0.48 0.17 255);cursor:pointer;">모두 선택</button></div>
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;">
               <sc-for list="{{ sf.prot }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:9px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
             </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <span style="font-size:13px;font-weight:700;color:#6b6d73;">파괴되면 흔적 복구</span>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;padding-top:14px;border-top:1px solid #efefec;">
+              <span style="font-size:15px;font-weight:800;color:#2a2b2f;">스타포스 이벤트</span>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:6px;">
+                <sc-for list="{{ sf.evs }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};font-family:inherit;text-align:left;cursor:pointer;"><span style="flex:none;width:10px;height:10px;margin-top:4px;border-radius:50%;background:{{ o.dot }};"></span><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;font-weight:800;color:{{ o.color }};">{{ o.label }}</span><sc-if value="{{ o.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:{{ o.subColor }};">{{ o.sub }}</span></sc-if></span></button></sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;padding-top:14px;border-top:1px solid #efefec;">
+            <span style="font-size:15px;font-weight:800;color:#2a2b2f;">파괴되면 흔적 복구</span>
             <div style="display:flex;flex-wrap:wrap;gap:6px;">
               <sc-for list="{{ sf.modes }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:999px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-              <sc-for list="{{ sf.rest }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;cursor:pointer;"><span style="font-size:14px;font-weight:800;">{{ o.label }}</span><span style="font-size:11px;font-weight:600;">{{ o.sub }}</span></button></sc-for>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px;">
+              <sc-for list="{{ sf.rest }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;cursor:pointer;"><span style="font-size:14px;font-weight:800;">{{ o.label }}</span></button></sc-for>
             </div>
-            <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">파란 칸 = 그 자리 복구(메소 + 스페어 여러 개), 흰 칸 = 12성 복구(스페어 1개). 23성 이상에서 파괴되면 흔적은 22성이에요. 복구 메소는 200제 기준값을 레벨에 맞춰 환산했어요.</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <span style="font-size:13px;font-weight:700;color:#6b6d73;">스타포스 이벤트</span>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:6px;">
-              <sc-for list="{{ sf.evs }}" as="o" hint-placeholder-count="8"><button onClick="{{ o.pick }}" style="display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};font-family:inherit;text-align:left;cursor:pointer;"><span style="flex:none;width:10px;height:10px;margin-top:4px;border-radius:50%;background:{{ o.dot }};"></span><span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;font-weight:700;color:{{ o.color }};">{{ o.label }}</span><sc-if value="{{ o.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#8a8c92;">{{ o.sub }}</span></sc-if></span></button></sc-for>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;background:#f7f7f5;">
+              <div style="display:flex;align-items:center;gap:10px;"><span style="flex:none;width:18px;height:18px;border-radius:4px;border:1px solid oklch(0.48 0.17 255);background:oklch(0.94 0.035 255);"></span><span style="font-size:16px;font-weight:800;color:oklch(0.3 0.09 255);">파란 칸에서 터지면 → 그 자리에서 복구하기</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="flex:none;width:18px;height:18px;border-radius:4px;border:1px solid #c9c9c5;background:#fff;"></span><span style="font-size:16px;font-weight:800;color:#2a2b2f;">흰 칸에서 터지면 → 12성으로 복구하기</span></div>
+            </div>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <span style="font-size:13px;font-weight:700;color:#6b6d73;">강화 비용 할인 <span style="font-weight:500;color:#9a9ca1;">(17성 미만만)</span></span>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              <sc-for list="{{ sf.mvps }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">MVP {{ o.label }}</button></sc-for>
-              <button onClick="{{ sf.pcBtn.pick }}" style="padding:7px 12px;border:1px solid {{ sf.pcBtn.border }};border-radius:8px;background:{{ sf.pcBtn.bg }};color:{{ sf.pcBtn.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ sf.pcBtn.label }}</button>
+          <div style="display:flex;flex-direction:column;gap:10px;padding:16px 20px;background:#fff;">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <span style="font-size:15px;font-weight:800;color:#2a2b2f;">강화 비용 할인 <span style="font-size:13px;font-weight:600;color:#8a8c92;">17성 미만만</span></span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ sf.mvps }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">MVP {{ o.label }}</button></sc-for>
+                <button onClick="{{ sf.pcBtn.pick }}" style="padding:7px 12px;border:1px solid {{ sf.pcBtn.border }};border-radius:8px;background:{{ sf.pcBtn.bg }};color:{{ sf.pcBtn.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ sf.pcBtn.label }}</button>
+              </div>
             </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <span style="font-size:13px;font-weight:700;color:#6b6d73;">시뮬레이션 횟수</span>
-            <div style="display:flex;gap:6px;">
-              <sc-for list="{{ sf.nOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 16px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}번</button></sc-for>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;padding-top:14px;border-top:1px solid #efefec;">
+              <span style="font-size:15px;font-weight:800;color:#2a2b2f;">시뮬레이션 횟수 <span style="font-size:14px;font-weight:700;color:oklch(0.45 0.17 255);">10만 번</span></span>
             </div>
           </div>
         </div>
       </section>
+      </div>
       <div style="display:flex;gap:10px;">
         <sc-if value="{{ sf.notRunning }}" hint-placeholder-val="{{ true }}"><button onClick="{{ sf.run }}" style="flex:1;padding:15px;border:none;border-radius:12px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:17px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">시뮬레이션 돌리기</button></sc-if>
         <sc-if value="{{ sf.running }}" hint-placeholder-val="{{ false }}"><div style="flex:1;position:relative;overflow:hidden;padding:15px;border-radius:12px;background:oklch(0.94 0.035 255);text-align:center;font-size:16px;font-weight:800;color:oklch(0.3 0.09 255);"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ sf.prog }};background:oklch(0.86 0.07 255);"></div><span style="position:relative;">계산 중 {{ sf.prog }}</span></div><button onClick="{{ sf.cancel }}" style="padding:15px 22px;border:1px solid #e3e3e0;border-radius:12px;background:#fff;color:oklch(0.55 0.2 25);font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;">취소</button></sc-if>
@@ -806,12 +811,11 @@ body{overflow-x:clip;}
         <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">결과</h2><span style="font-size:13px;font-weight:700;color:oklch(0.4 0.08 255);">{{ sf.R.title }}</span></div>
         <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
-            <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;"><span style="font-size:12px;font-weight:700;">평균 강화 메소</span><span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;">{{ sf.R.mean }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;"><span style="font-size:12px;font-weight:700;">평균 (스페어 포함)</span><span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;">{{ sf.R.mean }}</span></div>
             <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:#fafaf8;border:1px solid #efefec;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">평균 스페어</span><span style="font-size:20px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ sf.R.spMean }}</span></div>
-            <sc-if value="{{ sf.R.hasP }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:10px;background:#fafaf8;border:1px solid #efefec;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">스페어 포함 평균</span><span style="font-size:20px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ sf.R.total }}</span></div></sc-if>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <span style="font-size:14px;font-weight:800;color:#2a2b2f;">강화 메소 분포</span>
+            <span style="font-size:14px;font-weight:800;color:#2a2b2f;">소모 비용 분포 <span style="font-size:12px;font-weight:600;color:#8a8c92;">스페어 포함</span></span>
             <div style="position:relative;height:200px;display:flex;align-items:flex-end;gap:2px;padding-bottom:1px;border-bottom:1px solid #d9dadd;">
               <sc-for list="{{ sf.R.bars }}" as="b" hint-placeholder-count="36"><div title="{{ b.tip }}" style="flex:1;height:{{ b.h }};min-height:1px;border-radius:3px 3px 0 0;background:oklch(0.8 0.08 255);" style-hover="background:oklch(0.6 0.15 255);"></div></sc-for>
               <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;"><path d="{{ sf.R.cdf }}" fill="none" stroke="oklch(0.62 0.16 60)" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg>
@@ -2394,9 +2398,16 @@ class Component extends DCLogic {
     if (this.state.sf) return this.state.sf;
     let d = { lv: 200, cur: 12, tgt: 22, spare: '', n: 100000, prot: {}, restMode: 'auto', rest: {}, ev: 'none', mvp: 0, pc: false };
     try { const j = JSON.parse(localStorage.getItem(KEY + ':sf') || 'null'); if (j) d = { ...d, ...j }; } catch (e) {}
+    if (d.ev !== 'none' && d.ev !== 'shine') d.ev = 'none';
+    if (!d.spareMeso) { const s0 = String(d.spare || '').replace(/[,\s]/g, ''); if (/^[\d.]+$/.test(s0) && parseFloat(s0) < 1e6) d.spare = s0 + '억'; d.spareMeso = true; }
     return d;
   }
   sfSet(p) { const sf = { ...this.sfS(), ...p }; try { localStorage.setItem(KEY + ':sf', JSON.stringify(sf)); } catch (e) {} this.setState({ sf }); }
+  sfSpareV(sf) {
+    const s = String(sf.spare || '').replace(/[,\s]/g, '').replace(/메소$/, ''); if (!s) return 0;
+    if (/[조억만천]/.test(s)) { let v = 0; const re = /([\d.]+)(조|억|천만|백만|만|천)?/g; let m; const U = { '조': 1e12, '억': 1e8, '천만': 1e7, '백만': 1e6, '만': 1e4, '천': 1e3 }; while ((m = re.exec(s))) v += parseFloat(m[1]) * (m[2] ? U[m[2]] : 1); return v || 0; }
+    const n = parseFloat(s) || 0; return n;
+  }
   sfModel(sf) {
     const SUC = [95,90,85,85,80,75,70,65,60,55,50,45,40,35,30,30,30,15,15,15,30,15,15,10,10,10,7,5,3,1];
     const DES = { 15: 2.1, 16: 2.1, 17: 6.8, 18: 6.8, 19: 8.5, 20: 10.5, 21: 12.75, 22: 17, 23: 18, 24: 18, 25: 18, 26: 18.6, 27: 19, 28: 19.4, 29: 19.8 };
@@ -2421,7 +2432,7 @@ class Component extends DCLogic {
   sfPolicy(sf, M) {
     if (sf.restMode === 'all12') return {};
     if (sf.restMode === 'manual') return { ...(sf.rest || {}) };
-    const P = (parseFloat(sf.spare) || 0) * 1e8, T = sf.tgt, lo = Math.min(sf.cur, 12);
+    const P = this.sfSpareV(sf), T = sf.tgt, lo = Math.min(sf.cur, 12);
     const V = new Array(32).fill(0), pol = {};
     for (let it = 0; it < 4000; it++) {
       let ch = 0;
@@ -2438,7 +2449,7 @@ class Component extends DCLogic {
   sfRun() {
     const sf = this.sfS(); if (sf.tgt <= sf.cur) return;
     if (this.sfJob) this.sfJob.cancel = true;
-    const M = this.sfModel(sf), pol = this.sfPolicy(sf, M), N = sf.n, T = sf.tgt;
+    const M = this.sfModel(sf), pol = this.sfPolicy(sf, M), N = 100000, T = sf.tgt, SP = this.sfSpareV(sf);
     const cost = new Float64Array(N), spare = new Uint16Array(N), job = { i: 0, cancel: false };
     this.sfJob = job; this.setState({ sfProg: 0 });
     const step = () => {
@@ -2451,14 +2462,14 @@ class Component extends DCLogic {
           if (r < x.p) s = x.next;
           else if (r < x.p + x.d) { const t = s >= 23 ? 22 : s; if (pol[t]) { const R = M.rest(t); c += R.m; sp += R.n; s = t; } else { sp += 1; s = 12; } }
         }
-        cost[job.i] = c; spare[job.i] = sp; job.i++;
+        cost[job.i] = c + sp * SP; spare[job.i] = sp; job.i++;
       }
       if (job.i < N) { this.setState({ sfProg: job.i / N }); setTimeout(step, 0); return; }
       const sc = Float64Array.from(cost).sort(); let sum = 0, ss = 0, mx = 0;
       for (let i = 0; i < N; i++) { sum += cost[i]; ss += spare[i]; if (spare[i] > mx) mx = spare[i]; }
       const spCnt = new Array(mx + 1).fill(0); for (let i = 0; i < N; i++) spCnt[spare[i]]++;
       this.sfJob = null;
-      this.setState({ sfProg: null, sfRes: { sc, spCnt, N, mean: sum / N, spMean: ss / N, P: (parseFloat(sf.spare) || 0) * 1e8, pol, cur: sf.cur, tgt: sf.tgt, lv: sf.lv } });
+      this.setState({ sfProg: null, sfRes: { sc, spCnt, N, mean: sum / N, spMean: ss / N, P: SP, pol, cur: sf.cur, tgt: sf.tgt, lv: sf.lv } });
     };
     setTimeout(step, 0);
   }
@@ -2512,16 +2523,16 @@ class Component extends DCLogic {
       });
       const items = [...m.values()].map(o => {
         const slotId = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[o.nk] || o.nk), ik = this.iconKey(slotId), iv = (this.state.icons || {})[ik], lv = lvOf(o.nk), picked = sf.item === o.nk;
-        return { short: o.short, tip: o.name + ' · ' + lv + '제' + (o.price != null ? ' · 노작 ' + o.price + '억' : ''), hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+        return { short: o.short, tip: o.name + ' · ' + lv + '제', hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
           bg: picked ? 'oklch(0.94 0.035 255)' : '#fff', border: picked ? 'oklch(0.48 0.17 255)' : '#efefec', color: picked ? 'oklch(0.3 0.09 255)' : '#3a3b3f',
-          pick: () => set({ item: o.nk, lv, ...(o.price != null ? { spare: String(o.price) } : {}) }) };
+          pick: () => set({ item: o.nk, lv }) };
       });
       return items.length ? { tab, items } : null;
     }).filter(Boolean);
     const rows = []; for (let s = sf.cur; s < sf.tgt; s++) { const x = M.st[s], t = s >= 23 ? 22 : s, r = s >= 15 ? M.rest(t) : null; rows.push({ lab: s + '→' + x.next, p: pc(x.p), d: x.d ? pc(x.d) : (x.prot ? '파괴방지' : '–'), c: fmtL(x.c), rest: x.d ? (pol[t] ? t + '성 유지 · ' + fmtS(r.m) + ' + ' + r.n + '개' : '12성 · 1개') : '–', restColor: x.d && pol[t] ? 'oklch(0.45 0.15 255)' : '#6b6d73' }); }
     return {
       sf: {
-        lv: sf.lv, cur: sf.cur, tgt: sf.tgt, spare: sf.spare, itemGroups, hasItems: itemGroups.length > 0,
+        lv: sf.lv, cur: sf.cur, tgt: sf.tgt, spare: sf.spare, spareTxt: (() => { const v = this.sfSpareV(sf); return v > 0 ? '= ' + fmtL(v) + ' 메소' : '예: 300000000 또는 3억, 5000만'; })(), itemGroups, hasItems: itemGroups.length > 0,
         lvOpts: [140, 150, 160, 200, 250].map(v => ({ label: v + '제', ...on(sf.lv === v), pick: () => set({ lv: v, item: null }) })),
         onLv: e => { const v = parseInt(e.target.value); if (v > 0) set({ lv: clamp(v, 1, 300), item: null }); },
         curDn: () => setCur(sf.cur - 1), curUp: () => setCur(sf.cur + 1), tgtDn: () => setTgt(sf.tgt - 1), tgtUp: () => setTgt(sf.tgt + 1),
@@ -2533,7 +2544,7 @@ class Component extends DCLogic {
         protAll: () => { const all = [15, 16, 17].every(s => (sf.prot || {})[s]); set({ prot: all ? {} : { 15: true, 16: true, 17: true } }); },
         modes: [['auto', '유리한 쪽 자동'], ['manual', '직접 고르기'], ['all12', '항상 12성 복구']].map(([k, l]) => ({ label: l, ...on(sf.restMode === k), pick: () => set({ restMode: k, ...(k === 'manual' && sf.restMode !== 'manual' ? { rest: { ...pol } } : {}) }) })),
         rest: [15, 16, 17, 18, 19, 20, 21, 22].map(s => { const r = M.rest(s), v = !!pol[s]; return { label: s + '성', sub: fmtS(r.m) + ' + ' + r.n + '개', bg: v ? 'oklch(0.94 0.035 255)' : '#fff', color: v ? 'oklch(0.3 0.09 255)' : '#9a9ca1', border: v ? 'oklch(0.48 0.17 255)' : '#e3e3e0', pick: () => set({ restMode: 'manual', rest: { ...pol, [s]: !v } }) }; }),
-        evs: EV.map(([k, l, sub]) => { const o = sf.ev === k; return { label: l, sub, hasSub: !!sub, bg: o ? 'oklch(0.94 0.035 255)' : '#fff', border: o ? 'oklch(0.48 0.17 255)' : '#e3e3e0', dot: o ? 'oklch(0.48 0.17 255)' : '#d0d1d4', color: o ? 'oklch(0.3 0.09 255)' : '#3a3b3f', pick: () => set({ ev: k }) }; }),
+        evs: EV.filter(e => e[0] === 'none' || e[0] === 'shine').map(([k, l, sub]) => { const o = sf.ev === k; return { label: l, sub, hasSub: false, bg: o ? 'oklch(0.48 0.17 255)' : '#fff', border: o ? 'oklch(0.48 0.17 255)' : '#e3e3e0', dot: o ? '#fff' : '#d0d1d4', color: o ? '#fff' : '#2a2b2f', subColor: o ? 'oklch(0.93 0.03 255)' : '#6b6d73', pick: () => set({ ev: k }) }; }),
         mvps: [[0, '없음'], [0.03, '실버'], [0.05, '골드'], [0.1, '다이아']].map(([v, l]) => ({ label: l, ...on((sf.mvp || 0) === v), pick: () => set({ mvp: v }) })),
         pcBtn: { label: 'PC방', ...on(!!sf.pc), pick: () => set({ pc: !sf.pc }) },
         rows,
@@ -4813,13 +4824,14 @@ class Component extends DCLogic {
       isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso,
       isSunday,
       ...(() => {
-        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화'] : ['옥션', '사냥'];
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '스타포스'] : ['옥션', '사냥', '스타포스'];
         let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
+        if (area === '강화') area = '스타포스';
         if (!AREAS.includes(area)) area = '옥션';
         return {
-          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화',
+          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '스타포스',
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
-          ...(area === '강화' ? this.sfVals() : {}),
+          ...(area === '스타포스' ? this.sfVals() : {}),
           ...(() => {
             const GT = ['직업가이드', '보약', '환산별템세팅', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
@@ -4842,7 +4854,7 @@ class Component extends DCLogic {
               growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
-          areas: AREAS.map(l => ({ label: l, beta: l === '사냥', soon: l === '육성' || l === '강화', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
+          areas: AREAS.map(l => ({ label: l, beta: l === '사냥', soon: l === '육성', bg: l === area ? '#fff' : 'oklch(0.4 0.1 255)', color: l === area ? 'oklch(0.3 0.09 255)' : 'oklch(0.9 0.06 255)',
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
         };
       })(),
@@ -5069,7 +5081,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 49,
+      isAdmin: admin, appVer: 50,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
