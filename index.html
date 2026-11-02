@@ -1024,8 +1024,9 @@ body{overflow-x:clip;}
                 <img src="{{ s.vmxImg }}" alt="V매트릭스 코어 세팅" style="display:block;width:100%;height:auto;border-radius:10px;">
                 <sc-for list="{{ s.vmxCores }}" as="c" hint-placeholder-count="6">
                   <button onClick="{{ c.onClick }}" title="{{ c.tip }}" style="position:absolute;left:{{ c.left }};top:{{ c.top }};width:{{ c.w }};aspect-ratio:1;padding:0;border:none;background:transparent;cursor:{{ c.cursor }};">
-                    <span style="position:absolute;left:-8%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(45deg);opacity:{{ c.op }};"></span>
-                    <span style="position:absolute;left:-8%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(-45deg);opacity:{{ c.op }};"></span>
+                    <span style="position:absolute;left:2%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(45deg);opacity:{{ c.op }};"></span>
+                    <span style="position:absolute;left:2%;top:44%;width:116%;height:12%;border-radius:3px;background:#ff1a1a;box-shadow:0 0 0 1.5px #fff;transform:rotate(-45deg);opacity:{{ c.op }};"></span>
+                    <svg viewBox="0 0 100 100" style="position:absolute;left:5%;top:0;width:110%;height:110%;overflow:visible;opacity:{{ c.opT }};"><polygon points="50,6 96,90 4,90" fill="none" stroke="#fff" stroke-width="19" stroke-linejoin="round"></polygon><polygon points="50,6 96,90 4,90" fill="none" stroke="#ff1a1a" stroke-width="12" stroke-linejoin="round"></polygon></svg>
                   </button>
                 </sc-for>
                 <sc-for list="{{ s.vmxNums }}" as="c" hint-placeholder-count="24">
@@ -1040,7 +1041,7 @@ body{overflow-x:clip;}
                 </sc-for>
               </div>
               <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
-                <span style="font-size:12px;color:#6b6d73;">관리자: 강화 코어를 누르면 ✕ 표시, 직업·공용 코어 오른쪽 위 칸에 숫자를 적으면 빨간 숫자로 보여요.</span>
+                <span style="font-size:12px;color:#6b6d73;">관리자: 강화 코어를 누를 때마다 ✕ → △ → 없음, 직업·공용 코어 오른쪽 위 칸에 숫자를 적으면 빨간 숫자로 보여요.</span>
               </sc-if>
             </div>
           </sc-if>
@@ -2370,8 +2371,9 @@ const ABILITY = {
   });
   ABILITY['아델'][1] = { name: '보스 종결', lines: endOf('아델') };
 })();
-const VMATRIX = { '아델': 'img/vmatrix-adele.png' };
+const VMATRIX = {};
 const VMX = {
+  '아델': { img: 'img/vmatrix-adele.png?v=2', w: 484, h: 616, X: [48, 127, 205, 283, 361, 439], ey: 184, jy: 75, cy: [339, 417, 495, 573] },
   '메르세데스': { img: 'img/vmatrix-mercedes.png', w: 489, h: 614, X: [48, 127, 205, 283, 362, 440], ey: 182, jy: 77, cy: [337, 417, 497, 577] },
   '신궁': { img: 'img/vmatrix-sniper.png', w: 483, h: 615, X: [46, 124, 202, 280, 358, 436], ey: 184, jy: 75, cy: [339, 417, 495, 573] },
 };
@@ -3103,9 +3105,12 @@ class Component extends DCLogic {
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasVm: s.title === 'V매트릭스' && !!VMATRIX[job], vmImg: VMATRIX[job] || '',
         hasVmx: s.title === 'V매트릭스' && !!VMX[job], vmxImg: (VMX[job] || {}).img || '', vmxW: ((VMX[job] || {}).w || 489) + 'px',
-        vmxCores: s.title === 'V매트릭스' && VMX[job] ? VMX[job].X.map((cx, k) => { const L = VMX[job], on = (g.vmX || []).includes(k);
-          return { left: ((cx - 23.5) / L.w * 100).toFixed(2) + '%', top: (L.ey / L.h * 100).toFixed(2) + '%', w: (47 / L.w * 100).toFixed(2) + '%', op: on ? 1 : 0, cursor: admin ? 'pointer' : 'default', tip: admin ? '눌러서 ✕ 표시' : '',
-            onClick: () => { if (!admin) return; upd(n => { const a = n.vmX || []; n.vmX = a.includes(k) ? a.filter(x => x !== k) : [...a, k]; }); } }; }) : [],
+        vmxCores: s.title === 'V매트릭스' && VMX[job] ? VMX[job].X.map((cx, k) => { const L = VMX[job], on = (g.vmX || []).includes(k), onT = !on && (g.vmT || []).includes(k);
+          return { left: ((cx - 23.5) / L.w * 100).toFixed(2) + '%', top: (L.ey / L.h * 100).toFixed(2) + '%', w: (47 / L.w * 100).toFixed(2) + '%', op: on ? 1 : 0, opT: onT ? 1 : 0, cursor: admin ? 'pointer' : 'default', tip: admin ? '누를 때마다 ✕ → △ → 없음' : '',
+            onClick: () => { if (!admin) return; upd(n => { const a = n.vmX || [], t = n.vmT || [];
+              if (a.includes(k)) { n.vmX = a.filter(x => x !== k); n.vmT = [...t.filter(x => x !== k), k]; }
+              else if (t.includes(k)) n.vmT = t.filter(x => x !== k);
+              else n.vmX = [...a, k]; }); } }; }) : [],
         vmxNums: s.title === 'V매트릭스' && VMX[job] ? (() => { const L = VMX[job], X = L.X, P = [];
           X.slice(0, 4).forEach((x, k) => P.push(['j' + k, x, L.jy]));
           L.cy.forEach((y, r) => X.forEach((x, k) => { if (r < 3 || k < 2) P.push(['c' + (r * 6 + k), x, y]); }));
@@ -5193,7 +5198,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 58,
+      isAdmin: admin, appVer: 59,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
