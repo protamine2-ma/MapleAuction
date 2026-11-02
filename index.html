@@ -48,10 +48,10 @@ body{overflow-x:clip;}
 [data-m="hero"]{padding:20px!important;}
 [data-m="dhdr"]{display:flex!important;flex-direction:column;gap:10px!important;}
 [data-m="dmeta"]{justify-content:center;}
-[data-m="trow"],[data-m="thead"]{padding:0 6px!important;gap:2px!important;}
+[data-m="trow"],[data-m="thead"]{padding:0 3px!important;gap:1px!important;}
 [data-m="trow"]>span:nth-of-type(1),[data-m="trow"]>span:nth-of-type(2),[data-m="thead"]>span:nth-of-type(2),[data-m="thead"]>span:nth-of-type(3){display:none!important;}
-[data-m="trow"]>span,[data-m="thead"]>span:not(:first-child){width:54px!important;}
-[data-m="trow"] span[title]{font-size:14px!important;}
+[data-m="trow"]>span,[data-m="thead"]>span:not(:first-child){width:64px!important;}
+[data-m="trow"] span[title]{font-size:17px!important;}
 [data-m="thead"]>span:first-child{font-size:15px!important;}
 [data-m="rng"]{padding:10px 4px!important;}
 [data-m="rng"] span{font-size:revert;}
@@ -466,7 +466,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2><select value="{{ sndSel.stop.val }}" onChange="{{ sndSel.stop.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volStop.val }}" onChange="{{ volStop.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volStop.val }}%</span></label><select value="{{ sndSel.stop.val }}" onChange="{{ sndSel.stop.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ stopStatusBg }};color:{{ stopStatusColor }};font-size:13px;font-weight:700;">{{ stopStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.stop.open }}" hint-placeholder-val="{{ true }}">
@@ -529,7 +529,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><span style="font-size:13px;font-weight:600;color:oklch(0.4 0.08 255);">인식이 잘 안될 경우 감지 기준을 낮춰주세요</span><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="margin-left:auto;padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><span style="font-size:13px;font-weight:600;color:oklch(0.4 0.08 255);">인식이 잘 안될 경우 감지 기준을 낮춰주세요</span><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBooster.val }}" onChange="{{ volBooster.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBooster.val }}%</span></label><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
@@ -1299,9 +1299,39 @@ body{overflow-x:clip;}
     <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
+      <button onClick="{{ reviewTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ reviewTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ reviewTab.weight }};color:{{ reviewTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">검토</button>
     </sc-if>
   </div>
 </nav>
+
+<sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
+  <div style="display:flex;flex-direction:column;gap:6px;">
+    <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em;">검토</h1>
+    <span style="font-size:14px;color:#6b6d73;">이전 주보다 30% 넘게 오르거나 내린 아이템이에요. 누르면 그 탭으로 이동해요.</span>
+  </div>
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+    <div style="height:48px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 16px;background:#f7f7f5;border-bottom:1px solid #ececea;font-size:13px;font-weight:700;color:#6b6d73;">
+      <span style="flex:1;min-width:0;">아이템</span>
+      <span style="width:150px;flex:none;text-align:center;">이전 주 → 이번 주</span>
+      <span style="width:84px;flex:none;text-align:right;">변동</span>
+    </div>
+    <sc-if value="{{ reviewEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px 22px;text-align:center;font-size:15px;color:#6b6d73;">30% 넘게 바뀐 아이템이 없어요.</div>
+    </sc-if>
+    <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="6">
+      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:oklch(0.97 0.015 255);">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+          <span style="font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
+          <span style="font-size:13px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.where }}</span>
+        </div>
+        <span style="width:150px;flex:none;text-align:center;font-size:16px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ r.prev }} → <span style="font-weight:800;color:#1b1c1f;">{{ r.cur }}</span></span>
+        <span style="width:84px;flex:none;text-align:right;font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ r.color }};">{{ r.pct }}</span>
+      </div>
+    </sc-for>
+  </section>
+</div>
+</sc-if>
 
 <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
@@ -1783,28 +1813,28 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </sc-if>
       <sc-for list="{{ rowGroups }}" as="rg" hint-placeholder-count="1">
       <sc-if value="{{ rg.showLabel }}" hint-placeholder-val="{{ false }}">
-        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:2px;padding:0 4px 0 6px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
           <span onClick="{{ rg.onRename }}" title="{{ rg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ rg.cursor }};">{{ rg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
-            <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
+            <span style="width:70px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
           </sc-for>
-          <span style="width:68px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
+          <span style="width:80px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
         </div>
       </sc-if>
       <sc-for list="{{ rg.rows }}" as="row" hint-placeholder-count="7">
-        <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+        <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:2px;align-items:center;padding:0 4px 0 6px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
           <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
             <div style="position:relative;width:40px;height:40px;flex:none;">
               <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
               <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
               <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
             </div>
-            <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+            <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:19px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
           </div>
           <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
-            <span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
+            <span style="width:70px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
           </sc-for>
-          <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
+          <span style="width:80px;flex:none;text-align:center;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
         </div>
       </sc-for>
       </sc-for>
@@ -1826,37 +1856,37 @@ create policy "관리자만 보기" on visits for select to authenticated using 
               <polyline points="{{ line.points }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
             </svg>
             <sc-for list="{{ line.grid }}" as="gl" hint-placeholder-count="5">
-              <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
+              <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:14px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
             </sc-for>
             <sc-for list="{{ line.dots }}" as="p" hint-placeholder-count="12">
               <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:{{ p.size }};height:{{ p.size }};transform:translate(-50%,-50%);border-radius:50%;background:#fff;border:2.5px solid oklch(0.48 0.17 255);box-sizing:border-box;"></span>
               <sc-if value="{{ p.showVal }}" hint-placeholder-val="{{ true }}">
-                <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:12px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
+                <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:14px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
               </sc-if>
             </sc-for>
           </div>
-          <div style="position:relative;height:18px;">
+          <div style="position:relative;height:20px;">
             <sc-for list="{{ line.xlabels }}" as="xl" hint-placeholder-count="12">
-              <span style="position:absolute;left:{{ xl.left }};transform:translateX(-50%);font-size:12px;color:#6b6d73;white-space:nowrap;">{{ xl.label }}</span>
+              <span style="position:absolute;left:{{ xl.left }};transform:translateX(-50%);font-size:14px;color:#6b6d73;white-space:nowrap;">{{ xl.label }}</span>
             </sc-for>
           </div>
           <sc-if value="{{ line.showRange }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:14px;display:flex;gap:12px;">
               <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
-                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
               </div>
               <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
                 <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                   <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
-                  <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                  <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                   <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
                 </div>
               </sc-if>
               <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
-                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
               </div>
             </div>
@@ -1889,8 +1919,8 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </div>
         <div style="display:flex;align-items:center;gap:4px;padding:8px 8px 8px 10px;font-size:14px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">
           <span style="flex:1;min-width:0;padding-left:8px;">아이템</span>
-          <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4"><span style="width:58px;flex:none;text-align:center;">{{ td.label }}</span></sc-for>
-          <span style="width:68px;flex:none;text-align:center;">등락폭</span>
+          <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4"><span style="width:70px;flex:none;text-align:center;">{{ td.label }}</span></sc-for>
+          <span style="width:80px;flex:none;text-align:center;">등락폭</span>
         </div>
         <sc-for list="{{ pg.ktRows }}" as="row" hint-placeholder-count="4">
           <div style="padding:10px 8px 10px 10px;border-top:1px solid #f0f0ee;background:{{ row.bg }};">
@@ -1901,10 +1931,10 @@ create policy "관리자만 보기" on visits for select to authenticated using 
                 <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
                 <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
                 </div>
-                <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+                <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:19px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
               </div>
-              <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4"><span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span></sc-for>
-              <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;color:{{ row.deltaColor }};font-variant-numeric:tabular-nums;">{{ row.deltaText }}</span>
+              <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4"><span style="width:70px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span></sc-for>
+              <span style="width:80px;flex:none;text-align:center;font-size:21px;font-weight:700;color:{{ row.deltaColor }};font-variant-numeric:tabular-nums;">{{ row.deltaText }}</span>
             </div>
           </div>
         </sc-for>
@@ -1917,27 +1947,27 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             <span style="flex:1;min-width:0;font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ categoryLabel }}</span>
           </div>
         </sc-if>
-        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px 0 10px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
+        <div data-m="thead" style="height:44px;box-sizing:border-box;display:flex;align-items:center;gap:2px;padding:0 4px 0 6px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;color:oklch(0.36 0.17 255);">
           <span onClick="{{ pg.onRename }}" title="{{ pg.tip }}" style="flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-0.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:{{ pg.cursor }};">{{ pg.label }}</span>
           <sc-for list="{{ tableDates }}" as="td" hint-placeholder-count="4">
-            <span style="width:58px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
+            <span style="width:70px;flex:none;text-align:center;font-size:15px;font-weight:{{ td.weight }};color:oklch(0.36 0.17 255);font-variant-numeric:tabular-nums;">{{ td.label }}</span>
           </sc-for>
-          <span style="width:68px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
+          <span style="width:80px;flex:none;text-align:center;font-size:15px;font-weight:700;color:oklch(0.36 0.17 255);">등락폭</span>
         </div>
         <sc-for list="{{ pg.rows }}" as="row" hint-placeholder-count="7">
-          <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:4px;align-items:center;padding:0 8px 0 10px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
+          <div data-m="trow" style="height:66px;box-sizing:border-box;display:flex;gap:2px;align-items:center;padding:0 4px 0 6px;border-bottom:1px solid #f0f0ee;background:{{ row.bg }};">
             <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
               <div style="position:relative;width:40px;height:40px;flex:none;">
               <sc-if value="{{ row.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ row.iconSrc }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:8px;display:block;"></sc-if>
               <sc-if value="{{ row.noIcon }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ row.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="+" compact="" style="width:40px;height:40px;"></image-slot></sc-if>
               <sc-if value="{{ row.canUpload }}" hint-placeholder-val="{{ false }}"><label title="이미지 올리기 (관리자)" style="position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+<input type="file" accept="image/*" onChange="{{ row.onIcon }}" style="display:none;"></label></sc-if>
             </div>
-              <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
+              <span onClick="{{ row.onSelect }}" title="26주 시세 보기" style="font-size:19px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:{{ row.nameColor }};" style-hover="text-decoration:underline;">{{ row.name }}</span>
             </div>
             <sc-for list="{{ row.vals }}" as="v" hint-placeholder-count="4">
-              <span style="width:58px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
+              <span style="width:70px;flex:none;text-align:center;font-size:{{ v.size }};font-weight:{{ v.weight }};color:{{ v.color }};font-variant-numeric:tabular-nums;">{{ v.text }}</span>
             </sc-for>
-            <span style="width:68px;flex:none;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
+            <span style="width:80px;flex:none;text-align:center;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;color:{{ row.deltaColor }};">{{ row.deltaText }}</span>
           </div>
         </sc-for>
       </section>
@@ -1958,12 +1988,12 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             <polyline points="{{ line.points }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
           </svg>
           <sc-for list="{{ line.grid }}" as="gl" hint-placeholder-count="5">
-            <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:12px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
+            <span style="position:absolute;left:0;top:{{ gl.top }};width:{{ gl.w }};transform:translateY(-50%);padding-right:8px;box-sizing:border-box;text-align:right;font-size:14px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ gl.label }}</span>
           </sc-for>
           <sc-for list="{{ line.dots }}" as="p" hint-placeholder-count="12">
             <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:{{ p.size }};height:{{ p.size }};transform:translate(-50%,-50%);border-radius:50%;background:#fff;border:2.5px solid oklch(0.48 0.17 255);box-sizing:border-box;"></span>
             <sc-if value="{{ p.showVal }}" hint-placeholder-val="{{ true }}">
-              <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:12px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
+              <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,-150%);font-size:14px;font-weight:{{ p.weight }};color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ p.value }}</span>
             </sc-if>
           </sc-for>
         </div>
@@ -1976,19 +2006,19 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <div style="display:flex;gap:12px;">
             <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.02 255);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.15 255);">최저가</span>
-              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.minNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.minDate }}</span>
             </div>
             <sc-if value="{{ line.showAvg }}" hint-placeholder-val="{{ false }}">
               <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 150);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
                 <span style="font-size:18px;font-weight:800;color:oklch(0.45 0.13 150);">평균가</span>
-                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+                <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.avgNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
                 <span style="font-size:12px;color:#6b6d73;">{{ line.avgNote }}</span>
               </div>
             </sc-if>
             <div data-m="rng" style="flex:1 1 0;min-width:0;padding:14px 16px;border-radius:10px;background:oklch(0.96 0.03 25);display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
               <span style="font-size:18px;font-weight:800;color:oklch(0.5 0.17 25);">최고가</span>
-              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:13px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
+              <span style="display:flex;align-items:baseline;justify-content:center;gap:3px;flex-wrap:wrap;color:#1b1c1f;"><span style="font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;">{{ line.maxNum }}</span><span style="font-size:15px;font-weight:700;color:#3a3b3f;">{{ line.unit }}</span></span>
               <span style="font-size:12px;color:#6b6d73;">{{ line.maxDate }}</span>
             </div>
           </div>
@@ -2249,6 +2279,12 @@ const HIDDEN_TABS = ['깡통30%', '쿨뚝크뎀장갑'];
 const MESO_SEED = {"points":[{"date":"2026-01-13","v":2085},{"date":"2026-01-20","v":2152},{"date":"2026-01-27","v":2068},{"date":"2026-02-03","v":2075},{"date":"2026-02-10","v":2099},{"date":"2026-02-14","v":2311},{"date":"2026-02-21","v":2309},{"date":"2026-02-28","v":2388},{"date":"2026-03-03","v":2441},{"date":"2026-03-06","v":2503},{"date":"2026-03-13","v":2497},{"date":"2026-03-20","v":2511},{"date":"2026-03-28","v":2531},{"date":"2026-04-03","v":2569},{"date":"2026-04-09","v":2559},{"date":"2026-04-18","v":2417},{"date":"2026-04-24","v":2402},{"date":"2026-05-01","v":2477},{"date":"2026-05-09","v":2425},{"date":"2026-05-15","v":2335},{"date":"2026-05-23","v":2337},{"date":"2026-05-29","v":2350},{"date":"2026-06-05","v":2440},{"date":"2026-06-12","v":2551},{"date":"2026-06-20","v":2471},{"date":"2026-06-26","v":2480},{"date":"2026-07-03","v":2756},{"date":"2026-07-10","v":2649},{"date":"2026-08-03","v":2202},{"date":"2026-08-07","v":2158},{"date":"2026-08-14","v":2139},{"date":"2026-08-21","v":2024},{"date":"2026-08-28","v":1987},{"date":"2026-09-06","v":2063},{"date":"2026-09-12","v":2271},{"date":"2026-09-18","v":2248},{"date":"2026-09-26","v":2269},{"date":"2026-09-27","v":2290},{"date":"2026-10-03","v":2370},{"date":"2026-10-10","v":2336},{"date":"2026-10-16","v":2250},{"date":"2026-10-24","v":2185}]};
 const JANUS_DUR = { janus120: 120, janus80: 80, janus70: 70, janus60: 60 };
 const RAMP = ['oklch(0.89 0.035 255)', 'oklch(0.78 0.075 255)', 'oklch(0.64 0.12 255)', 'oklch(0.48 0.17 255)'];
+const BAR_SETS = {
+  '지금(연한 파랑)': RAMP,
+  '회색→이번주 파랑': ['oklch(0.84 0 0)', 'oklch(0.74 0 0)', 'oklch(0.62 0 0)', 'oklch(0.52 0.2 258)'],
+  '진한 파랑 단계': ['oklch(0.8 0.08 255)', 'oklch(0.68 0.12 255)', 'oklch(0.56 0.16 255)', 'oklch(0.42 0.2 262)'],
+  '4색 구분': ['oklch(0.78 0.11 195)', 'oklch(0.8 0.14 80)', 'oklch(0.62 0.16 320)', 'oklch(0.5 0.2 258)'],
+};
 const num = v => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 const fmt = v => { const n = num(v); return n === null ? '–' : String(Math.round(n * 100) / 100); };
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -3369,7 +3405,7 @@ class Component extends DCLogic {
   huntAlert(text, kind = 'skill', voice, snd) {
     if (this.hunt().paused && text !== '알림 테스트') return;
     if (kind === 'skill' && this.hunt().skillOff && text !== '알림 테스트') return;
-    const h = this.hunt(), grp = kind === 'buff' || kind === 'rune' || kind === 'skill' ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
+    const h = this.hunt(), grp = ['buff', 'rune', 'skill', 'stop', 'booster'].includes(kind) ? kind : 'timer', gv = (h.vols || {})[grp], vol = h.vol / 100 * (gv == null ? 100 : gv) / 100;
     const sg = ['skill', 'buff', 'rune', 'booster', 'stop'].includes(kind) ? kind : 'timer', sel = snd || (sg === 'skill' ? 'seoyun' : (h.snd || {})[sg] || 'seoyun');
     const VO = { seoyun: '', eunchae: 'eunchae/', jihyun: 'jihyun/', sena: 'sena/', ari: 'ari/', arang: 'arang/', ruri: 'ruri/', valkyrie: 'valkyrie/', gyogwan: 'gyogwan/', ajji: 'ajji/' };
     if (h.beep && !(sel in VO)) { this.sfx(sel, Math.min(1, vol)); return; }
@@ -4606,7 +4642,7 @@ class Component extends DCLogic {
             this._pick = null; this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== ps.id ? x : { ...x, box: { ...(x.box || {}), [res]: box } }) }); } }; })(),
       addSkill: () => this.saveHunt({ ...h, skills: [...h.skills, { id: 's' + Date.now(), preset: 'janus80', name: '솔 야누스 : 새벽', cd: 80, before: 8, durV: 1 }] }),
       huntVol: String(h.vol), onHuntVol: e => set('vol', Number(e.target.value)),
-      ...Object.fromEntries([['skill', 'volSkill'], ['buff', 'volBuff'], ['rune', 'volRune'], ['timer', 'volTimer']].map(([k, n]) => { const v = (h.vols || {})[k]; return [n, { val: String(v == null ? 100 : v),
+      ...Object.fromEntries([['skill', 'volSkill'], ['buff', 'volBuff'], ['rune', 'volRune'], ['stop', 'volStop'], ['booster', 'volBooster'], ['timer', 'volTimer']].map(([k, n]) => { const v = (h.vols || {})[k]; return [n, { val: String(v == null ? 100 : v),
         onChange: e => { set('vols', { ...(h.vols || {}), [k]: Number(e.target.value) }); clearTimeout(this._vt); this._vt = setTimeout(() => this.huntAlert('알림 테스트', k), 250); } }]; })),
       sndOpts: [{ key: 'seoyun', label: '서윤 (음성)', dis: false }, ...[['eunchae', '은채'], ['jihyun', '지현'], ['sena', '세나'], ['ari', '아리'], ['arang', '아랑'], ['ruri', '루리'], ['valkyrie', '발키리'], ['gyogwan', '교관'], ['ajji', '아찌']].map(([key, n]) => ({ key, label: n + ' (음성)', dis: false })), { key: '-', label: '── 짧은 효과음 ──', dis: true }, ...[['ting', '띠링'], ['bibik', '삐빅'], ['tiroring', '띠로링'], ['dingdong', '딩동'], ['ppabam', '빠밤'], ['beep', '삐-'], ['ttoreu', '또르륵']].map(([key, label]) => ({ key, label, dis: false }))],
       sndSel: Object.fromEntries([['skill', 'skill'], ['buff', 'buff'], ['rune', 'rune'], ['booster', 'booster'], ['stop', 'stop'], ['timer', 'minute']].map(([k, kind]) => [k, { val: (h.snd || {})[k] || 'seoyun',
@@ -4663,8 +4699,35 @@ class Component extends DCLogic {
       boxMsgColor: this._boxMode === 'none' ? 'oklch(0.5 0.19 25)' : 'oklch(0.45 0.15 150)', runeCvDisplay: this._stream ? 'block' : 'none',
     };
   }
+  reviewVals(on) {
+    const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    if (!on) return { reviewTab, reviewRows: [], reviewEmpty: false };
+    const all = this.state.all || {}, out = [], UR = /\s*\((만|억)\)\s*$/;
+    const KRE = /^노작 · (STR|DEX|INT|LUK) (27|30|33)%$/, S22 = /^(\d+성 · .+) · (STR|INT)$/;
+    TABS.filter(t => !HIDDEN_TABS.includes(t)).forEach(t => {
+      const T = all[t]; if (!T || !T.items) return;
+      const n = (T.dates || []).length; if (n < 2) return;
+      let g = '', u = '';
+      T.items.forEach(it => {
+        if (it.group) g = it.group;
+        const m = (it.name || '').match(UR); if (it.group) u = ''; if (m) u = m[1];
+        if (it.hidden) return;
+        const cur = num(it.values[n - 1]), prev = num(it.values[n - 2]);
+        if (cur === null || prev === null || prev === 0) return;
+        const r = (cur - prev) / prev; if (Math.abs(r) < 0.3) return;
+        let sk = null, sv = null, mk = g.match(KRE), ms = g.match(S22);
+        if (mk) { sk = mk[2] === '30' ? 'ktStat' : 'ktStat' + mk[2]; sv = mk[1]; } else if (ms) { sk = 'ktStat_' + ms[1]; sv = ms[2]; }
+        out.push({ r, name: (it.name || '').replace(UR, ''), where: t + (g ? ' · ' + g : '') + (u ? ' · ' + u + ' 단위' : ''),
+          prev: fmt(prev), cur: fmt(cur), pct: (r > 0 ? '▲ ' : '▼ ') + Math.round(Math.abs(r) * 100) + '%',
+          color: r > 0 ? 'oklch(0.56 0.2 25)' : 'oklch(0.5 0.18 260)',
+          onClick: () => { this.switchTab(t); this.setState({ selected: it.id, ...(sk ? { [sk]: sv } : {}) }); } });
+      });
+    });
+    out.sort((a, b) => Math.abs(b.r) - Math.abs(a.r));
+    return { reviewTab, reviewRows: out, reviewEmpty: !out.length };
+  }
   switchTab(tab) {
-    if (tab !== '문의' && tab !== '방문자') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
+    if (tab !== '문의' && tab !== '방문자' && tab !== '검토') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
     this.setState({ tab, selected: null });
     window.scrollTo(0, 0);
     if (tab === '방문자') this.loadStats();
@@ -4818,13 +4881,15 @@ class Component extends DCLogic {
     const isPop = this.state.tab === '인구수';
     const isSunday = this.state.tab === '썬데이';
     const isMeso = this.state.tab === '메소';
-    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
+    const isReview = this.state.tab === '검토' && admin;
+    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || this.state.tab === '검토' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
     const data = all[tab] && { ...all[tab], items: all[tab].items.filter(it => !it.hidden) };
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso,
+      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso && !isReview,
+      isReview, ...this.reviewVals(isReview),
       isSunday,
       ...(() => {
         const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '스타포스'] : ['옥션', '사냥', '스타포스'];
@@ -4890,14 +4955,15 @@ class Component extends DCLogic {
       let deltaText = '–', deltaColor = '#9a9ca1';
       if (cur !== null && prev !== null) {
         const d = Math.round((cur - prev) * 100) / 100;
-        if (d > 0) { deltaText = '▲ ' + d.toFixed(1); deltaColor = upColor; }
-        else if (d < 0) { deltaText = '▼ ' + Math.abs(d).toFixed(1); deltaColor = downColor; }
+        const dt = a => a >= 100 ? String(Math.round(a)) : a.toFixed(1);
+        if (d > 0) { deltaText = '▲ ' + dt(d); deltaColor = upColor; }
+        else if (d < 0) { deltaText = '▼ ' + dt(Math.abs(d)); deltaColor = downColor; }
         else deltaText = '0.0';
       }
       const vs = it.values.slice(last4);
       const vals = vs.map((v, i) => {
         const latest = i === vs.length - 1;
-        return { text: fmt(v), size: latest ? '18px' : '15px', weight: latest ? 700 : 500, color: latest ? '#1b1c1f' : '#6b6d73' };
+        return { text: fmt(v), size: latest ? '23px' : '19px', weight: latest ? 700 : 500, color: latest ? '#1b1c1f' : '#6b6d73' };
       });
       const sel = this.state.selected === it.id;
       const nk = (it.name || '').replace(UNIT_RE, '').replace(/\s+/g, '');
@@ -4950,7 +5016,7 @@ class Component extends DCLogic {
     }
 
     const chartDates = data.dates.slice(last4);
-    const colors = RAMP.slice(4 - chartDates.length);
+    const colors = BAR_SETS['4색 구분'].slice(4 - chartDates.length);
     const units = [];
     data.items.forEach(it => { const u = unitOf(it); if (!units.includes(u)) units.push(u); });
     const multi = units.length > 1;
@@ -5084,7 +5150,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 55,
+      isAdmin: admin, appVer: 56,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
