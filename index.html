@@ -3619,7 +3619,7 @@ class Component extends DCLogic {
     const W = v.videoWidth, H = v.videoHeight, res = W + 'x' + H;
     const M = this._mp || (this._mp = { last: now, alertAt: 0, cnt: 0 });
     if (M.res !== res) { M.res = res; M.box = null; M.findAt = 0; }
-    if (!M.box) { if (now - (M.findAt || 0) < 2000) return; M.findAt = now; M.box = this.findMpBar(W, H); M.peak = -1; M.last = now; M.alertAt = 0; M.cnt = 0; M.miss = 0; if (!M.box) return; }
+    if (!M.box) { if (now - (M.findAt || 0) < 2000) return; M.findAt = now; M.box = this.findMpBar(W, H); M.peak = -1; M.top = null; M.last = now; M.alertAt = 0; M.cnt = 0; M.miss = 0; if (!M.box) return; }
     const b = M.box, c = this._mpC || (this._mpC = document.createElement('canvas')); c.width = b.w; c.height = b.h;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, b.x, b.y, b.w, b.h, 0, 0, b.w, b.h); const img = x.getImageData(0, 0, b.w, b.h), d = img.data;
     let cyn = 0, dark = 0; const wm = new Uint8Array(b.w * b.h);
@@ -3630,7 +3630,8 @@ class Component extends DCLogic {
     if (!valid || this._fadeAt && now - this._fadeAt < 3000) { if (!valid && ++M.miss >= 15) M.box = null; M.last = Math.max(M.last, now - 1000); M.prevW = null; }
     else {
       M.miss = 0;
-      if (M.prevW && M.prevW.length === wm.length) { let n = 0; for (let k = 0; k < wm.length; k++) if (wm[k] !== M.prevW[k]) n++; if (n > 3 && !(M.prevFill != null && fill > M.prevFill)) { M.last = now; M.alertAt = 0; M.cnt = 0; } }
+      if (M.top == null || fill > M.top) M.top = fill;
+      else if (fill < M.top) { M.last = now; M.alertAt = 0; M.cnt = 0; M.top = fill; }
       M.prevW = wm; M.prevFill = fill;
     }
     const lim = Math.max(1, Number(h.mpSec) || 5) * 1000;
@@ -5198,7 +5199,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 59,
+      isAdmin: admin, appVer: 60,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
