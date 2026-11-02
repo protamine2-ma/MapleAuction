@@ -2576,9 +2576,10 @@ class Component extends DCLogic {
     }
     const SF_LV = { '여명의가디언엔젤링': 160, '에스텔라이어링': 160, '데이브레이크펜던트': 140, '트와일라이트마크': 140, '데아시두스이어링': 130, '골든클로버벨트': 140, '분노한자쿰의벨트': 150, '블랙빈마크': 135, '파풀라투스마크': 145, '도미네이트펜던트': 140, '도미네이터펜던트': 140, '마이스터링': 140,
       '루즈컨트롤머신마크': 160, '마력이깃든안대': 160, '몽환의벨트': 200, '커맨더포스이어링': 200, '거대한공포': 200, '고통의근원': 160, '컴플리트언더컨트롤': 200, '저주받은마도서': 160, '창세의뱃지': 250 };
+    const SF_SP = { '여명의가디언엔젤링': '1500만', '에스텔라이어링': '100만', '트와일라이트마크': '100만', '데이브레이크펜던트': '800만', '골든클로버벨트': '100만', '분노한자쿰의벨트': '1000만', '마이스터링': '2000만', '데아시두스이어링': '100만' };
     const lvOf = nk => SF_LV[nk] || (/^에테르넬/.test(nk) ? 250 : /^아케인셰이드/.test(nk) ? 200 : /^앱솔랩스/.test(nk) ? 160 : 0);
     const lastV = it => { for (let i = (it.values || []).length - 1; i >= 0; i--) { const v = parseFloat(it.values[i]); if (v > 0) return v; } return null; };
-    const allD = this.state.all || {};
+    const allD = this.state.all || {}, AUC = {};
     const itemGroups = ['여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '아케인'].map(tab => {
       const d = allD[tab]; if (!d || !d.items) return null;
       const m = new Map();
@@ -2588,14 +2589,19 @@ class Component extends DCLogic {
         const o = m.get(nk), g = it.group || '', v = lastV(it);
         if (/^노작/.test(g) && v != null) { const ex = g === '노작'; if (ex && !o.exact) { o.price = v; o.exact = true; } else if (!o.exact && (o.price == null || v < o.price)) o.price = v; }
       });
+      const KT17 = {}; if (tab === '보스장신구') d.items.forEach(it => { const g = it.group || '', n = (it.name || '').replace(/\s+/g, ''), v = lastV(it); if (!/^17성/.test(g) || !/깡통/.test(n) || v == null) return;
+        const k = /블빈|블랙빈/.test(n) ? '블랙빈마크' : /파풀/.test(n) ? '파풀라투스마크' : /도미/.test(n) ? '도미네이터펜던트' : null; if (k) KT17[k] = +v.toFixed(2) + '억'; });
+      m.forEach(o => { const k = { '도미네이트펜던트': '도미네이터펜던트' }[o.nk] || o.nk;
+        if (KT17[k]) AUC[o.nk] = KT17[k]; else if ((tab === '칠흑장신구' || tab === '에테르넬' && !/^에테르넬(모자|상의|하의|어깨)/.test(o.nk)) && o.exact && o.price > 0) AUC[o.nk] = +o.price.toFixed(2) + '억'; });
       const items = [...m.values()].map(o => {
         const slotId = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[o.nk] || o.nk), IC = this.state.icons || {}, ik = this.iconKey(slotId), iv = IC[ik], lv = lvOf(o.nk), picked = sf.item === o.nk;
         return { short: o.short, slotId, tip: o.name + ' · ' + lv + '제', hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
           bg: picked ? 'oklch(0.94 0.035 255)' : '#fff', border: picked ? 'oklch(0.48 0.17 255)' : '#efefec', color: picked ? 'oklch(0.3 0.09 255)' : '#3a3b3f',
-          pick: () => set({ item: o.nk, itemName: o.name, lv }) };
+          pick: () => { const a = AUC[o.nk], f = tab === '아케인' ? '200만' : /^에테르넬(모자|상의|하의|어깨)/.test(o.nk) ? '1500만' : SF_SP[o.nk]; set({ item: o.nk, itemName: o.name, lv, ...(a ? { spare: a, spareAuc: true } : f ? { spare: f, spareAuc: false } : { spareAuc: false }) }); } };
       });
       return items.length ? { tab, items } : null;
     }).filter(Boolean);
+    if (sf.spareAuc && sf.item && AUC[sf.item] && AUC[sf.item] !== sf.spare && !this._sfSync) { this._sfSync = true; setTimeout(() => { this._sfSync = false; const c = this.sfS(); if (c.spareAuc && c.item === sf.item) this.sfSet({ spare: AUC[sf.item] }); }, 0); }
     const rows = []; for (let s = sf.cur; s < sf.tgt; s++) { const x = M.st[s], t = s >= 23 ? 22 : s, r = s >= 15 ? M.rest(t) : null; rows.push({ lab: s + '→' + x.next, p: pc(x.p), d: x.d ? pc(x.d) : (x.prot ? '파괴방지' : '–'), c: fmtL(x.c), rest: x.d ? (pol[t] ? t + '성 유지 · ' + fmtS(r.m) + ' + ' + r.n + '개' : '12성 · 1개') : '–', restColor: x.d && pol[t] ? 'oklch(0.45 0.15 255)' : '#6b6d73' }); }
     return {
       sf: {
@@ -2605,7 +2611,7 @@ class Component extends DCLogic {
         curDn: () => setCur(sf.cur - 1), curUp: () => setCur(sf.cur + 1), tgtDn: () => setTgt(sf.tgt - 1), tgtUp: () => setTgt(sf.tgt + 1),
         onCur: e => setCur(parseInt(e.target.value) || 0), onTgt: e => setTgt(parseInt(e.target.value) || 1),
         stars: Array.from({ length: 25 }, (_, i) => ({ ch: '★', color: i < sf.cur ? 'oklch(0.62 0.16 75)' : i < sf.tgt ? 'oklch(0.48 0.17 255)' : '#d9dadd', gap: i % 5 === 4 && i < 24 ? '8px' : '0', pick: () => setTgt(i + 1), tip: (i + 1) + '성을 목표로' })),
-        onSpare: e => set({ spare: e.target.value }),
+        onSpare: e => set({ spare: e.target.value, spareAuc: false }),
         nOpts: [[10000, '1만'], [30000, '3만'], [100000, '10만']].map(([v, l]) => ({ label: l, ...on(sf.n === v), pick: () => set({ n: v }) })),
         prot: [15, 16, 17].map(s => ({ label: s + '성', ...on(!!(sf.prot || {})[s]), pick: () => set({ prot: { ...(sf.prot || {}), [s]: !(sf.prot || {})[s] } }) })),
         protAll: () => { const all = [15, 16, 17].every(s => (sf.prot || {})[s]); set({ prot: all ? {} : { 15: true, 16: true, 17: true } }); },
@@ -5199,7 +5205,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 60,
+      isAdmin: admin, appVer: 61,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
