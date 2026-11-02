@@ -50,18 +50,30 @@ function power(text) {
 }
 
 const d = new Date(Date.now() + 9 * 3600e3 - 86400e3), date = d.toISOString().slice(0, 10);
-const shares = {}, cores = {}, used = []; let raw = null, checked = 0;
+const shares = {}, cores = {}, used = []; let raw = null, checked = 0, other = 0, wrongRep = 0, noJob = 0;
+// 기록 안에 적힌 직업 이름 찾기
+function jobOf(o, depth = 0) { if (!o || typeof o !== 'object' || depth > 5) return ''; for (const k of Object.keys(o)) { if (/^(character_)?(class|job)(_name)?$/i.test(k) && typeof o[k] === 'string' && o[k]) return o[k].trim(); } for (const k of Object.keys(o)) { if (o[k] && typeof o[k] === 'object') { const v = jobOf(o[k], depth + 1); if (v) return v; } } return ''; }
 
 async function one(name) {
   if (used.length >= N) return;
   const id = await api('/id', { character_name: name }); if (!id || !id.ocid) return;
+  const b = await api('/character/basic', { ocid: id.ocid });
   checked++;
+  if (!b || b.character_class !== JOB) { other++; return; }
   const rl = await api('/battle-practice/replay-id', { ocid: id.ocid });
   const list = (rl && findArr(rl, x => x.replay_id)) || [];
-  const rep = list.filter(x => x.replay_id).sort((a, b) => String(b.register_date || '').localeCompare(String(a.register_date || '')))[0];
-  if (!rep || used.length >= N) return;
-  const res = await api('/battle-practice/result', { replay_id: rep.replay_id });
-  const st = res && findArr(res, x => x.skill_name && (x.damage != null || x.damage_percent != null));
+  const reps = list.filter(x => x.replay_id).sort((a, b) => String(b.register_date || '').localeCompare(String(a.register_date || '')));
+  let rep = null, res = null, st = null;
+  for (const r of reps) {
+    if (used.length >= N) return;
+    const rr = await api('/battle-practice/result', { replay_id: r.replay_id }); if (!rr) continue;
+    const jb = jobOf(rr) || jobOf(await api('/battle-practice/character-info', { replay_id: r.replay_id }));
+    if (jb && jb !== JOB) { wrongRep++; continue; }
+    if (!jb) { noJob++; continue; }
+    const ss = findArr(rr, x => x.skill_name && (x.damage != null || x.damage_percent != null)); if (!ss) continue;
+    if (used.some(u => u.replay_id === r.replay_id)) return;
+    rep = r; res = rr; st = ss; break;
+  }
   if (!st || used.length >= N) return;
   if (!raw) raw = { replay: rep, result: res };
   const tot = st.reduce((s, x) => s + num(x.damage), 0) || 1;
@@ -76,25 +88,25 @@ async function one(name) {
     const cn = c.hexa_core_name, L = num(c.hexa_core_level); if (!cn || !L) return;
     const o = cores[cn] || (cores[cn] = { name: cn, type: typeOf(c.hexa_core_type), linked: [], pts: {} });
     (c.linked_skill || []).forEach(l => { const n = l.hexa_skill_id || l.skill_name; if (n && !o.linked.includes(n)) o.linked.push(n); });
-    const tip = s6.find(s => s.skill_name === cn) || s6.find(s => o.linked.includes(s.skill_name));
+    const parts = String(cn).split('/').map(x => x.trim()); const tip = s6.find(s => s.skill_name === cn) || s6.find(s => parts.includes(s.skill_name)) || s6.find(s => o.linked.includes(s.skill_name));
     if (tip) { const a = power(tip.skill_effect), b = power(tip.skill_effect_next); if (a) o.pts[L] = a; if (b && L < 30) o.pts[L + 1] = b; if (!o.tip) o.tip = tip.skill_effect || ''; }
   });
   console.log(`✓ ${name} · 기록 ${used.length}/${N}`);
 }
 function findDps(o, depth = 0) { if (!o || typeof o !== 'object' || depth > 4) return 0; for (const k of Object.keys(o)) { if (/^(total_)?dps$/i.test(k) && !Array.isArray(o[k])) return o[k]; } for (const k of Object.keys(o)) { if (typeof o[k] === 'object' && !Array.isArray(o[k])) { const v = findDps(o[k], depth + 1); if (v) return v; } } return 0; }
 
-for (let page = 1; used.length < N && page <= 20; page++) {
+for (let page = 1; used.length < N && page <= 80; page++) {
   const j = await api('/ranking/overall', { date, class: CLASS, page });
   const r = (j && j.ranking) || []; if (!r.length) break;
   for (const x of r) { if (used.length >= N) break; await one(x.character_name); }
-  console.log(`랭킹 ${page}페이지 · 확인 ${checked}명 · 연무장 기록 ${used.length}명`);
+  console.log(`랭킹 ${page}페이지 · 확인 ${checked}명 · 다른 직업 ${other}명 · 다른 직업 기록 ${wrongRep}개 · 직업 확인 안 됨 ${noJob}개 · 아델 연무장 기록 ${used.length}명`);
 }
 if (raw) fs.writeFileSync(`hexaeff-raw-${JOB}.json`, JSON.stringify(raw, null, 2));
-if (!used.length) { console.error('연무장 기록이 있는 캐릭터를 찾지 못했어요.'); process.exit(1); }
+if (!used.length) { console.error(`아델 연무장 기록을 찾지 못했어요. (직업 확인 안 된 기록 ${noJob}개)`); process.exit(1); }
 
 // 평균 딜 지분
 Object.keys(shares).forEach(k => { shares[k] /= used.length; });
-const shareOf = c => { const keys = [c.name, ...c.linked].map(norm); return Object.entries(shares).filter(([k]) => keys.some(n => n && (norm(k) === n || norm(k).startsWith(n) || n.startsWith(norm(k))))).reduce((s, [, v]) => s + v, 0); };
+const shareOf = c => { const keys = [...new Set([c.name, ...c.linked].flatMap(x => String(x).split('/')).map(norm).filter(Boolean))]; return Object.entries(shares).filter(([k]) => keys.some(n => n && (norm(k) === n || norm(k).startsWith(n) || n.startsWith(norm(k))))).reduce((s, [, v]) => s + v, 0); };
 // 레벨별 강도: 모인 점들로 직선 보간
 const valAt = (c, L) => { const ks = Object.keys(c.pts).map(Number).sort((a, b) => a - b); if (!ks.length) return 1 + L * 0.03; if (c.pts[L]) return c.pts[L];
   let lo = ks.filter(k => k < L).pop(), hi = ks.find(k => k > L);
