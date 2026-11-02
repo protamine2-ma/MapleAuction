@@ -754,6 +754,7 @@ body{overflow-x:clip;}
           </div>
         </div>
       </section>
+      <div style="min-width:0;display:flex;flex-direction:column;gap:18px;">
       <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
         <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">강화 조건</h2></div>
         <div style="display:flex;flex-direction:column;gap:1px;background:#efefec;">
@@ -797,12 +798,14 @@ body{overflow-x:clip;}
         </div>
       </section>
       </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:18px;align-items:start;">
+    <div style="min-width:0;display:flex;flex-direction:column;gap:18px;">
       <div style="display:flex;gap:10px;">
         <sc-if value="{{ sf.notRunning }}" hint-placeholder-val="{{ true }}"><button onClick="{{ sf.run }}" style="flex:1;padding:15px;border:none;border-radius:12px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:17px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">시뮬레이션 돌리기</button></sc-if>
         <sc-if value="{{ sf.running }}" hint-placeholder-val="{{ false }}"><div style="flex:1;position:relative;overflow:hidden;padding:15px;border-radius:12px;background:oklch(0.94 0.035 255);text-align:center;font-size:16px;font-weight:800;color:oklch(0.3 0.09 255);"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ sf.prog }};background:oklch(0.86 0.07 255);"></div><span style="position:relative;">계산 중 {{ sf.prog }}</span></div><button onClick="{{ sf.cancel }}" style="padding:15px 22px;border:1px solid #e3e3e0;border-radius:12px;background:#fff;color:oklch(0.55 0.2 25);font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;">취소</button></sc-if>
       </div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:18px;">
       <sc-if value="{{ sf.noRes }}" hint-placeholder-val="{{ true }}">
       <section style="background:#fff;border:1px dashed #d6d7da;border-radius:14px;padding:60px 20px;text-align:center;font-size:15px;color:#8a8c92;">조건을 고르고 <b style="color:oklch(0.3 0.09 255);">시뮬레이션 돌리기</b>를 눌러주세요.</section>
       </sc-if>
@@ -847,6 +850,25 @@ body{overflow-x:clip;}
           </div>
         </div>
       </section>
+    </div>
+    <div style="min-width:0;display:flex;flex-direction:column;gap:18px;">
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">최근 기록 <span style="font-size:12px;font-weight:600;color:oklch(0.4 0.08 255);">최대 10개 · 이 기기에만 저장</span></h2><sc-if value="{{ sf.hasHist }}" hint-placeholder-val="{{ false }}"><button onClick="{{ sf.histClear }}" style="padding:5px 10px;border:1px solid #e3e3e0;border-radius:7px;background:#fff;color:#6b6d73;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">모두 지우기</button></sc-if></div>
+        <sc-if value="{{ sf.noHist }}" hint-placeholder-val="{{ true }}"><div style="padding:40px 20px;text-align:center;font-size:14px;color:#8a8c92;">시뮬레이션을 돌리면 여기에 기록이 남아요.</div></sc-if>
+        <sc-for list="{{ sf.hist }}" as="h" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid #f0f0ee;">
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+            <span style="font-size:15px;font-weight:800;color:#1b1c1f;">{{ h.title }}</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:12px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ h.when }}</span><span style="padding:2px 8px;border-radius:999px;background:{{ h.evBg }};color:{{ h.evColor }};font-size:12px;font-weight:700;white-space:nowrap;">{{ h.evTag }}</span></div>
+            </div>
+            <div style="flex:none;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;white-space:nowrap;"><span style="font-size:12px;font-weight:700;color:#6b6d73;margin-right:4px;">평균</span>{{ h.mean }}</span>
+            <button onClick="{{ h.del }}" title="삭제" style="width:26px;height:26px;padding:0;border:1px solid #e3e3e0;border-radius:7px;background:#fff;color:#9a9ca1;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">✕</button>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+    </div>
     </div>
   </div>
 </div>
@@ -2482,6 +2504,10 @@ class Component extends DCLogic {
     }
     return pol;
   }
+  sfHist() {
+    if (this.state.sfHist) return this.state.sfHist;
+    try { const h = JSON.parse(localStorage.getItem(KEY + ':sfHist') || '[]'); return Array.isArray(h) ? h : []; } catch (e) { return []; }
+  }
   sfRun() {
     const sf = this.sfS(); if (sf.tgt <= sf.cur) return;
     if (this.sfJob) this.sfJob.cancel = true;
@@ -2505,7 +2531,10 @@ class Component extends DCLogic {
       for (let i = 0; i < N; i++) { sum += cost[i]; ss += spare[i]; if (spare[i] > mx) mx = spare[i]; }
       const spCnt = new Array(mx + 1).fill(0); for (let i = 0; i < N; i++) spCnt[spare[i]]++;
       this.sfJob = null;
-      this.setState({ sfProg: null, sfRes: { sc, spCnt, N, mean: sum / N, spMean: ss / N, P: SP, pol, cur: sf.cur, tgt: sf.tgt, lv: sf.lv } });
+      const qv = p => sc[Math.min(N - 1, Math.floor(N * p))];
+      const ent = { at: Date.now(), sf: { ...sf }, mean: sum / N, spMean: ss / N, q10: qv(0.1), q50: qv(0.5), q90: qv(0.9) };
+      const hist = [ent, ...this.sfHist()].slice(0, 10); try { localStorage.setItem(KEY + ':sfHist', JSON.stringify(hist)); } catch (e) {}
+      this.setState({ sfProg: null, sfHist: hist, sfRes: { sc, spCnt, N, mean: sum / N, spMean: ss / N, P: SP, pol, cur: sf.cur, tgt: sf.tgt, lv: sf.lv } });
     };
     setTimeout(step, 0);
   }
@@ -2561,7 +2590,7 @@ class Component extends DCLogic {
         const slotId = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[o.nk] || o.nk), IC = this.state.icons || {}, ik = this.iconKey(slotId), iv = IC[ik], lv = lvOf(o.nk), picked = sf.item === o.nk;
         return { short: o.short, slotId, tip: o.name + ' · ' + lv + '제', hasIcon: !!iv, noIcon: !iv, iconSrc: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
           bg: picked ? 'oklch(0.94 0.035 255)' : '#fff', border: picked ? 'oklch(0.48 0.17 255)' : '#efefec', color: picked ? 'oklch(0.3 0.09 255)' : '#3a3b3f',
-          pick: () => set({ item: o.nk, lv }) };
+          pick: () => set({ item: o.nk, itemName: o.name, lv }) };
       });
       return items.length ? { tab, items } : null;
     }).filter(Boolean);
@@ -2569,8 +2598,8 @@ class Component extends DCLogic {
     return {
       sf: {
         lv: sf.lv, cur: sf.cur, tgt: sf.tgt, spare: sf.spare, spareTxt: (() => { const v = this.sfSpareV(sf); return v > 0 ? '= ' + fmtL(v) + ' 메소' : '예: 300000000 또는 3억, 5000만'; })(), itemGroups, hasItems: itemGroups.length > 0,
-        lvOpts: [140, 150, 160, 200, 250].map(v => ({ label: v + '제', ...on(sf.lv === v), pick: () => set({ lv: v, item: null }) })),
-        onLv: e => { const v = parseInt(e.target.value); if (v > 0) set({ lv: clamp(v, 1, 300), item: null }); },
+        lvOpts: [140, 150, 160, 200, 250].map(v => ({ label: v + '제', ...on(sf.lv === v), pick: () => set({ lv: v, item: null, itemName: null }) })),
+        onLv: e => { const v = parseInt(e.target.value); if (v > 0) set({ lv: clamp(v, 1, 300), item: null, itemName: null }); },
         curDn: () => setCur(sf.cur - 1), curUp: () => setCur(sf.cur + 1), tgtDn: () => setTgt(sf.tgt - 1), tgtUp: () => setTgt(sf.tgt + 1),
         onCur: e => setCur(parseInt(e.target.value) || 0), onTgt: e => setTgt(parseInt(e.target.value) || 1),
         stars: Array.from({ length: 25 }, (_, i) => ({ ch: '★', color: i < sf.cur ? 'oklch(0.62 0.16 75)' : i < sf.tgt ? 'oklch(0.48 0.17 255)' : '#d9dadd', gap: i % 5 === 4 && i < 24 ? '8px' : '0', pick: () => setTgt(i + 1), tip: (i + 1) + '성을 목표로' })),
@@ -2587,6 +2616,17 @@ class Component extends DCLogic {
         run: () => this.sfRun(), cancel: () => { if (this.sfJob) this.sfJob.cancel = true; this.sfJob = null; this.setState({ sfProg: null }); },
         running, notRunning: !running, prog: Math.round((this.state.sfProg || 0) * 100) + '%',
         hasRes: !!R, noRes: !R && !running, R: R || {},
+        ...(() => { const H = this.sfHist(), evL = Object.fromEntries(EV.map(e => [e[0], e[1]])), p2 = n => String(n).padStart(2, '0');
+          return { hasHist: H.length > 0, noHist: !H.length, hist: H.map((h, i) => { const s = h.sf || {}, d = new Date(h.at), sp = this.sfSpareV(s);
+            return { when: (d.getMonth() + 1) + '/' + d.getDate() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()),
+              title: (s.item ? (s.itemName || s.item) + ' · ' : '') + s.lv + '제 · ' + s.cur + '성 → ' + s.tgt + '성',
+              evTag: s.ev && s.ev !== 'none' ? (evL[s.ev] || s.ev) : '이벤트 없음', evOn: !!(s.ev && s.ev !== 'none'),
+              evBg: s.ev && s.ev !== 'none' ? 'oklch(0.95 0.06 85)' : '#f0f0ee', evColor: s.ev && s.ev !== 'none' ? 'oklch(0.45 0.12 70)' : '#6b6d73',
+              cond: [s.ev && s.ev !== 'none' ? evL[s.ev] : '이벤트 없음', sp > 0 ? '스페어 ' + fmtL(sp) : '스페어 0', Object.keys(s.prot || {}).filter(k => s.prot[k]).length ? '파괴방지 ' + Object.keys(s.prot).filter(k => s.prot[k]).join('·') + '성' : ''].filter(Boolean).join(' · '),
+              mean: fmtL(h.mean), spMean: (Math.round(h.spMean * 100) / 100) + '개', q10: fmtL(h.q10), q50: fmtL(h.q50), q90: fmtL(h.q90),
+              load: () => set({ ...s }),
+              del: () => { const nh = H.filter((_, j) => j !== i); try { localStorage.setItem(KEY + ':sfHist', JSON.stringify(nh)); } catch (e) {} this.setState({ sfHist: nh }); } }; }),
+            histClear: () => { if (!confirm('기록을 모두 지울까요?')) return; try { localStorage.removeItem(KEY + ':sfHist'); } catch (e) {} this.setState({ sfHist: [] }); } }; })(),
       },
     };
   }
@@ -3516,9 +3556,10 @@ class Component extends DCLogic {
     if (seen) { if (!B.seenAt) B.seenAt = now; } else if (B.gone >= 2) B.seenAt = 0;
     if (h.boostOn && !h.paused) {
       if (!B.start && !B.done && B.streak >= 2 && now - B.seenAt >= 2000) { B.start = B.seenAt - 3000; B.alerted = false; }
-      if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
+      if (B.start && !B.alerted && now - B.start >= dur) { B.alerted = true; B.done = true; B.doneAt = now; B.start = 0; this.huntAlert('부스터 끝', 'booster'); }
       if (B.start && B.gone >= 10 && now - B.start < dur - 15000) B.start = 0;
-      if (B.done && B.gone >= 3) B.done = false;
+      if (B.done && B.gone >= 1) { B.done = false; B.streak = 0; B.seenAt = 0; }
+      else if (B.done && seen && now - (B.doneAt || 0) >= 8000) { B.done = false; B.start = B.doneAt; B.alerted = false; }
     }
     const cv = this._boostCv && this._boostCv.current; if (cv) { cv.width = ow; cv.height = oh; cv.getContext('2d').putImageData(img, 0, 0); }
   }
@@ -4670,7 +4711,7 @@ class Component extends DCLogic {
         return { buffVidOn: !!this.state.buffVid, buffVidTop: this.state.buffVidTop || 0, buffVidLeft: this.state.buffVidLeft || 0, buffVidShow: e => { const r = e.currentTarget.getBoundingClientRect(), w = Math.min(480, window.innerWidth * 0.8); this.setState({ buffVid: true, buffVidTop: r.bottom + 8, buffVidLeft: Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) }); }, buffVidHide: () => this.setState({ buffVid: false }), huntAdmin: !!this.state.admin, stopCvRef: this._stopCv, stopSw: sw(h.stopOn), toggleStop: () => { this._stop = null; set('stopOn', !h.stopOn); }, stopSec: String(h.stopSec ?? 15), stopRep: String(h.stopRep ?? 3), onStopRep: e => set('stopRep', Math.max(1, Number(e.target.value) || 3)), onStopSec: e => set('stopSec', Math.max(3, Number(e.target.value) || 15)),
           stopStatus: ss[0], stopStatusBg: ss[1], stopStatusColor: ss[2], stopIdle: idle == null ? '--' : Math.floor(idle) + '초', stopIdleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)' }; })(),
       ...(() => { if (!this._boostCv) this._boostCv = React.createRef(); const B = this._boost || {}, dur = (Number(h.boostSec) || 100) * 1000, run = !!B.start, rem = run ? Math.max(0, dur - (now - B.start)) : 0;
-        const bs = !h.boostOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : run ? ['부스터 진행 중', 'oklch(0.6 0.2 25)', '#fff'] : ['대기 중', 'oklch(0.48 0.17 255)', '#fff'];
+        const bs = !h.boostOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : h.paused ? ['전체 비활성화 중', '#f0f0ee', '#6b6d73'] : run ? ['부스터 진행 중', 'oklch(0.6 0.2 25)', '#fff'] : ['대기 중', 'oklch(0.48 0.17 255)', '#fff'];
         return { boostCvRef: this._boostCv, boostSw: sw(h.boostOn), toggleBoost: () => { this._boost = null; set('boostOn', !h.boostOn); },
           boostStatus: bs[0], boostStatusBg: bs[1], boostStatusColor: bs[2], boostRemain: run ? Math.ceil(rem / 1000) + '초' : '--', boostPx: this._stream && B.px != null ? String(B.px) : '--',
           boostMin: this.state.boostMinDraft ?? String(h.boostMin == null || Number(h.boostMin) === 120 ? 50 : h.boostMin),
@@ -5152,7 +5193,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 57,
+      isAdmin: admin, appVer: 58,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
