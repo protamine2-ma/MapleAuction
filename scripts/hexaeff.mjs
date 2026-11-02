@@ -108,7 +108,20 @@ if (!used.length) { console.error(`아델 연무장 기록을 찾지 못했어�
 Object.keys(shares).forEach(k => { shares[k] /= used.length; });
 const shareOf = c => { const keys = [...new Set([c.name, ...c.linked].flatMap(x => String(x).split('/')).map(norm).filter(Boolean))]; return Object.entries(shares).filter(([k]) => keys.some(n => n && (norm(k) === n || norm(k).startsWith(n) || n.startsWith(norm(k))))).reduce((s, [, v]) => s + v, 0); };
 // 레벨별 강도: 모인 점들로 직선 보간
-const valAt = (c, L) => { const ks = Object.keys(c.pts).map(Number).sort((a, b) => a - b); if (!ks.length) return 1 + L * 0.03; if (c.pts[L]) return c.pts[L];
+// 직접 확인한 툴팁 수치 (레벨: 퍼뎀)
+const KNOWN = { '디바이드': { 1: 486, 30: 834 }, '오더': { 1: 394 }, '임페일': { 1: 368 }, '크리에이션': { 1: 788 }, '마에스트로': { 2: 726 }, '아인하이트': { 1: 924 }, '에테르뤼페': { 1: 500 } };
+// 강화 코어 최종뎀: 1~9 11~19%, 10~19 25~34%, 20~29 40~49%, 30 60%
+const ENH = L => L >= 30 ? 60 : L >= 20 ? 20 + L : L >= 10 ? 15 + L : 10 + L;
+const valAt = (c, L) => {
+  const kn = Object.keys(KNOWN).find(k => String(c.name).split('/').map(norm).some(n => n.startsWith(norm(k))));
+  if (kn) { const p = { ...Object.fromEntries(Object.entries(c.pts).filter(([, v]) => v >= 100)), ...KNOWN[kn] }; const ks = Object.keys(p).map(Number).sort((a, b) => a - b);
+    if (ks.length >= 2) { const lo = ks[0], hi = ks[ks.length - 1]; return p[lo] + (p[hi] - p[lo]) * (L - lo) / (hi - lo); }
+    const k = ks[0]; return p[k] * (39.5 + L) / (39.5 + k); }
+  if (c.type === 'enhance') return 1 + ENH(L) / 100;
+  const ks = Object.keys(c.pts).map(Number).sort((a, b) => a - b);
+  // 마스터리·오리진·헤카테: 수치가 하나뿐이면 디바이드와 같은 모양(1레벨 = 30레벨의 58%, 직선)으로 가정
+  if (ks.length === 1) { const k = ks[0], v = c.pts[k]; return v * (39.5 + L) / (39.5 + k); }
+  if (!ks.length) return (39.5 + L) / 69.5; if (c.pts[L]) return c.pts[L];
   let lo = ks.filter(k => k < L).pop(), hi = ks.find(k => k > L);
   if (lo == null) { lo = ks[0]; hi = ks[1] ?? null; } if (hi == null) { hi = ks[ks.length - 1]; lo = ks.length > 1 ? ks[ks.length - 2] : null; }
   if (lo == null || hi == null || lo === hi) return c.pts[ks[0]] * (1 + (L - ks[0]) * 0.03);
@@ -120,11 +133,13 @@ const lv = {}; list.forEach(c => { lv[c.name] = 1; });
 const order = [];
 for (let step = 0; step < 400; step++) {
   let best = null;
-  list.forEach(c => { const L = lv[c.name]; if (L >= 30) return; const cost = COST[c.type][L] || 1;
-    const gain = c.share * (valAt(c, L + 1) - valAt(c, L)) / (valAt(c, ref[c.name]) || 1);
-    const e = gain / cost; if (!best || e > best.e) best = { c, e }; });
+  // 10·20·30레벨 구간 효과까지 보도록, 다음 구간까지 묶어서 올렸을 때의 효율도 비교
+  list.forEach(c => { const L = lv[c.name]; if (L >= 30) return; const base = valAt(c, ref[c.name]) || 1;
+    let cost = 0; const nb = Math.min(30, Math.ceil((L + 1) / 10) * 10);
+    for (let t = L + 1; t <= nb; t++) { cost += COST[c.type][t - 1] || 1;
+      const e = c.share * (valAt(c, t) - valAt(c, L)) / base / cost; if (!best || e > best.e) best = { c, e, to: t }; } });
   if (!best) break;
-  lv[best.c.name]++; order.push({ core: best.c.name, lv: lv[best.c.name], type: best.c.type });
+  while (lv[best.c.name] < best.to) { lv[best.c.name]++; order.push({ core: best.c.name, lv: lv[best.c.name], type: best.c.type }); }
 }
 const out = { job: JOB, date, sample: used.length, replays: used.map(u => ({ dps: u.dps })),
   cores: list.sort((a, b) => b.share - a.share).map(c => ({ name: c.name, type: c.type, share: c.share, linked: c.linked, pts: c.pts })),
@@ -132,4 +147,5 @@ const out = { job: JOB, date, sample: used.length, replays: used.map(u => ({ dps
   items: order };
 fs.writeFileSync(`hexaeff-${JOB}.json`, JSON.stringify(out, null, 2));
 console.log('코어 지분:', out.cores.map(c => `${c.name} ${c.share}%`).join(' · '));
-console.log('순서:', order.slice(0, 40).map(o => `${o.core}${o.lv}`).join(' → '));
+out.cores.forEach(c => console.log(`툴팁 수치 ${c.name}:`, Object.entries(c.pts).map(([l, v]) => l + '레벨=' + (+v).toFixed(3)).join(' ')));
+console.log('순서:', order.slice(0, 80).map(o => `${o.core}${o.lv}`).join(' → '));
