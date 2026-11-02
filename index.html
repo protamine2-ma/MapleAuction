@@ -1110,6 +1110,26 @@ body{overflow-x:clip;}
               </sc-for>
             </div>
           </sc-if>
+          <sc-if value="{{ s.hasHexaEff }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;padding:16px;border:1px solid #e3e3e0;border-radius:12px;background:#fafaf8;">
+              <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+                <span style="font-size:16px;font-weight:800;color:#2a2b2f;">연무장 기반 효율 순서</span>
+                <span style="padding:2px 8px;border-radius:999px;background:oklch(0.94 0.035 255);color:oklch(0.4 0.15 255);font-size:12px;font-weight:700;">테스트</span>
+                <span style="font-size:13px;color:#8a8c92;">{{ s.hexaEff.note }}</span>
+              </div>
+              <span style="font-size:13px;color:#6b6d73;">모든 코어 1레벨 활성화 후 · 솔 에르다 조각 1개당 딜 증가가 큰 순서 · 숫자는 강화 후 레벨</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ s.hexaEff.cores }}" as="c" hint-placeholder-count="6">
+                  <span style="padding:5px 10px;border-radius:8px;background:#fff;border:1px solid #e3e3e0;font-size:13px;color:#3a3b3f;"><b style="color:{{ c.color }};">●</b> {{ c.name }} <b>{{ c.share }}</b></span>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <sc-for list="{{ s.hexaEff.steps }}" as="t" hint-placeholder-count="30">
+                  <span title="{{ t.tip }}" style="display:flex;align-items:center;gap:4px;padding:4px 7px;border-radius:6px;background:{{ t.bg }};font-size:12px;font-weight:700;color:#2a2b2f;"><span style="color:#9a9ca1;font-weight:600;">{{ t.n }}</span>{{ t.short }} {{ t.lv }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasHs }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:14px;">
               <span style="font-size:13px;font-weight:600;color:#6b6d73;">초록 칸은 이전 레벨보다 오른 스탯이에요</span>
@@ -3130,6 +3150,14 @@ class Component extends DCLogic {
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(img/artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
+        ...(() => { const he = s.title === '헥사스킬' && job === '아델' ? this.loadPetBuff(job, 'hexaeff') : null; if (!he || !he.items) return { hasHexaEff: false, hexaEff: {} };
+          const pal = ['oklch(0.92 0.06 300)', 'oklch(0.93 0.07 90)', 'oklch(0.92 0.06 160)', 'oklch(0.92 0.05 250)', 'oklch(0.92 0.06 30)', 'oklch(0.93 0.04 200)', 'oklch(0.92 0.06 340)', 'oklch(0.93 0.05 120)'];
+          const ink = ['oklch(0.55 0.18 300)', 'oklch(0.65 0.16 85)', 'oklch(0.55 0.15 160)', 'oklch(0.5 0.17 255)', 'oklch(0.58 0.18 30)', 'oklch(0.55 0.12 200)', 'oklch(0.55 0.18 340)', 'oklch(0.55 0.14 120)'];
+          const ci = {}; (he.cores || []).forEach((c, k) => { ci[c.name] = k % pal.length; });
+          const sh = n => String(n).replace(/\s*(VI|Ⅵ)$/, '').replace(/\s+/g, '').slice(0, 5);
+          return { hasHexaEff: true, hexaEff: { note: (he.date || '') + ' · 연무장 기록 ' + he.sample + '명 평균',
+            cores: (he.cores || []).map(c => ({ name: c.name, share: c.share + '%', color: ink[ci[c.name]] })),
+            steps: he.items.map((t, k) => ({ n: k + 1, short: sh(t.core), lv: t.lv, tip: t.core + ' ' + t.lv + '레벨', bg: pal[ci[t.core] ?? 0] })) } }; })(),
         hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => ({ src, alt: '헥사스킬 강화 순서 ' + (k + 1) })) : [],
         hasHs: s.title === '하이퍼스탯' && !!HYPERSTAT[job],
         hsSets: s.title === '하이퍼스탯' && HYPERSTAT[job] ? HYPERSTAT[job].map(h => ({ name: h.name, range: h.lv[0] + '~' + h.lv[h.lv.length - 1] + 'Lv', lvs: h.lv.map(l => ({ t: l + 'Lv' })),
@@ -5205,7 +5233,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 61,
+      isAdmin: admin, appVer: 62,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
