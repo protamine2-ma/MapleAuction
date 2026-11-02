@@ -1,0 +1,226 @@
+{
+  "replay": {
+    "period_no": 5,
+    "register_date": "2026-10-03T00:00+09:00",
+    "replay_id": "7c7c52e53542bf02108e11daba42570eefe8d04e6d233bd35cf2fabdeb93fb0d"
+  },
+  "result": {
+    "register_date": "2026-10-03T00:00+09:00",
+    "total_play_time": 336000,
+    "total_damage": 2124403311501165,
+    "total_dps": 6322628903277,
+    "end_type": "1",
+    "like_count": 0,
+    "skill_statistic": [
+      {
+        "skill_name": "솔 헤카테 : 스틱스",
+        "damage": 1166362884831,
+        "damage_percent": "0.05",
+        "dps": 3471318109,
+        "use_count": 7,
+        "damage_per_use": 166623269261,
+        "attack_count": 105,
+        "max_damage": 14804546203,
+        "min_damage": 7892307748
+      },
+      {
+        "skill_name": "홀로그램 그래피티 : 점멸",
+        "damage": 159072352256037,
+        "damage_percent": "7.48",
+        "dps": 473429619809,
+        "use_count": 140,
+        "damage_per_use": 1136231087543,
+        "attack_count": 560,
+        "max_damage": 432420666205,
+        "min_damage": 168886430642
+      },
+      {
+        "skill_name": "멜트다운 익스플로젼 VI",
+        "damage": 38348852363653,
+        "damage_percent": "1.8",
+        "dps": 114133489177,
+        "use_count": 6,
+        "damage_per_use": 6391475393942,
+        "attack_count": 84,
+        "max_damage": 747636010230,
+        "min_damage": 223731392370
+      },
+      {
+        "skill_name": "베놈 버스트",
+        "damage": 45890150654676,
+        "damage_percent": "2.16",
+        "dps": 136577829329,
+        "use_count": 420,
+        "damage_per_use": 109262263463,
+        "attack_count": 840,
+        "max_damage": 120270441429,
+        "min_damage": 32244358612
+      },
+      {
+        "skill_name": "레일 건 캐노네이드",
+        "damage": 85841966396436,
+        "damage_percent": "4.04",
+        "dps": 255482042846,
+        "use_count": 231,
+        "damage_per_use": 371610244140,
+        "attack_count": 2310,
+        "max_damage": 96288580909,
+        "min_damage": 17655425641
+      },
+      {
+        "skill_name": "레지스탕스 라인 인팬트리 VI",
+        "damage": 166470900878957,
+        "damage_percent": "7.83",
+        "dps": 495449109758,
+        "use_count": 70,
+        "damage_per_use": 2378155726842,
+        "attack_count": 840,
+        "max_damage": 308638478801,
+        "min_damage": 116543717015
+      },
+      {
+        "skill_name": "트라이앵글 포메이션 VI",
+        "damage": 153110849385833,
+        "damage_percent": "7.2",
+        "dps": 455687051743,
+        "use_count": 889,
+        "damage_per_use": 172228177036,
+        "attack_count": 3175,
+        "max_damage": 139443642001,
+        "min_damage": 20384293227
+      },
+      {
+        "skill_name": "로켓 시스템 VI",
+        "damage": 127802473501238,
+        "damage_percent": "6.01",
+        "dps": 380364504467,
+        "use_count": 752,
+        "damage_per_use": 169950097741,
+        "attack_count": 1504,
+        "max_damage": 187084761119,
+        "min_damage": 48399911905
+      },
+      {
+        "skill_name": "아티피셜 에볼루션",
+        "damage": 139858444468271,
+        "damage_percent": "6.58",
+        "dps": 416245370441,
+        "use_count": 145,
+        "damage_per_use": 964540996332,
+        "attack_count": 1574,
+        "max_damage": 247266147128,
+        "min_damage": 24023230057
+      },
+      {
+        "skill_name": "블레이드 댄싱 VI",
+        "damage": 156016880361590,
+        "damage_percent": "7.34",
+        "dps": 464335953457,
+        "use_count": 414,
+        "damage_per_use": 376852368023,
+        "attack_count": 5796,
+        "max_damage": 65517461231,
+        "min_damage": 12881494855
+      },
+      {
+        "skill_name": "솔 헤카테",
+        "damage": 77867352444230,
+        "damage_percent": "3.66",
+        "dps": 231748072750,
+        "use_count": 372,
+        "damage_per_use": 209320839903,
+        "attack_count": 2232,
+        "max_damage": 76948730196,
+        "min_damage": 20900460647
+      },
+      {
+        "skill_name": "오버로드 모드",
+        "damage": 31356360261662,
+        "damage_percent": "1.47",
+        "dps": 93322500778,
+        "use_count": 48,
+        "damage_per_use": 653257505451,
+        "attack_count": 576,
+        "max_damage": 88110244526,
+        "min_damage": 29318124339
+      },
+      {
+        "skill_name": "메가 스매셔",
+        "damage": 228154004608096,
+        "damage_percent": "10.73",
+        "dps": 679029775619,
+        "use_count": 238,
+        "damage_per_use": 958630271462,
+        "attack_count": 2480,
+        "max_damage": 137084195888,
+        "min_damage": 64464757245
+      },
+      {
+        "skill_name": "퍼지롭 매스커레이드 VI : 처형",
+        "damage": 83794089264585,
+        "damage_percent": "3.94",
+        "dps": 249387170430,
+        "use_count": 162,
+        "damage_per_use": 517247464596,
+        "attack_count": 2268,
+        "max_damage": 89608996475,
+        "min_damage": 17963090655
+      },
+      {
+        "skill_name": "포톤 레이",
+        "damage": 188524270672328,
+        "damage_percent": "8.87",
+        "dps": 561084138905,
+        "use_count": 450,
+        "damage_per_use": 418942823716,
+        "attack_count": 1800,
+        "max_damage": 181558118921,
+        "min_damage": 56628717756
+      },
+      {
+        "skill_name": "퍼지롭 매스커레이드 VI : 저격",
+        "damage": 372683239852257,
+        "damage_percent": "17.54",
+        "dps": 1109176309084,
+        "use_count": 498,
+        "damage_per_use": 748359919382,
+        "attack_count": 6972,
+        "max_damage": 144019727783,
+        "min_damage": 26897036805
+      },
+      {
+        "skill_name": "솔 헤카테 : 플레게톤",
+        "damage": 24609385054773,
+        "damage_percent": "1.15",
+        "dps": 73242217424,
+        "use_count": 54,
+        "damage_per_use": 455729352866,
+        "attack_count": 276,
+        "max_damage": 129468305945,
+        "min_damage": 60543069492
+      },
+      {
+        "skill_name": "네오테릭 트라이스",
+        "damage": 43589157884928,
+        "damage_percent": "2.05",
+        "dps": 129729636562,
+        "use_count": 99,
+        "damage_per_use": 440294524090,
+        "attack_count": 1417,
+        "max_damage": 109389162983,
+        "min_damage": 17088926882
+      },
+      {
+        "skill_name": "에르다 노바",
+        "damage": 246218306784,
+        "damage_percent": "0.01",
+        "dps": 732792579,
+        "use_count": 3,
+        "damage_per_use": 82072768928,
+        "attack_count": 15,
+        "max_damage": 17960275933,
+        "min_damage": 14721161878
+      }
+    ]
+  }
+}

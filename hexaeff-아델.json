@@ -1,0 +1,3172 @@
+{
+  "job": "아델",
+  "date": "2026-11-01",
+  "sample": 10,
+  "replays": [
+    {
+      "dps": 6322628903277
+    },
+    {
+      "dps": 2669329004050
+    },
+    {
+      "dps": 9736807714451
+    },
+    {
+      "dps": 4057579053487
+    },
+    {
+      "dps": 2508861247848
+    },
+    {
+      "dps": 5251702843442
+    },
+    {
+      "dps": 4269175128667
+    },
+    {
+      "dps": 3787217008616
+    },
+    {
+      "dps": 3127887933659
+    },
+    {
+      "dps": 5791674803178
+    }
+  ],
+  "cores": [
+    {
+      "name": "쿼드러플 스로우 VI",
+      "type": "mastery",
+      "share": 5.59,
+      "linked": [
+        "쿼드러플 스로우 VI"
+      ],
+      "pts": {
+        "30": 890
+      }
+    },
+    {
+      "name": "솔 헤카테",
+      "type": "common",
+      "share": 5.47,
+      "linked": [
+        "솔 헤카테",
+        "솔 헤카테 : 스틱스",
+        "솔 헤카테 : 카론",
+        "솔 헤카테 : 플레게톤",
+        "솔 헤카테 : 팩텀"
+      ],
+      "pts": {}
+    },
+    {
+      "name": "크리에이션 VI/테리토리 VI/마커 VI",
+      "type": "mastery",
+      "share": 3.63,
+      "linked": [
+        "크리에이션 VI",
+        "테리토리 VI",
+        "마커 VI"
+      ],
+      "pts": {
+        "30": 1020
+      }
+    },
+    {
+      "name": "마크 오브 어쌔신 VI",
+      "type": "mastery",
+      "share": 3.39,
+      "linked": [
+        "마크 오브 어쌔신 VI"
+      ],
+      "pts": {
+        "30": 520
+      }
+    },
+    {
+      "name": "디바이드 VI/샤드 VI/원더 VI",
+      "type": "mastery",
+      "share": 3.11,
+      "linked": [
+        "디바이드 VI",
+        "샤드 VI",
+        "원더 VI"
+      ],
+      "pts": {
+        "30": 834
+      }
+    },
+    {
+      "name": "오더 VI/트레드 VI",
+      "type": "mastery",
+      "share": 3.02,
+      "linked": [
+        "오더 VI",
+        "트레드 VI"
+      ],
+      "pts": {
+        "30": 800
+      }
+    },
+    {
+      "name": "엔젤레이 VI",
+      "type": "mastery",
+      "share": 2.85,
+      "linked": [
+        "엔젤레이 VI"
+      ],
+      "pts": {
+        "30": 669
+      }
+    },
+    {
+      "name": "레이징 블로우 VI",
+      "type": "mastery",
+      "share": 2.73,
+      "linked": [
+        "레이징 블로우 VI"
+      ],
+      "pts": {
+        "30": 721
+      }
+    },
+    {
+      "name": "다크 라이트닝 VI",
+      "type": "mastery",
+      "share": 2.44,
+      "linked": [
+        "다크 라이트닝 VI"
+      ],
+      "pts": {
+        "30": 1.2
+      }
+    },
+    {
+      "name": "섬멸 VI/낙뢰",
+      "type": "mastery",
+      "share": 2.41,
+      "linked": [
+        "섬멸 VI",
+        "낙뢰"
+      ],
+      "pts": {
+        "30": 500
+      }
+    },
+    {
+      "name": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "type": "mastery",
+      "share": 2.23,
+      "linked": [
+        "임페일 VI",
+        "레조넌스 VI",
+        "게더링 VI",
+        "블로섬 VI"
+      ],
+      "pts": {
+        "30": 600
+      }
+    },
+    {
+      "name": "퍼지롭 매스커레이드 VI",
+      "type": "mastery",
+      "share": 2.15,
+      "linked": [
+        "퍼지롭 매스커레이드 VI : 저격",
+        "퍼지롭 매스커레이드 VI : 폭격"
+      ],
+      "pts": {
+        "30": 386
+      }
+    },
+    {
+      "name": "체인 라이트닝 VI",
+      "type": "mastery",
+      "share": 1.99,
+      "linked": [
+        "체인 라이트닝 VI"
+      ],
+      "pts": {
+        "30": 287
+      }
+    },
+    {
+      "name": "크루셜 어썰트",
+      "type": "origin",
+      "share": 1.87,
+      "linked": [
+        "크루셜 어썰트"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "스로우 블래스팅",
+      "type": "enhance",
+      "share": 1.68,
+      "linked": [
+        "스로우 블래스팅 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "다크로드의 비전서",
+      "type": "enhance",
+      "share": 1.55,
+      "linked": [
+        "다크로드의 비전서 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "생사여탈",
+      "type": "origin",
+      "share": 1.46,
+      "linked": [
+        "생사여탈"
+      ],
+      "pts": {
+        "30": 1.2
+      }
+    },
+    {
+      "name": "인피니트",
+      "type": "enhance",
+      "share": 1.46,
+      "linked": [
+        "인피니트 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "라이트닝 스피어 VI/크라이오 쇼크",
+      "type": "mastery",
+      "share": 1.43,
+      "linked": [
+        "라이트닝 스피어 VI",
+        "크라이오 쇼크"
+      ],
+      "pts": {
+        "30": 1.5
+      }
+    },
+    {
+      "name": "디바인 퍼니시먼트",
+      "type": "enhance",
+      "share": 1.39,
+      "linked": [
+        "디바인 퍼니시먼트 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "스톰",
+      "type": "enhance",
+      "share": 1.37,
+      "linked": [
+        "스톰 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "type": "mastery",
+      "share": 1.34,
+      "linked": [
+        "인사이징 VI",
+        "파이널 어택 VI",
+        "발할라 VI"
+      ],
+      "pts": {
+        "30": 404
+      }
+    },
+    {
+      "name": "태풍 VI/해신강림 VI",
+      "type": "mastery",
+      "share": 1.31,
+      "linked": [
+        "태풍 VI",
+        "해신강림 VI"
+      ],
+      "pts": {
+        "30": 250
+      }
+    },
+    {
+      "name": "아인하이트",
+      "type": "origin",
+      "share": 1.15,
+      "linked": [
+        "아인하이트"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "파라볼릭 볼트",
+      "type": "origin",
+      "share": 1.11,
+      "linked": [
+        "파라볼릭 볼트"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "빅뱅 VI/트라이엄프 페더 VI",
+      "type": "mastery",
+      "share": 1.1,
+      "linked": [
+        "빅뱅 VI",
+        "트라이엄프 페더 VI"
+      ],
+      "pts": {
+        "30": 1.5
+      }
+    },
+    {
+      "name": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "type": "mastery",
+      "share": 1.08,
+      "linked": [
+        "쇼다운 챌린지 VI",
+        "다크 플레어 VI",
+        "다크니스 슈리켄"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "메가 스매셔",
+      "type": "enhance",
+      "share": 1.07,
+      "linked": [
+        "메가 스매셔 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "프로즌 오브 VI/블리자드 VI",
+      "type": "mastery",
+      "share": 1.05,
+      "linked": [
+        "프로즌 오브 VI",
+        "블리자드 VI"
+      ],
+      "pts": {
+        "30": 474
+      }
+    },
+    {
+      "name": "글루미 오라",
+      "type": "origin",
+      "share": 1.01,
+      "linked": [
+        "글루미 오라"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "커맨드 오브 헤븐",
+      "type": "origin",
+      "share": 1.01,
+      "linked": [
+        "커맨드 오브 헤븐"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "블랙 매직 알터",
+      "type": "enhance",
+      "share": 1,
+      "linked": [
+        "블랙 매직 알터 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "써든레이드 VI/포 시즌 VI",
+      "type": "mastery",
+      "share": 1,
+      "linked": [
+        "써든레이드 VI",
+        "포 시즌 VI"
+      ],
+      "pts": {
+        "30": 295
+      }
+    },
+    {
+      "name": "유니온 오라",
+      "type": "enhance",
+      "share": 0.99,
+      "linked": [
+        "유니온 오라 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "풍마수리검",
+      "type": "enhance",
+      "share": 0.99,
+      "linked": [
+        "풍마수리검 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "사일런트 클리브",
+      "type": "origin",
+      "share": 0.96,
+      "linked": [
+        "사일런트 클리브"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "마에스트로",
+      "type": "origin",
+      "share": 0.94,
+      "linked": [
+        "마에스트로"
+      ],
+      "pts": {
+        "30": 1370
+      }
+    },
+    {
+      "name": "레지스탕스 라인 인팬트리 VI",
+      "type": "common",
+      "share": 0.92,
+      "linked": [
+        "레지스탕스 라인 인팬트리 VI"
+      ],
+      "pts": {
+        "30": 2732
+      }
+    },
+    {
+      "name": "콤보 인스팅트",
+      "type": "enhance",
+      "share": 0.91,
+      "linked": [
+        "콤보 인스팅트 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "포톤 레이",
+      "type": "enhance",
+      "share": 0.89,
+      "linked": [
+        "포톤 레이 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "뇌신창격",
+      "type": "enhance",
+      "share": 0.87,
+      "linked": [
+        "뇌신창격 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "교아탄",
+      "type": "enhance",
+      "share": 0.8,
+      "linked": [
+        "교아탄 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "type": "mastery",
+      "share": 0.78,
+      "linked": [
+        "로켓 시스템 VI",
+        "멜트다운 익스플로젼 VI"
+      ],
+      "pts": {
+        "30": 450
+      }
+    },
+    {
+      "name": "소드 오브 버닝 소울",
+      "type": "enhance",
+      "share": 0.77,
+      "linked": [
+        "소드 오브 버닝 소울 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "루인",
+      "type": "enhance",
+      "share": 0.77,
+      "linked": [
+        "루인 강화"
+      ],
+      "pts": {
+        "20": 1.4,
+        "21": 1.41,
+        "30": 1.6
+      }
+    },
+    {
+      "name": "데스 VI",
+      "type": "mastery",
+      "share": 0.74,
+      "linked": [
+        "데스 VI"
+      ],
+      "pts": {
+        "30": 1475
+      }
+    },
+    {
+      "name": "블레이드 댄싱 VI",
+      "type": "mastery",
+      "share": 0.73,
+      "linked": [
+        "블레이드 댄싱 VI"
+      ],
+      "pts": {
+        "30": 464
+      }
+    },
+    {
+      "name": "주피터 썬더",
+      "type": "enhance",
+      "share": 0.73,
+      "linked": [
+        "주피터 썬더 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "type": "mastery",
+      "share": 0.72,
+      "linked": [
+        "트라이앵글 포메이션 VI",
+        "홀로그램 그래피티 : 역장 VI"
+      ],
+      "pts": {
+        "30": 700
+      }
+    },
+    {
+      "name": "벽력 VI",
+      "type": "mastery",
+      "share": 0.71,
+      "linked": [
+        "벽력 VI"
+      ],
+      "pts": {
+        "30": 396
+      }
+    },
+    {
+      "name": "어비셜 라이트닝",
+      "type": "enhance",
+      "share": 0.7,
+      "linked": [
+        "어비셜 라이트닝 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "해파 VI/해신강체",
+      "type": "mastery",
+      "share": 0.7,
+      "linked": [
+        "해파 VI",
+        "해신강체"
+      ],
+      "pts": {
+        "30": 367
+      }
+    },
+    {
+      "name": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "type": "mastery",
+      "share": 0.68,
+      "linked": [
+        "피니쉬 블로우 VI",
+        "배틀킹 바 VI"
+      ],
+      "pts": {
+        "30": 1.5
+      }
+    },
+    {
+      "name": "제네시스 VI/헤븐즈 도어 VI",
+      "type": "mastery",
+      "share": 0.68,
+      "linked": [
+        "제네시스 VI",
+        "헤븐즈 도어 VI"
+      ],
+      "pts": {
+        "30": 495
+      }
+    },
+    {
+      "name": "아티피셜 에볼루션",
+      "type": "origin",
+      "share": 0.66,
+      "linked": [
+        "아티피셜 에볼루션"
+      ],
+      "pts": {
+        "30": 1600
+      }
+    },
+    {
+      "name": "창뇌연격",
+      "type": "enhance",
+      "share": 0.66,
+      "linked": [
+        "창뇌연격 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "시그너스 팔랑크스 VI",
+      "type": "common",
+      "share": 0.66,
+      "linked": [
+        "시그너스 팔랑크스 VI"
+      ],
+      "pts": {
+        "30": 2164
+      }
+    },
+    {
+      "name": "그림 리퍼",
+      "type": "enhance",
+      "share": 0.64,
+      "linked": [
+        "그림 리퍼 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "썬더 브레이크",
+      "type": "enhance",
+      "share": 0.64,
+      "linked": [
+        "썬더 브레이크 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "뇌명벽해파",
+      "type": "origin",
+      "share": 0.61,
+      "linked": [
+        "뇌명벽해파"
+      ],
+      "pts": {
+        "30": 1390
+      }
+    },
+    {
+      "name": "홀리 어드밴트",
+      "type": "origin",
+      "share": 0.6,
+      "linked": [
+        "홀리 어드밴트"
+      ],
+      "pts": {
+        "30": 1.05
+      }
+    },
+    {
+      "name": "피스메이커",
+      "type": "enhance",
+      "share": 0.59,
+      "linked": [
+        "피스메이커 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "스피릿 오브 스노우",
+      "type": "enhance",
+      "share": 0.58,
+      "linked": [
+        "스피릿 오브 스노우 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "레이지 업라이징 VI",
+      "type": "mastery",
+      "share": 0.58,
+      "linked": [
+        "레이지 업라이징 VI"
+      ],
+      "pts": {
+        "30": 157
+      }
+    },
+    {
+      "name": "크림슨 팩텀",
+      "type": "origin",
+      "share": 0.56,
+      "linked": [
+        "크림슨 팩텀"
+      ],
+      "pts": {
+        "30": 2863
+      }
+    },
+    {
+      "name": "스피릿 칼리버",
+      "type": "origin",
+      "share": 0.56,
+      "linked": [
+        "스피릿 칼리버"
+      ],
+      "pts": {
+        "30": 472
+      }
+    },
+    {
+      "name": "에테르 뤼페",
+      "type": "origin",
+      "share": 0.54,
+      "linked": [
+        "에테르 뤼페"
+      ],
+      "pts": {
+        "30": 1.5
+      }
+    },
+    {
+      "name": "프로즌 라이트닝",
+      "type": "origin",
+      "share": 0.52,
+      "linked": [
+        "프로즌 라이트닝"
+      ],
+      "pts": {
+        "30": 1560
+      }
+    },
+    {
+      "name": "프로스트 아크",
+      "type": "enhance",
+      "share": 0.51,
+      "linked": [
+        "프로스트 아크 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "오라 블레이드 VI/퓨리어스 엣지",
+      "type": "mastery",
+      "share": 0.51,
+      "linked": [
+        "오라 블레이드 VI",
+        "퓨리어스 엣지"
+      ],
+      "pts": {
+        "30": 290
+      }
+    },
+    {
+      "name": "썬더 스피어 VI/엘퀴네스 VI",
+      "type": "mastery",
+      "share": 0.5,
+      "linked": [
+        "썬더 스피어 VI",
+        "엘퀴네스 VI"
+      ],
+      "pts": {
+        "30": 767
+      }
+    },
+    {
+      "name": "레일 건 캐노네이드",
+      "type": "origin",
+      "share": 0.4,
+      "linked": [
+        "레일 건 캐노네이드"
+      ],
+      "pts": {
+        "30": 650
+      }
+    },
+    {
+      "name": "엔젤릭 터치 VI/파운틴 포 엔젤 VI/바하뮤트 VI",
+      "type": "mastery",
+      "share": 0.36,
+      "linked": [
+        "엔젤릭 터치 VI",
+        "파운틴 포 엔젤 VI",
+        "바하뮤트 VI"
+      ],
+      "pts": {
+        "30": 383
+      }
+    },
+    {
+      "name": "소드 일루전",
+      "type": "enhance",
+      "share": 0.35,
+      "linked": [
+        "소드 일루전 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "해황폭쇄",
+      "type": "origin",
+      "share": 0.32,
+      "linked": [
+        "해황폭쇄"
+      ],
+      "pts": {
+        "30": 2181
+      }
+    },
+    {
+      "name": "신뇌합일",
+      "type": "enhance",
+      "share": 0.31,
+      "linked": [
+        "신뇌합일 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "다크 제네시스 VI",
+      "type": "mastery",
+      "share": 0.3,
+      "linked": [
+        "다크 제네시스 VI"
+      ],
+      "pts": {
+        "30": 1.3
+      }
+    },
+    {
+      "name": "매직 서킷 풀드라이브 VI",
+      "type": "common",
+      "share": 0.28,
+      "linked": [
+        "매직 서킷 풀드라이브 VI"
+      ],
+      "pts": {
+        "30": 1.45
+      }
+    },
+    {
+      "name": "네오테릭 트라이스",
+      "type": "origin",
+      "share": 0.21,
+      "linked": [
+        "네오테릭 트라이스"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "질도섬멸",
+      "type": "origin",
+      "share": 0.18,
+      "linked": [
+        "질도섬멸"
+      ],
+      "pts": {
+        "30": 1.4
+      }
+    },
+    {
+      "name": "얼티밋 다크 사이트 VI",
+      "type": "common",
+      "share": 0.18,
+      "linked": [
+        "얼티밋 다크 사이트 VI"
+      ],
+      "pts": {
+        "30": 1.16
+      }
+    },
+    {
+      "name": "리스토어",
+      "type": "enhance",
+      "share": 0.16,
+      "linked": [
+        "리스토어 강화"
+      ],
+      "pts": {
+        "28": 1.48,
+        "29": 1.49,
+        "30": 1.6
+      }
+    },
+    {
+      "name": "오버로드 모드",
+      "type": "enhance",
+      "share": 0.15,
+      "linked": [
+        "오버로드 모드 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "블리츠 실드 VI/블리츠 버스트",
+      "type": "common",
+      "share": 0.02,
+      "linked": [
+        "블리츠 실드 VI",
+        "블리츠 버스트"
+      ],
+      "pts": {
+        "30": 1.21
+      }
+    },
+    {
+      "name": "홀로그램 그래피티 : 융합",
+      "type": "enhance",
+      "share": 0,
+      "linked": [
+        "홀로그램 그래피티 : 융합 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "모티스 엣지",
+      "type": "origin",
+      "share": 0,
+      "linked": [
+        "모티스 엣지"
+      ],
+      "pts": {
+        "30": 1658
+      }
+    },
+    {
+      "name": "쉐도우 리츄얼",
+      "type": "origin",
+      "share": 0,
+      "linked": [
+        "쉐도우 리츄얼"
+      ],
+      "pts": {
+        "30": 7435
+      }
+    },
+    {
+      "name": "스프레드 스로우",
+      "type": "enhance",
+      "share": 0,
+      "linked": [
+        "스프레드 스로우 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "서브제로 퍼미네이션",
+      "type": "origin",
+      "share": 0,
+      "linked": [
+        "서브제로 퍼미네이션"
+      ],
+      "pts": {
+        "30": 624
+      }
+    },
+    {
+      "name": "엔젤스 플레지",
+      "type": "origin",
+      "share": 0,
+      "linked": [
+        "엔젤스 플레지"
+      ],
+      "pts": {
+        "30": 521
+      }
+    },
+    {
+      "name": "프레이",
+      "type": "enhance",
+      "share": 0,
+      "linked": [
+        "프레이 강화"
+      ],
+      "pts": {
+        "30": 1.17
+      }
+    },
+    {
+      "name": "엔젤 오브 제미니",
+      "type": "enhance",
+      "share": 0,
+      "linked": [
+        "엔젤 오브 제미니 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    },
+    {
+      "name": "레이지 익스플로젼",
+      "type": "origin",
+      "share": 0,
+      "linked": [
+        "레이지 익스플로젼"
+      ],
+      "pts": {
+        "30": 959
+      }
+    },
+    {
+      "name": "콤보 데스폴트",
+      "type": "enhance",
+      "share": 0,
+      "linked": [
+        "콤보 데스폴트 강화"
+      ],
+      "pts": {
+        "30": 1.6
+      }
+    }
+  ],
+  "topSkills": [
+    {
+      "name": "솔 헤카테",
+      "pct": 3.6
+    },
+    {
+      "name": "쿼드러플 스로우 VI",
+      "pct": 3.5
+    },
+    {
+      "name": "마크 오브 어쌔신 VI",
+      "pct": 3.4
+    },
+    {
+      "name": "오더 VI",
+      "pct": 3
+    },
+    {
+      "name": "디바이드 VI",
+      "pct": 2.9
+    },
+    {
+      "name": "엔젤레이 VI",
+      "pct": 2.9
+    },
+    {
+      "name": "레이징 블로우 VI",
+      "pct": 2.7
+    },
+    {
+      "name": "다크 라이트닝 VI",
+      "pct": 2.4
+    },
+    {
+      "name": "쿼드러플 스로우",
+      "pct": 2.1
+    },
+    {
+      "name": "체인 라이트닝 VI",
+      "pct": 2
+    },
+    {
+      "name": "크루셜 어썰트",
+      "pct": 1.9
+    },
+    {
+      "name": "퍼지롭 매스커레이드 VI : 저격",
+      "pct": 1.8
+    },
+    {
+      "name": "스로우 블래스팅",
+      "pct": 1.7
+    },
+    {
+      "name": "섬멸 VI",
+      "pct": 1.6
+    },
+    {
+      "name": "다크로드의 비전서",
+      "pct": 1.5
+    }
+  ],
+  "items": [
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 2,
+      "type": "common"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 3,
+      "type": "common"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 4,
+      "type": "common"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 5,
+      "type": "common"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 6,
+      "type": "common"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 7,
+      "type": "common"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 라이트닝 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "섬멸 VI/낙뢰",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 8,
+      "type": "common"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "퍼지롭 매스커레이드 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 9,
+      "type": "common"
+    },
+    {
+      "core": "인피니트",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "체인 라이트닝 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "인피니트",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "인피니트",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "벽력 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "해파 VI/해신강체",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "메가 스매셔",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "제네시스 VI/헤븐즈 도어 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "블랙 매직 알터",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "라이트닝 스피어 VI/크라이오 쇼크",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "유니온 오라",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "풍마수리검",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 5,
+      "type": "origin"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "인사이징 VI/파이널 어택 VI/발할라 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "태풍 VI/해신강림 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "메가 스매셔",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "콤보 인스팅트",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "벽력 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "해파 VI/해신강체",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "포톤 레이",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "레이지 업라이징 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "인피니트",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "뇌신창격",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "제네시스 VI/헤븐즈 도어 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 6,
+      "type": "origin"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "블랙 매직 알터",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "파라볼릭 볼트",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "유니온 오라",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "풍마수리검",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "메가 스매셔",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "벽력 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "해파 VI/해신강체",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "교아탄",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "스로우 블래스팅",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 7,
+      "type": "origin"
+    },
+    {
+      "core": "오라 블레이드 VI/퓨리어스 엣지",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "제네시스 VI/헤븐즈 도어 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "마크 오브 어쌔신 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "콤보 인스팅트",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "글루미 오라",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "커맨드 오브 헤븐",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "소드 오브 버닝 소울",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "썬더 스피어 VI/엘퀴네스 VI",
+      "lv": 2,
+      "type": "mastery"
+    },
+    {
+      "core": "블랙 매직 알터",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "빅뱅 VI/트라이엄프 페더 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "유니온 오라",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "풍마수리검",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "포톤 레이",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "다크 플레어 VI/쇼다운 챌린지 VI/다크니스 슈리켄",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 5,
+      "type": "origin"
+    },
+    {
+      "core": "인피니트",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "뇌신창격",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "레이지 업라이징 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "사일런트 클리브",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 20,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 21,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 22,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 23,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 24,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 25,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 26,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 27,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 28,
+      "type": "mastery"
+    },
+    {
+      "core": "쿼드러플 스로우 VI",
+      "lv": 29,
+      "type": "mastery"
+    },
+    {
+      "core": "프로즌 오브 VI/블리자드 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "주피터 썬더",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "파라볼릭 볼트",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "다크로드의 비전서",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "메가 스매셔",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 8,
+      "type": "origin"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "벽력 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "어비셜 라이트닝",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "해파 VI/해신강체",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "콤보 인스팅트",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "써든레이드 VI/포 시즌 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "인피니트",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "포톤 레이",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "교아탄",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "제네시스 VI/헤븐즈 도어 VI",
+      "lv": 5,
+      "type": "mastery"
+    },
+    {
+      "core": "블랙 매직 알터",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 6,
+      "type": "origin"
+    },
+    {
+      "core": "유니온 오라",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "풍마수리검",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "레이지 업라이징 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "뇌신창격",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "글루미 오라",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "커맨드 오브 헤븐",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "트라이앵글 포메이션 VI/홀로그램 그래피티 : 역장 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "크루셜 어썰트",
+      "lv": 9,
+      "type": "origin"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "창뇌연격",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "소드 오브 버닝 소울",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "엔젤레이 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "벽력 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "디바인 퍼니시먼트",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "오라 블레이드 VI/퓨리어스 엣지",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "메가 스매셔",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "해파 VI/해신강체",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "로켓 시스템 VI/멜트다운 익스플로젼 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "그림 리퍼",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "썬더 브레이크",
+      "lv": 2,
+      "type": "enhance"
+    },
+    {
+      "core": "썬더 스피어 VI/엘퀴네스 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "파라볼릭 볼트",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "사일런트 클리브",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "레이징 블로우 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "제네시스 VI/헤븐즈 도어 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "피니쉬 블로우 VI/배틀킹 바 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "주피터 썬더",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "콤보 인스팅트",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "교아탄",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "생사여탈",
+      "lv": 7,
+      "type": "origin"
+    },
+    {
+      "core": "데스 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "블랙 매직 알터",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "포톤 레이",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "블레이드 댄싱 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
+      "core": "유니온 오라",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "풍마수리검",
+      "lv": 6,
+      "type": "enhance"
+    }
+  ]
+}
