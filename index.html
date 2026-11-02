@@ -1538,16 +1538,16 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
     <div ref="{{ mesoImgRef }}" style="display:flex;flex-direction:column;gap:20px;"><div data-imgsec="" style="display:flex;flex-direction:column;gap:20px;">
     <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
-      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
-        <span style="font-size:13px;font-weight:600;color:#6b6d73;">현재 시세</span>
-        <span style="font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
-        <span style="font-size:13px;font-weight:700;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
+      <div style="order:9;background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:4px;">
+        <span style="font-size:17px;font-weight:800;line-height:24px;color:#1b1c1f;">현재 시세</span>
+        <span style="font-size:36px;font-weight:800;line-height:44px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:17px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
+        <span style="font-size:13px;font-weight:700;line-height:18px;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
       </div>
       <sc-for list="{{ mesoStats }}" as="s" hint-placeholder-count="3">
-        <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;">
-          <span style="font-size:13px;font-weight:600;color:#6b6d73;">{{ s.label }}</span>
-          <span style="font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.color }};">{{ s.val }}<span style="font-size:14px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
-          <span style="font-size:12px;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
+        <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:4px;">
+          <span style="font-size:17px;font-weight:800;line-height:24px;color:#1b1c1f;">{{ s.label }}</span>
+          <span style="font-size:36px;font-weight:800;line-height:44px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:{{ s.color }};">{{ s.val }}<span style="font-size:17px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
+          <span style="font-size:13px;font-weight:700;line-height:18px;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
         </div>
       </sc-for>
     </div>
@@ -1898,7 +1898,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 
   <sc-if value="{{ showBars }}" hint-placeholder-val="{{ true }}">
-  <main ref="{{ pairMainRef }}" style="display:flex;flex-direction:column;gap:20px;">
+  <main ref="{{ pairMainRef }}" data-tab="{{ title }}" style="display:flex;flex-direction:column;gap:20px;">
     <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
       <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 등록된 아이템이 없어요.</div>
     </sc-if>
@@ -4806,10 +4806,12 @@ class Component extends DCLogic {
     this._allBusy = false; this._allLabel = ''; this.setState({ tab: back });
   }
   async saveImage(tab, date, target, capW, opt) {
-    const el = target || this._pairEl; if (!el || this._imgBusy) return;
+    let el = target || this._pairEl; if (!el || this._imgBusy) return;
     let dir = opt && opt.dir ? (opt.dir === 'none' ? null : opt.dir) : null;
     if (!(opt && opt.dir) && window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
     this._imgBusy = true; this.forceUpdate();
+    if (!target) { const t0 = Date.now(); while (Date.now() - t0 < 5000) { const e2 = this._pairEl; if (e2 && e2.dataset.tab === tab && [...e2.querySelectorAll('img')].every(i => i.complete)) break; await new Promise(r => setTimeout(r, 100)); }
+      el = this._pairEl; if (!el || el.dataset.tab !== tab) { this._imgBusy = false; this.forceUpdate(); alert(tab + ' 화면이 아직 안 바뀌어서 이미지를 건너뛰었어요. 다시 시도해 주세요.'); return; } }
     const rules = [];
     try {
       if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
@@ -5150,7 +5152,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 56,
+      isAdmin: admin, appVer: 57,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
