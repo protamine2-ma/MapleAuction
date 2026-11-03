@@ -1,0 +1,24 @@
+name: hexaicon
+on:
+  workflow_dispatch:
+    inputs:
+      class:
+        description: '직업 랭킹 이름'
+        default: '영웅-루미너스'
+      img:
+        description: '헥사스킬 그림 경로'
+        default: 'img/hexa-luminous.png'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/hexaicon.mjs
+        env:
+          NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+          CLASS: ${{ inputs.class }}
+          IMG: ${{ inputs.img }}
