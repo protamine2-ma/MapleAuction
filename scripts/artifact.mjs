@@ -29,7 +29,7 @@ async function pool(list, fn, size = 20) {
 
 const d = new Date(Date.now() + 9 * 3600e3 - 86400e3);
 const date = d.toISOString().slice(0, 10);
-const combo = {}, opt = {}, eff = {}; let ok = 0, checked = 0, inactive = 0, other = 0, notMain = 0, lvSum = 0, lvN = 0;
+const combo = {}, opt = {}, eff = {}; let ok = 0, checked = 0, inactive = 0, other = 0, notMain = 0, noRaid = 0, lvSum = 0, lvN = 0, noArt = 0;
 async function one(name) {
   if (ok >= N) return;
   const id = await api('/id', { character_name: name });
@@ -40,12 +40,14 @@ async function one(name) {
   if (b.character_class !== JOB) { other++; return; }
   if (ok >= N) return;
   const ur = await api('/user/union-raider', { ocid: id.ocid });
-  const bl = ((ur && ur.union_block) || []).map(x => Number(x.block_level) || 0);
-  if (!bl.length || Number(b.character_level) < Math.max(...bl)) { notMain++; return; }
+  const bl = ((ur && ur.union_block) || []).map(x => Number(x.block_level) || 0).filter(x => x > 0);
+  const myLv = Number(b.character_level) || 0, top = bl.length ? Math.max(...bl) : 0;
+  if (bl.length && myLv < top) { notMain++; if (notMain <= 5) console.log(`  본캐 아님 예: ${name} Lv.${myLv} / 유니온 최고 Lv.${top} (블록 ${bl.length}개)`); return; }
+  if (!bl.length && noRaid++ < 5) console.log(`  유니온 정보 없음: ${name} → 본캐로 봄 (응답 키: ${ur ? Object.keys(ur).join(',') : 'null'})`);
   if (ok >= N) return;
   const a = await api('/user/union-artifact', { ocid: id.ocid });
   const cr = ((a && a.union_artifact_crystal) || []).filter(c => c && c.crystal_option_name_1);
-  if (!cr.length || ok >= N) return;
+  if (!cr.length || ok >= N) { if (!cr.length && noArt++ < 5) console.log(`  아티팩트 없음: ${name} (응답 키: ${a ? Object.keys(a).join(',') : 'null'})`); return; }
   ok++;
   const u = await api('/user/union', { ocid: id.ocid });
   const lv = Number(u && u.union_artifact_level); if (lv > 0) { lvSum += lv; lvN++; }
