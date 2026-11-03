@@ -3666,8 +3666,10 @@ class Component extends DCLogic {
       M.miss = 0;
       const tol = Math.max(2, Math.round(b.w * 0.01)), use = () => { M.last = now; M.alertAt = 0; M.cnt = 0; };
       let df = 0; if (M.prevW && M.prevW.length === wm.length) for (let k = 0; k < wm.length; k++) if (wm[k] !== M.prevW[k]) df++;
-      const up = M.prevFill != null && fill > M.prevFill;
-      if (M.top == null || fill > M.top) M.top = fill;
+      // 바 끝 1~2칸 흔들림은 회복으로 안 침 (회복 후 꽉 찬 바에서 계속 '회복'으로 잡혀 감소를 못 읽던 문제)
+      const up = M.prevFill != null && fill >= M.prevFill + tol;
+      if (up) M.top = fill;
+      else if (M.top == null || fill > M.top + 1) M.top = fill;
       else if (fill <= M.top - tol) { use(); M.top = fill; }
       // MP 숫자가 바뀌었는데 바가 늘지 않았으면 사용 후보 → 3초 안에 2번이면 사용 (자연 회복 1번은 무시)
       if (df > 4 && !up) { M.chg = (M.chg || []).filter(t => now - t < 3000); M.chg.push(now); if (M.chg.length >= 2) use(); }
@@ -5239,7 +5241,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 64,
+      isAdmin: admin, appVer: 65,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
