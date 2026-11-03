@@ -512,7 +512,7 @@ body{overflow-x:clip;}
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-          <span style="font-size:12px;color:#9a9ca1;">감지 중인 MP 바 (초록 = 비교하는 MP 숫자)</span>
+          <span style="display:flex;flex-direction:column;gap:2px;font-size:12px;color:#9a9ca1;"><span>감지 중인 MP 바 (초록 = 비교하는 MP 숫자)</span><span style="font-variant-numeric:tabular-nums;color:#6b6d73;">{{ mp.dbg }}</span></span>
           <button onClick="{{ mp.refind }}" style="padding:4px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;">MP 바 다시 찾기</button>
         </div>
         <div style="min-height:60px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;">
@@ -3150,14 +3150,15 @@ class Component extends DCLogic {
           return { name: u.name, server: u.server, note: u.note || '', hasNote: !!u.note, base: u.base.map(cell), extra: u.extra.map(cell) }; }) : [],
         hasArt: s.title === '아티팩트' && !!ARTIFACT[job],
         artCards: s.title === '아티팩트' && ARTIFACT[job] ? ARTIFACT[job].map((e, k) => ({ num: k + 1, img: 'url(img/artifact-' + (k + 1) + '.png?v=3)', effects: e.map(t => ({ t })) })) : [],
-        ...(() => { const he = s.title === '헥사스킬' && job === '아델' ? this.loadPetBuff(job, 'hexaeff') : null; if (!he || !he.items) return { hasHexaEff: false, hexaEff: {} };
+        ...(() => { const HEXAEFF_ON = false; const he = HEXAEFF_ON && s.title === '헥사스킬' && job === '아델' ? this.loadPetBuff(job, 'hexaeff') : null; if (!he || !he.items) return { hasHexaEff: false, hexaEff: {} };
           const pal = ['oklch(0.92 0.06 300)', 'oklch(0.93 0.07 90)', 'oklch(0.92 0.06 160)', 'oklch(0.92 0.05 250)', 'oklch(0.92 0.06 30)', 'oklch(0.93 0.04 200)', 'oklch(0.92 0.06 340)', 'oklch(0.93 0.05 120)'];
           const ink = ['oklch(0.55 0.18 300)', 'oklch(0.65 0.16 85)', 'oklch(0.55 0.15 160)', 'oklch(0.5 0.17 255)', 'oklch(0.58 0.18 30)', 'oklch(0.55 0.12 200)', 'oklch(0.55 0.18 340)', 'oklch(0.55 0.14 120)'];
           const ci = {}; (he.cores || []).forEach((c, k) => { ci[c.name] = k % pal.length; });
           const sh = n => String(n).split('/')[0].replace(/\s*(VI|Ⅵ)$/, '').replace(/\s+/g, '').slice(0, 5);
           return { hasHexaEff: true, hexaEff: { note: (he.date || '') + ' · 연무장 기록 ' + he.sample + '명 평균',
             cores: (he.cores || []).map(c => ({ name: c.name, share: c.share + '%', color: ink[ci[c.name]] })),
-            steps: he.items.map((t, k) => ({ n: k + 1, short: sh(t.core), lv: t.lv, tip: t.core + ' ' + t.lv + '레벨', bg: pal[ci[t.core] ?? 0] })) } }; })(),
+            steps: he.items.reduce((a, t) => { const p = a[a.length - 1]; if (p && p.core === t.core && p.to === t.lv - 1) p.to = t.lv; else a.push({ core: t.core, from: t.lv, to: t.lv }); return a; }, [])
+              .map((g, k) => ({ n: k + 1, short: sh(g.core), lv: g.from === g.to ? g.to : (g.from - 1) + '→' + g.to, tip: g.core + ' ' + (g.from === g.to ? g.to + '레벨' : (g.from - 1) + '→' + g.to + '레벨'), bg: pal[ci[g.core] ?? 0] })) } }; })(),
         hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => ({ src, alt: '헥사스킬 강화 순서 ' + (k + 1) })) : [],
         hasHs: s.title === '하이퍼스탯' && !!HYPERSTAT[job],
         hsSets: s.title === '하이퍼스탯' && HYPERSTAT[job] ? HYPERSTAT[job].map(h => ({ name: h.name, range: h.lv[0] + '~' + h.lv[h.lv.length - 1] + 'Lv', lvs: h.lv.map(l => ({ t: l + 'Lv' })),
@@ -3672,6 +3673,13 @@ class Component extends DCLogic {
       else if (M.top == null || fill > M.top + 1) M.top = fill;
       else if (fill <= M.top - tol) { use(); M.top = fill; }
       // MP 숫자가 바뀌었는데 바가 늘지 않았으면 사용 후보 → 3초 안에 2번이면 사용 (자연 회복 1번은 무시)
+      // 최근 5초 최고값보다 1칸 이상 낮은 상태가 2번 연속이면 사용 (꽉 찬 뒤 조금씩 쓰고 자연 회복으로 다시 차는 경우)
+      M.hist = (M.hist || []).filter(e => now - e[0] < 5000); const pk = Math.max(fill, ...M.hist.map(e => e[1])); M.hist.push([now, fill]);
+      if (fill < pk) { if ((M.low = (M.low || 0) + 1) >= 2) { use(); M.low = 0; } } else M.low = 0;
+      M.dbg = '바 ' + fill + '/' + b.w + ' · 5초 최고 ' + pk + ' · 숫자 변화 ' + df;
+      // 숫자가 바뀌었는데 바가 조금도 안 늘었으면 바로 사용 (큰 회복은 바가 늘어서 제외)
+      const grew = M.prevFill != null && fill > M.prevFill;
+      if (df > 4 && !grew) use();
       if (df > 4 && !up) { M.chg = (M.chg || []).filter(t => now - t < 3000); M.chg.push(now); if (M.chg.length >= 2) use(); }
       if (up) M.chg = [];
       M.prevW = wm; M.prevFill = fill;
@@ -4745,7 +4753,7 @@ class Component extends DCLogic {
           rep: String(Number(h.mpRep) || 3), onRep: e => this.saveHunt({ ...h, mpRep: Math.max(1, Math.floor(Number(e.target.value)) || 1) }),
           sec: String(sec), onSec: e => this.saveHunt({ ...h, mpSec: Math.max(1, Math.floor(Number(e.target.value)) || 5) }),
           idle: idle == null ? '--' : Math.floor(idle) + '초', idleColor: stopped ? 'oklch(0.55 0.2 25)' : 'oklch(0.4 0.17 255)',
-          status: st[0], stBg: st[1], stColor: st[2], refind: () => { if (this._mp) { this._mp.box = null; this._mp.findAt = 0; } this.forceUpdate(); } }; })(),
+          dbg: found ? (M.dbg || '') : '', status: st[0], stBg: st[1], stColor: st[2], refind: () => { if (this._mp) { this._mp.box = null; this._mp.findAt = 0; } this.forceUpdate(); } }; })(),
       huntFold, skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
@@ -5241,7 +5249,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 65,
+      isAdmin: admin, appVer: 66,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
