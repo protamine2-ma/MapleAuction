@@ -1,0 +1,28 @@
+name: artifactprobe
+on:
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: '확인할 랭킹 페이지 (쉼표로 구분)'
+        default: '1,10,25,50,75,100,150,200,300,400,500,700,1000'
+      class:
+        description: '직업 랭킹 (비우면 전체 랭킹, 예: 레프-아델)'
+        default: ''
+      per:
+        description: '페이지당 확인할 인원'
+        default: '20'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/artifactprobe.mjs
+        env:
+          NEXON_API_KEY: ${{ secrets.NEXON_API_KEY }}
+          PAGES: ${{ inputs.pages }}
+          CLASS: ${{ inputs.class }}
+          PER: ${{ inputs.per }}
