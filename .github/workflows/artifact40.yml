@@ -7,10 +7,16 @@ on:
         default: '50'
       lvmin:
         description: '아티팩트 최소 레벨'
-        default: '38'
+        default: '1'
       lvmax:
         description: '아티팩트 최대 레벨'
-        default: '42'
+        default: '45'
+      startlv:
+        description: '이 캐릭터 레벨 근처 랭킹부터 시작'
+        default: '285'
+      startpage:
+        description: '시작 페이지 직접 지정 (비우면 위 레벨로 자동)'
+        default: ''
       only:
         description: '특정 직업만 (쉼표로 구분, 비우면 전 직업)'
         default: ''
@@ -35,4 +41,6 @@ jobs:
           ONLY: ${{ inputs.only }}
           LVMIN: ${{ inputs.lvmin }}
           LVMAX: ${{ inputs.lvmax }}
+          STARTLV: ${{ inputs.startlv }}
+          STARTPAGE: ${{ inputs.startpage }}
           SCRIPTS: artifact40
