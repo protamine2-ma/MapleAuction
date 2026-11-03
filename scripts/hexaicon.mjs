@@ -43,13 +43,21 @@ async function api(path, params) {
   return null;
 }
 const date = new Date(Date.now() + 9 * 3600e3 - 86400e3).toISOString().slice(0, 10);
+const JOB = process.env.JOB || CLASS.split('-').pop();
 const icons = {};
-const rk = await api('/ranking/overall', { date, class: CLASS, page: 1 });
-for (const x of ((rk && rk.ranking) || []).slice(0, 5)) {
-  const id = await api('/id', { character_name: x.character_name }); if (!id || !id.ocid) continue;
-  for (const g of ['6', '5']) { const s = await api('/character/skill', { ocid: id.ocid, character_skill_grade: g }); ((s && s.character_skill) || []).forEach(k => { if (k.skill_icon && !icons[k.skill_name]) icons[k.skill_name] = k.skill_icon; }); }
-  if (Object.keys(icons).length > 20) break;
+let got = 0;
+for (const c of [...new Set([CLASS, '영웅-' + JOB, '마법사-' + JOB, JOB + '-' + JOB, '레프-' + JOB, '노바-' + JOB, '기사단-' + JOB, '모험가-' + JOB])]) {
+  if (got >= 3) break;
+  const rk = await api('/ranking/overall', { date, class: c, page: 1 });
+  for (const x of ((rk && rk.ranking) || []).slice(0, 30)) {
+    if (got >= 3) break;
+    const id = await api('/id', { character_name: x.character_name }); if (!id || !id.ocid) continue;
+    const b = await api('/character/basic', { ocid: id.ocid }); if (!b || b.character_class !== JOB) continue;
+    got++; console.log(`확인: ${x.character_name} (${b.character_class}, 랭킹 직업명 ${c})`);
+    for (const g of ['6', '5']) { const s = await api('/character/skill', { ocid: id.ocid, character_skill_grade: g }); ((s && s.character_skill) || []).forEach(k => { if (k.skill_icon && !icons[k.skill_name] && !/HEXA 스탯|솔 에르다/.test(k.skill_name)) icons[k.skill_name] = k.skill_icon; }); }
+  }
 }
+if (!got) { console.log(JOB + ' 캐릭터를 못 찾았어요'); process.exit(1); }
 console.log(`API 아이콘 ${Object.keys(icons).length}개 받음`);
 const tpl = [];
 for (const [name, url] of Object.entries(icons)) { try { const r = await fetch(url); tpl.push({ name, ...png(Buffer.from(await r.arrayBuffer())) }); } catch (e) { console.log('아이콘 읽기 실패', name); } }
@@ -68,7 +76,7 @@ function score(t, cx, cy, sc) {
 const res = [];
 for (let k = 0; k < COLS; k++) {
   const cx0 = X0 + STEP * k, list = [];
-  for (const t of tpl) { let best = 1e9; for (const sc of [1, 1.1, 1.2]) for (let dy = -8; dy <= 8; dy++) for (let dx = -8; dx <= 8; dx++) { const v = score(t, cx0 + dx, Y0 + dy, sc); if (v < best) best = v; } list.push([t.name, best]); }
+  for (const t of tpl) { let best = 1e9; for (const sc of [1, 1.1, 1.2, 1.3, 1.4]) for (let dy = -8; dy <= 8; dy++) for (let dx = -8; dx <= 8; dx++) { const v = score(t, cx0 + dx, Y0 + dy, sc); if (v < best) best = v; } list.push([t.name, best]); }
   list.sort((a, b) => a[1] - b[1]);
   res.push(list[0][0]);
   console.log(`${k + 1}번: ${list[0][0]} (차이 ${list[0][1].toFixed(0)}) · 2위 ${list[1] ? list[1][0] + ' ' + list[1][1].toFixed(0) : '-'}`);
