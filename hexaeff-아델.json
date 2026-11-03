@@ -1,6 +1,6 @@
 {
   "job": "아델",
-  "date": "2026-11-01",
+  "date": "2026-11-02",
   "sample": 10,
   "replays": [
     {
@@ -22,10 +22,10 @@
       "dps": 3378610392382
     },
     {
-      "dps": 5210437045991
+      "dps": 7151619239828
     },
     {
-      "dps": 7151619239828
+      "dps": 5210437045991
     },
     {
       "dps": 5682692050795
@@ -257,7 +257,7 @@
   ],
   "items": [
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 2,
       "type": "mastery"
     },
@@ -267,17 +267,12 @@
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 3,
       "type": "mastery"
     },
     {
       "core": "오더 VI/트레드 VI",
-      "lv": 2,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
       "lv": 4,
       "type": "mastery"
     },
@@ -288,11 +283,6 @@
     },
     {
       "core": "오더 VI/트레드 VI",
-      "lv": 3,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
       "lv": 5,
       "type": "mastery"
     },
@@ -302,18 +292,13 @@
       "type": "mastery"
     },
     {
+      "core": "오더 VI/트레드 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
       "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
       "lv": 2,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 4,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 6,
       "type": "mastery"
     },
     {
@@ -322,18 +307,13 @@
       "type": "mastery"
     },
     {
-      "core": "오더 VI/트레드 VI",
-      "lv": 5,
-      "type": "mastery"
-    },
-    {
       "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 7,
+      "lv": 2,
       "type": "mastery"
     },
     {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 3,
+      "core": "오더 VI/트레드 VI",
+      "lv": 7,
       "type": "mastery"
     },
     {
@@ -342,13 +322,28 @@
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 8,
       "type": "mastery"
     },
     {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
       "core": "오더 VI/트레드 VI",
-      "lv": 6,
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 3,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 7,
       "type": "mastery"
     },
     {
@@ -357,28 +352,18 @@
       "type": "mastery"
     },
     {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
       "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 4,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
       "lv": 9,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 7,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 7,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 8,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 8,
       "type": "mastery"
     },
     {
@@ -387,17 +372,17 @@
       "type": "mastery"
     },
     {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 9,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 9,
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 5,
       "type": "mastery"
     },
     {
       "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 6,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
       "lv": 6,
       "type": "mastery"
     },
@@ -407,7 +392,17 @@
       "type": "mastery"
     },
     {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 7,
+      "type": "mastery"
+    },
+    {
       "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 8,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
       "lv": 8,
       "type": "mastery"
     },
@@ -417,29 +412,14 @@
       "type": "mastery"
     },
     {
-      "core": "인피니트",
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 9,
+      "type": "mastery"
+    },
+    {
+      "core": "솔 헤카테",
       "lv": 2,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 2,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 3,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 3,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 4,
-      "type": "enhance"
+      "type": "common"
     },
     {
       "core": "아인하이트",
@@ -447,19 +427,9 @@
       "type": "origin"
     },
     {
-      "core": "스톰",
-      "lv": 4,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 5,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 5,
-      "type": "enhance"
+      "core": "솔 헤카테",
+      "lv": 3,
+      "type": "common"
     },
     {
       "core": "아인하이트",
@@ -467,89 +437,84 @@
       "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 6,
-      "type": "enhance"
+      "core": "솔 헤카테",
+      "lv": 4,
+      "type": "common"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 10,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 11,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 12,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 13,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 14,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 15,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 16,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 17,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 18,
       "type": "mastery"
     },
     {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "core": "오더 VI/트레드 VI",
       "lv": 19,
       "type": "mastery"
-    },
-    {
-      "core": "스톰",
-      "lv": 6,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 7,
-      "type": "enhance"
-    },
-    {
-      "core": "아인하이트",
-      "lv": 4,
-      "type": "origin"
-    },
-    {
-      "core": "인피니트",
-      "lv": 8,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 7,
-      "type": "enhance"
     },
     {
       "core": "마에스트로",
       "lv": 2,
       "type": "origin"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 5,
+      "type": "common"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 6,
+      "type": "common"
     },
     {
       "core": "아인하이트",
@@ -607,69 +572,14 @@
       "type": "mastery"
     },
     {
-      "core": "스톰",
-      "lv": 8,
-      "type": "enhance"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 10,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 11,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 12,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 13,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 14,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 15,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 16,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 17,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 18,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 19,
-      "type": "mastery"
+      "core": "솔 헤카테",
+      "lv": 7,
+      "type": "common"
     },
     {
       "core": "인피니트",
-      "lv": 9,
-      "type": "enhance"
-    },
-    {
-      "core": "솔 헤카테",
       "lv": 2,
-      "type": "common"
+      "type": "enhance"
     },
     {
       "core": "아인하이트",
@@ -677,144 +587,24 @@
       "type": "origin"
     },
     {
-      "core": "스톰",
-      "lv": 9,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 4,
+      "type": "origin"
     },
     {
-      "core": "마에스트로",
-      "lv": 3,
-      "type": "origin"
+      "core": "솔 헤카테",
+      "lv": 8,
+      "type": "common"
+    },
+    {
+      "core": "스톰",
+      "lv": 2,
+      "type": "enhance"
     },
     {
       "core": "아인하이트",
       "lv": 7,
       "type": "origin"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 3,
-      "type": "common"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 4,
-      "type": "origin"
-    },
-    {
-      "core": "아인하이트",
-      "lv": 8,
-      "type": "origin"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 10,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 11,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 12,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 13,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 14,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 15,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 16,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 17,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 18,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 19,
-      "type": "mastery"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 4,
-      "type": "common"
-    },
-    {
-      "core": "아인하이트",
-      "lv": 9,
-      "type": "origin"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 20,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 21,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 22,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 23,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 24,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 25,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 26,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 27,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 28,
-      "type": "mastery"
-    },
-    {
-      "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 29,
-      "type": "mastery"
     },
     {
       "core": "마에스트로",
@@ -823,8 +613,23 @@
     },
     {
       "core": "솔 헤카테",
-      "lv": 5,
+      "lv": 9,
       "type": "common"
+    },
+    {
+      "core": "인피니트",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 8,
+      "type": "origin"
+    },
+    {
+      "core": "스톰",
+      "lv": 3,
+      "type": "enhance"
     },
     {
       "core": "마에스트로",
@@ -832,66 +637,71 @@
       "type": "origin"
     },
     {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "core": "아인하이트",
+      "lv": 9,
+      "type": "origin"
+    },
+    {
+      "core": "인피니트",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "오더 VI/트레드 VI",
       "lv": 20,
       "type": "mastery"
     },
     {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 21,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 22,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 23,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 24,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 25,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 26,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 27,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 28,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 29,
-      "type": "mastery"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 6,
-      "type": "common"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 20,
-      "type": "mastery"
-    },
-    {
       "core": "오더 VI/트레드 VI",
       "lv": 21,
       "type": "mastery"
@@ -935,220 +745,185 @@
       "core": "오더 VI/트레드 VI",
       "lv": 29,
       "type": "mastery"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 7,
-      "type": "origin"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 7,
-      "type": "common"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 8,
-      "type": "origin"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 8,
-      "type": "common"
     },
     {
       "core": "크리에이션 VI/테리토리 VI/마커 VI",
-      "lv": 30,
+      "lv": 10,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 11,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 12,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 13,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 14,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 15,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 16,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 17,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 18,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 19,
+      "type": "mastery"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 7,
+      "type": "origin"
+    },
+    {
+      "core": "스톰",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 10,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 10,
+      "type": "enhance"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 8,
+      "type": "origin"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 20,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 21,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 22,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 23,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 24,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 25,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 26,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 27,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 28,
+      "type": "mastery"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 29,
       "type": "mastery"
     },
     {
       "core": "마에스트로",
       "lv": 9,
-      "type": "origin"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 9,
-      "type": "common"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 20,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 21,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 22,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 23,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 24,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 25,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 26,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 27,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 28,
-      "type": "mastery"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 29,
-      "type": "mastery"
-    },
-    {
-      "core": "디바이드 VI/샤드 VI/원더 VI",
-      "lv": 30,
-      "type": "mastery"
-    },
-    {
-      "core": "오더 VI/트레드 VI",
-      "lv": 30,
-      "type": "mastery"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 2,
-      "type": "origin"
-    },
-    {
-      "core": "인피니트",
-      "lv": 10,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 11,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 12,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 13,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 14,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 15,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 16,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 17,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 18,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 19,
-      "type": "enhance"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 3,
-      "type": "origin"
-    },
-    {
-      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
-      "lv": 30,
-      "type": "mastery"
-    },
-    {
-      "core": "스톰",
-      "lv": 10,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 11,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 12,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 13,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 14,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 15,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 16,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 17,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 18,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 19,
-      "type": "enhance"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 4,
       "type": "origin"
     },
     {
@@ -1157,9 +932,334 @@
       "type": "enhance"
     },
     {
+      "core": "오더 VI/트레드 VI",
+      "lv": 30,
+      "type": "mastery"
+    },
+    {
+      "core": "루인",
+      "lv": 3,
+      "type": "enhance"
+    },
+    {
+      "core": "디바이드 VI/샤드 VI/원더 VI",
+      "lv": 30,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 20,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 21,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 22,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 23,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 24,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 25,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 26,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 27,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 28,
+      "type": "mastery"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 29,
+      "type": "mastery"
+    },
+    {
+      "core": "루인",
+      "lv": 4,
+      "type": "enhance"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 20,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 21,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 22,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 23,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 24,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 25,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 26,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 27,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 28,
+      "type": "mastery"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 29,
+      "type": "mastery"
+    },
+    {
+      "core": "루인",
+      "lv": 5,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 6,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 7,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 10,
+      "type": "enhance"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 2,
+      "type": "origin"
+    },
+    {
+      "core": "인피니트",
+      "lv": 11,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 11,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 12,
+      "type": "enhance"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 3,
+      "type": "origin"
+    },
+    {
+      "core": "인피니트",
+      "lv": 13,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 14,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 15,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 16,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 17,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 18,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 19,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 20,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 12,
+      "type": "enhance"
+    },
+    {
+      "core": "임페일 VI/레조넌스 VI/게더링 VI/블로섬 VI",
+      "lv": 30,
+      "type": "mastery"
+    },
+    {
+      "core": "스톰",
+      "lv": 13,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 14,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 15,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 16,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 17,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 18,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 19,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 20,
+      "type": "enhance"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 4,
+      "type": "origin"
+    },
+    {
+      "core": "크리에이션 VI/테리토리 VI/마커 VI",
+      "lv": 30,
+      "type": "mastery"
+    },
+    {
       "core": "에테르 뤼페",
       "lv": 5,
       "type": "origin"
+    },
+    {
+      "core": "인피니트",
+      "lv": 21,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 22,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 23,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 24,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 25,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 26,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 27,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 28,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 29,
+      "type": "enhance"
+    },
+    {
+      "core": "인피니트",
+      "lv": 30,
+      "type": "enhance"
     },
     {
       "core": "아인하이트",
@@ -1212,14 +1312,109 @@
       "type": "origin"
     },
     {
+      "core": "스톰",
+      "lv": 21,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 22,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 23,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 24,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 25,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 26,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 27,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 28,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 29,
+      "type": "enhance"
+    },
+    {
+      "core": "스톰",
+      "lv": 30,
+      "type": "enhance"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 10,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 11,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 12,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 13,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 14,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 15,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 16,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 17,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 18,
+      "type": "common"
+    },
+    {
+      "core": "솔 헤카테",
+      "lv": 19,
+      "type": "common"
+    },
+    {
       "core": "에테르 뤼페",
       "lv": 6,
       "type": "origin"
-    },
-    {
-      "core": "루인",
-      "lv": 3,
-      "type": "enhance"
     },
     {
       "core": "매직 서킷 풀드라이브 VI",
@@ -1227,64 +1422,64 @@
       "type": "common"
     },
     {
+      "core": "루인",
+      "lv": 11,
+      "type": "enhance"
+    },
+    {
       "core": "에테르 뤼페",
       "lv": 7,
       "type": "origin"
     },
     {
-      "core": "루인",
-      "lv": 4,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 10,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 20,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 11,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 21,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 12,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 22,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 13,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 23,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 14,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 24,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 15,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 25,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 16,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 26,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 17,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 27,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 18,
+      "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 28,
-      "type": "enhance"
-    },
-    {
-      "core": "인피니트",
-      "lv": 29,
-      "type": "enhance"
+      "core": "마에스트로",
+      "lv": 19,
+      "type": "origin"
     },
     {
       "core": "에테르 뤼페",
@@ -1297,58 +1492,8 @@
       "type": "common"
     },
     {
-      "core": "스톰",
-      "lv": 20,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 21,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 22,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 23,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 24,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 25,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 26,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 27,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 28,
-      "type": "enhance"
-    },
-    {
-      "core": "스톰",
-      "lv": 29,
-      "type": "enhance"
-    },
-    {
       "core": "루인",
-      "lv": 5,
+      "lv": 12,
       "type": "enhance"
     },
     {
@@ -1357,54 +1502,44 @@
       "type": "origin"
     },
     {
-      "core": "마에스트로",
-      "lv": 10,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 11,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 12,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 13,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 14,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 15,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 16,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 17,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 18,
-      "type": "origin"
+      "type": "enhance"
     },
     {
-      "core": "마에스트로",
+      "core": "루인",
       "lv": 19,
-      "type": "origin"
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 20,
+      "type": "enhance"
     },
     {
       "core": "매직 서킷 풀드라이브 VI",
@@ -1412,21 +1547,61 @@
       "type": "common"
     },
     {
-      "core": "루인",
-      "lv": 6,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 7,
-      "type": "enhance"
-    },
-    {
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 5,
       "type": "common"
     },
     {
+      "core": "루인",
+      "lv": 21,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 22,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 23,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 24,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 25,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 26,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 27,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 28,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 29,
+      "type": "enhance"
+    },
+    {
+      "core": "루인",
+      "lv": 30,
+      "type": "enhance"
+    },
+    {
       "core": "아인하이트",
       "lv": 20,
       "type": "origin"
@@ -1477,63 +1652,53 @@
       "type": "origin"
     },
     {
-      "core": "인피니트",
-      "lv": 30,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 8,
-      "type": "enhance"
-    },
-    {
       "core": "솔 헤카테",
-      "lv": 10,
+      "lv": 20,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 11,
+      "lv": 21,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 12,
+      "lv": 22,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 13,
+      "lv": 23,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 14,
+      "lv": 24,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 15,
+      "lv": 25,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 16,
+      "lv": 26,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 17,
+      "lv": 27,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 18,
+      "lv": 28,
       "type": "common"
     },
     {
       "core": "솔 헤카테",
-      "lv": 19,
+      "lv": 29,
       "type": "common"
     },
     {
@@ -1542,189 +1707,64 @@
       "type": "common"
     },
     {
-      "core": "스톰",
-      "lv": 30,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 9,
-      "type": "enhance"
-    },
-    {
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 7,
       "type": "common"
     },
     {
+      "core": "마에스트로",
+      "lv": 20,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 21,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 22,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 23,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 24,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 25,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 26,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 27,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 28,
+      "type": "origin"
+    },
+    {
+      "core": "마에스트로",
+      "lv": 29,
+      "type": "origin"
+    },
+    {
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 8,
       "type": "common"
-    },
-    {
-      "core": "매직 서킷 풀드라이브 VI",
-      "lv": 9,
-      "type": "common"
-    },
-    {
-      "core": "아인하이트",
-      "lv": 30,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 20,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 21,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 22,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 23,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 24,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 25,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 26,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 27,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 28,
-      "type": "origin"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 29,
-      "type": "origin"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 20,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 21,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 22,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 23,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 24,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 25,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 26,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 27,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 28,
-      "type": "common"
-    },
-    {
-      "core": "솔 헤카테",
-      "lv": 29,
-      "type": "common"
-    },
-    {
-      "core": "마에스트로",
-      "lv": 30,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 10,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 11,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 12,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 13,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 14,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 15,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 16,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 17,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 18,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 19,
-      "type": "origin"
     },
     {
       "core": "리스토어",
@@ -1732,9 +1772,14 @@
       "type": "enhance"
     },
     {
-      "core": "솔 헤카테",
-      "lv": 30,
+      "core": "매직 서킷 풀드라이브 VI",
+      "lv": 9,
       "type": "common"
+    },
+    {
+      "core": "아인하이트",
+      "lv": 30,
+      "type": "origin"
     },
     {
       "core": "리스토어",
@@ -1742,54 +1787,9 @@
       "type": "enhance"
     },
     {
-      "core": "루인",
-      "lv": 10,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 11,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 12,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 13,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 14,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 15,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 16,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 17,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 18,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 19,
-      "type": "enhance"
+      "core": "솔 헤카테",
+      "lv": 30,
+      "type": "common"
     },
     {
       "core": "리스토어",
@@ -1797,59 +1797,14 @@
       "type": "enhance"
     },
     {
+      "core": "마에스트로",
+      "lv": 30,
+      "type": "origin"
+    },
+    {
       "core": "리스토어",
       "lv": 5,
       "type": "enhance"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 20,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 21,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 22,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 23,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 24,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 25,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 26,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 27,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 28,
-      "type": "origin"
-    },
-    {
-      "core": "에테르 뤼페",
-      "lv": 29,
-      "type": "origin"
     },
     {
       "core": "리스토어",
@@ -1862,6 +1817,221 @@
       "type": "enhance"
     },
     {
+      "core": "리스토어",
+      "lv": 8,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 9,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 10,
+      "type": "enhance"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 10,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 11,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 12,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 13,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 14,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 15,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 16,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 17,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 18,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 19,
+      "type": "origin"
+    },
+    {
+      "core": "리스토어",
+      "lv": 11,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 12,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 13,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 14,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 15,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 16,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 17,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 18,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 19,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 20,
+      "type": "enhance"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 20,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 21,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 22,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 23,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 24,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 25,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 26,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 27,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 28,
+      "type": "origin"
+    },
+    {
+      "core": "에테르 뤼페",
+      "lv": 29,
+      "type": "origin"
+    },
+    {
+      "core": "리스토어",
+      "lv": 21,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 22,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 23,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 24,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 25,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 26,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 27,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 28,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 29,
+      "type": "enhance"
+    },
+    {
+      "core": "리스토어",
+      "lv": 30,
+      "type": "enhance"
+    },
+    {
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 10,
       "type": "common"
@@ -1910,71 +2080,6 @@
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 19,
       "type": "common"
-    },
-    {
-      "core": "리스토어",
-      "lv": 8,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 9,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 20,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 21,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 22,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 23,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 24,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 25,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 26,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 27,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 28,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 29,
-      "type": "enhance"
-    },
-    {
-      "core": "루인",
-      "lv": 30,
-      "type": "enhance"
     },
     {
       "core": "에테르 뤼페",
@@ -2035,111 +2140,6 @@
       "core": "매직 서킷 풀드라이브 VI",
       "lv": 30,
       "type": "common"
-    },
-    {
-      "core": "리스토어",
-      "lv": 10,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 11,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 12,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 13,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 14,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 15,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 16,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 17,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 18,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 19,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 20,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 21,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 22,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 23,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 24,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 25,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 26,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 27,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 28,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 29,
-      "type": "enhance"
-    },
-    {
-      "core": "리스토어",
-      "lv": 30,
-      "type": "enhance"
     }
   ]
 }
