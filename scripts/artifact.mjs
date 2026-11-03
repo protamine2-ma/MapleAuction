@@ -63,7 +63,17 @@ async function one(name) {
   });
   ((a && a.union_artifact_effect) || []).forEach(e => { if (!e || !e.name) return; const nm = String(e.name).replace(/[\d.]+%?/g, '').replace(/\s+/g, ' ').trim(); const x = eff[nm] || (eff[nm] = { n: 0, sum: 0, max: 0 }); x.n++; x.sum += Number(e.level) || 0; if (Number(e.level) >= 10) x.max++; });
 }
-for (let page = 1; ok < N && page <= MAXPAGE; page++) {
+let START = Number(process.env.STARTPAGE || 1);
+const STARTLV = Number(process.env.STARTLV || 0);
+if (STARTLV && !process.env.STARTPAGE) {
+  const top = async p => { const j = await api('/ranking/overall', { date, class: CLASS, page: p }); const r = (j && j.ranking) || []; return r.length ? Number(r[0].character_level) || 0 : -1; };
+  let lo = 1, hi = 1;
+  while (hi < 5000) { const v = await top(hi); if (v < 0 || v <= STARTLV) break; lo = hi; hi *= 2; }
+  while (hi - lo > 1) { const m = Math.floor((lo + hi) / 2), v = await top(m); if (v < 0 || v <= STARTLV) hi = m; else lo = m; }
+  START = lo;
+  console.log(`캐릭터 Lv.${STARTLV} 근처 = 랭킹 ${START}페이지부터 시작`);
+}
+for (let page = START; ok < N && page < START + MAXPAGE; page++) {
   const j = await api('/ranking/overall', { date, class: CLASS, page });
   const r = (j && j.ranking) || [];
   if (!r.length) break;
