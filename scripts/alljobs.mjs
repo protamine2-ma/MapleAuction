@@ -22,13 +22,14 @@ async function api(path, params) {
 }
 const date = new Date(Date.now() + 9 * 3600e3 - 86400e3).toISOString().slice(0, 10);
 const norm = s => String(s || '').replace(/\s/g, '');
+const ALIAS = { '듀얼블레이드': '듀얼블레이더' };
 async function findClass(group, job) {
-  const g1 = group.replace('모험가 ', ''), base = job.replace(/\(.*\)/, '');
-  const cands = [...new Set([`${g1}-${job}`, `${group}-${job}`, `기사단-${job}`, `데몬-${job}`, `${job}-${job}`, `${base}-${job}`, `${g1}-${base}`])];
+  const g1 = group.replace('모험가 ', ''), base = job.replace(/\(.*\)/, ''), al = ALIAS[job];
+  const cands = [...new Set([`${g1}-${job}`, `${group}-${job}`, `기사단-${job}`, `데몬-${job}`, `${job}-${job}`, `${base}-${job}`, `${g1}-${base}`, ...(al ? [`${g1}-${al}`, `${group}-${al}`, `${al}-${al}`] : [])])];
   for (const c of cands) {
     const j = await api('/ranking/overall', { date, class: c, page: 1 });
     const r = (j && j.ranking) || [];
-    if (r.length && r.slice(0, 20).some(x => norm(x.sub_class_name || x.class_name) === norm(job) || norm(x.class_name).endsWith(norm(job)))) return c;
+    if (r.length && r.slice(0, 20).some(x => [job, al].filter(Boolean).some(n => norm(x.sub_class_name || x.class_name) === norm(n) || norm(x.class_name).endsWith(norm(n))))) return c;
   }
   return null;
 }
@@ -40,7 +41,7 @@ for (const [group, jobs] of JG) for (const job of jobs) {
   const cls = await findClass(group, job);
   if (!cls) { console.log(`✗ ${job}: 랭킹 직업명을 찾지 못했어요`); fails.push(job); continue; }
   console.log(`\n===== ${job} (${cls}) =====`);
-  const env = { JOB: job, CLASS: cls, COUNT };
+  const env = { JOB: job, CLASS: cls, COUNT, API_JOB: ALIAS[job] || '' };
   const codes = await Promise.all(SCRIPTS.map(f => run(`scripts/${f}.mjs`, env)));
   if (codes.some(c => c)) fails.push(job);
   try { execSync(`git add ${SCRIPTS.map(f => f + '-*.json').join(' ')} && (git commit -m "전 직업 집계: ${job}" || true) && git push`, { stdio: 'inherit', shell: '/bin/bash' }); } catch (e) { console.log('커밋 실패', e.message); }
