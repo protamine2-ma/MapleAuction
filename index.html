@@ -65,6 +65,7 @@ body{overflow-x:clip;}
 [data-m="abil"]{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important;grid-auto-flow:row!important;}
 [data-m="top"]{right:14px!important;bottom:14px!important;width:46px!important;height:46px!important;}
 }
+@media (max-width:760px) and (hover:hover) and (pointer:fine){[data-m="tabs"]{overflow:visible!important;flex-wrap:wrap!important;justify-content:center!important;}}
 </style>
 </helmet>
 <div style="background:oklch(0.3 0.09 255);color:#fff;">
@@ -5580,8 +5581,8 @@ class Component extends DCLogic {
             const byT = this.state.byTab || (() => { try { return localStorage.getItem(KEY + ':byTab'); } catch (e) { return null; } })() || '시뮬레이션';
             const bySub = this.state.byAdmSub || (() => { try { return localStorage.getItem(KEY + ':byAdmSub'); } catch (e) { return null; } })() || '전투';
             const byGrowOn = g === '보약' && byT === '관리자' && !!this.state.admin && bySub === '성장', byWS = byGrowOn ? 'G' : '';
-            const byTrain = g === '보약' && byT === '특수훈련', byUseG = byGrowOn || byTrain;
-            const bySfx = byTrain ? 'T' : byGrowOn ? 'G' : byT === '관리자' && this.state.admin ? 'A' : '';
+            const byTrain = g === '보약' && byT === '특수훈련', byGrowSim = g === '보약' && bySub === '성장' && byT !== '직업' && !byTrain && !(byT === '관리자' && !!this.state.admin), byUseG = byGrowOn || byTrain || byGrowSim;
+            const bySfx = byTrain ? 'T' : byGrowSim ? 'SG' : byGrowOn ? 'G' : byT === '관리자' && this.state.admin ? 'A' : '';
             const BYSG = [['솔 에르다', [10, 20, 40, 60, 80, 100], '%'], ['몬스터 컬렉션', [10, 20, 40, 60, 80, 100], '%'], ['몬스터파크', [5, 10, 20, 30, 40, 50], '%'],
               ['아케인 일퀘', [5, 10, 20, 30, 40, 50], '%', [2, 4, 8, 12, 16, 20]], ['그란디스 일퀘', [5, 10, 20, 30, 40, 50], '%', [2, 3, 4, 5, 7, 9]], ['유니온 코인', [100, 150, 200, 250, 300, 400], '']];
             const BYC = [1, 2, 5, 12, 25, 30], BYS = byUseG ? BYSG : [['공격력/마력', [5, 10, 15, 20, 30, 40], ''], ['보스 데미지', [5, 10, 15, 20, 30, 40], '%'], ['방어율 무시', [5, 10, 15, 20, 30, 40], '%'], ['올스탯', [10, 20, 30, 40, 60, 80], ''], ['HP/MP', [500, 1000, 1500, 2000, 3000, 4000], ''], ['버프 지속시간', [5, 10, 15, 20, 25, 30], '%'], ['크리티컬 확률', [5, 10, 15, 20, 25, 30], '%'], ['일반몹 데미지', [5, 10, 15, 20, 30, 40], '%'], ['아케인 포스', [10, 20, 30, 40, 50, 60], ''], ['어센틱 포스', [10, 20, 30, 40, 50, 60], ''], ['획득 경험치', [2.5, 5, 7.5, 10, 12.5, 15], '%']];
@@ -5681,8 +5682,8 @@ class Component extends DCLogic {
               bySave({ per: byPer, hist: hs });
             };
             gv.byReqs = ['크리티컬 확률'].map(name => ({ name, val: byRq[name] ?? '', set: e => { const v = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byRq, [name]: v }; try { localStorage.setItem(KEY + ':byReq' + byWS, JSON.stringify(o)); } catch (er) {} this.setState({ byRq: o }); } }));
-            gv.byGroups = byGrowOn ? [{ rows: gv.byRows }] : [{ rows: gv.byRows.slice(0, 5) }, { rows: gv.byRows.slice(5) }];
-            gv.byBoxTitle = byGrowOn ? '성장 지원 마법' : '전투 지원 마법'; gv.byCombat = !byGrowOn;
+            gv.byGroups = byGrowOn || byGrowSim ? [{ rows: gv.byRows }] : [{ rows: gv.byRows.slice(0, 5) }, { rows: gv.byRows.slice(5) }];
+            gv.byBoxTitle = byGrowOn || byGrowSim ? '성장 지원 마법' : '전투 지원 마법'; gv.byCombat = !(byGrowOn || byGrowSim);
             const PW = (buff, ark, aut, mob, cr) => ({ '공격력/마력': 90, '보스 데미지': 220, '방어율 무시': 120, '올스탯': 60, '버프 지속시간': buff, '아케인 포스': ark, '어센틱 포스': aut, '일반몹 데미지': mob, '크리티컬 확률': cr });
             const PE = { '획득 경험치': 120, '획득 경험치:max': 4 }, PB = { '획득 경험치': 10 };
             const PG = {
@@ -5711,8 +5712,8 @@ class Component extends DCLogic {
             gv.byJobBoxTitle = byTrain ? '성장 지원 마법 추천' : '전투 지원 마법 추천';
             if (byTrain) { const tot = 25 * byWN;
               Object.assign(gv, { byJobTot: tot, byJobNote: '성장 지원 마법',
-                byJobSets: [{ title: '몬파 우선', wt: { '몬스터파크': '3000', '그란디스 일퀘': '30', '아케인 일퀘': '100', '솔 에르다': '5', '유니온 코인': '1' } },
-                  { title: '균등', wt: { '몬스터파크': '4000', '그란디스 일퀘': '300', '아케인 일퀘': '1300', '솔 에르다': '20', '유니온 코인': '1' } }].map(s => { const r = byAutoHist(s.wt, {}, tot); return { title: s.title, used: r.used, weeks: weeksOf(r.hs, 25) }; }) }); }
+                byJobSets: [{ title: '몬파 우선', wt: { '몬스터파크': '3000', '그란디스 일퀘': '30', '아케인 일퀘': '100', '솔 에르다': '5', '유니온 코인': '1', '몬스터 컬렉션': '2' } },
+                  { title: '균등', wt: { '몬스터파크': '4000', '그란디스 일퀘': '300', '아케인 일퀘': '1300', '솔 에르다': '20', '유니온 코인': '1', '몬스터 컬렉션': '2' } }].map(s => { const r = byAutoHist(s.wt, {}, tot); return { title: s.title, used: r.used, weeks: weeksOf(r.hs, 25) }; }) }); }
             if (g === '보약' && !this._charPre) { this._charPre = Object.values(HEXA).map(([h]) => { const s = h.replace(/^img\/hexa-|\.png$/g, ''), im = new Image();
               im.src = 'img/char-' + s + ('angelicbuster blaster cadena darkknight demonavenger demonslayer dualblade flamewizard kaiser lara mechanic mihile pathfinder shadower soulmaster striker viper xenon'.split(' ').includes(s) ? '.webp' : '.png'); return im; }); }
             gv.byH1Img = byT === '직업' && bjD && (() => { const h = (HEXA[bjName] || [])[0]; if (!h) return ''; const s = h.replace(/^img\/hexa-|\.png$/g, '');
@@ -5729,7 +5730,7 @@ class Component extends DCLogic {
             Object.assign(gv, { byZoom: byAdmV ? 0.72 : 1, byBoxMax: byAdmV ? 'none' : '960px', byWrap: byAdmV ? 'nowrap' : 'wrap' });
             const byAd = !!this.state.admin, byCur = byT === '직업' ? '직업' : byT === '특수훈련' ? '특수훈련' : (byT === '관리자' && byAd ? '관리자' : '시뮬레이션');
             { const pickSub = s => { try { localStorage.setItem(KEY + ':byAdmSub', s); } catch (e) {} this.setState({ byAdmSub: s, byWt: undefined, byRq: undefined, byWs: undefined, byWsEdit: null, byCrG: null }); };
-              Object.assign(gv, { byAdmTabsOn: g === '보약' && byCur === '관리자',
+              Object.assign(gv, { byAdmTabsOn: g === '보약' && (byCur === '관리자' || byCur === '시뮬레이션'),
                 byAdmTabs: [['전투', '전투 지원 마법'], ['성장', '성장 지원 마법']].map(([k, l]) => { const on = k === bySub; return { label: l, pick: () => pickSub(k), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }) }); }
             Object.assign(gv, { isBoyak: g === '보약', byIsSim: byCur !== '직업' && byCur !== '특수훈련', byIsJob: byCur === '직업', byJobHas: g === '보약' && ((byCur === '직업' && gv._bjHas) || byCur === '특수훈련'), byJobNone: g === '보약' && byCur === '직업' && !gv._bjHas, byIsAdm: byCur === '관리자', byTitle: byCur === '관리자' ? '관리자 테스트' : byCur === '직업' ? (this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })() || '직업') : byCur,
               byJobGroups: (() => { const CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', M = {}, bj = this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })();
@@ -5988,7 +5989,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 77,
+      isAdmin: admin, appVer: 78,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
