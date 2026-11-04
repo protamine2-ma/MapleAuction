@@ -893,7 +893,28 @@ body{overflow-x:clip;}
         </div>
       </sc-if>
     </div>
-    <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">보약</button>
+    <div onMouseEnter="{{ byMenuOpen }}" onMouseLeave="{{ byMenuClose }}" style="position:relative;">
+      <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">보약<span style="font-size:10px;opacity:0.6;">▼</span></button>
+      <sc-if value="{{ byMenu }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:50;width:min(560px,92vw);max-height:420px;overflow-y:auto;background:#fff;border:1px solid #e3e3e0;border-radius:12px;box-shadow:0 12px 32px rgba(20,30,60,0.14);padding:14px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:4px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #ececea;">
+            <sc-for list="{{ byTabs }}" as="s" hint-placeholder-count="1">
+              <button onClick="{{ s.onClick }}" style="padding:8px 14px;border:none;border-radius:7px;background:{{ s.mbg }};color:{{ s.mfg }};font-family:inherit;font-size:15px;font-weight:700;text-align:left;cursor:pointer;white-space:nowrap;" style-hover="background:oklch(0.94 0.035 255);">{{ s.label }}</button>
+            </sc-for>
+          </div>
+          <sc-for list="{{ byJobGroups }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <span style="font-size:12px;font-weight:800;color:oklch(0.4 0.17 255);padding:0 4px;">{{ g.name }}</span>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;">
+                <sc-for list="{{ g.jobs }}" as="j" hint-placeholder-count="3">
+                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">{{ j.name }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
     <div onMouseEnter="{{ setMenuOpen }}" onMouseLeave="{{ setMenuClose }}" style="position:relative;">
       <button onClick="{{ growTabs.2.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.2.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.2.weight }};color:{{ growTabs.2.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">환산별템세팅<span style="font-size:10px;opacity:0.6;">▼</span></button>
       <sc-if value="{{ setMenu }}" hint-placeholder-val="{{ false }}">
@@ -962,6 +983,243 @@ body{overflow-x:clip;}
       </div>
     </section>
   </sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isBoyak }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1600px;margin:0 auto;padding:40px 28px 80px;display:flex;flex-direction:column;gap:22px;">
+  <h1 data-m="h1" style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ byH1 }}</h1>
+  <sc-if value="{{ byIsSim }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;gap:12px;align-items:flex-start;justify-content:center;flex-wrap:{{ byWrap }};">
+    <sc-if value="{{ byIsAdm }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;width:250px;flex:none;box-sizing:border-box;">
+        <div style="display:flex;flex-direction:column;gap:4px;padding-bottom:8px;border-bottom:1px solid #ececea;">
+          <span style="font-size:18px;font-weight:800;color:#2a2b2f;">보약 시작 날짜</span>
+          <input type="date" value="{{ byStart }}" onChange="{{ bySetStart }}" style="padding:4px 6px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:15px;font-weight:700;"></input>
+          <span style="font-size:13px;color:#6a6c71;">{{ byNowText }} <span style="color:#9a9ca1;">{{ byStartMsg }}</span></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+          <span style="font-size:18px;font-weight:800;color:#2a2b2f;">가중치</span>
+          <button onClick="{{ byWtReset }}" style="padding:3px 10px;border:1px solid #d6d6d2;border-radius:6px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+        </div>
+        <sc-for list="{{ byWeights }}" as="wt" hint-placeholder-count="11">
+          <label style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:#3a3b3f;"><span style="flex:1;min-width:0;white-space:nowrap;">{{ wt.name }}</span>
+            <span style="font-size:12px;font-weight:600;color:oklch(0.5 0.15 255);white-space:nowrap;">{{ wt.lv1 }}</span>
+            <sc-if value="{{ wt.hasMax }}" hint-placeholder-val="{{ false }}">
+              <input type="number" min="0" max="6" placeholder="최고" title="최고 레벨" value="{{ wt.maxVal }}" onChange="{{ wt.setMax }}" style="width:34px;flex:none;padding:3px 3px;border:1px solid oklch(0.8 0.08 50);border-radius:6px;font-family:inherit;font-size:13px;font-weight:700;text-align:right;"></input>
+            </sc-if>
+            <input type="number" step="any" value="{{ wt.val }}" onChange="{{ wt.set }}" style="width:40px;flex:none;padding:3px 3px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;"></input>
+          </label>
+        </sc-for>
+        <span style="font-size:18px;font-weight:800;color:#2a2b2f;margin-top:8px;padding-top:8px;border-top:1px solid #ececea;">필수 조건</span>
+        <sc-for list="{{ byReqs }}" as="rq" hint-placeholder-count="1">
+          <label style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:600;color:#3a3b3f;">{{ rq.name }}
+            <span style="display:flex;align-items:center;gap:4px;font-size:14px;color:#6a6c71;">Lv.
+              <input type="number" min="0" max="6" value="{{ rq.val }}" onChange="{{ rq.set }}" style="width:48px;padding:4px 6px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;"></input>
+            </span>
+          </label>
+        </sc-for>
+        <span style="font-size:13px;color:#9a9ca1;">직업 그룹 누르면 크확 필수 레벨 적용</span>
+        <sc-for list="{{ byCrGroups }}" as="cg" hint-placeholder-count="6">
+          <button onClick="{{ cg.pick }}" style="display:flex;flex-direction:column;gap:2px;padding:6px 8px;border:1px solid {{ cg.border }};border-radius:8px;background:{{ cg.bg }};font-family:inherit;text-align:left;cursor:pointer;">
+            <span style="display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;">
+              <span style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:#2a2b2f;"><span style="width:10px;height:10px;border-radius:3px;background:{{ cg.color }};border:1px solid rgba(0,0,0,0.15);"></span>{{ cg.name }}</span>
+              <span style="font-size:14px;font-weight:800;color:oklch(0.45 0.15 255);white-space:nowrap;">{{ cg.lvText }}</span>
+            </span>
+            <span style="font-size:12px;font-weight:500;color:#6a6c71;line-height:1.4;">{{ cg.jobs }}</span>
+          </button>
+        </sc-for>
+        <div style="display:flex;flex-direction:column;gap:2px;padding:6px 8px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;">
+          <span style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+            <span style="font-size:15px;font-weight:800;color:#2a2b2f;">버프 지속 직업</span>
+            <span style="font-size:14px;font-weight:800;color:oklch(0.45 0.15 255);white-space:nowrap;">가중치 15 넣기</span>
+          </span>
+          <span style="font-size:12px;font-weight:500;color:#6a6c71;line-height:1.4;">엔젤릭버스터·카이저</span>
+        </div>
+        <button onClick="{{ byAuto }}" style="margin-top:6px;padding:8px 10px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">가중치로 자동 찍기</button>
+        <span style="font-size:13px;color:#9a9ca1;line-height:1.4;">필수 조건 먼저 → 남은 포인트는 (가중치 ÷ 다음 레벨 포인트)가 큰 순서</span>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-top:8px;border-top:1px solid #ececea;">
+          <span style="font-size:18px;font-weight:800;color:#2a2b2f;">가중치 저장</span>
+          <div style="display:flex;gap:4px;">
+            <input type="text" placeholder="이름" value="{{ byWtName }}" onChange="{{ bySetWtName }}" style="flex:1;min-width:0;padding:4px 6px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:14px;"></input>
+            <button onClick="{{ byWtSaveNow }}" style="padding:4px 10px;border:none;border-radius:6px;background:oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;">저장</button>
+          </div>
+          <sc-for list="{{ byWtSaves }}" as="ws" hint-placeholder-count="0">
+            <div style="display:flex;align-items:center;border:1px solid #e3e3e0;border-radius:7px;overflow:hidden;">
+              <sc-if value="{{ ws.editing }}" hint-placeholder-val="{{ false }}">
+                <input type="text" autoFocus="{{ true }}" defaultValue="{{ ws.name }}" onBlur="{{ ws.rename }}" onKeyDown="{{ ws.key }}" style="flex:1;min-width:0;padding:4px 8px;border:none;outline:2px solid oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;"></input>
+              </sc-if>
+              <sc-if value="{{ ws.notEditing }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ ws.load }}" title="불러오기" style="flex:1;min-width:0;padding:4px 8px;border:none;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" style-hover="background:oklch(0.95 0.03 255);">{{ ws.name }}</button>
+              </sc-if>
+              <button onClick="{{ ws.edit }}" title="이름 변경" style="padding:4px 7px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#6a6c71;cursor:pointer;" style-hover="color:oklch(0.48 0.17 255);">✎</button>
+              <button onClick="{{ ws.del }}" title="삭제" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#9a9ca1;cursor:pointer;" style-hover="color:oklch(0.55 0.2 25);">✕</button>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size:13px;color:#9a9ca1;">이 기기에 자동 저장</span>
+      </div>
+    </sc-if>
+    <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;max-width:{{ byBoxMax }};width:fit-content;margin:0 auto;zoom:{{ byZoom }};box-sizing:border-box;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">전투 지원 마법</span>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:16px;font-weight:600;color:#3a3b3f;">주당 포인트
+            <input type="number" min="0" value="{{ byPer }}" onChange="{{ bySetTotal }}" style="width:72px;padding:6px 8px;border:1px solid #d6d6d2;border-radius:7px;font-family:inherit;font-size:18px;font-weight:700;text-align:right;"></input>
+          </label>
+          <span style="font-size:16px;font-weight:600;color:#3a3b3f;">{{ byWkLabel }} 총 <b style="font-variant-numeric:tabular-nums;">{{ byTotal }}</b></span>
+          <span style="font-size:16px;font-weight:600;color:#3a3b3f;">사용 <b style="font-variant-numeric:tabular-nums;">{{ byUsed }}</b></span>
+          <span style="font-size:16px;font-weight:600;color:#3a3b3f;">남음 <b style="font-size:20px;color:{{ byLeftColor }};font-variant-numeric:tabular-nums;">{{ byLeft }}</b></span>
+          <button onClick="{{ byReset }}" style="padding:6px 12px;border:1px solid #d6d6d2;border-radius:7px;background:#fff;font-family:inherit;font-size:16px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;justify-content:center;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+        <sc-for list="{{ byGroups }}" as="gr" hint-placeholder-count="2">
+          <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ gr.rows }}" as="r" hint-placeholder-count="5">
+              <div style="width:128px;box-sizing:border-box;border:1px solid oklch(0.82 0.05 240);border-radius:10px;background:linear-gradient(180deg,oklch(0.97 0.02 240),#fff);display:flex;flex-direction:column;overflow:hidden;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 5px 0;">
+                  <span style="font-size:13px;font-weight:800;color:#fff;background:oklch(0.45 0.08 245);border-radius:4px;padding:1px 5px;font-variant-numeric:tabular-nums;">Lv. {{ r.lv }}</span>
+                  <button onClick="{{ r.dec }}" title="1레벨 내리기" style="width:22px;height:22px;padding:0;border:none;border-radius:4px;background:#e8ebef;font-family:inherit;font-size:14px;font-weight:700;color:#5a5d63;cursor:pointer;line-height:22px;opacity:{{ r.decOp }};" style-hover="background:#d6dbe2;">−</button>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:2px 4px 5px;">
+                  <span style="font-size:16px;font-weight:700;color:#2a2b2f;text-align:center;white-space:nowrap;">{{ r.name }}</span>
+                  <span style="font-size:22px;font-weight:800;color:oklch(0.45 0.15 255);font-variant-numeric:tabular-nums;">{{ r.valText }}</span>
+                  <div style="display:flex;gap:2px;">
+                    <sc-for list="{{ r.pips }}" as="p" hint-placeholder-count="6">
+                      <span style="width:12px;height:4px;border-radius:2px;background:{{ p.bg }};"></span>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;background:oklch(0.93 0.025 240);border-top:1px solid oklch(0.86 0.04 240);">
+                  <span style="display:flex;align-items:center;gap:3px;font-size:14px;font-weight:700;color:#3a3b3f;font-variant-numeric:tabular-nums;"><span style="width:14px;height:14px;border-radius:50%;background:oklch(0.6 0.2 20);"></span>{{ r.nextText }}</span>
+                  <button onClick="{{ r.inc }}" style="padding:2px 7px;border:none;border-radius:5px;background:oklch(0.5 0.15 250);font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;opacity:{{ r.incOp }};" style-hover="background:oklch(0.42 0.15 250);">강화하기</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      </div>
+      <span style="font-size:14px;color:#9a9ca1;">레벨당 필요 포인트 1 · 2 · 5 · 12 · 25 · 30 (6레벨까지 75) · 12주</span>
+      <div style="overflow-x:auto;display:flex;justify-content:center;"><div style="border:1px solid #b9bcc2;border-radius:10px;overflow:hidden;">
+        <table style="width:auto;table-layout:auto;border-collapse:collapse;font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;">
+          <thead>
+            <tr>
+              <th style="padding:8px 12px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;"></th>
+              <th style="padding:8px 12px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">포인트</th>
+              <sc-for list="{{ byWkHead }}" as="h" hint-placeholder-count="11">
+                <th style="width:64px;padding:8px 5px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">{{ h }}</th>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ byWeeks }}" as="w" hint-placeholder-count="8">
+              <tr style="outline:{{ w.rowOutline }};outline-offset:-2px;">
+                <td style="padding:6px 12px;background:#fafafa;color:#3a3b3f;font-size:15px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;white-space:nowrap;">{{ w.label }}</td>
+                <td style="padding:6px 12px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;background:#fff;color:#9a9ca1;font-weight:600;white-space:nowrap;font-size:14px;">{{ w.pts }}</td>
+                <sc-for list="{{ w.cells }}" as="c" hint-placeholder-count="11">
+                  <td style="padding:6px 5px;border-top:1px solid #d2d4d8;border-right:1px solid #d2d4d8;background:#fff;color:oklch(0.45 0.15 255);font-size:17px;font-weight:800;">{{ c }}</td>
+                </sc-for>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;padding:8px 10px;background:#f7f7f5;border:1px solid #ececea;border-radius:10px;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-size:15px;font-weight:700;color:#2a2b2f;">저장</span>
+          <input type="text" placeholder="이름 (예: 보스용)" value="{{ bySaveName }}" onChange="{{ bySetSaveName }}" style="width:180px;padding:5px 8px;border:1px solid #d6d6d2;border-radius:7px;font-family:inherit;font-size:15px;"></input>
+          <button onClick="{{ bySaveNow }}" style="padding:5px 12px;border:none;border-radius:7px;background:oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">현재 시뮬 저장</button>
+          <span style="font-size:13px;color:#9a9ca1;">이 기기에 저장돼요 · 이름 누르면 아래에 표</span>
+        </div>
+        <sc-if value="{{ byHasSaves }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <sc-for list="{{ bySaves }}" as="sv" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;border:1px solid {{ sv.border }};border-radius:8px;background:{{ sv.bg }};overflow:hidden;">
+                <button onClick="{{ sv.view }}" style="padding:4px 10px;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:{{ sv.fg }};cursor:pointer;display:flex;gap:6px;align-items:baseline;">{{ sv.name }}<span style="font-size:12px;font-weight:500;opacity:0.7;">{{ sv.info }}</span></button>
+                <button onClick="{{ sv.load }}" title="위 시뮬로 불러오기" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:oklch(0.95 0.03 255);">불러오기</button>
+                <button onClick="{{ sv.del }}" title="삭제" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#9a9ca1;cursor:pointer;" style-hover="color:oklch(0.55 0.2 25);">✕</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ byHasView }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <span style="font-size:16px;font-weight:800;color:#2a2b2f;text-align:center;">저장: {{ byViewName }}</span>
+      <div style="overflow-x:auto;display:flex;justify-content:center;"><div style="border:1px solid #b9bcc2;border-radius:10px;overflow:hidden;">
+        <table style="width:auto;table-layout:auto;border-collapse:collapse;font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;">
+          <thead>
+            <tr>
+              <th style="padding:8px 12px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;"></th>
+              <th style="padding:8px 12px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">포인트</th>
+              <sc-for list="{{ byWkHead }}" as="h" hint-placeholder-count="11">
+                <th style="width:64px;padding:8px 5px;background:#f4f5f7;color:#6a6c71;font-size:14px;font-weight:700;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">{{ h }}</th>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ byViewWeeks }}" as="w" hint-placeholder-count="8">
+              <tr style="outline:{{ w.rowOutline }};outline-offset:-2px;">
+                <td style="padding:6px 12px;background:#fafafa;color:#3a3b3f;font-size:15px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;white-space:nowrap;">{{ w.label }}</td>
+                <td style="padding:6px 12px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;background:#fff;color:#9a9ca1;font-weight:600;white-space:nowrap;font-size:14px;">{{ w.pts }}</td>
+                <sc-for list="{{ w.cells }}" as="c" hint-placeholder-count="11">
+                  <td style="padding:6px 5px;border-top:1px solid #d2d4d8;border-right:1px solid #d2d4d8;background:#fff;color:oklch(0.45 0.15 255);font-size:17px;font-weight:800;">{{ c }}</td>
+                </sc-for>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div></div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ byJobNone }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
+      <span style="font-size:24px;font-weight:800;color:#2a2b2f;">{{ byTitle }}</span>
+      <span style="font-size:16px;color:#9a9ca1;">준비 중이에요.</span>
+    </div>
+  </sc-if>
+  <sc-if value="{{ byJobHas }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;width:fit-content;max-width:100%;margin:0 auto;box-sizing:border-box;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">전투 지원 마법 추천</span>
+        <span style="font-size:14px;color:#6a6c71;">12주 · 총 {{ byJobTot }}포인트 · {{ byJobNote }}</span>
+      </div>
+      <sc-for list="{{ byJobSets }}" as="js" hint-placeholder-count="2">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+      <span style="font-size:24px;font-weight:800;color:#2a2b2f;text-align:center;">{{ js.title }} <span style="font-size:15px;font-weight:600;color:#9a9ca1;">{{ js.used }}P 사용</span></span>
+      <div style="overflow-x:auto;display:flex;justify-content:center;"><div style="border:1px solid #b9bcc2;border-radius:10px;overflow:hidden;">
+        <table style="width:auto;table-layout:auto;border-collapse:collapse;font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;">
+          <thead>
+            <tr>
+              <th style="padding:8px 12px;background:#eef0f3;color:#2a2b2f;font-size:16px;font-weight:800;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;"></th>
+              <th style="padding:8px 12px;background:#eef0f3;color:#2a2b2f;font-size:16px;font-weight:800;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">포인트</th>
+              <sc-for list="{{ byWkHead }}" as="h" hint-placeholder-count="11">
+                <th style="width:64px;padding:8px 5px;background:#eef0f3;color:#2a2b2f;font-size:16px;font-weight:800;border-bottom:1px solid #b9bcc2;border-right:1px solid #d2d4d8;white-space:nowrap;">{{ h }}</th>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ js.weeks }}" as="w" hint-placeholder-count="12">
+              <tr style="outline:{{ w.rowOutline }};outline-offset:-2px;">
+                <td style="padding:6px 12px;background:#fafafa;color:#3a3b3f;font-size:15px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;white-space:nowrap;">{{ w.label }}</td>
+                <td style="padding:6px 12px;border-top:1px solid #d2d4d8;border-right:1px solid #b9bcc2;background:#fff;color:#9a9ca1;font-weight:600;white-space:nowrap;font-size:14px;">{{ w.pts }}</td>
+                <sc-for list="{{ w.cells }}" as="c" hint-placeholder-count="11">
+                  <td style="padding:6px 5px;border-top:1px solid #d2d4d8;border-right:1px solid #d2d4d8;background:#fff;color:oklch(0.45 0.15 255);font-size:17px;font-weight:800;">{{ c }}</td>
+                </sc-for>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div></div>
+      </div>
+      </sc-for>
+    </div>
+  </sc-if>
 </div>
 </sc-if>
 <sc-if value="{{ noGuide }}" hint-placeholder-val="{{ true }}">
@@ -3218,6 +3476,7 @@ class Component extends DCLogic {
       const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
       const isr = rows.find(row => row.tab === 'itemset'); if (isr && isr.data && isr.data.sets && !this._isDirty) this.setState({ itemSets: isr.data.sets });
+      const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
       const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
@@ -3304,6 +3563,15 @@ class Component extends DCLogic {
         this.setState({ setMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
       } catch (e) { this.setState({ setMsg: '저장 실패 — 다시 시도해 주세요.' }); }
     }, 900);
+  }
+  async saveByStart(date) {
+    this.setState({ byStart: date, byStartMsg: '저장 중…' }); try { localStorage.setItem(KEY + ':byStart', date); } catch (e) {}
+    const token = await this.ensureToken(); if (!token) { this.setState({ byStartMsg: '로그인이 만료됐어요.' }); return; }
+    try {
+      const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'byStart', data: { date }, updated_at: new Date().toISOString() }]) });
+      if (!r.ok) throw new Error();
+      this.setState({ byStartMsg: '저장됨' });
+    } catch (e) { this.setState({ byStartMsg: '저장 실패' }); }
   }
   saveHuntNote(text, kind) {
     const A = kind === 'auc', K = A ? 'aucNote' : 'huntNote', M = K + 'Msg', T = A ? '_anT' : '_hnT';
@@ -5301,7 +5569,150 @@ class Component extends DCLogic {
                 onUp: () => k > 0 && updSet(d => { const a = d.groups[gi].rows; [a[k - 1], a[k]] = [a[k], a[k - 1]]; }),
                 onDown: () => k < rows.length - 1 && updSet(d => { const a = d.groups[gi].rows; [a[k + 1], a[k]] = [a[k], a[k + 1]]; }) }; }); })(),
               onAdd: () => updSet(d => { d.groups[gi].rows.push({ name: '', sf: '', pot: '', add: '', flame: '', scroll: '' }); }) })) : [] };
-            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData }), ...setVals, ...setAvgVals };
+            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' }), ...setVals, ...setAvgVals };
+            const byT = this.state.byTab || (() => { try { return localStorage.getItem(KEY + ':byTab'); } catch (e) { return null; } })() || '시뮬레이션';
+            const bySfx = byT === '관리자' && this.state.admin ? 'A' : '';
+            const BYC = [1, 2, 5, 12, 25, 30], BYS = [['공격력/마력', [5, 10, 15, 20, 30, 40], ''], ['보스 데미지', [5, 10, 15, 20, 30, 40], '%'], ['방어율 무시', [5, 10, 15, 20, 30, 40], '%'], ['올스탯', [10, 20, 30, 40, 60, 80], ''], ['HP/MP', [500, 1000, 1500, 2000, 3000, 4000], ''], ['버프 지속시간', [5, 10, 15, 20, 25, 30], '%'], ['크리티컬 확률', [5, 10, 15, 20, 25, 30], '%'], ['일반몹 데미지', [5, 10, 15, 20, 30, 40], '%'], ['아케인 포스', [10, 20, 30, 40, 50, 60], ''], ['어센틱 포스', [10, 20, 30, 40, 50, 60], ''], ['획득 경험치', [2.5, 5, 7.5, 10, 12.5, 15], '%']];
+            const byLoad = () => { try { return JSON.parse(localStorage.getItem(KEY + ':bySim3' + bySfx) || 'null'); } catch (e) { return null; } };
+            const byS = this.state['bySim' + bySfx] || byLoad() || { per: 25, hist: [] };
+            const byPer = Math.max(1, Number(byS.per) || 25), byWN = 12, byTot = byPer * byWN;
+            const lvNow = BYS.map(() => 0), wkLv = [], hist = [];
+            let used = 0;
+            (byS.hist || []).forEach(i => { if (lvNow[i] == null || lvNow[i] >= 6) return; const c = BYC[lvNow[i]]; if (used + c > byTot) return; used += c; lvNow[i]++; hist.push({ i, cum: used }); });
+            for (let w = 0; w < byWN; w++) { const cap = byPer * (w + 1), l = BYS.map(() => 0); let u = 0; hist.forEach(x => { if (x.cum <= cap) { l[x.i]++; u = x.cum; } }); wkLv.push({ l, u, cap }); }
+            const left = byTot - used;
+            const bySave = s => { try { localStorage.setItem(KEY + ':bySim3' + bySfx, JSON.stringify(s)); } catch (e) {} this.setState({ ['bySim' + bySfx]: s }); };
+            const hIdx = hist.map(x => x.i);
+            Object.assign(gv, { byTotal: byTot, byPer, byWkLabel: byWN + '주', byUsed: used, byLeft: left, byLeftColor: 'oklch(0.48 0.17 255)',
+              bySetTotal: e => bySave({ per: Math.max(1, Number(e.target.value) || 1), hist: hIdx }),
+              byReset: () => bySave({ per: byPer, hist: [] }),
+              byRows: BYS.map(([name, v, u], i) => { const n = lvNow[i], nx = n < 6 ? BYC[n] : 0, canInc = n < 6 && nx <= left, canDec = n > 0;
+                return { name, lv: n, valText: n ? v[n - 1].toLocaleString() + u : '0', lvText: n + ' / 6', nextText: n < 6 ? String(nx) : 'MAX',
+                  pips: [0, 1, 2, 3, 4, 5].map(k => ({ bg: k < n ? 'oklch(0.48 0.17 255)' : '#e6e6e3' })),
+                  decOp: canDec ? 1 : 0.35, incOp: canInc ? 1 : 0.35,
+                  dec: () => { if (!canDec) return; const hs = hIdx.slice(); hs.splice(hs.lastIndexOf(i), 1); bySave({ per: byPer, hist: hs }); },
+                  inc: () => canInc && bySave({ per: byPer, hist: hIdx.concat(i) }) }; }) });
+            const bySv = this.state['bySaves' + bySfx] || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':bySaves' + bySfx) || '[]'); } catch (e) { return []; } })();
+            const bySvPut = l => { try { localStorage.setItem(KEY + ':bySaves' + bySfx, JSON.stringify(l)); } catch (e) {} this.setState({ ['bySaves' + bySfx]: l }); };
+            const curKey = JSON.stringify(hIdx);
+            Object.assign(gv, { bySaveName: this.state.bySaveName || '', bySetSaveName: e => this.setState({ bySaveName: e.target.value }),
+              byHasSaves: bySv.length > 0,
+              bySaveNow: () => { const d = new Date(), name = (this.state.bySaveName || '').trim() || ('시뮬 ' + (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'));
+                const l = bySv.filter(x => x.name !== name); l.unshift({ name, per: byPer, hist: hIdx, used }); bySvPut(l.slice(0, 20)); this.setState({ bySaveName: '', ['byView' + bySfx]: name }); },
+              bySaves: bySv.map((x, k) => ({ name: x.name, info: (x.used || 0) + 'P', border: JSON.stringify(x.hist) === curKey ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
+                load: () => bySave({ per: x.per || 25, hist: x.hist || [] }),
+                del: () => bySvPut(bySv.filter((_, j) => j !== k)) })) });
+            const weeksOf = (hs, per) => { const lv = BYS.map(() => 0), hh = []; let u0 = 0, tot = per * byWN;
+              (hs || []).forEach(i => { if (lv[i] == null || lv[i] >= 6) return; const c = BYC[lv[i]]; if (u0 + c > tot) return; u0 += c; lv[i]++; hh.push({ i, cum: u0 }); });
+              return Array.from({ length: byWN }, (_, w) => { const cap = per * (w + 1), l = BYS.map(() => 0); let u = 0; hh.forEach(x => { if (x.cum <= cap) { l[x.i]++; u = x.cum; } });
+                return { label: (w + 1) + '주차', pts: u + ' / ' + cap, ptsColor: '#6a6c71', bg: 'oklch(0.93 0.035 245)', fg: '#2a2b2f', cellBg: '#fff', cells: l.map(n => n ? String(n) : '') }; }); };
+            gv.byWkHead = ['공/마', '보공', '방무', '올스탯', 'HP/MP', '벞지', '크확', '일몹뎀', '아케인', '어센틱', '경험치'];
+            gv.byWeeks = weeksOf(hIdx, byPer);
+            const byVw = this.state['byView' + bySfx] === undefined ? bySv[0] : bySv.find(x => x.name === this.state['byView' + bySfx]);
+            Object.assign(gv, { byHasView: !!byVw, byViewName: byVw ? byVw.name : '', byViewWeeks: byVw ? weeksOf(byVw.hist, byVw.per || 25) : [] });
+            gv.bySaves = gv.bySaves.map((s, k) => { const on = byVw && bySv[k].name === byVw.name; return { ...s, bg: on ? 'oklch(0.48 0.17 255)' : '#fff', fg: on ? '#fff' : '#2a2b2f',
+              view: () => this.setState({ ['byView' + bySfx]: on ? null : bySv[k].name }) }; });
+            const byWt = this.state.byWt || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byWeight') || '{}'); } catch (e) { return {}; } })();
+            gv.byWeights = BYS.map(([name, v, u]) => ({ name, hasMax: name === '획득 경험치' || name === '어센틱 포스', maxVal: byWt[name + ':max'] ?? '',
+              setMax: e => { const x = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byWt, [name + ':max']: x }; try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); },
+              lv1: '+' + v[0].toLocaleString() + u, val: byWt[name] ?? '', set: e => { const o = { ...byWt, [name]: e.target.value }; try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); } }));
+            const byAdmV = byT === '관리자' && !!this.state.admin;
+            gv.byLvHead = ['1', '2', '3', '4', '5', '6'].map(x => 'Lv' + x);
+            gv.byLvRows = BYS.map(([name, v, u]) => ({ name, cells: v.map((x, k) => '+' + (x - (k ? v[k - 1] : 0)).toLocaleString() + u) }));
+            const byRq = this.state.byRq || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byReq') || '{}'); } catch (e) { return {}; } })();
+            const W0 = { '공격력/마력': '45', '보스 데미지': '110', '방어율 무시': '60', '올스탯': '30' };
+            const wE4 = b => ({ ...W0, '버프 지속시간': String(b), '획득 경험치': '60', '획득 경험치:max': 4, '아케인 포스': '1', '어센틱 포스': '1', '일반몹 데미지': '1' });
+            const wB = b => ({ ...W0, '버프 지속시간': String(b), '획득 경험치': '5', '아케인 포스': '1', '어센틱 포스': '3', '일반몹 데미지': '2' });
+            const BYWDEF = [
+              { name: '궁수 - 경4', wt: { ...W0, '버프 지속시간': '1', '획득 경험치': '60', '획득 경험치:max': 4, '아케인 포스': '2', '크리티컬 확률': '80', '어센틱 포스': '3', '일반몹 데미지': '2' }, rq: { '크리티컬 확률': '' } },
+              { name: '궁수 - 보스', wt: { ...W0, '버프 지속시간': '', '획득 경험치': '4', '아케인 포스': '1', '크리티컬 확률': '80', '어센틱 포스': '3', '일반몹 데미지': '2' }, rq: { '크리티컬 확률': '' } },
+              { name: '엔버 - 경4', wt: wE4(15), rq: { '크리티컬 확률': 2 } },
+              { name: '엔버 - 보스', wt: wB(15), rq: { '크리티컬 확률': 2 } }];
+            const W2 = b => ({ '공격력/마력': '90', '보스 데미지': '220', '방어율 무시': '120', '올스탯': '60', '어센틱 포스': '5', '일반몹 데미지': '4', '아케인 포스': '3', '버프 지속시간': String(b), '크리티컬 확률': '1' });
+            const E4 = { '획득 경험치': '120', '획득 경험치:max': 4 }, EB = { '획득 경험치': '10' };
+            BYWDEF.splice(2, 0,
+              { name: '크확0렙 - 경4', wt: { ...W2(2), ...E4 }, rq: { '크리티컬 확률': 0 } },
+              { name: '크확0렙 - 보스', wt: { ...W2(2), ...EB }, rq: { '크리티컬 확률': 0 } },
+              { name: '크확1렙 - 보스', wt: { ...W2(2), ...EB }, rq: { '크리티컬 확률': 1 } },
+              { name: '크확1렙 - 경4', wt: { ...W2(2), ...E4 }, rq: { '크리티컬 확률': 1 } },
+              { name: '크확2렙 - 경4', wt: { ...W2(2), ...E4 }, rq: { '크리티컬 확률': 2 } },
+              { name: '크확2렙 - 보스', wt: { ...W2(2), ...EB }, rq: { '크리티컬 확률': 2 } });
+            BYWDEF.push(
+              { name: '카이저 - 경4', wt: { ...W2(20), ...E4 }, rq: { '크리티컬 확률': 0 } },
+              { name: '카이저 - 보스', wt: { ...W2(20), ...EB }, rq: { '크리티컬 확률': 0 } });
+            const byWs = this.state.byWs || (() => { try { const raw = localStorage.getItem(KEY + ':byWtSaves'); let l = raw ? JSON.parse(raw) : [];
+              if (localStorage.getItem(KEY + ':byWtDef') !== '1') { const nm = new Set(l.map(x => x.name.replace(/\s+/g, ' '))); l = l.concat(BYWDEF.filter(d => !nm.has(d.name))); localStorage.setItem(KEY + ':byWtSaves', JSON.stringify(l)); localStorage.setItem(KEY + ':byWtDef', '1'); }
+              return l; } catch (e) { return BYWDEF; } })();
+            const byWsPut = l => { try { localStorage.setItem(KEY + ':byWtSaves', JSON.stringify(l)); } catch (e) {} this.setState({ byWs: l }); };
+            const byWtSet = (wt, rq) => { try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(wt)); localStorage.setItem(KEY + ':byReq', JSON.stringify(rq)); } catch (e) {} this.setState({ byWt: wt, byRq: rq }); };
+            Object.assign(gv, { byWtReset: () => byWtSet({}, {}), byWtName: this.state.byWtName || '', bySetWtName: e => this.setState({ byWtName: e.target.value }),
+              byWtSaveNow: () => { const name = (this.state.byWtName || '').trim() || ('가중치 ' + (byWs.length + 1)); byWsPut([{ name, wt: byWt, rq: byRq }, ...byWs.filter(x => x.name !== name)].slice(0, 50)); this.setState({ byWtName: '' }); },
+              byWtSaves: byWs.map((x, k) => { const editing = this.state.byWsEdit === k;
+                const rename = e => { const nm = (e.target.value || '').trim(); if (nm && nm !== x.name) byWsPut(byWs.map((y, j) => j === k ? { ...y, name: nm } : y).filter((y, j) => j === k || y.name !== nm)); this.setState({ byWsEdit: null }); };
+                return { name: x.name, editing, notEditing: !editing, rename, edit: () => this.setState({ byWsEdit: editing ? null : k }),
+                key: e => { if (e.key === 'Enter') e.target.blur(); if (e.key === 'Escape') this.setState({ byWsEdit: null }); }, load: () => byWtSet(x.wt || {}, x.rq || {}), del: () => byWsPut(byWs.filter((_, j) => j !== k)) }; }) });
+            const BYCG = [
+              ['기본', 0, '#00B0F0', '다크나이트·비숍·나이트로드·섀도어·바이퍼·캡틴·소울마스터·블래스터·배틀메이지·메카닉(1렙)·아란·팬텀·카이저·카데나·아크·키네시스·렌·호영·제로'],
+              ['크확 1렙', 1, '#FFFF00', '팔라딘·불독·캐논슈터·플레임위자드·제논·에반·아델·일리움·라라·레테'],
+              ['크확 2렙', 2, '#FF0000', '히어로·썬콜·듀얼블레이더·나이트워커·스트라이커·데몬슬레이어·데몬어벤져·루미너스·은월·칼리·미하일'],
+              ['궁수', null, '#FFC000', '보우마스터·신궁·패스파인더·윈드브레이커·와일드헌터·메르세데스·카인'],
+              ['엔버', 2, '#ffffff', '엔젤릭버스터']];
+            gv.byCrGroups = BYCG.map(([name, lv, color, jobs]) => { const on = this.state.byCrG === name; return { name, lv, lvText: lv == null ? '크확 제한없음' : '크확 ' + lv + '렙', color, jobs, bg: on ? 'oklch(0.95 0.04 255)' : '#fff', border: on ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
+              pick: () => { const o = { ...byRq, '크리티컬 확률': lv == null ? '' : lv }; try { localStorage.setItem(KEY + ':byReq', JSON.stringify(o)); } catch (e) {} this.setState({ byRq: o, byCrG: name }); } }; });
+            gv.byAuto = () => {
+              const lv = BYS.map(() => 0), hs = []; let left = byTot;
+              const wOf = i => Number(byWt[BYS[i][0]]) || 0;
+              BYS.forEach(([name], i) => { const need = Math.min(6, Number(byRq[name]) || 0); while (lv[i] < need && BYC[lv[i]] <= left) { left -= BYC[lv[i]]; lv[i]++; hs.push(i); } });
+              for (;;) { let best = -1, be = 0;
+                BYS.forEach(([nm], i) => { const mx = byWt[nm + ':max']; if (lv[i] >= (mx === '' || mx == null ? 6 : Number(mx))) return; const c = BYC[lv[i]], w = wOf(i); if (c > left || w <= 0) return; const e = w / c; if (e > be) { be = e; best = i; } });
+                if (best < 0) break; left -= BYC[lv[best]]; lv[best]++; hs.push(best); }
+              bySave({ per: byPer, hist: hs });
+            };
+            gv.byReqs = ['크리티컬 확률'].map(name => ({ name, val: byRq[name] ?? '', set: e => { const v = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byRq, [name]: v }; try { localStorage.setItem(KEY + ':byReq', JSON.stringify(o)); } catch (er) {} this.setState({ byRq: o }); } }));
+            gv.byGroups = [{ rows: gv.byRows.slice(0, 5) }, { rows: gv.byRows.slice(5) }];
+            const PW = (buff, ark, aut, mob, cr) => ({ '공격력/마력': 90, '보스 데미지': 220, '방어율 무시': 120, '올스탯': 60, '버프 지속시간': buff, '아케인 포스': ark, '어센틱 포스': aut, '일반몹 데미지': mob, '크리티컬 확률': cr });
+            const PE = { '획득 경험치': 120, '획득 경험치:max': 4 }, PB = { '획득 경험치': 10 };
+            const PG = {
+              c0: { note: '크확 0렙', e: { ...PW(2, 3, 5, 4, 1), ...PE }, b: { ...PW(2, 3, 5, 4, 1), ...PB }, re: 0, rb: 0 },
+              c1: { note: '크확 1렙', e: { ...PW(2, 3, 5, 4, 1), ...PE }, b: { ...PW(2, 3, 5, 4, 1), ...PB }, re: 1, rb: 1 },
+              c2: { note: '크확 2렙', e: { ...PW(2, 3, 5, 4, 1), ...PE }, b: { ...PW(2, 3, 5, 4, 1), ...PB }, re: 2, rb: 2 },
+              bow: { note: '크확 많이', e: { ...PW(1, 2, 4, 3, 160), ...PE }, b: { ...PW(1, 2, 4, 3, 160), ...PB }, re: 2, rb: 0 },
+              ab: { note: '크확 2렙 · 벞지', e: { ...PW(20, 2, 4, 3, 1), ...PE }, b: { ...PW(20, 2, 4, 3, 1), ...PB }, re: 2, rb: 2 },
+              kai: { note: '크확 0렙 · 벞지', e: { ...PW(20, 3, 5, 4, 1), ...PE }, b: { ...PW(20, 3, 5, 4, 1), ...PB }, re: 0, rb: 0 } };
+            const PJ = { c0: '다크나이트 비숍 나이트로드 섀도어 바이퍼 캡틴 소울마스터 블래스터 배틀메이지 메카닉 아란 팬텀 카데나 아크 키네시스 렌 호영 제로',
+              c1: '레테 팔라딘 아크메이지(불,독) 캐논마스터 캐논슈터 플레임위자드 제논 에반 아델 일리움 라라',
+              c2: '히어로 아크메이지(썬,콜) 듀얼블레이드 듀얼블레이더 나이트워커 스트라이커 데몬슬레이어 데몬어벤져 루미너스 은월 칼리 미하일',
+              bow: '보우마스터 신궁 패스파인더 윈드브레이커 와일드헌터 메르세데스 카인', ab: '엔젤릭버스터', kai: '카이저' };
+            const BYJOB = {};
+            Object.entries(PJ).forEach(([k, s]) => s.split(' ').forEach(j => { const p = PG[k]; BYJOB[j] = { note: p.note, sets: [{ title: '경험치 4레벨용', wt: p.e, rq: { '크리티컬 확률': p.re } }, { title: '보스용', wt: p.b, rq: { '크리티컬 확률': p.rb } }] }; }));
+            const byAutoHist = (wt, rq, tot) => { const lv = BYS.map(() => 0), hs = []; let lf = tot;
+              BYS.forEach(([nm], i) => { const need = Math.min(6, Number(rq[nm]) || 0); while (lv[i] < need && BYC[lv[i]] <= lf) { lf -= BYC[lv[i]]; lv[i]++; hs.push(i); } });
+              for (;;) { let b = -1, be = 0; BYS.forEach(([nm], i) => { const mx = wt[nm + ':max']; if (lv[i] >= (mx === '' || mx == null ? 6 : Number(mx))) return; const c = BYC[lv[i]], w = Number(wt[nm]) || 0; if (c > lf || w <= 0) return; if (w / c > be) { be = w / c; b = i; } }); if (b < 0) break; lf -= BYC[lv[b]]; lv[b]++; hs.push(b); }
+              return { hs, lv, used: tot - lf }; };
+            const bjName = this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })(), bjD = BYJOB[bjName];
+            if (bjD) { const tot = 25 * byWN;
+              Object.assign(gv, { byJobTot: tot, byJobNote: bjD.note,
+                byJobSets: bjD.sets.map(s => { const r = byAutoHist(s.wt, s.rq, tot); return { title: s.title, used: r.used, weeks: weeksOf(r.hs, 25) }; }) }); }
+            gv._bjHas = !!bjD;
+            gv.byH1 = byT === '직업' && bjName ? bjName : '보약 ' + (byT === '관리자' && this.state.admin ? '관리자 테스트' : '시뮬레이션');
+            const byStart = this.state.byStart || (() => { try { return localStorage.getItem(KEY + ':byStart'); } catch (e) { return null; } })() || '';
+            let byNowWk = -1;
+            if (byStart) { const s = new Date(byStart + 'T00:00:00'), d = Math.floor((Date.now() - s.getTime()) / 86400000); if (d >= 0) byNowWk = Math.floor(d / 7); }
+            const markWk = l => (l || []).map((w, k) => ({ ...w, rowOutline: k === byNowWk ? '3px solid oklch(0.58 0.22 25)' : 'none' }));
+            gv.byWeeks = markWk(gv.byWeeks); if (gv.byViewWeeks) gv.byViewWeeks = markWk(gv.byViewWeeks);
+            if (gv.byJobSets) gv.byJobSets = gv.byJobSets.map(s => ({ ...s, weeks: markWk(s.weeks) }));
+            Object.assign(gv, { byStart, byStartMsg: this.state.byStartMsg || '', bySetStart: e => this.saveByStart(e.target.value),
+              byNowText: byStart ? (byNowWk < 0 ? '시작 전' : byNowWk >= byWN ? '종료' : '지금 ' + (byNowWk + 1) + '주차') : '시작 날짜 미설정' });
+            Object.assign(gv, { byZoom: byAdmV ? 0.72 : 1, byBoxMax: byAdmV ? 'none' : '960px', byWrap: byAdmV ? 'nowrap' : 'wrap' });
+            const byAd = !!this.state.admin, byCur = byT === '직업' ? '직업' : (byT === '관리자' && byAd ? '관리자' : '시뮬레이션');
+            Object.assign(gv, { isBoyak: g === '보약', byIsSim: byCur !== '직업', byIsJob: byCur === '직업', byJobHas: g === '보약' && byCur === '직업' && gv._bjHas, byJobNone: g === '보약' && byCur === '직업' && !gv._bjHas, byIsAdm: byCur === '관리자', byTitle: byCur === '관리자' ? '관리자 테스트' : byCur === '직업' ? (this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })() || '직업') : byCur,
+              byJobGroups: (() => { const CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', M = {}, bj = this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })();
+                JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')).forEach(n => { const c = n.charCodeAt(0) - 0xAC00; const k = c >= 0 && c < 11172 ? CH[Math.floor(c / 588)] : n[0]; (M[k] = M[k] || []).push(n); });
+                return Object.entries(M).map(([name, jobs]) => ({ name, jobs: jobs.map(n => { const on = g === '보약' && byCur === '직업' && n === bj; return { name: n, bg: on ? 'oklch(0.48 0.17 255)' : 'transparent', color: on ? '#fff' : '#2a2b2f',
+                  onClick: () => { try { localStorage.setItem(KEY + ':byTab', '직업'); localStorage.setItem(KEY + ':byJob', n); localStorage.setItem(KEY + ':growTab', '보약'); } catch (e) {} this.setState({ byTab: '직업', byJob: n, growTab: '보약', byMenu: false }); } }; }) })); })(),
+              byMenu: !!this.state.byMenu, byMenuOpen: () => this.setState({ byMenu: true }), byMenuClose: () => this.setState({ byMenu: false }),
+              byTabs: (byAd ? ['시뮬레이션', '관리자'] : ['시뮬레이션']).map(t => { const on = g === '보약' && t === byCur; return { label: t, mbg: on ? 'oklch(0.48 0.17 255)' : 'transparent', mfg: on ? '#fff' : '#3a3b3f',
+                onClick: () => { try { localStorage.setItem(KEY + ':byTab', t); localStorage.setItem(KEY + ':growTab', '보약'); } catch (e) {} this.setState({ byTab: t, growTab: '보약', byMenu: false }); } }; }) });
             const aiT = ['아티팩트', '아티팩트 40Lv'].includes(this.state.aiTab) ? this.state.aiTab : '특수코어', allJobs = JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')), art40 = aiT === '아티팩트 40Lv';
             const aiTabs = ['특수코어', '아티팩트', '아티팩트 40Lv'].map(t => ({ label: t, bg: t === aiT ? 'oklch(0.48 0.17 255)' : '#ececea', fg: t === aiT ? '#fff' : '#3a3b3f', onClick: () => this.setState({ aiTab: t }) }));
             const aiSub = art40 ? '아티팩트 레벨 45 이하 본캐 유저 · 직업당 50명 기준 (artifact40 집계)' : aiT === '아티팩트' ? '직업별 아티팩트 크리스탈 · 본캐(유니온 최고 레벨) 50명 기준 (artifact 집계)' : '직업별 많이 쓰는 특수코어 · 직업당 활성 유저 300명 기준 (specialcore 집계)';
@@ -5551,7 +5962,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 75,
+      isAdmin: admin, appVer: 76,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
