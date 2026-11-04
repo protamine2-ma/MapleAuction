@@ -30,6 +30,7 @@ body{margin:0;background:#f4f4f2;color:#1b1c1f;font-family:Pretendard,-apple-sys
 a{color:oklch(0.48 0.17 255);}a:hover{color:oklch(0.38 0.17 255);}
 input{font-family:inherit;}
 @media (min-width:761px){body:has([data-m="aside"]) [data-m="top"]{display:none!important;}}
+@media (min-width:761px) and (max-width:1100px){[data-m="areab"]{padding:8px 13px!important;font-size:15px!important;}[data-m="maker"]{bottom:2px!important;right:10px!important;}[data-m="maker"] span{font-size:15px!important;}[data-m="maker"] img{height:34px!important;}}
 @media (max-width:760px){
 body{overflow-x:clip;}
 [data-m="hide"],[data-m="aside"]{display:none!important;}
@@ -688,6 +689,89 @@ body{overflow-x:clip;}
     </div>
   </section>
   </sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isMm }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
+    <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em;color:#1d1e22;">나의매애기</h1>
+    <span style="font-size:14px;color:#6b6d73;">이미지를 올리고 저장해 둔 프롬프트로 새 이미지 만들기 · 관리자 전용</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:18px;align-items:start;">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+        <span style="font-size:16px;font-weight:800;color:#1d1e22;">1. 이미지 올리기</span>
+        <label style="position:relative;display:flex;align-items:center;justify-content:center;min-height:240px;border:2px dashed #d6d7da;border-radius:12px;background:#fafaf8;cursor:pointer;overflow:hidden;">
+          <input type="file" accept="image/png,image/jpeg,image/webp" onChange="{{ onMmFile }}" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+          <sc-if value="{{ mmNoImg }}" hint-placeholder-val="{{ true }}"><span style="font-size:15px;font-weight:700;color:#6b6d73;">눌러서 이미지 고르기</span></sc-if>
+          <sc-if value="{{ mmHasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ mmPreview }}" alt="올린 이미지" style="max-width:100%;max-height:360px;display:block;"></sc-if>
+        </label>
+        <span style="font-size:12px;color:#9a9ca1;">보낼 때 긴 변 504px로 자동 축소돼요.</span>
+      </div>
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:16px;font-weight:800;color:#1d1e22;">2. 프롬프트 고르기</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:#9a9ca1;">{{ mmSaveMsg }}</span>
+            <button onClick="{{ mmAdd }}" style="padding:6px 12px;border:1px solid #d6d7da;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:700;color:#3a3b3f;cursor:pointer;">+ 추가</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <sc-for list="{{ mmPrompts }}" as="p" hint-placeholder-count="0">
+            <button onClick="{{ p.pick }}" style="padding:7px 14px;border:1px solid {{ p.border }};border-radius:999px;background:{{ p.bg }};color:{{ p.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ p.name }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ mmNoPrompt }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#6b6d73;">'+ 추가'를 눌러 프롬프트를 만들어 주세요.</span></sc-if>
+        <sc-if value="{{ mmHasPrompt }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;">
+            <input value="{{ mmName }}" onChange="{{ onMmName }}" placeholder="이름" style="flex:1;min-width:0;padding:9px 12px;border:1px solid #d6d7da;border-radius:8px;font-size:14px;font-weight:700;">
+            <button onClick="{{ mmDel }}" style="padding:0 12px;border:1px solid #f0c9c9;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:700;color:#c0392b;cursor:pointer;">삭제</button>
+          </div>
+          <textarea value="{{ mmText }}" onChange="{{ onMmText }}" rows="7" placeholder="예: 이 캐릭터를 실사풍 사진으로. 헤어·의상 색은 그대로, 영화 같은 조명" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7da;border-radius:8px;font-family:inherit;font-size:14px;line-height:1.55;resize:vertical;"></textarea>
+        </sc-if>
+        <button onClick="{{ mmToggleRefine }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;cursor:pointer;text-align:left;">
+          <span style="position:relative;flex:none;width:38px;height:22px;border-radius:999px;background:{{ mmRefineBg }};"><span style="position:absolute;top:2px;left:{{ mmRefineX }};width:18px;height:18px;border-radius:50%;background:#fff;"></span></span>
+          <span style="font-size:13px;color:#3a3b3f;line-height:1.45;"><b>AI로 프롬프트 변환</b> — 켜면 이미지를 보고 내 프롬프트를 영어 이미지 프롬프트로 바꿔서 만들어요. 끄면 적은 그대로 써요.</span>
+        </button>
+      </div>
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+        <span style="font-size:16px;font-weight:800;color:#1d1e22;">3. 그림 모델</span>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;">
+          <sc-for list="{{ mmModels }}" as="m" hint-placeholder-count="3">
+            <button onClick="{{ m.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;border:1px solid {{ m.border }};border-radius:10px;background:{{ m.bg }};color:{{ m.color }};font-family:inherit;cursor:pointer;">
+              <span style="font-size:14px;font-weight:800;">{{ m.label }}</span>
+              <span style="font-size:12px;color:#6b6d73;">{{ m.sub }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <span style="font-size:12px;color:#9a9ca1;">무료 장수는 하루 한도(10,000 뉴런)를 기준으로 잡은 추정치예요. 무료 한도는 매일 오전 9시에 초기화돼요.</span>
+      </div>
+      <button onClick="{{ mmGo }}" style="padding:15px;border:none;border-radius:12px;background:{{ mmBtnBg }};color:#fff;font-family:inherit;font-size:17px;font-weight:800;cursor:pointer;">{{ mmBtn }}</button>
+      <sc-if value="{{ mmHasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;font-weight:700;color:oklch(0.4 0.17 255);text-align:center;">{{ mmMsg }}</span></sc-if>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+        <span style="font-size:16px;font-weight:800;color:#1d1e22;">결과</span>
+        <sc-if value="{{ mmNoOut }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;justify-content:center;min-height:320px;border-radius:12px;background:#f4f4f2;font-size:14px;color:#9a9ca1;">만든 이미지가 여기에 나와요</div></sc-if>
+        <sc-if value="{{ mmHasOut }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ mmOut }}" alt="만든 이미지" style="width:100%;border-radius:12px;display:block;">
+          <a href="{{ mmOut }}" download="{{ mmFileName }}" style="align-self:flex-start;padding:9px 16px;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-size:14px;font-weight:800;text-decoration:none;">이미지 다운로드</a>
+        </sc-if>
+        <sc-if value="{{ mmHasUsed }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">사용된 프롬프트</span>
+            <button onClick="{{ mmCopy }}" style="padding:5px 10px;border:1px solid #d6d7da;border-radius:8px;background:#fff;font-family:inherit;font-size:12px;font-weight:700;color:#3a3b3f;cursor:pointer;">복사</button>
+          </div>
+          <div style="padding:10px 12px;border-radius:8px;background:#f4f4f2;font-size:13px;line-height:1.55;color:#3a3b3f;white-space:pre-wrap;">{{ mmUsed }}</div>
+        </sc-if>
+      </div>
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;">
+        <span style="font-size:15px;font-weight:800;color:#1d1e22;">서버 설정 <span style="font-size:12px;font-weight:600;color:#9a9ca1;">(이 기기에만 저장)</span></span>
+        <input value="{{ mmUrl }}" onChange="{{ onMmUrl }}" placeholder="Worker 주소 (예: https://maeagi.xxx.workers.dev)" style="padding:9px 12px;border:1px solid #d6d7da;border-radius:8px;font-size:14px;">
+        <input type="password" value="{{ mmKey }}" onChange="{{ onMmKey }}" placeholder="접속 키 (Worker의 ACCESS_KEY)" style="padding:9px 12px;border:1px solid #d6d7da;border-radius:8px;font-size:14px;">
+      </div>
+    </div>
+  </div>
 </div>
 </sc-if>
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
@@ -3483,6 +3567,7 @@ class Component extends DCLogic {
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
       const isr = rows.find(row => row.tab === 'itemset'); if (isr && isr.data && isr.data.sets && !this._isDirty) this.setState({ itemSets: isr.data.sets });
       const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
+      const mmr = rows.find(row => row.tab === 'mymae'); if (mmr && mmr.data && Array.isArray(mmr.data.prompts) && !this._mmDirty) this.setState({ mmPrompts: mmr.data.prompts });
       const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
@@ -3557,6 +3642,67 @@ class Component extends DCLogic {
       }
     }
     return g;
+  }
+  saveMm(list) {
+    this._mmDirty = true; this.setState({ mmPrompts: list, mmSaveMsg: '저장 중…' });
+    clearTimeout(this._mmT);
+    this._mmT = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ mmSaveMsg: '로그인이 만료됐어요.' }); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'mymae', data: { prompts: this.state.mmPrompts, at: new Date().toISOString() }, updated_at: new Date().toISOString() }]) });
+        if (!r.ok) throw new Error();
+        this.setState({ mmSaveMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
+      } catch (e) { this.setState({ mmSaveMsg: '저장 실패 — 다시 시도해 주세요.' }); }
+    }, 900);
+  }
+  mmResize(file, maxSide) {
+    return new Promise((res, rej) => { const img = new Image(); img.onload = () => { const s = Math.min(1, maxSide / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); c.toBlob(b => b ? res(b) : rej(), 'image/png'); }; img.onerror = rej; img.src = URL.createObjectURL(file); });
+  }
+  async mmGo() {
+    const st = this.state, list = st.mmPrompts || [], p = list[st.mmSel || 0];
+    const ls = k => { try { return localStorage.getItem(KEY + ':' + k) || ''; } catch (e) { return ''; } };
+    const url = (st.mmUrl ?? ls('mmUrl')).trim().replace(/\/+$/, ''), key = st.mmKey ?? ls('mmKey');
+    if (!url) { this.setState({ mmMsg: '먼저 아래 \'서버 설정\'에 Worker 주소를 넣어 주세요.' }); return; }
+    if (!st.mmFile) { this.setState({ mmMsg: '이미지를 먼저 올려 주세요.' }); return; }
+    if (!p || !(p.text || '').trim()) { this.setState({ mmMsg: '프롬프트를 고르거나 입력해 주세요.' }); return; }
+    this.setState({ mmBusy: true, mmMsg: '만드는 중… (10~40초)', mmOut: '', mmUsed: '' });
+    try {
+      const fd = new FormData();
+      fd.append('image', await this.mmResize(st.mmFile, 504), 'input.png');
+      fd.append('prompt', p.text); fd.append('refine', st.mmRefine === false ? '0' : '1'); fd.append('model', st.mmModel || ls('mmModel') || '4b');
+      const r = await fetch(url + '/api/generate', { method: 'POST', headers: { 'X-Access-Key': key }, body: fd });
+      const d = await r.json().catch(() => ({}));
+      this.setState({ mmBusy: false, mmUsed: d.prompt || '', mmOut: d.image ? 'data:image/png;base64,' + d.image : '', mmMsg: (d.image ? '완료!' : (d.error || '오류가 났어요 (' + r.status + ')')) + (d.note ? ' · ' + d.note : '') });
+    } catch (e) { this.setState({ mmBusy: false, mmMsg: '서버에 연결하지 못했어요. Worker 주소를 확인해 주세요.' }); }
+  }
+  mmVals() {
+    const st = this.state, list = st.mmPrompts || [], sel = Math.min(st.mmSel || 0, Math.max(0, list.length - 1));
+    const ls = k => { try { return localStorage.getItem(KEY + ':' + k) || ''; } catch (e) { return ''; } };
+    const upd = fn => { const n = JSON.parse(JSON.stringify(list)); fn(n); this.saveMm(n); };
+    const cur = list[sel];
+    return {
+      mmPrompts: list.map((p, i) => ({ name: p.name || ('프롬프트 ' + (i + 1)), bg: i === sel ? 'oklch(0.94 0.035 255)' : '#fff', border: i === sel ? 'oklch(0.48 0.17 255)' : '#e3e3e0', color: i === sel ? 'oklch(0.3 0.09 255)' : '#3a3b3f', pick: () => this.setState({ mmSel: i }) })),
+      mmHasPrompt: !!cur, mmNoPrompt: !cur, mmName: cur ? cur.name || '' : '', mmText: cur ? cur.text || '' : '',
+      onMmName: e => { const v = e.target.value; upd(n => { n[sel].name = v; }); },
+      onMmText: e => { const v = e.target.value; upd(n => { n[sel].text = v; }); },
+      mmAdd: () => { upd(n => { n.push({ name: '새 프롬프트', text: '' }); }); this.setState({ mmSel: list.length }); },
+      mmDel: () => { if (!cur || !confirm('\'' + (cur.name || '') + '\' 프롬프트를 지울까요?')) return; upd(n => { n.splice(sel, 1); }); this.setState({ mmSel: Math.max(0, sel - 1) }); },
+      mmSaveMsg: st.mmSaveMsg || '',
+      mmPreview: st.mmPreview || '', mmHasImg: !!st.mmPreview, mmNoImg: !st.mmPreview,
+      onMmFile: e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return; this.setState({ mmFile: f, mmPreview: URL.createObjectURL(f), mmMsg: '' }); },
+      mmRefineOn: st.mmRefine !== false, mmRefineBg: st.mmRefine !== false ? 'oklch(0.48 0.17 255)' : '#d6d7da', mmRefineX: st.mmRefine !== false ? '18px' : '2px',
+      mmToggleRefine: () => this.setState({ mmRefine: st.mmRefine === false }),
+      mmModels: [['4b', '기본 (4B)', '하루 약 80장'], ['9b', '고급 (9B)', '하루 약 7장'], ['dev', '최고 (dev)', '하루 1~2장']].map(([id, label, sub]) => { const on = (st.mmModel || ls('mmModel') || '4b') === id; return { label, sub, bg: on ? 'oklch(0.94 0.035 255)' : '#fff', border: on ? 'oklch(0.48 0.17 255)' : '#e3e3e0', color: on ? 'oklch(0.3 0.09 255)' : '#3a3b3f', pick: () => { try { localStorage.setItem(KEY + ':mmModel', id); } catch (e) {} this.setState({ mmModel: id }); } }; }),
+      mmGo: () => { if (!st.mmBusy) this.mmGo(); }, mmBusy: !!st.mmBusy, mmBtn: st.mmBusy ? '만드는 중…' : '이미지 만들기', mmBtnBg: st.mmBusy ? '#9a9ca1' : 'oklch(0.48 0.17 255)',
+      mmMsg: st.mmMsg || '', mmHasMsg: !!st.mmMsg,
+      mmOut: st.mmOut || '', mmHasOut: !!st.mmOut, mmNoOut: !st.mmOut,
+      mmUsed: st.mmUsed || '', mmHasUsed: !!st.mmUsed,
+      mmCopy: () => { try { navigator.clipboard.writeText(st.mmUsed || ''); this.setState({ mmMsg: '프롬프트를 복사했어요.' }); } catch (e) {} },
+      mmFileName: 'maeagi-' + new Date().toISOString().slice(0, 10) + '.png',
+      mmUrl: st.mmUrl ?? ls('mmUrl'), mmKey: st.mmKey ?? ls('mmKey'),
+      onMmUrl: e => { const v = e.target.value; try { localStorage.setItem(KEY + ':mmUrl', v); } catch (x) {} this.setState({ mmUrl: v }); },
+      onMmKey: e => { const v = e.target.value; try { localStorage.setItem(KEY + ':mmKey', v); } catch (x) {} this.setState({ mmKey: v }); },
+    };
   }
   saveItemSet(all) {
     this._isDirty = true; this.setState({ itemSets: all, setMsg: '저장 중…' });
@@ -5533,12 +5679,13 @@ class Component extends DCLogic {
       isReview, ...this.reviewVals(isReview),
       isSunday,
       ...(() => {
-        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '스타포스'] : ['옥션', '사냥', '스타포스'];
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '스타포스', '나의매애기'] : ['옥션', '사냥', '스타포스'];
         let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         if (area === '강화') area = '스타포스';
         if (!AREAS.includes(area)) area = '옥션';
         return {
-          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '스타포스',
+          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '스타포스', isMm: area === '나의매애기',
+          ...(area === '나의매애기' ? this.mmVals() : {}),
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(area === '스타포스' ? this.sfVals() : {}),
           ...(() => {
@@ -5992,7 +6139,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 79,
+      isAdmin: admin, appVer: 80,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
