@@ -987,7 +987,14 @@ body{overflow-x:clip;}
 </sc-if>
 <sc-if value="{{ isBoyak }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1600px;margin:0 auto;padding:40px 28px 80px;display:flex;flex-direction:column;gap:22px;">
-  <h1 data-m="h1" style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ byH1 }}</h1>
+  <h1 data-m="h1" style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.03em;text-align:center;display:flex;align-items:center;justify-content:center;gap:12px;"><span>{{ byH1 }}</span><sc-if value="{{ byH1Img }}" hint-placeholder-val="{{ false }}"><img src="{{ byH1Img }}" alt="" style="height:86px;width:auto;object-fit:contain;margin:-26px 0 -22px;"></img></sc-if></h1>
+  <sc-if value="{{ byAdmTabsOn }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;justify-content:center;gap:6px;">
+      <sc-for list="{{ byAdmTabs }}" as="at" hint-placeholder-count="2">
+        <button onClick="{{ at.pick }}" style="padding:7px 18px;border:1px solid {{ at.border }};border-radius:8px;background:{{ at.bg }};font-family:inherit;font-size:16px;font-weight:700;color:{{ at.color }};cursor:pointer;">{{ at.label }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
   <sc-if value="{{ byIsSim }}" hint-placeholder-val="{{ true }}">
   <div style="display:flex;gap:12px;align-items:flex-start;justify-content:center;flex-wrap:{{ byWrap }};">
     <sc-if value="{{ byIsAdm }}" hint-placeholder-val="{{ false }}">
@@ -1007,9 +1014,10 @@ body{overflow-x:clip;}
             <sc-if value="{{ wt.hasMax }}" hint-placeholder-val="{{ false }}">
               <input type="number" min="0" max="6" placeholder="최고" title="최고 레벨" value="{{ wt.maxVal }}" onChange="{{ wt.setMax }}" style="width:34px;flex:none;padding:3px 3px;border:1px solid oklch(0.8 0.08 50);border-radius:6px;font-family:inherit;font-size:13px;font-weight:700;text-align:right;"></input>
             </sc-if>
-            <input type="number" step="any" value="{{ wt.val }}" onChange="{{ wt.set }}" style="width:40px;flex:none;padding:3px 3px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;"></input>
+            <input type="number" step="any" value="{{ wt.val }}" onChange="{{ wt.set }}" style="width:56px;flex:none;padding:3px 3px;border:1px solid #d6d6d2;border-radius:6px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;"></input>
           </label>
         </sc-for>
+        <sc-if value="{{ byCombat }}" hint-placeholder-val="{{ true }}">
         <span style="font-size:18px;font-weight:800;color:#2a2b2f;margin-top:8px;padding-top:8px;border-top:1px solid #ececea;">필수 조건</span>
         <sc-for list="{{ byReqs }}" as="rq" hint-placeholder-count="1">
           <label style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:600;color:#3a3b3f;">{{ rq.name }}
@@ -1035,6 +1043,7 @@ body{overflow-x:clip;}
           </span>
           <span style="font-size:12px;font-weight:500;color:#6a6c71;line-height:1.4;">엔젤릭버스터·카이저</span>
         </div>
+        </sc-if>
         <button onClick="{{ byAuto }}" style="margin-top:6px;padding:8px 10px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">가중치로 자동 찍기</button>
         <span style="font-size:13px;color:#9a9ca1;line-height:1.4;">필수 조건 먼저 → 남은 포인트는 (가중치 ÷ 다음 레벨 포인트)가 큰 순서</span>
         <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-top:8px;border-top:1px solid #ececea;">
@@ -1061,7 +1070,7 @@ body{overflow-x:clip;}
     </sc-if>
     <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;max-width:{{ byBoxMax }};width:fit-content;margin:0 auto;zoom:{{ byZoom }};box-sizing:border-box;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">전투 지원 마법</span>
+        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">{{ byBoxTitle }}</span>
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:6px;font-size:16px;font-weight:600;color:#3a3b3f;">주당 포인트
             <input type="number" min="0" value="{{ byPer }}" onChange="{{ bySetTotal }}" style="width:72px;padding:6px 8px;border:1px solid #d6d6d2;border-radius:7px;font-family:inherit;font-size:18px;font-weight:700;text-align:right;"></input>
@@ -1085,6 +1094,7 @@ body{overflow-x:clip;}
                 <div style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:2px 4px 5px;">
                   <span style="font-size:16px;font-weight:700;color:#2a2b2f;text-align:center;white-space:nowrap;">{{ r.name }}</span>
                   <span style="font-size:22px;font-weight:800;color:oklch(0.45 0.15 255);font-variant-numeric:tabular-nums;">{{ r.valText }}</span>
+                  <sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:#6a6c71;font-variant-numeric:tabular-nums;">{{ r.subText }}</span></sc-if>
                   <div style="display:flex;gap:2px;">
                     <sc-for list="{{ r.pips }}" as="p" hint-placeholder-count="6">
                       <span style="width:12px;height:4px;border-radius:2px;background:{{ p.bg }};"></span>
@@ -1186,7 +1196,7 @@ body{overflow-x:clip;}
   <sc-if value="{{ byJobHas }}" hint-placeholder-val="{{ false }}">
     <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;width:fit-content;max-width:100%;margin:0 auto;box-sizing:border-box;">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">전투 지원 마법 추천</span>
+        <span style="font-size:22px;font-weight:800;color:#2a2b2f;">{{ byJobBoxTitle }}</span>
         <span style="font-size:14px;color:#6a6c71;">12주 · 총 {{ byJobTot }}포인트 · {{ byJobNote }}</span>
       </div>
       <sc-for list="{{ byJobSets }}" as="js" hint-placeholder-count="2">
@@ -1312,29 +1322,24 @@ body{overflow-x:clip;}
       <span style="font-size:13px;color:#6b6d73;">{{ guideMsg }}</span>
     </div>
   </sc-if>
-  <section style="position:relative;border-radius:16px;overflow:hidden;background:oklch(0.3 0.09 255);min-height:300px;display:flex;align-items:flex-end;">
+  <section style="position:relative;border-radius:16px;overflow:hidden;background:oklch(0.3 0.09 255);min-height:{{ guideHeroMinH }};display:flex;align-items:flex-end;">
     <sc-if value="{{ guideHasImg }}" hint-placeholder-val="{{ false }}">
       <div style="position:absolute;inset:0;background-image:{{ guideImgBg }};background-size:cover;background-position:center 25%;"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,18,40,0.85),rgba(10,18,40,0) 60%);"></div>
     </sc-if>
-    <div data-m="hero" style="position:relative;padding:28px 32px;display:flex;flex-direction:column;gap:8px;width:100%;box-sizing:border-box;">
+    <div data-m="hero" style="position:relative;padding:28px 32px;display:flex;flex-direction:column;gap:8px;width:{{ guideHeroW }};flex:none;box-sizing:border-box;">
       <span style="font-size:13px;font-weight:800;letter-spacing:0.08em;color:oklch(0.85 0.1 85);">직업가이드</span>
       <h1 style="margin:0;font-size:52px;font-weight:800;letter-spacing:-0.03em;color:#fff;" data-m="gh1">{{ guideJob }}</h1>
       <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
         <span style="font-size:18px;font-weight:600;color:#fff;">{{ guideTagline }}</span>
         <span style="font-size:14px;color:oklch(0.9 0.04 255);">{{ guideMeta }}</span>
       </sc-if>
-      <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
-        <input value="{{ guideTagline }}" onChange="{{ onGuideTagline }}" placeholder="한 줄 소개" style="box-sizing:border-box;width:100%;padding:8px 10px;border:none;border-radius:8px;font-family:inherit;font-size:16px;font-weight:600;">
-        <input value="{{ guideMeta }}" onChange="{{ onGuideMeta }}" placeholder="계열 · 주스탯 · 무기" style="box-sizing:border-box;width:100%;padding:8px 10px;border:none;border-radius:8px;font-family:inherit;font-size:14px;">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <label style="padding:7px 14px;border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:13px;font-weight:700;cursor:pointer;">일러스트 올리기<input type="file" accept="image/*" onChange="{{ onGuideImg }}" style="display:none;"></label>
-          <sc-if value="{{ guideHasImg }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ removeGuideImg }}" style="padding:7px 14px;border:none;border-radius:8px;background:rgba(255,255,255,0.2);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">이미지 삭제</button>
-          </sc-if>
-        </div>
-      </sc-if>
     </div>
+    <sc-if value="{{ guideChar }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:1;min-width:0;align-self:stretch;display:flex;align-items:center;justify-content:flex-start;padding:6px 16px 6px 0;pointer-events:none;">
+        <img src="{{ guideChar }}" alt="" style="height:200px;max-width:100%;width:auto;object-fit:contain;"></img>
+      </div>
+    </sc-if>
   </section>
   <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="6">
     <section id="{{ s.anchor }}" style="position:relative;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:visible;scroll-margin-top:16px;" style-hover="z-index:20;">
@@ -3623,7 +3628,9 @@ class Component extends DCLogic {
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
     const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
     return {
-      hasGuide: true, noGuide: false, guideJob: job, guideTagline: g.tagline || '', guideMeta: g.meta || '',
+      hasGuide: true, noGuide: false, guideJob: job, ...(() => { const h = (HEXA[job] || [])[0], s = h ? h.replace(/^img\/hexa-|\.png$/g, '') : '';
+        const c = s ? 'img/char-' + s + ('angelicbuster blaster cadena darkknight demonavenger demonslayer dualblade flamewizard kaiser lara mechanic mihile pathfinder shadower soulmaster striker viper xenon'.split(' ').includes(s) ? '.webp' : '.png') : '';
+        return { guideChar: c, guideHeroW: c ? 'auto' : '100%', guideHeroMinH: c ? '0' : '300px' }; })(), guideTagline: g.tagline || '', guideMeta: g.meta || '',
       guideHasImg: !!g.img, guideNoImg: !g.img, guideImgBg: g.img ? 'url(' + g.img + ')' : 'none',
       guideAdmin: admin, guideEdit: edit, guideView: !edit, guideMsg: this.state.guideMsg || '',
       guideEditLabel: edit ? '수정 완료' : '페이지 수정',
@@ -5571,8 +5578,13 @@ class Component extends DCLogic {
               onAdd: () => updSet(d => { d.groups[gi].rows.push({ name: '', sf: '', pot: '', add: '', flame: '', scroll: '' }); }) })) : [] };
             const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' }), ...setVals, ...setAvgVals };
             const byT = this.state.byTab || (() => { try { return localStorage.getItem(KEY + ':byTab'); } catch (e) { return null; } })() || '시뮬레이션';
-            const bySfx = byT === '관리자' && this.state.admin ? 'A' : '';
-            const BYC = [1, 2, 5, 12, 25, 30], BYS = [['공격력/마력', [5, 10, 15, 20, 30, 40], ''], ['보스 데미지', [5, 10, 15, 20, 30, 40], '%'], ['방어율 무시', [5, 10, 15, 20, 30, 40], '%'], ['올스탯', [10, 20, 30, 40, 60, 80], ''], ['HP/MP', [500, 1000, 1500, 2000, 3000, 4000], ''], ['버프 지속시간', [5, 10, 15, 20, 25, 30], '%'], ['크리티컬 확률', [5, 10, 15, 20, 25, 30], '%'], ['일반몹 데미지', [5, 10, 15, 20, 30, 40], '%'], ['아케인 포스', [10, 20, 30, 40, 50, 60], ''], ['어센틱 포스', [10, 20, 30, 40, 50, 60], ''], ['획득 경험치', [2.5, 5, 7.5, 10, 12.5, 15], '%']];
+            const bySub = this.state.byAdmSub || (() => { try { return localStorage.getItem(KEY + ':byAdmSub'); } catch (e) { return null; } })() || '전투';
+            const byGrowOn = g === '보약' && byT === '관리자' && !!this.state.admin && bySub === '성장', byWS = byGrowOn ? 'G' : '';
+            const byTrain = g === '보약' && byT === '특수훈련', byUseG = byGrowOn || byTrain;
+            const bySfx = byTrain ? 'T' : byGrowOn ? 'G' : byT === '관리자' && this.state.admin ? 'A' : '';
+            const BYSG = [['솔 에르다', [10, 20, 40, 60, 80, 100], '%'], ['몬스터 컬렉션', [10, 20, 40, 60, 80, 100], '%'], ['몬스터파크', [5, 10, 20, 30, 40, 50], '%'],
+              ['아케인 일퀘', [5, 10, 20, 30, 40, 50], '%', [2, 4, 8, 12, 16, 20]], ['그란디스 일퀘', [5, 10, 20, 30, 40, 50], '%', [2, 3, 4, 5, 7, 9]], ['유니온 코인', [100, 150, 200, 250, 300, 400], '']];
+            const BYC = [1, 2, 5, 12, 25, 30], BYS = byUseG ? BYSG : [['공격력/마력', [5, 10, 15, 20, 30, 40], ''], ['보스 데미지', [5, 10, 15, 20, 30, 40], '%'], ['방어율 무시', [5, 10, 15, 20, 30, 40], '%'], ['올스탯', [10, 20, 30, 40, 60, 80], ''], ['HP/MP', [500, 1000, 1500, 2000, 3000, 4000], ''], ['버프 지속시간', [5, 10, 15, 20, 25, 30], '%'], ['크리티컬 확률', [5, 10, 15, 20, 25, 30], '%'], ['일반몹 데미지', [5, 10, 15, 20, 30, 40], '%'], ['아케인 포스', [10, 20, 30, 40, 50, 60], ''], ['어센틱 포스', [10, 20, 30, 40, 50, 60], ''], ['획득 경험치', [2.5, 5, 7.5, 10, 12.5, 15], '%']];
             const byLoad = () => { try { return JSON.parse(localStorage.getItem(KEY + ':bySim3' + bySfx) || 'null'); } catch (e) { return null; } };
             const byS = this.state['bySim' + bySfx] || byLoad() || { per: 25, hist: [] };
             const byPer = Math.max(1, Number(byS.per) || 25), byWN = 12, byTot = byPer * byWN;
@@ -5586,8 +5598,8 @@ class Component extends DCLogic {
             Object.assign(gv, { byTotal: byTot, byPer, byWkLabel: byWN + '주', byUsed: used, byLeft: left, byLeftColor: 'oklch(0.48 0.17 255)',
               bySetTotal: e => bySave({ per: Math.max(1, Number(e.target.value) || 1), hist: hIdx }),
               byReset: () => bySave({ per: byPer, hist: [] }),
-              byRows: BYS.map(([name, v, u], i) => { const n = lvNow[i], nx = n < 6 ? BYC[n] : 0, canInc = n < 6 && nx <= left, canDec = n > 0;
-                return { name, lv: n, valText: n ? v[n - 1].toLocaleString() + u : '0', lvText: n + ' / 6', nextText: n < 6 ? String(nx) : 'MAX',
+              byRows: BYS.map(([name, v, u, ex], i) => { const n = lvNow[i], nx = n < 6 ? BYC[n] : 0, canInc = n < 6 && nx <= left, canDec = n > 0;
+                return { name, lv: n, valText: n ? v[n - 1].toLocaleString() + u : '0', hasSub: !!ex, subText: ex ? '심볼 +' + (n ? ex[n - 1] : 0) : '', lvText: n + ' / 6', nextText: n < 6 ? String(nx) : 'MAX',
                   pips: [0, 1, 2, 3, 4, 5].map(k => ({ bg: k < n ? 'oklch(0.48 0.17 255)' : '#e6e6e3' })),
                   decOp: canDec ? 1 : 0.35, incOp: canInc ? 1 : 0.35,
                   dec: () => { if (!canDec) return; const hs = hIdx.slice(); hs.splice(hs.lastIndexOf(i), 1); bySave({ per: byPer, hist: hs }); },
@@ -5606,20 +5618,20 @@ class Component extends DCLogic {
               (hs || []).forEach(i => { if (lv[i] == null || lv[i] >= 6) return; const c = BYC[lv[i]]; if (u0 + c > tot) return; u0 += c; lv[i]++; hh.push({ i, cum: u0 }); });
               return Array.from({ length: byWN }, (_, w) => { const cap = per * (w + 1), l = BYS.map(() => 0); let u = 0; hh.forEach(x => { if (x.cum <= cap) { l[x.i]++; u = x.cum; } });
                 return { label: (w + 1) + '주차', pts: u + ' / ' + cap, ptsColor: '#6a6c71', bg: 'oklch(0.93 0.035 245)', fg: '#2a2b2f', cellBg: '#fff', cells: l.map(n => n ? String(n) : '') }; }); };
-            gv.byWkHead = ['공/마', '보공', '방무', '올스탯', 'HP/MP', '벞지', '크확', '일몹뎀', '아케인', '어센틱', '경험치'];
+            gv.byWkHead = byUseG ? ['솔에르다', '몬컬', '몬파', '아케인', '그란디스', '유니온'] : ['공/마', '보공', '방무', '올스탯', 'HP/MP', '벞지', '크확', '일몹뎀', '아케인', '어센틱', '경험치'];
             gv.byWeeks = weeksOf(hIdx, byPer);
             const byVw = this.state['byView' + bySfx] === undefined ? bySv[0] : bySv.find(x => x.name === this.state['byView' + bySfx]);
             Object.assign(gv, { byHasView: !!byVw, byViewName: byVw ? byVw.name : '', byViewWeeks: byVw ? weeksOf(byVw.hist, byVw.per || 25) : [] });
             gv.bySaves = gv.bySaves.map((s, k) => { const on = byVw && bySv[k].name === byVw.name; return { ...s, bg: on ? 'oklch(0.48 0.17 255)' : '#fff', fg: on ? '#fff' : '#2a2b2f',
               view: () => this.setState({ ['byView' + bySfx]: on ? null : bySv[k].name }) }; });
-            const byWt = this.state.byWt || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byWeight') || '{}'); } catch (e) { return {}; } })();
+            const byWt = this.state.byWt || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byWeight' + byWS) || '{}'); } catch (e) { return {}; } })();
             gv.byWeights = BYS.map(([name, v, u]) => ({ name, hasMax: name === '획득 경험치' || name === '어센틱 포스', maxVal: byWt[name + ':max'] ?? '',
-              setMax: e => { const x = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byWt, [name + ':max']: x }; try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); },
-              lv1: '+' + v[0].toLocaleString() + u, val: byWt[name] ?? '', set: e => { const o = { ...byWt, [name]: e.target.value }; try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); } }));
+              setMax: e => { const x = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byWt, [name + ':max']: x }; try { localStorage.setItem(KEY + ':byWeight' + byWS, JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); },
+              lv1: '+' + v[0].toLocaleString() + u, val: byWt[name] ?? '', set: e => { const o = { ...byWt, [name]: e.target.value }; try { localStorage.setItem(KEY + ':byWeight' + byWS, JSON.stringify(o)); } catch (er) {} this.setState({ byWt: o }); } }));
             const byAdmV = byT === '관리자' && !!this.state.admin;
             gv.byLvHead = ['1', '2', '3', '4', '5', '6'].map(x => 'Lv' + x);
             gv.byLvRows = BYS.map(([name, v, u]) => ({ name, cells: v.map((x, k) => '+' + (x - (k ? v[k - 1] : 0)).toLocaleString() + u) }));
-            const byRq = this.state.byRq || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byReq') || '{}'); } catch (e) { return {}; } })();
+            const byRq = this.state.byRq || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':byReq' + byWS) || '{}'); } catch (e) { return {}; } })();
             const W0 = { '공격력/마력': '45', '보스 데미지': '110', '방어율 무시': '60', '올스탯': '30' };
             const wE4 = b => ({ ...W0, '버프 지속시간': String(b), '획득 경험치': '60', '획득 경험치:max': 4, '아케인 포스': '1', '어센틱 포스': '1', '일반몹 데미지': '1' });
             const wB = b => ({ ...W0, '버프 지속시간': String(b), '획득 경험치': '5', '아케인 포스': '1', '어센틱 포스': '3', '일반몹 데미지': '2' });
@@ -5640,11 +5652,11 @@ class Component extends DCLogic {
             BYWDEF.push(
               { name: '카이저 - 경4', wt: { ...W2(20), ...E4 }, rq: { '크리티컬 확률': 0 } },
               { name: '카이저 - 보스', wt: { ...W2(20), ...EB }, rq: { '크리티컬 확률': 0 } });
-            const byWs = this.state.byWs || (() => { try { const raw = localStorage.getItem(KEY + ':byWtSaves'); let l = raw ? JSON.parse(raw) : [];
-              if (localStorage.getItem(KEY + ':byWtDef') !== '1') { const nm = new Set(l.map(x => x.name.replace(/\s+/g, ' '))); l = l.concat(BYWDEF.filter(d => !nm.has(d.name))); localStorage.setItem(KEY + ':byWtSaves', JSON.stringify(l)); localStorage.setItem(KEY + ':byWtDef', '1'); }
-              return l; } catch (e) { return BYWDEF; } })();
-            const byWsPut = l => { try { localStorage.setItem(KEY + ':byWtSaves', JSON.stringify(l)); } catch (e) {} this.setState({ byWs: l }); };
-            const byWtSet = (wt, rq) => { try { localStorage.setItem(KEY + ':byWeight', JSON.stringify(wt)); localStorage.setItem(KEY + ':byReq', JSON.stringify(rq)); } catch (e) {} this.setState({ byWt: wt, byRq: rq }); };
+            const byWs = this.state.byWs || (() => { try { const raw = localStorage.getItem(KEY + ':byWtSaves' + byWS); let l = raw ? JSON.parse(raw) : [];
+              if (!byWS && localStorage.getItem(KEY + ':byWtDef') !== '1') { const nm = new Set(l.map(x => x.name.replace(/\s+/g, ' '))); l = l.concat(BYWDEF.filter(d => !nm.has(d.name))); localStorage.setItem(KEY + ':byWtSaves' + byWS, JSON.stringify(l)); localStorage.setItem(KEY + ':byWtDef', '1'); }
+              return l; } catch (e) { return byWS ? [] : BYWDEF; } })();
+            const byWsPut = l => { try { localStorage.setItem(KEY + ':byWtSaves' + byWS, JSON.stringify(l)); } catch (e) {} this.setState({ byWs: l }); };
+            const byWtSet = (wt, rq) => { try { localStorage.setItem(KEY + ':byWeight' + byWS, JSON.stringify(wt)); localStorage.setItem(KEY + ':byReq' + byWS, JSON.stringify(rq)); } catch (e) {} this.setState({ byWt: wt, byRq: rq }); };
             Object.assign(gv, { byWtReset: () => byWtSet({}, {}), byWtName: this.state.byWtName || '', bySetWtName: e => this.setState({ byWtName: e.target.value }),
               byWtSaveNow: () => { const name = (this.state.byWtName || '').trim() || ('가중치 ' + (byWs.length + 1)); byWsPut([{ name, wt: byWt, rq: byRq }, ...byWs.filter(x => x.name !== name)].slice(0, 50)); this.setState({ byWtName: '' }); },
               byWtSaves: byWs.map((x, k) => { const editing = this.state.byWsEdit === k;
@@ -5658,7 +5670,7 @@ class Component extends DCLogic {
               ['궁수', null, '#FFC000', '보우마스터·신궁·패스파인더·윈드브레이커·와일드헌터·메르세데스·카인'],
               ['엔버', 2, '#ffffff', '엔젤릭버스터']];
             gv.byCrGroups = BYCG.map(([name, lv, color, jobs]) => { const on = this.state.byCrG === name; return { name, lv, lvText: lv == null ? '크확 제한없음' : '크확 ' + lv + '렙', color, jobs, bg: on ? 'oklch(0.95 0.04 255)' : '#fff', border: on ? 'oklch(0.48 0.17 255)' : '#e3e3e0',
-              pick: () => { const o = { ...byRq, '크리티컬 확률': lv == null ? '' : lv }; try { localStorage.setItem(KEY + ':byReq', JSON.stringify(o)); } catch (e) {} this.setState({ byRq: o, byCrG: name }); } }; });
+              pick: () => { const o = { ...byRq, '크리티컬 확률': lv == null ? '' : lv }; try { localStorage.setItem(KEY + ':byReq' + byWS, JSON.stringify(o)); } catch (e) {} this.setState({ byRq: o, byCrG: name }); } }; });
             gv.byAuto = () => {
               const lv = BYS.map(() => 0), hs = []; let left = byTot;
               const wOf = i => Number(byWt[BYS[i][0]]) || 0;
@@ -5668,8 +5680,9 @@ class Component extends DCLogic {
                 if (best < 0) break; left -= BYC[lv[best]]; lv[best]++; hs.push(best); }
               bySave({ per: byPer, hist: hs });
             };
-            gv.byReqs = ['크리티컬 확률'].map(name => ({ name, val: byRq[name] ?? '', set: e => { const v = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byRq, [name]: v }; try { localStorage.setItem(KEY + ':byReq', JSON.stringify(o)); } catch (er) {} this.setState({ byRq: o }); } }));
-            gv.byGroups = [{ rows: gv.byRows.slice(0, 5) }, { rows: gv.byRows.slice(5) }];
+            gv.byReqs = ['크리티컬 확률'].map(name => ({ name, val: byRq[name] ?? '', set: e => { const v = e.target.value === '' ? '' : Math.max(0, Math.min(6, Number(e.target.value) | 0)); const o = { ...byRq, [name]: v }; try { localStorage.setItem(KEY + ':byReq' + byWS, JSON.stringify(o)); } catch (er) {} this.setState({ byRq: o }); } }));
+            gv.byGroups = byGrowOn ? [{ rows: gv.byRows }] : [{ rows: gv.byRows.slice(0, 5) }, { rows: gv.byRows.slice(5) }];
+            gv.byBoxTitle = byGrowOn ? '성장 지원 마법' : '전투 지원 마법'; gv.byCombat = !byGrowOn;
             const PW = (buff, ark, aut, mob, cr) => ({ '공격력/마력': 90, '보스 데미지': 220, '방어율 무시': 120, '올스탯': 60, '버프 지속시간': buff, '아케인 포스': ark, '어센틱 포스': aut, '일반몹 데미지': mob, '크리티컬 확률': cr });
             const PE = { '획득 경험치': 120, '획득 경험치:max': 4 }, PB = { '획득 경험치': 10 };
             const PG = {
@@ -5684,7 +5697,8 @@ class Component extends DCLogic {
               c2: '히어로 아크메이지(썬,콜) 듀얼블레이드 듀얼블레이더 나이트워커 스트라이커 데몬슬레이어 데몬어벤져 루미너스 은월 칼리 미하일',
               bow: '보우마스터 신궁 패스파인더 윈드브레이커 와일드헌터 메르세데스 카인', ab: '엔젤릭버스터', kai: '카이저' };
             const BYJOB = {};
-            Object.entries(PJ).forEach(([k, s]) => s.split(' ').forEach(j => { const p = PG[k]; BYJOB[j] = { note: p.note, sets: [{ title: '경험치 4레벨용', wt: p.e, rq: { '크리티컬 확률': p.re } }, { title: '보스용', wt: p.b, rq: { '크리티컬 확률': p.rb } }] }; }));
+            Object.entries(PJ).forEach(([k, s]) => s.split(' ').forEach(j => { const p = PG[k]; BYJOB[j] = { note: p.note, sets: [{ title: '경험치 4레벨용', wt: p.e, rq: { '크리티컬 확률': p.re } }, { title: '보스용', wt: p.b, rq: { '크리티컬 확률': p.rb } },
+              { title: '어센틱 4 · 경험치 4레벨용', wt: { ...p.e, '획득 경험치': 150, '획득 경험치:max': 4, '어센틱 포스': 150, '어센틱 포스:max': 4, ...(k === 'c2' ? { 'HP/MP': 1 } : {}) }, rq: { '크리티컬 확률': p.re } }] }; }));
             const byAutoHist = (wt, rq, tot) => { const lv = BYS.map(() => 0), hs = []; let lf = tot;
               BYS.forEach(([nm], i) => { const need = Math.min(6, Number(rq[nm]) || 0); while (lv[i] < need && BYC[lv[i]] <= lf) { lf -= BYC[lv[i]]; lv[i]++; hs.push(i); } });
               for (;;) { let b = -1, be = 0; BYS.forEach(([nm], i) => { const mx = wt[nm + ':max']; if (lv[i] >= (mx === '' || mx == null ? 6 : Number(mx))) return; const c = BYC[lv[i]], w = Number(wt[nm]) || 0; if (c > lf || w <= 0) return; if (w / c > be) { be = w / c; b = i; } }); if (b < 0) break; lf -= BYC[lv[b]]; lv[b]++; hs.push(b); }
@@ -5694,7 +5708,16 @@ class Component extends DCLogic {
               Object.assign(gv, { byJobTot: tot, byJobNote: bjD.note,
                 byJobSets: bjD.sets.map(s => { const r = byAutoHist(s.wt, s.rq, tot); return { title: s.title, used: r.used, weeks: weeksOf(r.hs, 25) }; }) }); }
             gv._bjHas = !!bjD;
-            gv.byH1 = byT === '직업' && bjName ? bjName : '보약 ' + (byT === '관리자' && this.state.admin ? '관리자 테스트' : '시뮬레이션');
+            gv.byJobBoxTitle = byTrain ? '성장 지원 마법 추천' : '전투 지원 마법 추천';
+            if (byTrain) { const tot = 25 * byWN;
+              Object.assign(gv, { byJobTot: tot, byJobNote: '성장 지원 마법',
+                byJobSets: [{ title: '몬파 우선', wt: { '몬스터파크': '3000', '그란디스 일퀘': '30', '아케인 일퀘': '100', '솔 에르다': '5', '유니온 코인': '1' } },
+                  { title: '균등', wt: { '몬스터파크': '4000', '그란디스 일퀘': '300', '아케인 일퀘': '1300', '솔 에르다': '20', '유니온 코인': '1' } }].map(s => { const r = byAutoHist(s.wt, {}, tot); return { title: s.title, used: r.used, weeks: weeksOf(r.hs, 25) }; }) }); }
+            if (g === '보약' && !this._charPre) { this._charPre = Object.values(HEXA).map(([h]) => { const s = h.replace(/^img\/hexa-|\.png$/g, ''), im = new Image();
+              im.src = 'img/char-' + s + ('angelicbuster blaster cadena darkknight demonavenger demonslayer dualblade flamewizard kaiser lara mechanic mihile pathfinder shadower soulmaster striker viper xenon'.split(' ').includes(s) ? '.webp' : '.png'); return im; }); }
+            gv.byH1Img = byT === '직업' && bjD && (() => { const h = (HEXA[bjName] || [])[0]; if (!h) return ''; const s = h.replace(/^img\/hexa-|\.png$/g, '');
+              return 'img/char-' + s + ('angelicbuster blaster cadena darkknight demonavenger demonslayer dualblade flamewizard kaiser lara mechanic mihile pathfinder shadower soulmaster striker viper xenon'.split(' ').includes(s) ? '.webp' : '.png'); })() || '';
+            gv.byH1 = byTrain ? '특수훈련' : byT === '직업' && bjName ? bjName : '보약 ' + (byT === '관리자' && this.state.admin ? '관리자 테스트' : '시뮬레이션');
             const byStart = this.state.byStart || (() => { try { return localStorage.getItem(KEY + ':byStart'); } catch (e) { return null; } })() || '';
             let byNowWk = -1;
             if (byStart) { const s = new Date(byStart + 'T00:00:00'), d = Math.floor((Date.now() - s.getTime()) / 86400000); if (d >= 0) byNowWk = Math.floor(d / 7); }
@@ -5704,14 +5727,17 @@ class Component extends DCLogic {
             Object.assign(gv, { byStart, byStartMsg: this.state.byStartMsg || '', bySetStart: e => this.saveByStart(e.target.value),
               byNowText: byStart ? (byNowWk < 0 ? '시작 전' : byNowWk >= byWN ? '종료' : '지금 ' + (byNowWk + 1) + '주차') : '시작 날짜 미설정' });
             Object.assign(gv, { byZoom: byAdmV ? 0.72 : 1, byBoxMax: byAdmV ? 'none' : '960px', byWrap: byAdmV ? 'nowrap' : 'wrap' });
-            const byAd = !!this.state.admin, byCur = byT === '직업' ? '직업' : (byT === '관리자' && byAd ? '관리자' : '시뮬레이션');
-            Object.assign(gv, { isBoyak: g === '보약', byIsSim: byCur !== '직업', byIsJob: byCur === '직업', byJobHas: g === '보약' && byCur === '직업' && gv._bjHas, byJobNone: g === '보약' && byCur === '직업' && !gv._bjHas, byIsAdm: byCur === '관리자', byTitle: byCur === '관리자' ? '관리자 테스트' : byCur === '직업' ? (this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })() || '직업') : byCur,
+            const byAd = !!this.state.admin, byCur = byT === '직업' ? '직업' : byT === '특수훈련' ? '특수훈련' : (byT === '관리자' && byAd ? '관리자' : '시뮬레이션');
+            { const pickSub = s => { try { localStorage.setItem(KEY + ':byAdmSub', s); } catch (e) {} this.setState({ byAdmSub: s, byWt: undefined, byRq: undefined, byWs: undefined, byWsEdit: null, byCrG: null }); };
+              Object.assign(gv, { byAdmTabsOn: g === '보약' && byCur === '관리자',
+                byAdmTabs: [['전투', '전투 지원 마법'], ['성장', '성장 지원 마법']].map(([k, l]) => { const on = k === bySub; return { label: l, pick: () => pickSub(k), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }) }); }
+            Object.assign(gv, { isBoyak: g === '보약', byIsSim: byCur !== '직업' && byCur !== '특수훈련', byIsJob: byCur === '직업', byJobHas: g === '보약' && ((byCur === '직업' && gv._bjHas) || byCur === '특수훈련'), byJobNone: g === '보약' && byCur === '직업' && !gv._bjHas, byIsAdm: byCur === '관리자', byTitle: byCur === '관리자' ? '관리자 테스트' : byCur === '직업' ? (this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })() || '직업') : byCur,
               byJobGroups: (() => { const CH = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', M = {}, bj = this.state.byJob || (() => { try { return localStorage.getItem(KEY + ':byJob'); } catch (e) { return null; } })();
                 JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')).forEach(n => { const c = n.charCodeAt(0) - 0xAC00; const k = c >= 0 && c < 11172 ? CH[Math.floor(c / 588)] : n[0]; (M[k] = M[k] || []).push(n); });
                 return Object.entries(M).map(([name, jobs]) => ({ name, jobs: jobs.map(n => { const on = g === '보약' && byCur === '직업' && n === bj; return { name: n, bg: on ? 'oklch(0.48 0.17 255)' : 'transparent', color: on ? '#fff' : '#2a2b2f',
                   onClick: () => { try { localStorage.setItem(KEY + ':byTab', '직업'); localStorage.setItem(KEY + ':byJob', n); localStorage.setItem(KEY + ':growTab', '보약'); } catch (e) {} this.setState({ byTab: '직업', byJob: n, growTab: '보약', byMenu: false }); } }; }) })); })(),
               byMenu: !!this.state.byMenu, byMenuOpen: () => this.setState({ byMenu: true }), byMenuClose: () => this.setState({ byMenu: false }),
-              byTabs: (byAd ? ['시뮬레이션', '관리자'] : ['시뮬레이션']).map(t => { const on = g === '보약' && t === byCur; return { label: t, mbg: on ? 'oklch(0.48 0.17 255)' : 'transparent', mfg: on ? '#fff' : '#3a3b3f',
+              byTabs: (byAd ? ['특수훈련', '시뮬레이션', '관리자'] : ['특수훈련', '시뮬레이션']).map(t => { const on = g === '보약' && t === byCur; return { label: t, mbg: on ? 'oklch(0.48 0.17 255)' : 'transparent', mfg: on ? '#fff' : '#3a3b3f',
                 onClick: () => { try { localStorage.setItem(KEY + ':byTab', t); localStorage.setItem(KEY + ':growTab', '보약'); } catch (e) {} this.setState({ byTab: t, growTab: '보약', byMenu: false }); } }; }) });
             const aiT = ['아티팩트', '아티팩트 40Lv'].includes(this.state.aiTab) ? this.state.aiTab : '특수코어', allJobs = JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')), art40 = aiT === '아티팩트 40Lv';
             const aiTabs = ['특수코어', '아티팩트', '아티팩트 40Lv'].map(t => ({ label: t, bg: t === aiT ? 'oklch(0.48 0.17 255)' : '#ececea', fg: t === aiT ? '#fff' : '#3a3b3f', onClick: () => this.setState({ aiTab: t }) }));
@@ -5962,7 +5988,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 76,
+      isAdmin: admin, appVer: 77,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
