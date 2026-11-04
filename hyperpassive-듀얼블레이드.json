@@ -1,0 +1,89 @@
+{
+  "job": "듀얼블레이드",
+  "date": "2026-11-03",
+  "sample": 1000,
+  "active": true,
+  "items": [
+    {
+      "name": "팬텀 블로우-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBIG",
+      "desc": "데미지 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n팬텀 블로우의 데미지를 증가시킨다.",
+      "effect": "데미지 20% 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "팬텀 블로우-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBII",
+      "desc": "공격 횟수 1 증가",
+      "info": "[마스터 레벨 : 1]\r\n팬텀 블로우의 공격 횟수를 증가시킨다.",
+      "effect": "공격 횟수 1 증가",
+      "count": 999,
+      "pct": 99.9
+    },
+    {
+      "name": "팬텀 블로우-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBIH",
+      "desc": "방어율 무시 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n팬텀 블로우의 몬스터 방어율 무시 수치를 증가시킨다.",
+      "effect": "방어율 무시 20% 증가",
+      "count": 997,
+      "pct": 99.7
+    },
+    {
+      "name": "블레이드 퓨리-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBJF",
+      "desc": "데미지 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 퓨리의 데미지를 증가시킨다.",
+      "effect": "데미지 20% 증가",
+      "count": 908,
+      "pct": 90.8
+    },
+    {
+      "name": "블레이드 퓨리-엑스트라 타겟",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBJH",
+      "desc": "최대 공격 가능한 몬스터 수 2 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 퓨리의 최대 공격 가능한 몬스터 수를 증가시킨다.",
+      "effect": "최대 공격 가능한 몬스터 수 2 증가",
+      "count": 608,
+      "pct": 60.8
+    },
+    {
+      "name": "블레이드 어센션-보너스 어택",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBIF",
+      "desc": "공격 횟수 1 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 어센션의 공격 횟수를 증가시킨다.",
+      "effect": "공격 횟수 1 증가",
+      "count": 250,
+      "pct": 25
+    },
+    {
+      "name": "블레이드 어센션-리인포스",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBIE",
+      "desc": "데미지 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 어센션의 데미지를 증가시킨다.",
+      "effect": "데미지 20% 증가",
+      "count": 116,
+      "pct": 11.6
+    },
+    {
+      "name": "블레이드 퓨리-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBJG",
+      "desc": "방어율 무시 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 퓨리의 방어율 무시를 증가시킨다.",
+      "effect": "방어율 무시 20% 증가",
+      "count": 115,
+      "pct": 11.5
+    },
+    {
+      "name": "블레이드 어센션-이그노어 가드",
+      "icon": "https://open.api.nexon.com/static/maplestory/skill/icon/KFPGIDOBID",
+      "desc": "방어율 무시 20% 증가",
+      "info": "[마스터 레벨 : 1]\r\n블레이드 어센션의 방어율 무시를 증가시킨다.",
+      "effect": "방어율 무시 20% 증가",
+      "count": 7,
+      "pct": 0.7
+    }
+  ]
+}
