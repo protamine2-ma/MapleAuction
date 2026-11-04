@@ -1240,8 +1240,16 @@ body{overflow-x:clip;}
             <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
               <span style="font-size:13px;font-weight:600;color:#6b6d73;">왼쪽 위부터 순서대로 강화 · 숫자는 강화 후 레벨</span>
               <sc-for list="{{ s.hexaImgs }}" as="im" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;background:#fff;">
+                  <sc-if value="{{ im.hasNames }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:relative;height:clamp(24px,2.64vw,34px);margin-bottom:-1%;z-index:1;">
+                      <sc-for list="{{ im.names }}" as="nm" hint-placeholder-count="0">
+                        <span style="position:absolute;left:{{ nm.l }};top:0;bottom:0;width:6.6%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;"><span style="font-size:clamp(10px,1.1vw,14px);font-weight:800;line-height:1.2;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;color:#2a2b2f;text-align:center;word-break:keep-all;">{{ nm.t }}</span></span>
+                      </sc-for>
+                    </div>
+                  </sc-if>
                 <div style="position:relative;">
-                  <img src="{{ im.src }}" alt="{{ im.alt }}" style="display:block;width:100%;height:auto;border-radius:10px;border:1px solid #e3e3e0;">
+                  <img src="{{ im.src }}" alt="{{ im.alt }}" style="display:block;width:100%;height:auto;border-radius:10px;">
                   <sc-for list="{{ im.marks }}" as="mk" hint-placeholder-count="0">
                     <span onMouseEnter="{{ mk.onEnter }}" onMouseLeave="{{ mk.onLeave }}" style="position:absolute;left:{{ mk.l }};top:{{ mk.t }};width:3%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;cursor:help;z-index:2;">
                       <sc-if value="{{ mk.show }}" hint-placeholder-val="{{ false }}">
@@ -1249,6 +1257,7 @@ body{overflow-x:clip;}
                       </sc-if>
                     </span>
                   </sc-for>
+                </div>
                 </div>
               </sc-for>
             </div>
@@ -2601,6 +2610,7 @@ QUEST['호영'] = { reward: '괴이봉인', rewardSub: '(마스터 Lv.10)', effe
 QUEST['아란'] = { reward: '되찾은 기억', rewardSub: '(마스터 Lv.1)', effect: '공격력 5% · 방어력 300', quest: '[메인] 크로스 헌터 S.O.S. 요청', note: '퀘스트 창 → 스토리 → 시작 가능에 있는 크로스 헌터 S.O.S. 요청 퀘스트를 진행하세요.', imgs: [['quest-aran-1.png', '되찾은 기억 스킬 효과', 315], ['quest-aran-2.png', '크로스 헌터 S.O.S. 요청 퀘스트', 318]] };
 ['소울마스터', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커', '미하일'].forEach(j => { QUEST[j] = { reward: '초월자 시그너스의 축복', rewardSub: '(마스터 Lv.30)', effect: '45초 동안 데미지 72% · 피격 데미지 5% 감소', quest: 'Lv.245 문브릿지 · 나인하트에게 말 걸기', note: '레벨 245 이상이면 시그너스 옆에 있는 나인하트에게 말을 걸어 보상을 받으세요.', imgs: [['quest-cygnus-1.png', '초월자 시그너스의 축복 스킬 효과', 414], ['quest-cygnus-2.png', 'Lv.245~249 문브릿지', 346], ['quest-cygnus-3.png', '나인하트 위치', 400]] }; });
 const HEXA = { '아델': ['img/hexa-adele.png'], '루미너스': ['img/hexa-luminous.png'], '다크나이트': ['img/hexa-darkknight.png'], '데몬슬레이어': ['img/hexa-demonslayer.png'], '데몬어벤져': ['img/hexa-demonavenger.png'], '나이트로드': ['img/hexa-nightlord.png'], '나이트워커': ['img/hexa-nightwalker.png'], '듀얼블레이드': ['img/hexa-dualblade.png'], '라라': ['img/hexa-lara.png'], '레테': ['img/hexa-lethe.png'], '렌': ['img/hexa-ren.png'], '메르세데스': ['img/hexa-mercedes.png'], '배틀메이지': ['img/hexa-battlemage.png'], '보우마스터': ['img/hexa-bowmaster.png'], '메카닉': ['img/hexa-mechanic.png'], '미하일': ['img/hexa-mihile.png'], '바이퍼': ['img/hexa-viper.png'], '섀도어': ['img/hexa-shadower.png'], '소울마스터': ['img/hexa-soulmaster.png'], '스트라이커': ['img/hexa-striker.png'], '아크메이지(불,독)': ['img/hexa-archmagefp.png'], '블래스터': ['img/hexa-blaster.png'], '비숍': ['img/hexa-bishop.png'], '아란': ['img/hexa-aran.png'], '아크': ['img/hexa-ark.png'], '에반': ['img/hexa-evan.png'], '신궁': ['img/hexa-sniper.png'], '아크메이지(썬,콜)': ['img/hexa-archmageil.png'], '윈드브레이커': ['img/hexa-windbreaker.png'], '은월': ['img/hexa-eunwol.png'], '일리움': ['img/hexa-illium.png'], '제논': ['img/hexa-xenon.png'], '엔젤릭버스터': ['img/hexa-angelicbuster.png'], '와일드헌터': ['img/hexa-wildhunter.png'], '카인': ['img/hexa-kain.png'], '칼리': ['img/hexa-khali.png'], '캐논마스터': ['img/hexa-cannonmaster.png'], '캡틴': ['img/hexa-captain.png'], '제로': ['img/hexa-zero.png'], '카데나': ['img/hexa-cadena.png'], '카이저': ['img/hexa-kaiser.png'], '팬텀': ['img/hexa-phantom.png'], '플레임위자드': ['img/hexa-flamewizard.png'], '호영': ['img/hexa-hoyoung.png'], '히어로': ['img/hexa-hero.png'], '키네시스': ['img/hexa-kinesis.png'], '팔라딘': ['img/hexa-paladin.png'], '패스파인더': ['img/hexa-pathfinder.png'] };
+const HEXANAME = { 'img/hexa-luminous.png': { w: 975, x0: 42, step: 64.3, n: ['프리드의 가호 VI', '아포칼립스 VI', '라이트 리플렉션 VI', '앱솔루트 킬 VI', '트와일라잇 노바 VI', '빛과 어둠의 세례', '앱솔루트 스페이스', '트와일라잇 노바 VI', '솔 헤카테', '라이트 리플렉션 VI', '트와일라잇 노바 VI', '아포칼립스 VI', '라이트 리플렉션 VI', '앱솔루트 킬 VI', '라이트 리플렉션 VI'].map(t => t.replace(/ VI$/, '')) } };
 const HEXAPLUS = {
   'img/hexa-darkknight.png': [974, 899, [[384,138],[383,202],[64,522],[255,522],[896,586],[896,714],[256,778],[639,778],[959,778]]],
   'img/hexa-demonslayer.png': [970, 852, [[448,18],[576,18],[256,146],[128,210],[896,210],[64,402],[320,466],[128,530],[448,530],[128,594],[704,594],[319,659],[512,658],[768,658],[191,787]]],
@@ -3407,7 +3417,7 @@ class Component extends DCLogic {
               .map((g, k) => ({ n: k + 1, short: sh(g.core), lv: g.from === g.to ? g.to : (g.from - 1) + '→' + g.to, tip: g.core + ' ' + (g.from === g.to ? g.to + '레벨' : (g.from - 1) + '→' + g.to + '레벨'), bg: pal[ci[g.core] ?? 0] })) } }; })(),
         hasHxs: s.title === '헥사스탯',
         hxsSets: s.title === '헥사스탯' ? (HEXASTAT[job] || HEXASTAT['아델']).map(h => ({ name: h.name, cores: h.cores.map((c, k) => ({ n: k + 1, lines: c.map((v, m) => ({ label: m ? '에디셔널' + m : '메인', v })) })) })) : [],
-        hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => { const hm = HEXAMARK[src]; return { src, alt: '헥사스킬 강화 순서 ' + (k + 1), marks: hm ? hm.m.map(([t, x, y], q) => { const key = src + q, on = this.state.hxTip === key;
+        hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => { const hm = HEXAMARK[src], hd = this.loadPetBuff(job, 'hexaicon'), hn = HEXANAME[src] || (hd && hd.names && hd.img === src ? { w: hd.w, x0: hd.x0, step: hd.step, n: hd.names } : null); return { src, hasNames: !!hn, names: hn ? hn.n.map((t, q) => ({ t, l: ((hn.x0 + hn.step * q) / hn.w * 100) + '%' })) : [], alt: '헥사스킬 강화 순서 ' + (k + 1), marks: hm ? hm.m.map(([t, x, y], q) => { const key = src + q, on = this.state.hxTip === key;
             const px = x / hm.w; return { l: (px * 100) + '%', t: (y / hm.h * 100) + '%', tl: px < 0.2 ? '-8px' : px > 0.8 ? 'auto' : '50%', tr: px > 0.8 ? '-8px' : 'auto', tx: px < 0.2 || px > 0.8 ? 'none' : 'translateX(-50%)', tip: t === '!' ? '편의성때문에 우선개방 추천' : '해당 레벨까지 연속 강화', show: on,
               onEnter: () => this.setState({ hxTip: key }), onLeave: () => this.setState(st => st.hxTip === key ? { hxTip: null } : null) }; }) : [] }; }) : [],
         hasHs: s.title === '하이퍼스탯' && !!HYPERSTAT[job],
@@ -5541,7 +5551,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 74,
+      isAdmin: admin, appVer: 75,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
