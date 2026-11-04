@@ -37,7 +37,7 @@ async function one(name) {
   const b = await api('/character/basic', { ocid: id.ocid });
   checked++;
   if (!b || String(b.access_flag) !== 'true') { inactive++; return; }
-  if (b.character_class !== JOB) { other++; return; }
+  if (b.character_class !== JOB && b.character_class !== (process.env.API_JOB || '-')) { other++; return; }
   if (ok >= N) return;
   const vm = await api('/character/vmatrix', { ocid: id.ocid });
   const eq = (vm && vm.character_v_core_equipment) || [];

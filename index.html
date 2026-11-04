@@ -1585,18 +1585,18 @@ body{overflow-x:clip;}
                     <table style="border-collapse:collapse;width:100%;min-width:640px;font-variant-numeric:tabular-nums;">
                       <thead>
                         <tr>
-                          <th style="position:sticky;left:0;background:#fafaf8;padding:9px 12px;text-align:left;font-size:13px;font-weight:700;color:#6b6d73;border-bottom:1px solid #e3e3e0;white-space:nowrap;">스탯</th>
+                          <th style="position:sticky;left:0;background:#fafaf8;padding:9px 12px;text-align:center;font-size:13px;font-weight:800;color:#6b6d73;border-bottom:1px solid #d6d6d2;border-right:1px solid #d6d6d2;white-space:nowrap;">스탯</th>
                           <sc-for list="{{ h.lvs }}" as="l" hint-placeholder-count="11">
-                            <th style="background:#fafaf8;padding:9px 6px;text-align:center;font-size:13px;font-weight:800;color:#3a3b3f;border-bottom:1px solid #e3e3e0;white-space:nowrap;">{{ l.t }}</th>
+                            <th style="background:#fafaf8;padding:9px 6px;text-align:center;font-size:13px;font-weight:800;color:#3a3b3f;border-bottom:1px solid #d6d6d2;border-right:1px solid #e3e3e0;white-space:nowrap;">{{ l.t }}</th>
                           </sc-for>
                         </tr>
                       </thead>
                       <tbody>
                         <sc-for list="{{ h.rows }}" as="r" hint-placeholder-count="8">
                           <tr>
-                            <td style="position:sticky;left:0;background:#fff;padding:8px 12px;font-size:14px;font-weight:700;color:#3a3b3f;border-bottom:1px solid #f0f0ee;white-space:nowrap;">{{ r.name }}</td>
+                            <td style="position:sticky;left:0;background:#fff;padding:8px 12px;text-align:center;font-size:14px;font-weight:800;color:#3a3b3f;border-bottom:1px solid #e3e3e0;border-right:1px solid #d6d6d2;white-space:nowrap;">{{ r.name }}</td>
                             <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="11">
-                              <td style="padding:8px 6px;text-align:center;font-size:17px;font-weight:800;color:{{ c.color }};background:{{ c.bg }};border-bottom:1px solid #f0f0ee;">{{ c.v }}</td>
+                              <td style="padding:8px 6px;text-align:center;font-size:17px;font-weight:800;color:{{ c.color }};background:{{ c.bg }};border-bottom:1px solid #e3e3e0;border-right:1px solid #e3e3e0;">{{ c.v }}</td>
                             </sc-for>
                           </tr>
                         </sc-for>
@@ -3627,7 +3627,10 @@ class Component extends DCLogic {
         onEnter: () => this.setState({ hpTip: key }), onLeave: () => this.setState(st => st.hpTip === key ? { hpTip: null } : null) }; }) : [];
     const admin = !!this.state.admin, edit = admin && !!this.state.guideEdit;
     const upd = fn => { const n = clone(g); fn(n); this.saveGuide(job, n); };
-    const yt = u => { const m = String(u || '').match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? 'https://www.youtube.com/embed/' + m[1] : ''; };
+    const yt = u => { const s = String(u || ''), m = s.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); if (!m) return '';
+      const t = s.match(/[?&#](?:t|start)=([\dhms]+)/); let sec = 0;
+      if (t) { const r = t[1]; if (/^\d+$/.test(r)) sec = +r; else { const p = r.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/); sec = (+p[1] || 0) * 3600 + (+p[2] || 0) * 60 + (+p[3] || 0); } }
+      return 'https://www.youtube.com/embed/' + m[1] + (sec ? '?start=' + sec : ''); };
     return {
       hasGuide: true, noGuide: false, guideJob: job, ...(() => { const h = (HEXA[job] || [])[0], s = h ? h.replace(/^img\/hexa-|\.png$/g, '') : '';
         const c = s ? 'img/char-' + s + ('angelicbuster blaster cadena darkknight demonavenger demonslayer dualblade flamewizard kaiser lara mechanic mihile pathfinder shadower soulmaster striker viper xenon'.split(' ').includes(s) ? '.webp' : '.png') : '';
@@ -5989,7 +5992,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 78,
+      isAdmin: admin, appVer: 79,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),

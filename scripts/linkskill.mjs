@@ -41,7 +41,7 @@ async function one(name) {
   const b = await api('/character/basic', { ocid: id.ocid });
   checked++;
   if (!b || String(b.access_flag) !== 'true') { inactive++; return; }
-  if (b.character_class !== JOB) { other++; return; }
+  if (b.character_class !== JOB && b.character_class !== (process.env.API_JOB || '-')) { other++; return; }
   if (ok >= N) return;
   const l = await api('/character/link-skill', { ocid: id.ocid });
   if (!l) return;
@@ -65,7 +65,7 @@ for (let page = 1; ok < N && page <= 60; page++) {
 if (!ok) { console.error('집계된 캐릭터가 없어요.'); process.exit(1); }
 
 const WANT = { '륀느의 축복': 5, '스피릿 오브 프리덤': 8, '시그너스 블레스': 10, '시프 커닝': 6, '어드벤쳐러 큐리어스': 6, '인빈서블 빌리프': 6, '임피리컬 널리지': 6, '파이렛 블레스': 6 };
-const pickLv = (L, name) => { if (!L) return 0; const w = WANT[name] || 2, lv = Object.keys(L).map(Number); return lv.includes(w) ? w : lv.sort((a, b) => Math.abs(a - w) - Math.abs(b - w) || b - a)[0]; };
+const pickLv = (L, name) => { if (!L) return 0; const nm = x => String(x).replace(/\s/g, '').replace(/쳐/g, '처'), w = WANT[name] || (Object.entries(WANT).find(([k]) => nm(k) === nm(name)) || [])[1] || 2, lv = Object.keys(L).map(Number); return lv.includes(w) ? w : lv.sort((a, b) => Math.abs(a - w) - Math.abs(b - w) || b - a)[0]; };
 const pickDesc = (L, name) => (L ? L[pickLv(L, name)] : '') || '';
 const list = k => Object.entries(C[k].c).sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, icon: icons[name] || '', desc: pickDesc(descs[name], name), descLv: pickLv(descs[name], name), count: n, pct: Math.round(n / Math.max(1, C[k].n) * 1000) / 10 }));
 const out = { job: JOB, date, sample: ok, active: true, boss: { sample: C.boss.n, items: list('boss') }, hunt: { sample: C.hunt.n, items: list('hunt') } };

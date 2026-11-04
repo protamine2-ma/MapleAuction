@@ -30,7 +30,7 @@ async function pool(list, fn, size = 20) {
 
 const d = new Date(Date.now() + 9 * 3600e3 - 86400e3);
 const date = d.toISOString().slice(0, 10);
-const cnt = {}, icons = {}, descs = {}; let ok = 0, checked = 0, inactive = 0, other = 0;
+const cnt = {}, icons = {}, descs = {}, infos = {}, effs = {}; let ok = 0, checked = 0, inactive = 0, other = 0;
 async function one(name) {
   if (ok >= N) return;
   const id = await api('/id', { character_name: name });
@@ -38,14 +38,14 @@ async function one(name) {
   const b = await api('/character/basic', { ocid: id.ocid });
   checked++;
   if (!b || String(b.access_flag) !== 'true') { inactive++; return; }
-  if (b.character_class !== JOB) { other++; return; }
+  if (b.character_class !== JOB && b.character_class !== (process.env.API_JOB || '-')) { other++; return; }
   if (ok >= N) return;
   const s = await api('/character/skill', { ocid: id.ocid, character_skill_grade: 'hyperpassive' });
   const list = ((s && s.character_skill) || []).filter(x => x && x.skill_name && Number(x.skill_level) >= 1);
   if (!list.length || ok >= N) return;
   ok++;
   new Set(list.map(x => x.skill_name)).forEach(v => { cnt[v] = (cnt[v] || 0) + 1; });
-  list.forEach(x => { if (x.skill_icon) icons[x.skill_name] = x.skill_icon; const e = x.skill_effect || x.skill_description; if (e && !descs[x.skill_name]) descs[x.skill_name] = e; });
+  list.forEach(x => { if (x.skill_icon) icons[x.skill_name] = x.skill_icon; const e = x.skill_effect || x.skill_description; if (e && !descs[x.skill_name]) descs[x.skill_name] = e; if (x.skill_description && !infos[x.skill_name]) infos[x.skill_name] = x.skill_description; if (x.skill_effect && !effs[x.skill_name]) effs[x.skill_name] = x.skill_effect; });
 }
 for (let page = 1; ok < N && page <= 60; page++) {
   const j = await api('/ranking/overall', { date, class: CLASS, page });
@@ -55,6 +55,6 @@ for (let page = 1; ok < N && page <= 60; page++) {
   console.log(`랭킹 ${page}페이지 · 확인 ${checked}명 · 활성 ${ok}명 · 미접속 ${inactive}명 · 다른 직업 ${other}명`);
 }
 if (!ok) { console.error('집계된 캐릭터가 없어요.'); process.exit(1); }
-const items = Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, icon: icons[name] || '', desc: descs[name] || '', count: n, pct: Math.round(n / ok * 1000) / 10 }));
+const items = Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([name, n]) => ({ name, icon: icons[name] || '', desc: descs[name] || '', info: infos[name] || '', effect: effs[name] || '', count: n, pct: Math.round(n / ok * 1000) / 10 }));
 fs.writeFileSync(`hyperpassive-${JOB}.json`, JSON.stringify({ job: JOB, date, sample: ok, active: true, items }, null, 2));
 items.forEach((x, i) => console.log(`${i + 1}. ${x.name} ${x.pct}%`));
