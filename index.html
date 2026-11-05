@@ -777,9 +777,10 @@ body{overflow-x:clip;}
 <sc-if value="{{ isEnhance }}" hint-placeholder-val="{{ false }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
   <div style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;justify-content:center;gap:4px;">
-    <button style="padding:16px 12px 13px;border:none;border-bottom:3px solid oklch(0.48 0.17 255);background:transparent;font-family:inherit;font-size:15px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;">스타포스</button>
+    <sc-for list="{{ enhTabs }}" as="t" hint-placeholder-count="2"><button onClick="{{ t.pick }}" style="padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.bar }};background:transparent;font-family:inherit;font-size:15px;font-weight:800;color:{{ t.color }};cursor:pointer;">{{ t.label }}</button></sc-for>
   </div>
 </nav>
+<sc-if value="{{ isSfTab }}" hint-placeholder-val="{{ true }}">
 <div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
     <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">별 기댓값</h1>
@@ -957,6 +958,131 @@ body{overflow-x:clip;}
     </div>
   </div>
 </div>
+</sc-if>
+<sc-if value="{{ isPotTab }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">잠재능력 기댓값</h1>
+    <span style="font-size:13px;font-weight:600;color:#6b6d73;">넥슨 공개 확률 기준 · 블랙 큐브 / 잠재능력 재설정(메소) / 에디셔널 잠재능력 재설정</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:18px;align-items:start;">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">설정</h2></div>
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;flex-wrap:wrap;gap:16px 32px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">잠재능력</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ pt.kinds }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">목표</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ pt.goals }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 레벨</span>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="text" inputmode="numeric" value="{{ pt.lv }}" onChange="{{ pt.onLv }}" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"><span style="font-size:12px;font-weight:600;color:#8a8c92;">{{ pt.band }}</span></label>
+          </div>
+        </div>
+        <sc-if value="{{ pt.isUp }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:16px;padding-top:16px;border-top:1px solid #efefec;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">현재 등급</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ pt.curs }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">목표 등급</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ pt.tgts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;"><button onClick="{{ pt.mirToggle }}" style="display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid {{ pt.mirBorder }};border-radius:999px;background:{{ pt.mirBg }};color:{{ pt.mirColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">미라클 타임 · 등급 상승 확률 2배</button></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ pt.isOpt }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;padding-top:16px;border-top:1px solid #efefec;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 부위</span>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;"><sc-for list="{{ pt.parts }}" as="o" hint-placeholder-count="18"><button onClick="{{ o.pick }}" style="padding:6px 10px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:16px 32px;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <span style="font-size:13px;font-weight:700;color:#6b6d73;">잠재능력 등급</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ pt.grades }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:7px 12px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">목표 옵션 <span style="font-weight:600;color:#8a8c92;">3줄 합계 · 조건 전부 만족</span></span>
+            <sc-for list="{{ pt.opt.rows }}" as="r" hint-placeholder-count="1">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+              <select value="{{ r.stat }}" onChange="{{ r.onStat }}" style="flex:1 1 200px;min-width:0;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;">
+                <option value="">옵션 고르기</option>
+                <sc-for list="{{ pt.opt.statOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+              </select>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#6b6d73;"><input type="text" inputmode="decimal" value="{{ r.min }}" onChange="{{ r.onMin }}" placeholder="0" style="box-sizing:border-box;width:64px;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;">이상</label>
+              <button onClick="{{ r.del }}" title="삭제" style="width:30px;height:30px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:13px;color:#8a8c92;cursor:pointer;">✕</button>
+            </div>
+            </sc-for>
+            <sc-if value="{{ pt.opt.canAdd }}" hint-placeholder-val="{{ true }}"><div style="display:flex;"><button onClick="{{ pt.opt.add }}" style="padding:6px 12px;border:1px dashed #c9cac6;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:700;color:oklch(0.48 0.17 255);cursor:pointer;">+ 조건 추가</button></div></sc-if>
+          </div>
+        </div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #efefec;">
+          <span style="font-size:13px;font-weight:700;color:#6b6d73;">재설정 1번 비용 <span style="font-weight:600;color:#8a8c92;">{{ pt.costBand }}</span></span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ pt.costs }}" as="c" hint-placeholder-count="1">
+          <span style="display:flex;align-items:baseline;gap:8px;padding:8px 12px;border-radius:8px;background:#f7f7f5;"><span style="font-size:13px;font-weight:800;color:{{ c.color }};">{{ c.label }}</span><span style="font-size:15px;font-weight:800;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ c.txt }}</span></span>
+          </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">결과</h2></div>
+      <sc-if value="{{ pt.isUp }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">평균 횟수</span><span style="font-size:26px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ pt.up.E }}번</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">평균 비용</span><span style="font-size:20px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ pt.up.cost }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">최대 (천장)</span><span style="font-size:26px;font-weight:800;color:oklch(0.5 0.17 25);font-variant-numeric:tabular-nums;">{{ pt.up.max }}</span><span style="font-size:12px;font-weight:600;color:#8a8c92;">{{ pt.up.maxCost }}</span></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ pt.up.q }}" as="q" hint-placeholder-count="3"><span style="padding:6px 12px;border-radius:999px;background:oklch(0.95 0.03 255);font-size:13px;font-weight:700;color:oklch(0.35 0.1 255);">{{ q.label }} {{ q.val }}</span></sc-for></div>
+        <div style="display:flex;flex-direction:column;border:1px solid #efefec;border-radius:10px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:6px;padding:9px 12px;background:#fafaf8;font-size:12px;font-weight:700;color:#8a8c92;"><span>단계</span><span>확률</span><span>천장</span><span>평균</span><span>평균 비용</span></div>
+          <sc-for list="{{ pt.up.steps }}" as="s" hint-placeholder-count="1"><div style="display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr));gap:6px;padding:10px 12px;border-top:1px solid #efefec;font-size:14px;font-weight:700;color:#3a3b3f;font-variant-numeric:tabular-nums;"><span style="color:{{ s.color }};font-weight:800;">{{ s.label }}</span><span>{{ s.p }}</span><span>{{ s.C }}</span><span>{{ s.E }}</span><span>{{ s.cost }}</span></div></sc-for>
+        </div>
+        <span style="font-size:12px;color:#8a8c92;">천장: 그 횟수까지 등급이 안 오르면 다음 재설정에서 무조건 상승 · 넥슨 공개 값 (프라임 큐브는 천장 없음)</span>
+      </div>
+      </sc-if>
+      <sc-if value="{{ pt.isOpt }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px;">
+        <sc-if value="{{ pt.opt.noTable }}" hint-placeholder-val="{{ false }}"><span style="padding:24px 0;text-align:center;font-size:14px;font-weight:600;color:#8a8c92;">이 조건의 옵션 확률표가 아직 없어요</span></sc-if>
+        <sc-if value="{{ pt.opt.needTg }}" hint-placeholder-val="{{ false }}"><span style="padding:24px 0;text-align:center;font-size:14px;font-weight:600;color:#8a8c92;">목표 옵션을 골라 주세요</span></sc-if>
+        <sc-if value="{{ pt.opt.ready }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">1번에 뜰 확률</span><span style="font-size:26px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ pt.opt.p }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">평균 횟수</span><span style="font-size:26px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ pt.opt.E }}</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">평균 비용</span><span style="font-size:20px;font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ pt.opt.cost }}</span></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ pt.opt.q }}" as="q" hint-placeholder-count="3"><span style="padding:6px 12px;border-radius:999px;background:oklch(0.95 0.03 255);font-size:13px;font-weight:700;color:oklch(0.35 0.1 255);">{{ q.label }} {{ q.val }}</span></sc-for></div>
+        <span style="font-size:12px;color:#8a8c92;">{{ pt.opt.lineNote }} · 쓸만한 스킬·피격 후 무적은 1줄, 피격 시 데미지 무시·무적은 2줄까지</span>
+        </sc-if>
+      </div>
+      </sc-if>
+    </section>
+  </div>
+  <sc-if value="{{ pt.showAdmin }}" hint-placeholder-val="{{ false }}">
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">관리자 · 옵션 확률표</h2><span style="font-size:13px;font-weight:600;color:#6b6d73;">{{ pt.adm.msg }}</span></div>
+    <div style="padding:16px 20px;display:flex;flex-direction:column;gap:12px;">
+      <span style="font-size:14px;font-weight:800;color:#2a2b2f;">{{ pt.adm.label }}</span>
+      <span style="font-size:12px;color:#8a8c92;">넥슨 홈페이지 [가이드 → 확률형 아이템 → 큐브] 표를 복사해서 붙여넣기 · 한 줄에 '옵션 이름  확률%' (예: STR : +12%  9.0909%)</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px;">
+        <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">{{ pt.adm.aLabel }}</span><textarea value="{{ pt.adm.a }}" onChange="{{ pt.adm.onA }}" rows="12" style="box-sizing:border-box;width:100%;padding:10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;"></textarea></label>
+        <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">{{ pt.adm.bLabel }}</span><textarea value="{{ pt.adm.b }}" onChange="{{ pt.adm.onB }}" rows="12" style="box-sizing:border-box;width:100%;padding:10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;"></textarea></label>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+</div>
+</sc-if>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
@@ -3143,6 +3269,170 @@ class Component extends DCLogic {
     };
     setTimeout(step, 0);
   }
+  enhVals() {
+    const tab = this.state.enhTab || (() => { try { return localStorage.getItem(KEY + ':enhTab'); } catch (e) { return null; } })() || '스타포스', pot = tab === '잠재능력';
+    return { isSfTab: !pot, isPotTab: pot, enhTabs: ['스타포스', '잠재능력'].map(l => ({ label: l, bar: l === tab ? 'oklch(0.48 0.17 255)' : 'transparent', color: l === tab ? 'oklch(0.3 0.09 255)' : '#6b6d73', pick: () => { try { localStorage.setItem(KEY + ':enhTab', l); } catch (e) {} this.setState({ enhTab: l }); } })), ...(pot ? this.potVals() : this.sfVals()) };
+  }
+  potS() {
+    const d = { part: '무기', lv: 200, cur: '유니크', tgt: '레전드리', grade: '레전드리', goal: 'up', kind: 'main', mir: false, cost: {}, tg: [{ stat: '', min: '', all: false }] };
+    let s = this.state.pt; if (!s) { try { s = JSON.parse(localStorage.getItem(KEY + ':pt') || 'null'); } catch (e) {} }
+    return { ...d, ...(s || {}) };
+  }
+  potSet(p) { const pt = { ...this.potS(), ...p }; try { localStorage.setItem(KEY + ':pt', JSON.stringify(pt)); } catch (e) {} this.setState({ pt }); }
+  potItems(list) {
+    const a = list.filter(x => x && x[0] && x[1] > 0).map(([name, p]) => { const ns = name.match(/\d+(?:\.\d+)?/g), last = ns ? ns[ns.length - 1] : null, at = last != null ? name.lastIndexOf(last) : -1;
+      return { name, p, v: last != null ? parseFloat(last) : 1, stat: at >= 0 ? name.slice(0, at) + '#' + name.slice(at + last.length) : name }; });
+    const sum = a.reduce((s, o) => s + o.p, 0) || 1; a.forEach(o => { o.p /= sum; });
+    return a;
+  }
+  potParse(txt) {
+    return this.potItems(String(txt || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => { const m = l.match(/^(.*?)[\s\t]+([\d.]+)\s*%\s*$/) || l.match(/^(.*?)\t+([\d.]+)\s*$/); return m ? [m[1].trim(), parseFloat(m[2])] : null; }));
+  }
+  potBuiltin(key) {
+    let [kind, part, grade, band] = key.split('|');
+    if (part === '눈장식') part = '얼굴장식';
+    if (kind !== 'main' || !['무기', '엠블렘', '보조무기', '방패', '포스실드·소울링', '모자', '상의', '한벌옷', '신발', '망토', '장갑', '벨트', '어깨장식', '얼굴장식', '귀고리', '반지', '펜던트', '하트'].includes(part)) return null;
+    const gi = ['레어', '에픽', '유니크', '레전드리'].indexOf(grade); if (gi < 0) return null;
+    if (['모자', '상의', '한벌옷', '신발', '망토', '장갑', '벨트', '어깨장식', '얼굴장식', '귀고리', '반지', '펜던트', '하트'].includes(part)) {
+      const top = part === '상의' || part === '한벌옷', hi = band === '201', SS = ['STR', 'DEX', 'INT', 'LUK'], six = (v, w) => [...SS.map(s => [s + ' +' + v + '%', w]), ['최대 HP +' + v + '%', w], ['최대 MP +' + v + '%', w]];
+      const S = hi ? 13 : 12, H = { '100': 100, '110': 110, '120': 120, '201': 125 }[band] || 120, P = hi ? 4 : 3;
+      const RA = [...SS.map(s => [s + ' +' + S, 7.5]), ['최대 HP +' + H, 7.5], ['최대 MP +' + H, 7.5], ['방어력 +' + H, 5], ...SS.map(s => [s + ' +' + P + '%', 7.5]), ['최대 HP +' + P + '%', 5], ['최대 MP +' + P + '%', 5], ['방어력 +' + P + '%', 5], ['올스탯 +' + (hi ? 6 : 5), 5]];
+      const e = hi ? 7 : 6, EP = [...six(e, 14.2857), ['방어력 +' + e + '%', 8.5714], ['올스탯 +' + (hi ? 4 : 3) + '%', 5.7143], ...(top ? [['피격 후 무적시간 +1초', 8.5714]] : [])];
+      const u = hi ? 10 : 9, ua = hi ? 7 : 6, rf = band === '100' ? 20 : hi ? 35 : 30, ig = (q, w) => [['피격 시 ' + q + '% 확률로 데미지의 20% 무시', w], ['피격 시 ' + q + '% 확률로 데미지의 40% 무시', w]];
+      const UN = top ? [...SS.map(s => [s + ' +' + u + '%', 8.06452]), ['최대 HP +' + u + '%', 9.6774], ['최대 MP +' + u + '%', 9.6774], ['올스탯 +' + ua + '%', 6.4516], ...ig(5, 6.4516), ['피격 후 무적시간 +2초', 6.4516], ['피격 시 2% 확률로 7초간 무적', 6.4516], [rf + '% 확률로 받은 피해의 50%를 반사', 6.4516], [rf + '% 확률로 받은 피해의 70%를 반사', 3.2258], ['HP 회복 아이템 및 회복 스킬 효율 +30%', 6.4516]]
+        : [...SS.map(s => [s + ' +' + u + '%', 9.6154]), ['최대 HP +' + u + '%', 11.5385], ['최대 MP +' + u + '%', 11.5385], ['올스탯 +' + ua + '%', 7.6923], ...ig(5, 7.6923), ['HP 회복 아이템 및 회복 스킬 효율 +30%', 7.6923], ['<쓸만한 미스틱 도어> 스킬 사용 가능', 7.6923]];
+      const l = hi ? 13 : 12, la = hi ? 10 : 9, big = band === '120' || hi;
+      const LG = top ? [...six(l, 10.2564), ['올스탯 +' + la + '%', 7.6923], ...ig(10, 7.6923), ['피격 후 무적시간 +3초', 7.6923], ['피격 시 4% 확률로 7초간 무적', 7.6923]]
+        : big ? [...six(l, 9.7561), ['올스탯 +' + la + '%', 7.3171], ...ig(10, 7.3171), ['스킬 재사용 대기시간 -1초', 7.3171], ['스킬 재사용 대기시간 -2초', 4.878], ['<쓸만한 어드밴스드 블레스> 스킬 사용 가능', 7.3171]]
+        : [...six(l, 11.1111), ['올스탯 +' + la + '%', 8.3333], ...ig(10, 8.3333), ['스킬 재사용 대기시간 -1초', 8.3333]];
+      if (part === '망토' || part === '장갑' || part === '벨트' || part === '어깨장식' || part === '얼굴장식' || part === '귀고리' || part === '반지' || part === '펜던트' || part === '하트') {
+        const fc = part === '얼굴장식' || part === '귀고리' || part === '반지' || part === '펜던트' || part === '하트', mp = { '100': [10, 20], '110': [15, 30], '120': [15, 30], '201': [17, 35] }[band] || [15, 30];
+        const gl = part === '장갑', hn = hi ? 60 : H / 2, big = band === '120' || hi, kh = { '100': 85, '110': 90, '120': 95, '201': 97 }[band] || 95;
+        const NB = [...SS.map(s => [s + ' +6', 1]), ['최대 HP +' + hn, 1], ['최대 MP +' + hn, 1], ['방어력 +' + hn, 1]];
+        const E2 = gl ? [...six(e, 12.1951), ['방어력 +' + e + '%', 7.3171], ['올스탯 +' + (hi ? 4 : 3) + '%', 4.878], ['몬스터 처치 시 15% 확률로 ' + kh + '의 HP 회복', 7.3171], ['몬스터 처치 시 15% 확률로 ' + kh + '의 MP 회복', 7.3171]] : EP;
+        const hr = ['HP 회복 아이템 및 회복 스킬 효율 +30%'];
+        const U2 = fc ? [...SS.map(s => [s + ' +' + u + '%', 12.5]), ['최대 HP +' + u + '%', 15], ['최대 MP +' + u + '%', 15], ['올스탯 +' + ua + '%', 10], [hr[0], 10]] : !gl ? [...SS.map(s => [s + ' +' + u + '%', 10.4167]), ['최대 HP +' + u + '%', 12.5], ['최대 MP +' + u + '%', 12.5], ['올스탯 +' + ua + '%', 8.3333], ...ig(5, 8.3333), [hr[0], 8.3333]]
+          : big ? [...SS.map(s => [s + ' +' + u + '%', 8.9286]), ['최대 HP +' + u + '%', 10.7143], ['최대 MP +' + u + '%', 10.7143], ['올스탯 +' + ua + '%', 7.1429], ...SS.map(s => [s + ' +32', 1.7857]), ...ig(5, 7.1429), [hr[0], 7.1429], ['<쓸만한 샤프 아이즈> 스킬 사용 가능', 7.1429]]
+          : [...SS.map(s => [s + ' +' + u + '%', 9.6154]), ['최대 HP +' + u + '%', 11.5385], ['최대 MP +' + u + '%', 11.5385], ['올스탯 +' + ua + '%', 7.6923], ...SS.map(s => [s + ' +32', 1.9231]), ...ig(5, 7.6923), [hr[0], 7.6923]];
+        const L2 = part === '하트' ? [...six(l, 14.8148), ['올스탯 +' + la + '%', 11.1111]] : fc ? [...six(l, 10.2564), ['올스탯 +' + la + '%', 7.6923], ['모든 스킬의 MP 소모 -' + mp[0] + '%', 7.6923], ['모든 스킬의 MP 소모 -' + mp[1] + '%', 7.6923], ['메소 획득량 +20%', 7.6923], ['아이템 드롭률 +20%', 7.6923]] : !gl ? [...six(l, 12.1212), ['올스탯 +' + la + '%', 9.09091], ...ig(10, 9.09091)]
+          : big ? [...six(l, 10), ['크리티컬 데미지 +8%', 10], ['올스탯 +' + la + '%', 7.5], ...ig(10, 7.5), ['<쓸만한 윈드 부스터> 스킬 사용 가능', 7.5]]
+          : [...six(l, 10.8108), ['크리티컬 데미지 +8%', 10.8108], ['올스탯 +' + la + '%', 8.1081], ...ig(10, 8.1081)];
+        const CG = [RA, E2, U2, L2]; return { a: CG[gi], b: gi ? CG[gi - 1] : NB };
+      }
+      if (part === '신발') {
+        const mv = { '100': 6, '110': 6, '120': 8, '201': 9 }[band] || 8, hn = hi ? 60 : H / 2, mn = Math.floor(mv / 2);
+        RA.length = 0; RA.push(...SS.map(s => [s + ' +' + S, 6.8182]), ['최대 HP +' + H, 6.8182], ['최대 MP +' + H, 6.8182], ['이동속도 +' + mv, 4.5455], ['점프력 +' + mv, 4.5455], ['방어력 +' + H, 4.5455], ...SS.map(s => [s + ' +' + P + '%', 6.8182]), ['최대 HP +' + P + '%', 4.5455], ['최대 MP +' + P + '%', 4.5455], ['방어력 +' + P + '%', 4.5455], ['올스탯 +' + (hi ? 6 : 5), 4.5455]);
+        UN[UN.length - 1] = ['<쓸만한 헤이스트> 스킬 사용 가능', 7.6923];
+        const LS = [...six(l, 11.1111), ['올스탯 +' + la + '%', 8.3333], ...ig(10, 8.3333), ['<쓸만한 컴뱃 오더스> 스킬 사용 가능', 8.3333]];
+        const SG = [RA, EP, UN, LS]; return { a: SG[gi], b: gi ? SG[gi - 1] : [...SS.map(s => [s + ' +6', 9.6]), ['최대 HP +' + hn, 9.6], ['최대 MP +' + hn, 9.6], ['이동속도 +' + mn, 6.4], ['점프력 +' + mn, 6.4], ['방어력 +' + hn, 9.6]] };
+      }
+      const AG = [RA, EP, UN, LG]; return { a: AG[gi], b: gi ? AG[gi - 1] : [...SS.map(s => [s + ' +6', 1]), ['최대 HP +' + H / 2, 1], ['최대 MP +' + H / 2, 1], ['방어력 +' + H / 2, 1]] };
+    }
+    const R = { '10': [2, 10, 2, 1, 1, 20, 20, [1, 1, 1, 1, 1, 1], 0, 1, 5, 1, 4], '20': [2, 20, 2, 1, 1, 40, 30, [1, 1, 1, 1, 1, 1], 0, 1, 10, 1, 4], '30': [4, 30, 4, 1, 2, 60, 40, [2, 1, 1, 1, 1, 1], 15, 2, 15, 2, 4], '40': [4, 40, 4, 2, 2, 80, 50, [2, 1, 1, 1, 1, 1], 15, 2, 20, 2, 4],
+      '50': [6, 50, 6, 2, 3, 100, 60, [3, 1, 1, 1, 1, 1], 15, 3, 25, 3, 4], '60': [8, 60, 6, 2, 3, 120, 70, [3, 1, 1, 2, 1, 1], 15, 4, 30, 3, 4], '70': [8, 70, 8, 2, 4, 140, 80, [4, 1, 1, 2, 1, 1], 15, 4, 35, 4, 4], '80': [10, 80, 8, 3, 4, 160, 90, [4, 2, 2, 2, 2, 2], 15, 5, 40, 4, 4],
+      '90': [10, 90, 10, 3, 5, 180, 100, [5, 2, 2, 2, 2, 2], 15, 5, 45, 5, 4], '100': [12, 100, 12, 3, 5, 200, 110, [5, 2, 2, 2, 2, 2], 15, 6, 50, 6, 4], '110': [12, 110, 12, 3, 5, 220, 120, [6, 2, 2, 3, 2, 2], 15, 6, 55, 6, 4], '120': [12, 120, 12, 3, 5, 240, 120, [6, 2, 2, 3, 2, 2], 15, 6, 60, 6, 4], '201': [13, 125, 13, 4, 6, 250, 125, [7, 3, 3, 4, 3, 3], 20, 6, 60, 6, 5] };
+    const r = R[band]; if (!r) return null;
+    const [S, H, A, P, AS, HR, MR, st, IED, n, nh, na, cr] = r, ST = ['STR', 'DEX', 'INT', 'LUK'];
+    const a = [...ST.map(s => [s + ' +' + S, 3]), ['최대 HP +' + H, 3], ['최대 MP +' + H, 3], ['공격력 +' + A, 2], ['마력 +' + A, 2], ...ST.map(s => [s + ' +' + P + '%', 3]), ['공격력 +' + P + '%', 1], ['마력 +' + P + '%', 1], ['크리티컬 확률 +' + cr + '%', 1], ['데미지 +' + P + '%', 1], ['올스탯 +' + AS, 2],
+      ['공격 시 20% 확률로 ' + HR + '의 HP 회복', 1], ['공격 시 20% 확률로 ' + MR + '의 MP 회복', 1], ...[['20%', '중독'], ['10%', '기절'], ['20%', '슬로우'], ['20%', '암흑'], ['10%', '빙결'], ['10%', '봉인']].map(([q, t], k) => ['공격 시 ' + q + ' 확률로 ' + st[k] + '레벨 ' + t + '효과 적용', 1]), ...(IED ? [['몬스터 방어율 무시 +' + IED + '%', 1]] : [])];
+    const b = [...ST.map(s => [s + ' +' + n, 3]), ['최대 HP +' + nh, 3], ['최대 MP +' + nh, 3], ['공격력 +' + na, 2], ['마력 +' + na, 2]];
+    const hi = band === '201', x = (v120, v201) => hi ? v201 : v120;
+    const e = x(6, 7), EP = [...ST.map(s => [s + ' +' + e + '%', 10.8696]), ['최대 HP +' + e + '%', 10.8696], ['최대 MP +' + e + '%', 10.8696], ['공격력 +' + e + '%', 4.3478], ['마력 +' + e + '%', 4.3478], ['크리티컬 확률 +' + x(8, 9) + '%', 4.3478], ['데미지 +' + e + '%', 4.3478], ['올스탯 +' + x(3, 4) + '%', 4.3478],
+      ['공격 시 20% 확률로 ' + (band === '100' ? 300 : band === '110' ? 330 : x(360, 370)) + '의 HP 회복', 4.3478], ['공격 시 20% 확률로 ' + (band === '100' ? 165 : band === '110' ? 180 : x(180, 195)) + '의 MP 회복', 4.3478], ['몬스터 방어율 무시 +' + x(15, 20) + '%', 4.3478]];
+    const u = x(9, 10), UN = [...ST.map(s => [s + ' +' + u + '%', 11.6279]), ['공격력 +' + u + '%', 6.9767], ['마력 +' + u + '%', 6.9767], ['크리티컬 확률 +' + x(9, 10) + '%', 9.3023], ['데미지 +' + u + '%', 6.9767], ['올스탯 +' + x(6, 7) + '%', 9.3023], ['몬스터 방어율 무시 +' + x(30, 35) + '%', 6.9767], ['보스 몬스터 데미지 +' + x(30, 35) + '%', 6.9767]];
+    const l = x(12, 13), LG = [...ST.map(s => [s + ' +' + l + '%', 9.7561]), ['공격력 +' + l + '%', 4.878], ['마력 +' + l + '%', 4.878], ['크리티컬 확률 +' + l + '%', 4.878], ['데미지 +' + l + '%', 4.878], ['올스탯 +' + x(9, 10) + '%', 7.3171], ['공격력 +32', 4.878], ['마력 +32', 4.878],
+      ['몬스터 방어율 무시 +' + x(35, 40) + '%', 4.878], ['몬스터 방어율 무시 +' + x(40, 45) + '%', 4.878], ['보스 몬스터 데미지 +' + x(35, 40) + '%', 9.7561], ['보스 몬스터 데미지 +' + x(40, 45) + '%', 4.878]];
+    if (part === '보조무기' || part === '방패' || part === '포스실드·소울링') { UN.push(['피격 시 5% 확률로 데미지의 20% 무시', 9.3023], ['피격 시 5% 확률로 데미지의 40% 무시', 9.3023]); LG.push(['피격 시 10% 확률로 데미지의 20% 무시', 7.3171], ['피격 시 10% 확률로 데미지의 40% 무시', 7.3171]); }
+    const G = [a, EP, UN, LG].map(t => part === '엠블렘' ? t.filter(o => !/보스 몬스터/.test(o[0])) : part === '포스실드·소울링' ? t.filter(o => !/최대 MP/.test(o[0])) : t);
+    return { a: G[gi], b: gi ? G[gi - 1] : part === '포스실드·소울링' ? b.filter(o => !/최대 MP/.test(o[0])) : b };
+  }
+  potCalc(A, B, L, tg) {
+    const cat1 = n => /쓸만한/.test(n) ? 'use' : /피격 후 무적/.test(n) ? 'inv' : '', cat2 = n => /피격 시.*데미지.*무시/.test(n) ? 'dg' : /피격 시.*무적/.test(n) ? 'iv' : /메소 획득량/.test(n) ? 'ms' : /아이템 드롭률/.test(n) ? 'dr' : '';
+    const line = w => { const m = new Map(); [[A, w[0]], [B, w[1]]].forEach(([arr, f]) => { if (!f) return; arr.forEach(o => { const c = tg.map(t => t.keys.has(o.stat) ? o.v : 0), k1 = cat1(o.name), k2 = cat2(o.name), key = c.join(',') + '|' + k1 + '|' + k2, e = m.get(key); if (e) e.p += o.p * f; else m.set(key, { p: o.p * f, c, k1, k2 }); }); }); return [...m.values()]; };
+    const D = L.map(line); let P = 0;
+    for (const a of D[0]) {
+      let t2 = 0; for (const b of D[1]) if (!(a.k1 && b.k1 === a.k1)) t2 += b.p;
+      if (!(t2 > 0)) continue;
+      for (const b of D[1]) {
+        if (a.k1 && b.k1 === a.k1) continue;
+        const pab = a.p * b.p / t2; if (!pab) continue;
+        const ex2 = a.k2 && a.k2 === b.k2 ? a.k2 : ''; let tot = 0, good = 0;
+        for (const c of D[2]) { if ((c.k1 && (c.k1 === a.k1 || c.k1 === b.k1)) || (ex2 && c.k2 === ex2)) continue; tot += c.p; if (tg.every((t, j) => a.c[j] + b.c[j] + c.c[j] >= t.min)) good += c.p; }
+        if (tot > 0) P += pab * good / tot;
+      }
+    }
+    return Math.min(1, P);
+  }
+  savePotOpt(all) {
+    this._poDirty = true; this.setState({ potOpt: all, poMsg: '저장 중…' });
+    clearTimeout(this._poT);
+    this._poT = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ poMsg: '로그인이 만료됐어요.' }); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'potopt', data: { tables: this.state.potOpt, at: new Date().toISOString() }, updated_at: new Date().toISOString() }]) });
+        if (!r.ok) throw new Error();
+        this.setState({ poMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
+      } catch (e) { this.setState({ poMsg: '저장 실패 — 다시 시도해 주세요.' }); }
+    }, 900);
+  }
+  potVals() {
+    const pt = this.potS(), set = p => this.potSet(p), adm = !!this.state.admin;
+    const on = v => v ? { bg: 'oklch(0.48 0.17 255)', color: '#fff', border: 'oklch(0.48 0.17 255)' } : { bg: '#fff', color: '#3a3b3f', border: '#e3e3e0' };
+    const GR = ['레어', '에픽', '유니크', '레전드리'], GC = ['oklch(0.55 0.13 240)', 'oklch(0.5 0.17 300)', 'oklch(0.6 0.15 75)', 'oklch(0.55 0.16 145)'];
+    const gOn = (v, i) => v ? { bg: GC[i], color: '#fff', border: GC[i] } : { bg: '#fff', color: GC[i], border: '#e3e3e0' };
+    const UP = { main: [0.15, 0.035, 0.014], addi: [0.02381, 0.009804, 0.007] }, CEIL = { main: [10, 42, 107], addi: [62, 152, 214] };
+    const PARTS = ['무기', '보조무기', '방패', '포스실드·소울링', '엠블렘', '모자', '상의', '하의', '한벌옷', '신발', '장갑', '망토', '어깨장식', '벨트', '얼굴장식', '눈장식', '귀고리', '반지', '펜던트', '하트'];
+    const lv = Math.max(100, Math.min(250, parseInt(pt.lv) || 200));
+    const band = pt.part === '하트' ? (lv < 120 ? ['100', '100제'] : ['120', '120~200제']) : pt.part === '눈장식' ? (lv < 120 ? ['100', '100제'] : lv > 200 ? ['201', '201~250제'] : ['120', '120~200제']) : pt.part === '한벌옷' ? (lv < 110 ? ['100', '100제'] : lv < 120 ? ['110', '110제'] : ['120', '120~200제']) : (pt.part === '모자' || pt.part === '신발' || pt.part === '망토' || pt.part === '장갑' || pt.part === '벨트' || pt.part === '어깨장식' || pt.part === '얼굴장식' || pt.part === '귀고리' || pt.part === '반지' || pt.part === '펜던트') ? (lv < 110 ? ['100', '100제'] : lv < 120 ? ['110', '110제'] : lv > 200 ? ['201', '201~250제'] : ['120', '120~200제']) : pt.part === '상의' ? (lv < 120 ? ['100', '100제'] : lv > 200 ? ['201', '201~250제'] : ['120', '120~200제']) : pt.part === '엠블렘' ? (lv < 120 ? ['100', '100제'] : ['120', '120~200제']) : (pt.part === '보조무기' || pt.part === '방패' || pt.part === '포스실드·소울링') ? (lv < 110 ? ['100', '100제'] : lv < 120 ? ['110', '110제'] : ['120', '120제 이상']) : lv > 200 ? ['201', '201~250제'] : ['120', '120~200제'];
+    const fmtL = v => { v = Math.round(v); if (v <= 0) return '0'; const jo = Math.floor(v / 1e12), ok = Math.floor(v % 1e12 / 1e8), man = Math.floor(v % 1e8 / 1e4); const a = []; if (jo) a.push(jo.toLocaleString() + '조'); if (ok) a.push(ok.toLocaleString() + '억'); if (man && !jo) a.push(man.toLocaleString() + '만'); return a.join(' ') || v.toLocaleString(); };
+    const pc = x => x >= 0.01 ? (Math.round(x * 10000) / 100) + '%' : x > 0 ? (x * 100).toPrecision(3) + '%' : '0%';
+    const num = s => parseInt(String(s || '').replace(/[^\d]/g, '')) || 0;
+    const QS = [['50%', 0.5], ['90%', 0.9], ['99%', 0.99]];
+    const gi = Math.max(0, GR.indexOf(pt.grade)), ci = Math.max(0, Math.min(2, GR.indexOf(pt.cur))), ti = Math.max(ci + 1, GR.indexOf(pt.tgt));
+    const COST = { main: [[400, 425, 450, 500], [1600, 1700, 1800, 2000], [3400, 3612.5, 3825, 4250], [4000, 4250, 4500, 5000]], addi: [[975, 1037.5, 1100, 1225], [2730, 2905, 3080, 3430], [6630, 7055, 7480, 8330], [7800, 8300, 8800, 9800]] };
+    const cb = lv >= 250 ? 3 : lv >= 200 ? 2 : lv >= 160 ? 1 : 0, CBN = ['150레벨 이하', '160~190레벨', '200~240레벨', '250레벨'];
+    const costOf = g => COST[pt.kind][GR.indexOf(g)][cb] * 1e4;
+    const isUp = pt.goal !== 'opt';
+    const costs = (isUp ? GR.slice(ci, ti) : [GR[gi]]).map(g => ({ label: g, color: GC[GR.indexOf(g)], txt: fmtL(costOf(g)) + ' 메소' }));
+    let up = {}, opt = {}, admV = {}, showAdmin = false;
+    if (isUp) {
+      const steps = []; for (let i = ci; i < ti; i++) { let p = UP[pt.kind][i]; if (pt.mir) p = Math.min(1, p * 2); const C = CEIL[pt.kind][i]; steps.push({ i, p, C, E: (1 - Math.pow(1 - p, C)) / p }); }
+      let dist = [1];
+      steps.forEach(s => { const d = new Array(s.C + 1).fill(0); for (let k = 1; k < s.C; k++) d[k] = Math.pow(1 - s.p, k - 1) * s.p; d[s.C] = Math.pow(1 - s.p, s.C - 1); const n = new Array(dist.length + s.C).fill(0); dist.forEach((a, x) => { if (a) d.forEach((b, y) => { if (b) n[x + y] += a * b; }); }); dist = n; });
+      const qd = q => { let c = 0; for (let k = 0; k < dist.length; k++) { c += dist[k]; if (c >= q - 1e-9) return k; } return dist.length - 1; };
+      const E = steps.reduce((a, s) => a + s.E, 0), cost = steps.reduce((a, s) => a + s.E * costOf(GR[s.i]), 0), max = steps.reduce((a, s) => a + s.C, 0), maxCost = steps.reduce((a, s) => a + s.C * costOf(GR[s.i]), 0);
+      up = { E: E.toFixed(1), cost: cost ? fmtL(cost) + ' 메소' : '비용을 넣어 주세요', max: max + '번', maxCost: maxCost ? fmtL(maxCost) + ' 메소' : '', q: QS.map(([l, q]) => ({ label: l + ' 확률로', val: qd(q) + '번 안에' })),
+        steps: steps.map(s => ({ label: GR[s.i] + ' → ' + GR[s.i + 1], color: GC[s.i + 1], p: pc(s.p), C: s.C + '번', E: s.E.toFixed(1) + '번', cost: costOf(GR[s.i]) ? fmtL(s.E * costOf(GR[s.i])) : '-' })) };
+    } else {
+      const key = [pt.kind, pt.part, GR[gi], band[0]].join('|'), T = (this.state.potOpt || {})[key] || {};
+      const BI = this.potBuiltin(key), A = T.a ? this.potParse(T.a) : BI ? this.potItems(BI.a) : [], B = T.b ? this.potParse(T.b) : BI ? this.potItems(BI.b) : [], stats = [...new Set([...A, ...B].map(o => o.stat))];
+      const lp = [0.019608, 0.047619, 0.019608, 0.004975][gi], L = pt.kind === 'main' ? [[1, 0], [0.2, 0.8], [0.05, 0.95]] : [[1, 0], [lp, 1 - lp], [lp, 1 - lp]];
+      const allable = s => /^(STR|DEX|INT|LUK)\b/.test(s || '');
+      const tgs = pt.tg.filter(t => t.stat && stats.includes(t.stat)).map(t => { const keys = new Set([t.stat]); if (allable(t.stat)) stats.filter(s => s.startsWith('올스탯') && s.includes('%') === t.stat.includes('%')).forEach(s => keys.add(s)); return { keys, min: parseFloat(t.min) || 0 }; });
+      const mk = JSON.stringify([key, T.a, T.b, pt.tg, L]); if (this._potMk !== mk) { this._potMk = mk; this._potP = tgs.length && A.length ? this.potCalc(A, B, L, tgs) : null; }
+      const P = this._potP, c1 = costOf(GR[gi]), tg = pt.tg, setTg = (k, p) => set({ tg: tg.map((t, j) => j === k ? { ...t, ...p } : t) });
+      const lowName = gi ? GR[gi - 1] : '노멀';
+      opt = { noTable: !A.length, needTg: A.length > 0 && !tgs.length, ready: A.length > 0 && tgs.length > 0 && P != null,
+        p: P != null ? pc(P) : '', E: P > 0 ? (1 / P).toFixed(1) + '번' : '불가능', cost: P > 0 ? (c1 ? fmtL(c1 / P) + ' 메소' : '비용을 넣어 주세요') : '-',
+        q: P > 0 ? QS.map(([l, q]) => ({ label: l + ' 확률로', val: (P >= 1 ? 1 : Math.ceil(Math.log(1 - q) / Math.log(1 - P))) + '번 안에' })) : [],
+        lineNote: pt.kind === 'main' ? '2번째 줄 20% · 3번째 줄 5% 확률로 ' + GR[gi] + ' 옵션' : '2·3번째 줄 ' + pc(lp) + ' 확률로 ' + GR[gi] + ' 옵션',
+        statOpts: stats.map(v => ({ v, label: v.replace('#', 'N') })), canAdd: tg.length < 3, add: () => set({ tg: [...tg, { stat: '', min: '', all: false }] }),
+        rows: tg.map((t, k) => { const a = on(!t.noAll); const sv = stats.includes(t.stat) ? t.stat : ''; return { stat: sv, min: t.min, canAll: allable(sv), allBg: a.bg, allColor: a.color, allBorder: a.border,
+          onStat: e => setTg(k, { stat: e.target.value }), onMin: e => setTg(k, { min: e.target.value }), toggleAll: () => setTg(k, { noAll: !t.noAll }), del: () => set({ tg: tg.length > 1 ? tg.filter((_, j) => j !== k) : [{ stat: '', min: '', all: false }] }) }; }) };
+      if (adm) { showAdmin = true; const upd = p => this.savePotOpt({ ...(this.state.potOpt || {}), [key]: { ...((this.state.potOpt || {})[key] || {}), ...p } });
+        admV = { msg: this.state.poMsg || '', label: (pt.kind === 'main' ? '윗잠' : '에디셔널') + ' · ' + pt.part + ' · ' + GR[gi] + ' · ' + band[1], a: T.a || '', b: T.b || '',
+          aLabel: GR[gi] + ' 옵션 (같은 등급) · ' + A.length + '개' + (!T.a && BI ? ' · 내장 표 사용 중' : ''), bLabel: lowName + ' 옵션 (한 단계 아래) · ' + B.length + '개' + (!T.b && BI ? ' · 내장 표 사용 중' : ''), onA: e => upd({ a: e.target.value }), onB: e => upd({ b: e.target.value }) }; }
+    }
+    const m = on(pt.mir);
+    return { pt: { isUp, isOpt: !isUp, lv: pt.lv, band: isUp ? '' : band[1] + ' 확률표', costBand: CBN[cb] + ' 기준', onLv: e => set({ lv: e.target.value }), costs, up, opt, showAdmin, adm: admV,
+      mirToggle: () => set({ mir: !pt.mir }), mirBg: m.bg, mirColor: m.color, mirBorder: m.border,
+      kinds: [['main', '윗잠'], ['addi', '에디셔널']].map(([v, l]) => ({ label: l, ...on(pt.kind === v), pick: () => set({ kind: v }) })),
+      goals: [['up', '등급 올리기'], ['opt', '옵션 띄우기']].map(([v, l]) => ({ label: l, ...on((pt.goal === 'opt' ? 'opt' : 'up') === v), pick: () => set({ goal: v }) })),
+      parts: PARTS.map(l => ({ label: l, ...on(pt.part === l), pick: () => set({ part: l }) })),
+      curs: GR.slice(0, 3).map((l, i) => ({ label: l, ...gOn(i === ci, i), pick: () => set({ cur: l, tgt: GR.indexOf(pt.tgt) > i ? pt.tgt : GR[i + 1] }) })),
+      tgts: GR.slice(ci + 1).map((l, k) => ({ label: l, ...gOn(ci + 1 + k === ti, ci + 1 + k), pick: () => set({ tgt: l }) })),
+      grades: GR.map((l, i) => ({ label: l, ...gOn(i === gi, i), pick: () => set({ grade: l }) })) } };
+  }
   sfVals() {
     const sf = this.sfS(), M = this.sfModel(sf), pol = this.sfPolicy(sf, M), set = p => this.sfSet(p);
     const on = v => v ? { bg: 'oklch(0.48 0.17 255)', color: '#fff', border: 'oklch(0.48 0.17 255)' } : { bg: '#fff', color: '#3a3b3f', border: '#e3e3e0' };
@@ -3565,6 +3855,7 @@ class Component extends DCLogic {
       rows.forEach(row => { if (TABS.includes(row.tab) && row.data && row.data.dates) all[row.tab] = row.data; });
       const guides = {}; rows.forEach(row => { if (row.tab && row.tab.startsWith('guide:') && row.data) guides[row.tab.slice(6)] = row.data; });
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
+      const por = rows.find(row => row.tab === 'potopt'); if (por && por.data && por.data.tables && !this._poDirty) this.setState({ potOpt: por.data.tables });
       const isr = rows.find(row => row.tab === 'itemset'); if (isr && isr.data && isr.data.sets && !this._isDirty) this.setState({ itemSets: isr.data.sets });
       const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
       const mmr = rows.find(row => row.tab === 'mymae'); if (mmr && mmr.data && Array.isArray(mmr.data.prompts) && !this._mmDirty) this.setState({ mmPrompts: mmr.data.prompts });
@@ -4877,7 +5168,7 @@ class Component extends DCLogic {
           const exp = rem != null && !fake ? rem + JB_LAG / 1000 : null;
           if (exp == null) { setT(); this._alerted[s.id] = false; D.down = 0; }
           else if (sec > exp + 3) { setT(); if (sec - 1 > (Number(s.before) || 0)) this._alerted[s.id] = false; D.down = 0; }
-          else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= 4) { setT(); D.down = 0; } }
+          else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= (exp - sec > 15 ? 12 : 4)) { setT(); D.down = 0; } }
           else D.down = 0; }
         else if (D.down) D.down = 0;
         const shown = rem != null && !fake ? Math.max(0, Math.round(rem + JB_LAG / 1000)) : sec;
@@ -4900,7 +5191,8 @@ class Component extends DCLogic {
       D.prev = null; D.wm = null;
       const trusted = D.secAt && rem != null && rem > 5 && now - D.secAt < 90000;
       if (D.on && trusted) D.msg = '숫자 잠깐 안 보임 · 타이머는 계속';
-      if (D.on && ++D.miss >= (trusted ? 20 : 6)) { D.on = false; D.miss = 0; D.secAt = 0;
+      const far = rem != null && rem > (Number(s.before) || 0) + 10;
+      if (D.on && ++D.miss >= (trusted || far ? 20 : 6)) { D.on = false; D.miss = 0; D.secAt = 0;
         if (rem != null && !this._alerted[s.id]) this._run[s.id] = now; else if (rem != null) delete this._run[s.id]; }
       if (!D.on) { D.msg = '버프 기다리는 중'; D.secAt = 0; }
     }
@@ -5687,7 +5979,7 @@ class Component extends DCLogic {
           areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '스타포스', isMm: area === '나의매애기',
           ...(area === '나의매애기' ? this.mmVals() : {}),
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
-          ...(area === '스타포스' ? this.sfVals() : {}),
+          ...(area === '스타포스' ? this.enhVals() : {}),
           ...(() => {
             const GT = ['직업가이드', '보약', '환산별템세팅', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
@@ -6139,7 +6431,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 80,
+      isAdmin: admin, appVer: 81,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
