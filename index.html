@@ -6341,7 +6341,7 @@ class Component extends DCLogic {
             const spcGroups = isAI && aiT === '특수코어' ? [{ name: '전체 직업 (이름순)', jobs: JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')) }].map(({ name, jobs }) => ({ name, jobs: jobs.map(jb => { const sc = this.loadPetBuff(jb, 'specialcore'), rows = sc && sc.items ? sc.items.filter(x => x.pct >= 3).slice(0, 5).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', tip: x.name + ' · ' + x.count + '명' })) : [];
               return { job: jb, note: sc ? (sc.date || '') + ' · ' + sc.sample + '명' : '', rows, empty: !rows.length }; }) })) : [];
             return { ...gv, raidOn: g === '유니온챔피언', ...(() => {
-                const on = g === '유니온챔피언', sim = on && !!this.state.admin && !!this.state.champSim, COST = [50, 125, 200, 300, 500], cum = n => COST.slice(0, n).reduce((a, b) => a + b, 0);
+                const on = g === '유니온챔피언', sim = on && !!this.state.admin && !!this.state.champSim, COST = [50, 75, 75, 100, 200], cum = n => COST.slice(0, n).reduce((a, b) => a + b, 0);
                 const NAMES = ['올스탯/최대HP', '공격력/마력', '보스 데미지', '방어율 무시', '크리 데미지', '경험치 획득'];
                 const lv = this.state.champLv || {}, setLv = (k, v) => this.setState(s => ({ champLv: { ...(s.champLv || {}), [k]: Math.max(0, Math.min(5, v)) } }));
                 const total = NAMES.reduce((a, k) => a + cum(lv[k] || 0), 0), fmt = n => n.toLocaleString('ko-KR');
@@ -6356,7 +6356,7 @@ class Component extends DCLogic {
                     const c = COST[L[best]]; sum += c; L[best]++; out.push({ no: String(out.length + 1), name: best, lv: L[best] + '단계', coin: fmt(c), sum: fmt(sum), eff: (bv * 100).toFixed(2), bg: out.length % 2 ? '#fff' : 'oklch(0.97 0.012 220)', hit: (Number(budget) || 0) > 0 && sum <= Number(budget) }); }
                   return out.map(r => ({ ...r, color: r.hit ? 'oklch(0.5 0.17 25)' : '#2a2b2f' })); })();
                 const WN = NAMES.filter(k => k !== '경험치 획득');
-                const steps = (() => { const res = []; for (let n = 6; n <= Math.min(15, order.length); n++) { const L = {}; order.slice(0, n).forEach(r => { L[r.name] = (L[r.name] || 0) + 1; }); const last = order[n - 1].name;
+                const steps = (() => { const res = []; for (let n = 6; n <= Math.min(20, order.length); n++) { const L = {}; order.slice(0, n).forEach(r => { L[r.name] = (L[r.name] || 0) + 1; }); const last = order[n - 1].name;
                   res.push({ title: (n - 5) + '단계 (' + order[n - 1].sum + ')', cells: WN.map((k, i) => ({ name: ['올스탯', '공마', '보공', '방무', '크뎀'][i], v: L[k] ? String(L[k]) : '-', bg: i % 2 ? '#fff' : 'oklch(0.97 0.012 220)', color: L[k] ? '#2a2b2f' : '#b8bbc0' })) }); } return res; })();
                 return { raidMain: on && !sim, raidSimOn: sim, champMapOn: !!this.state.champMap, champMapShow: () => this.setState({ champMap: true }), champMapHide: () => this.setState({ champMap: false }), champSimOpen: () => { this.setState({ champSim: true }); window.scrollTo(0, 0); }, champSimClose: () => { this.setState({ champSim: false }); window.scrollTo(0, 0); },
                   champSimTotal: fmt(total), champSimMax: fmt(cum(5) * NAMES.length), champBudget: String(budget), champSimAuto: auto, champOrder: order, champOrderEmpty: !order.length, champStepHead: WN, champSteps: steps, champStepsOn: steps.length > 0,
@@ -6606,7 +6606,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 83,
+      isAdmin: admin, appVer: 84,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
