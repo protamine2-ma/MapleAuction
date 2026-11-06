@@ -1136,9 +1136,30 @@ body{overflow-x:clip;}
         </div>
       </sc-if>
     </div>
-    <sc-if value="{{ growAdminTab }}" hint-placeholder-val="{{ false }}"><button onClick="{{ growTabs.3.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.3.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.3.weight }};color:{{ growTabs.3.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">관리자 정보</button></sc-if>
+    <button onClick="{{ growTabs.3.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.3.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.3.weight }};color:{{ growTabs.3.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">챔피언레이드</button>
+    <sc-if value="{{ growAdminTab }}" hint-placeholder-val="{{ false }}"><button onClick="{{ growTabs.4.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.4.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.4.weight }};color:{{ growTabs.4.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">관리자 정보</button></sc-if>
   </div>
 </nav>
+<sc-if value="{{ raidOn }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1320px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언레이드</h1>
+    <span style="padding:5px 12px;border:2px solid #2a2b2f;border-radius:6px;background:#e9e9e6;font-size:15px;font-weight:800;color:#2a2b2f;">사냥과 보스 총 6STAGE</span>
+  </div>
+  <div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px;max-width:1000px;">
+      <sc-for list="{{ raidCols }}" as="c" hint-placeholder-count="5">
+        <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;background:oklch(0.68 0.1 220);color:#fff;font-size:17px;font-weight:800;text-align:center;"><span style="padding:10px 4px;">{{ c.stage }}</span><span style="padding:10px 4px;border-left:1px solid rgba(255,255,255,0.35);">위치</span></div>
+          <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e3e8ec;background:{{ r.bg }};font-size:19px;font-weight:800;text-align:center;"><span style="padding:10px 4px;color:#2a2b2f;">{{ r.no }}</span><span style="padding:10px 4px;border-left:1px solid #e3e8ec;color:{{ r.color }};">{{ r.pos }}</span></div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
 <sc-if value="{{ adminInfo }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:1320px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -5981,7 +6002,7 @@ class Component extends DCLogic {
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(area === '스타포스' ? this.enhVals() : {}),
           ...(() => {
-            const GT = ['직업가이드', '보약', '환산별템세팅', ...(this.state.admin ? ['관리자 정보'] : [])];
+            const GT = ['직업가이드', '보약', '환산별템세팅', '챔피언레이드', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
             if (!GT.includes(g)) g = GT[0];
             const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
@@ -6019,7 +6040,7 @@ class Component extends DCLogic {
                 onUp: () => k > 0 && updSet(d => { const a = d.groups[gi].rows; [a[k - 1], a[k]] = [a[k], a[k - 1]]; }),
                 onDown: () => k < rows.length - 1 && updSet(d => { const a = d.groups[gi].rows; [a[k + 1], a[k]] = [a[k], a[k + 1]]; }) }; }); })(),
               onAdd: () => updSet(d => { d.groups[gi].rows.push({ name: '', sf: '', pot: '', add: '', flame: '', scroll: '' }); }) })) : [] };
-            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' }), ...setVals, ...setAvgVals };
+            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' && g !== '챔피언레이드' }), ...setVals, ...setAvgVals };
             const byT = this.state.byTab || (() => { try { return localStorage.getItem(KEY + ':byTab'); } catch (e) { return null; } })() || '시뮬레이션';
             const bySub = this.state.byAdmSub || (() => { try { return localStorage.getItem(KEY + ':byAdmSub'); } catch (e) { return null; } })() || '전투';
             const byGrowOn = g === '보약' && byT === '관리자' && !!this.state.admin && bySub === '성장', byWS = byGrowOn ? 'G' : '';
@@ -6189,7 +6210,7 @@ class Component extends DCLogic {
               return { job: jb, note: a ? (a.date || '') + ' · ' + a.sample + '명' + (a.avgLv ? ' · 평균 ' + a.avgLv + 'Lv' : '') : '', has: !!rows.length, empty: !rows.length, rows, opts: a && a.opts ? a.opts.map(o => ({ name: o.name, pctText: Math.round(o.pct) + '%' })) : [] }; }) : [];
             const spcGroups = isAI && aiT === '특수코어' ? [{ name: '전체 직업 (이름순)', jobs: JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')) }].map(({ name, jobs }) => ({ name, jobs: jobs.map(jb => { const sc = this.loadPetBuff(jb, 'specialcore'), rows = sc && sc.items ? sc.items.filter(x => x.pct >= 3).slice(0, 5).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', tip: x.name + ' · ' + x.count + '명' })) : [];
               return { job: jb, note: sc ? (sc.date || '') + ' · ' + sc.sample + '명' : '', rows, empty: !rows.length }; }) })) : [];
-            return { ...gv, adminInfo: isAI, growAdminTab: !!this.state.admin, spcGroups, aiTabs, aiSub, aiArt: aiT !== '특수코어', artJobs, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
+            return { ...gv, raidOn: g === '챔피언레이드', raidCols: [['사냥', '좌', '사냥', '우', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥']].map((ps, i) => ({ stage: String(i + 1), rows: ps.map((p, j) => ({ no: (i + 1) + '-' + (j + 1), pos: p, bg: j % 2 ? '#fff' : 'oklch(0.97 0.012 220)', color: p === '사냥' ? '#2a2b2f' : 'oklch(0.5 0.17 25)' })) })), adminInfo: isAI, growAdminTab: !!this.state.admin, spcGroups, aiTabs, aiSub, aiArt: aiT !== '특수코어', artJobs, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
               setMenu: !!this.state.setMenu, setMenuOpen: () => this.setState({ setMenu: true }), setMenuClose: () => this.setState({ setMenu: false }),
               setLvs: ['6만', '8만', '10만'].map(n => { const cur = this.state.setLv || (() => { try { return localStorage.getItem(KEY + ':setLv'); } catch (e) { return null; } })(), on = g === '환산별템세팅' && n === cur;
                 return { name: n, bg: on ? 'oklch(0.48 0.17 255)' : 'transparent', color: on ? '#fff' : '#3a3b3f',
@@ -6431,7 +6452,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 81,
+      isAdmin: admin, appVer: 82,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
