@@ -1136,24 +1136,148 @@ body{overflow-x:clip;}
         </div>
       </sc-if>
     </div>
-    <button onClick="{{ growTabs.3.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.3.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.3.weight }};color:{{ growTabs.3.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">챔피언레이드</button>
+    <button onClick="{{ growTabs.3.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.3.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.3.weight }};color:{{ growTabs.3.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">유니온챔피언</button>
     <sc-if value="{{ growAdminTab }}" hint-placeholder-val="{{ false }}"><button onClick="{{ growTabs.4.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.4.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.4.weight }};color:{{ growTabs.4.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">관리자 정보</button></sc-if>
   </div>
 </nav>
-<sc-if value="{{ raidOn }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ raidSimOn }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:1320px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언레이드</h1>
+    <button onClick="{{ champSimClose }}" style="padding:7px 14px;border:1px solid #d6dde4;border-radius:8px;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;cursor:pointer;" style-hover="background:#f2f4f6;">← 돌아가기</button>
+    <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언의 가호 시뮬레이션</h1>
+    <span style="padding:4px 10px;border-radius:999px;background:oklch(0.5 0.17 25);color:#fff;font-size:12px;font-weight:800;">관리자</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 18px;background:#fff;border:1px solid #d6dde4;border-radius:12px;max-width:1000px;">
+    <span style="font-size:16px;font-weight:800;color:#6b6e75;">필요한 챔피언코인</span>
+    <span style="font-size:28px;font-weight:800;color:oklch(0.5 0.17 25);">{{ champSimTotal }}</span>
+    <span style="font-size:14px;font-weight:700;color:#9a9ca1;">전부 MAX {{ champSimMax }}</span>
+    <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#6b6e75;">보유 코인<input type="number" min="0" step="25" value="{{ champBudget }}" onChange="{{ champBudgetChange }}" style="width:90px;padding:5px 8px;border:1px solid #d6dde4;border-radius:6px;font-family:inherit;font-size:15px;font-weight:800;color:#2a2b2f;text-align:right;"></input></label>
+    <button onClick="{{ champSimAuto }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.5 0.17 25);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">가중치로 자동 찍기</button>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button onClick="{{ champSimAllMax }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.68 0.1 220);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">전부 MAX</button>
+      <button onClick="{{ champSimReset }}" style="padding:7px 14px;border:1px solid #d6dde4;border-radius:8px;background:#fff;color:#2a2b2f;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">초기화</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;max-width:1000px;">
+    <sc-for list="{{ champSimStats }}" as="s" hint-placeholder-count="6">
+      <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;"><span style="font-size:18px;font-weight:800;color:#2a2b2f;">{{ s.name }}</span><span style="font-size:18px;font-weight:800;color:oklch(0.3 0.09 255);">{{ s.lvText }}</span></div>
+        <sc-if value="{{ s.hasW }}" hint-placeholder-val="{{ false }}"><label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#6b6e75;">가중치<input type="number" min="0" step="0.1" value="{{ s.w }}" onChange="{{ s.onW }}" style="width:80px;padding:5px 8px;border:1px solid #d6dde4;border-radius:6px;font-family:inherit;font-size:15px;font-weight:800;color:#2a2b2f;text-align:right;"></input><span style="font-size:12px;color:#9a9ca1;">(1단계당)</span></label></sc-if>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;">
+          <sc-for list="{{ s.bars }}" as="b" hint-placeholder-count="5"><div style="height:8px;border-radius:3px;background:{{ b.bg }};"></div></sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+          <button onClick="{{ s.onUp }}" style="padding:8px 0;border:1px solid #d6dde4;border-radius:6px;background:#f2f4f6;font-family:inherit;font-size:14px;font-weight:800;color:#2a2b2f;cursor:pointer;">▲</button>
+          <button onClick="{{ s.onDown }}" style="padding:8px 0;border:1px solid #d6dde4;border-radius:6px;background:#f2f4f6;font-family:inherit;font-size:14px;font-weight:800;color:#2a2b2f;cursor:pointer;">▼</button>
+          <button onClick="{{ s.onMax }}" style="padding:8px 0;border:1px solid #d6dde4;border-radius:6px;background:#f2f4f6;font-family:inherit;font-size:13px;font-weight:800;color:#2a2b2f;cursor:pointer;">MAX</button>
+          <button onClick="{{ s.onMin }}" style="padding:8px 0;border:1px solid #d6dde4;border-radius:6px;background:#f2f4f6;font-family:inherit;font-size:13px;font-weight:800;color:#2a2b2f;cursor:pointer;">MIN</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:#6b6e75;"><span>다음 단계 {{ s.next }}</span><span>사용 코인 {{ s.used }}</span></div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:1000px;">
+    <sc-if value="{{ champStepsOn }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em;color:oklch(0.3 0.09 255);">순서별 찍을 단계</h2><span style="font-size:13px;font-weight:700;color:#9a9ca1;">숫자 = 그 능력치 단계</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;">
+          <sc-for list="{{ champSteps }}" as="r" hint-placeholder-count="0">
+            <div style="background:#fff;border:1px solid #d6dde4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;">
+              <div style="background:oklch(0.68 0.1 220);color:#fff;font-size:15px;font-weight:800;text-align:center;padding:5px 0;white-space:nowrap;">{{ r.title }}</div>
+              <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e3e8ec;background:{{ c.bg }};font-size:16px;font-weight:800;text-align:center;"><span style="padding:4px 0;white-space:nowrap;color:#2a2b2f;">{{ c.name }}</span><span style="padding:4px 0;border-left:1px solid #e3e8ec;color:{{ c.color }};">{{ c.v }}</span></div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:8px;"><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em;color:oklch(0.3 0.09 255);">가중치 효율 순서</h2><span style="font-size:13px;font-weight:700;color:#9a9ca1;">효율 = 가중치 ÷ 코인 × 100 · 보유 코인 안에 드는 줄은 빨간 글씨</span></div>
+    <sc-if value="{{ champOrderEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:18px;background:#fff;border:1px solid #d6dde4;border-radius:12px;font-size:15px;font-weight:700;color:#9a9ca1;text-align:center;">가중치를 넣으면 순서가 나와요.</div></sc-if>
+    <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:50px minmax(0,2fr) 1fr 1fr 1fr 1fr;background:oklch(0.68 0.1 220);color:#fff;font-size:15px;font-weight:800;text-align:center;"><span style="padding:9px 0;">순서</span><span style="padding:9px 0;">능력치</span><span style="padding:9px 0;">단계</span><span style="padding:9px 0;">코인</span><span style="padding:9px 0;">누적</span><span style="padding:9px 0;">효율</span></div>
+      <sc-for list="{{ champOrder }}" as="r" hint-placeholder-count="0">
+        <div style="display:grid;grid-template-columns:50px minmax(0,2fr) 1fr 1fr 1fr 1fr;border-top:1px solid #e3e8ec;background:{{ r.bg }};font-size:15px;font-weight:800;text-align:center;color:{{ r.color }};"><span style="padding:8px 0;">{{ r.no }}</span><span style="padding:8px 0;">{{ r.name }}</span><span style="padding:8px 0;">{{ r.lv }}</span><span style="padding:8px 0;">{{ r.coin }}</span><span style="padding:8px 0;">{{ r.sum }}</span><span style="padding:8px 0;">{{ r.eff }}</span></div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ raidMain }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1056px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;position:relative;">
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">유니온챔피언</h1>
     <span style="padding:5px 12px;border:2px solid #2a2b2f;border-radius:6px;background:#e9e9e6;font-size:15px;font-weight:800;color:#2a2b2f;">사냥과 보스 총 6STAGE</span>
+    <div onMouseEnter="{{ champMapShow }}" onMouseLeave="{{ champMapHide }}">
+      <span style="display:inline-block;padding:5px 12px;border:2px solid oklch(0.68 0.1 220);border-radius:6px;background:#fff;font-size:15px;font-weight:800;color:oklch(0.45 0.1 220);cursor:default;">위치</span>
+      <sc-if value="{{ champMapOn }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:50%;transform:translateX(-50%);width:560px;top:100%;padding-top:8px;z-index:50;max-width:100%;">
+          <div style="width:560px;max-width:100%;box-sizing:border-box;background:#fff;border:1px solid #d6dde4;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.18);padding:10px;display:flex;flex-direction:column;gap:8px;">
+            <div style="position:relative;">
+              <img src="img/champ-map.png" alt="유니온챔피언 위치" style="display:block;width:100%;height:auto;border-radius:8px;"></img>
+              <span style="position:absolute;left:17.4%;top:81%;transform:translate(-50%,-50%);font-size:24px;font-weight:900;color:#ffe600;-webkit-text-stroke:5px #000;paint-order:stroke fill;">좌</span>
+              <span style="position:absolute;left:49.8%;top:81%;transform:translate(-50%,-50%);font-size:24px;font-weight:900;color:#ffe600;-webkit-text-stroke:5px #000;paint-order:stroke fill;">중</span>
+              <span style="position:absolute;left:82.3%;top:81%;transform:translate(-50%,-50%);font-size:24px;font-weight:900;color:#ffe600;-webkit-text-stroke:5px #000;paint-order:stroke fill;">우</span>
+            </div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:15px;font-weight:800;color:#2a2b2f;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:12px;border:3px solid #e01e1e;"></span>잡몹 사냥하는 곳</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:12px;border:3px solid #f2d600;"></span>보스 나오는 곳</span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
   </div>
   <div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px;max-width:1000px;">
-      <sc-for list="{{ raidCols }}" as="c" hint-placeholder-count="5">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;max-width:1000px;">
+      <sc-for list="{{ raidCols }}" as="c" hint-placeholder-count="6">
         <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;background:oklch(0.68 0.1 220);color:#fff;font-size:17px;font-weight:800;text-align:center;"><span style="padding:10px 4px;">{{ c.stage }}</span><span style="padding:10px 4px;border-left:1px solid rgba(255,255,255,0.35);">위치</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;background:oklch(0.68 0.1 220);color:#fff;font-size:17px;font-weight:800;text-align:center;"><span style="padding:10px 0;white-space:nowrap;">{{ c.stage }}</span><span style="padding:10px 0;white-space:nowrap;border-left:1px solid rgba(255,255,255,0.35);">위치</span></div>
           <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="5">
-            <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e3e8ec;background:{{ r.bg }};font-size:19px;font-weight:800;text-align:center;"><span style="padding:10px 4px;color:#2a2b2f;">{{ r.no }}</span><span style="padding:10px 4px;border-left:1px solid #e3e8ec;color:{{ r.color }};">{{ r.pos }}</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e3e8ec;background:{{ r.bg }};font-size:19px;font-weight:800;text-align:center;"><span style="padding:10px 0;white-space:nowrap;color:#2a2b2f;">{{ r.no }}</span><span style="padding:10px 0;white-space:nowrap;border-left:1px solid #e3e8ec;color:{{ r.color }};">{{ r.pos }}</span></div>
           </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:1000px;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+      <h2 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언의 가호</h2>
+      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><button onClick="{{ champSimOpen }}" style="padding:7px 16px;border:none;border-radius:8px;background:oklch(0.68 0.1 220);color:#fff;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.6 0.11 220);">시뮬레이션</button></sc-if>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;justify-content:center;">
+      <img src="img/champ-blessing.png" alt="챔피언의 가호 능력치" style="display:block;width:100%;max-width:454px;height:auto;align-self:center;border-radius:12px;border:1px solid #d6dde4;"></img>
+      <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;">
+        <div style="flex:1;display:grid;grid-template-columns:68px 104px;align-items:center;background:oklch(0.68 0.1 220);color:#fff;font-size:17px;font-weight:800;text-align:center;"><span style="padding:6px 8px;">단계</span><span style="padding:6px 8px;align-self:stretch;display:flex;align-items:center;justify-content:center;border-left:1px solid rgba(255,255,255,0.35);">챔피언코인</span></div>
+        <sc-for list="{{ champCoins }}" as="r" hint-placeholder-count="5">
+          <div style="flex:1;display:grid;grid-template-columns:68px 104px;border-top:1px solid #e3e8ec;background:{{ r.bg }};font-size:19px;font-weight:800;text-align:center;color:#2a2b2f;"><span style="padding:6px 8px;display:flex;align-items:center;justify-content:center;">{{ r.lv }}</span><span style="padding:6px 8px;display:flex;align-items:center;justify-content:center;border-left:1px solid #e3e8ec;">{{ r.coin }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ champStepsOn }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,110px));gap:6px;justify-content:center;">
+        <sc-for list="{{ champSteps }}" as="r" hint-placeholder-count="0">
+          <div style="background:#fff;border:1px solid #d6dde4;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;">
+            <div style="background:oklch(0.68 0.1 220);color:#fff;font-size:15px;font-weight:800;text-align:center;padding:5px 0;white-space:nowrap;">{{ r.title }}</div>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #e3e8ec;background:{{ c.bg }};font-size:16px;font-weight:800;text-align:center;"><span style="padding:4px 0;white-space:nowrap;color:#2a2b2f;">{{ c.name }}</span><span style="padding:4px 0;border-left:1px solid #e3e8ec;color:{{ c.color }};">{{ c.v }}</span></div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:1000px;">
+    <div style="display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap;"><h2 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언등급</h2><span style="font-size:16px;font-weight:800;color:#6b6e75;">C · B · A · S · SS · SSS</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+      <sc-for list="{{ champGrades }}" as="g" hint-placeholder-count="5">
+        <div style="background:#fff;border:1px solid #d6dde4;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;">
+          <div style="background:oklch(0.68 0.1 220);color:#fff;font-size:20px;font-weight:800;text-align:center;padding:8px 0;">{{ g.grade }}</div>
+          <img src="{{ g.card }}" alt="{{ g.grade }} 챔피언" style="display:block;width:100%;aspect-ratio:240/420;object-fit:cover;"></img>
+          <div style="border-top:1px solid #e3e8ec;padding:8px 0;font-size:18px;font-weight:800;text-align:center;color:#2a2b2f;">{{ g.boss }}</div>
+          <div style="background:#f0f0ef;display:flex;justify-content:center;"><img src="{{ g.bossImg }}" alt="{{ g.boss }}" style="display:block;width:100%;max-width:220px;height:auto;"></img></div>
+          <div style="border-top:1px solid #e3e8ec;background:oklch(0.97 0.012 220);padding:9px 0;font-size:18px;font-weight:800;text-align:center;color:oklch(0.5 0.17 25);">헥환 {{ g.hexa }}</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;border-top:1px solid #e3e8ec;padding:9px 6px;font-size:15px;font-weight:800;text-align:center;color:#2a2b2f;text-wrap:pretty;">{{ g.badge }}</div>
         </div>
       </sc-for>
     </div>
@@ -3878,6 +4002,7 @@ class Component extends DCLogic {
       const hn = rows.find(row => row.tab === 'huntnote'); if (hn && hn.data && !this._hnDirty) this.setState({ huntNote: hn.data.text || '', huntNoteAtIso: hn.data.at || '' });
       const por = rows.find(row => row.tab === 'potopt'); if (por && por.data && por.data.tables && !this._poDirty) this.setState({ potOpt: por.data.tables });
       const isr = rows.find(row => row.tab === 'itemset'); if (isr && isr.data && isr.data.sets && !this._isDirty) this.setState({ itemSets: isr.data.sets });
+      const cwr = rows.find(row => row.tab === 'champW'); if (cwr && cwr.data && cwr.data.w && !this._cwDirty) { this.setState({ champW: cwr.data.w }); try { localStorage.setItem(KEY + ':champW', JSON.stringify(cwr.data.w)); } catch (e) {} }
       const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
       const mmr = rows.find(row => row.tab === 'mymae'); if (mmr && mmr.data && Array.isArray(mmr.data.prompts) && !this._mmDirty) this.setState({ mmPrompts: mmr.data.prompts });
       const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
@@ -4027,6 +4152,11 @@ class Component extends DCLogic {
         this.setState({ setMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) });
       } catch (e) { this.setState({ setMsg: '저장 실패 — 다시 시도해 주세요.' }); }
     }, 900);
+  }
+  async saveChampW(w) {
+    clearTimeout(this._cwT); this._cwDirty = true;
+    this._cwT = setTimeout(async () => { const token = await this.ensureToken(); if (!token) return;
+      try { await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'champW', data: { w }, updated_at: new Date().toISOString() }]) }); this._cwDirty = false; } catch (e) {} }, 800);
   }
   async saveByStart(date) {
     this.setState({ byStart: date, byStartMsg: '저장 중…' }); try { localStorage.setItem(KEY + ':byStart', date); } catch (e) {}
@@ -6002,7 +6132,7 @@ class Component extends DCLogic {
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(area === '스타포스' ? this.enhVals() : {}),
           ...(() => {
-            const GT = ['직업가이드', '보약', '환산별템세팅', '챔피언레이드', ...(this.state.admin ? ['관리자 정보'] : [])];
+            const GT = ['직업가이드', '보약', '환산별템세팅', '유니온챔피언', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
             if (!GT.includes(g)) g = GT[0];
             const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
@@ -6040,7 +6170,7 @@ class Component extends DCLogic {
                 onUp: () => k > 0 && updSet(d => { const a = d.groups[gi].rows; [a[k - 1], a[k]] = [a[k], a[k - 1]]; }),
                 onDown: () => k < rows.length - 1 && updSet(d => { const a = d.groups[gi].rows; [a[k + 1], a[k]] = [a[k], a[k + 1]]; }) }; }); })(),
               onAdd: () => updSet(d => { d.groups[gi].rows.push({ name: '', sf: '', pot: '', add: '', flame: '', scroll: '' }); }) })) : [] };
-            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' && g !== '챔피언레이드' }), ...setVals, ...setAvgVals };
+            const gv = { ...(isGuide && job ? this.guideVals(job) : { hasGuide: false, noGuide: !isAI && !setData && g !== '보약' && g !== '유니온챔피언' }), ...setVals, ...setAvgVals };
             const byT = this.state.byTab || (() => { try { return localStorage.getItem(KEY + ':byTab'); } catch (e) { return null; } })() || '시뮬레이션';
             const bySub = this.state.byAdmSub || (() => { try { return localStorage.getItem(KEY + ':byAdmSub'); } catch (e) { return null; } })() || '전투';
             const byGrowOn = g === '보약' && byT === '관리자' && !!this.state.admin && bySub === '성장', byWS = byGrowOn ? 'G' : '';
@@ -6210,7 +6340,31 @@ class Component extends DCLogic {
               return { job: jb, note: a ? (a.date || '') + ' · ' + a.sample + '명' + (a.avgLv ? ' · 평균 ' + a.avgLv + 'Lv' : '') : '', has: !!rows.length, empty: !rows.length, rows, opts: a && a.opts ? a.opts.map(o => ({ name: o.name, pctText: Math.round(o.pct) + '%' })) : [] }; }) : [];
             const spcGroups = isAI && aiT === '특수코어' ? [{ name: '전체 직업 (이름순)', jobs: JG.flatMap(x => x[1]).sort((a, b) => a.localeCompare(b, 'ko')) }].map(({ name, jobs }) => ({ name, jobs: jobs.map(jb => { const sc = this.loadPetBuff(jb, 'specialcore'), rows = sc && sc.items ? sc.items.filter(x => x.pct >= 3).slice(0, 5).map((x, k) => ({ rank: k + 1, name: x.name, pctText: Math.round(x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', tip: x.name + ' · ' + x.count + '명' })) : [];
               return { job: jb, note: sc ? (sc.date || '') + ' · ' + sc.sample + '명' : '', rows, empty: !rows.length }; }) })) : [];
-            return { ...gv, raidOn: g === '챔피언레이드', raidCols: [['사냥', '좌', '사냥', '우', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥']].map((ps, i) => ({ stage: String(i + 1), rows: ps.map((p, j) => ({ no: (i + 1) + '-' + (j + 1), pos: p, bg: j % 2 ? '#fff' : 'oklch(0.97 0.012 220)', color: p === '사냥' ? '#2a2b2f' : 'oklch(0.5 0.17 25)' })) })), adminInfo: isAI, growAdminTab: !!this.state.admin, spcGroups, aiTabs, aiSub, aiArt: aiT !== '특수코어', artJobs, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
+            return { ...gv, raidOn: g === '유니온챔피언', ...(() => {
+                const on = g === '유니온챔피언', sim = on && !!this.state.admin && !!this.state.champSim, COST = [50, 125, 200, 300, 500], cum = n => COST.slice(0, n).reduce((a, b) => a + b, 0);
+                const NAMES = ['올스탯/최대HP', '공격력/마력', '보스 데미지', '방어율 무시', '크리 데미지', '경험치 획득'];
+                const lv = this.state.champLv || {}, setLv = (k, v) => this.setState(s => ({ champLv: { ...(s.champLv || {}), [k]: Math.max(0, Math.min(5, v)) } }));
+                const total = NAMES.reduce((a, k) => a + cum(lv[k] || 0), 0), fmt = n => n.toLocaleString('ko-KR');
+                const W = this.state.champW || (() => { try { return JSON.parse(localStorage.getItem(KEY + ':champW') || '{}'); } catch (e) { return {}; } })();
+                const setW = (k, v) => { const nw = { ...W, [k]: v }; try { localStorage.setItem(KEY + ':champW', JSON.stringify(nw)); } catch (e) {} this.setState({ champW: nw }); if (this.state.admin) this.saveChampW(nw); };
+                const budget = this.state.champBudget ?? (() => { try { return localStorage.getItem(KEY + ':champBudget'); } catch (e) { return null; } })() ?? '';
+                const auto = () => { let left = Number(budget) || 0; const L = Object.fromEntries(NAMES.map(k => [k, 0]));
+                  for (;;) { let best = null, bv = 0; for (const k of NAMES) { const w = Number(W[k]) || 0; if (!w || L[k] >= 5 || COST[L[k]] > left) continue; const v = w / COST[L[k]]; if (v > bv) { bv = v; best = k; } } if (!best) break; left -= COST[L[best]]; L[best]++; }
+                  this.setState({ champLv: L }); };
+                const order = (() => { const L = Object.fromEntries(NAMES.map(k => [k, 0])), out = []; let sum = 0;
+                  for (;;) { let best = null, bv = 0; for (const k of NAMES) { const w = Number(W[k]) || 0; if (!w || L[k] >= 5) continue; const v = w / COST[L[k]]; if (v > bv) { bv = v; best = k; } } if (!best) break;
+                    const c = COST[L[best]]; sum += c; L[best]++; out.push({ no: String(out.length + 1), name: best, lv: L[best] + '단계', coin: fmt(c), sum: fmt(sum), eff: (bv * 100).toFixed(2), bg: out.length % 2 ? '#fff' : 'oklch(0.97 0.012 220)', hit: (Number(budget) || 0) > 0 && sum <= Number(budget) }); }
+                  return out.map(r => ({ ...r, color: r.hit ? 'oklch(0.5 0.17 25)' : '#2a2b2f' })); })();
+                const WN = NAMES.filter(k => k !== '경험치 획득');
+                const steps = (() => { const res = []; for (let n = 6; n <= Math.min(15, order.length); n++) { const L = {}; order.slice(0, n).forEach(r => { L[r.name] = (L[r.name] || 0) + 1; }); const last = order[n - 1].name;
+                  res.push({ title: (n - 5) + '단계 (' + order[n - 1].sum + ')', cells: WN.map((k, i) => ({ name: ['올스탯', '공마', '보공', '방무', '크뎀'][i], v: L[k] ? String(L[k]) : '-', bg: i % 2 ? '#fff' : 'oklch(0.97 0.012 220)', color: L[k] ? '#2a2b2f' : '#b8bbc0' })) }); } return res; })();
+                return { raidMain: on && !sim, raidSimOn: sim, champMapOn: !!this.state.champMap, champMapShow: () => this.setState({ champMap: true }), champMapHide: () => this.setState({ champMap: false }), champSimOpen: () => { this.setState({ champSim: true }); window.scrollTo(0, 0); }, champSimClose: () => { this.setState({ champSim: false }); window.scrollTo(0, 0); },
+                  champSimTotal: fmt(total), champSimMax: fmt(cum(5) * NAMES.length), champBudget: String(budget), champSimAuto: auto, champOrder: order, champOrderEmpty: !order.length, champStepHead: WN, champSteps: steps, champStepsOn: steps.length > 0,
+                  champBudgetChange: e => { const v = e.target.value; try { localStorage.setItem(KEY + ':champBudget', v); } catch (er) {} this.setState({ champBudget: v }); },
+                  champSimAllMax: () => this.setState({ champLv: Object.fromEntries(NAMES.map(k => [k, 5])) }), champSimReset: () => this.setState({ champLv: {} }),
+                  champSimStats: NAMES.map(k => { const n = lv[k] || 0; return { name: k, lvText: n + ' / 5단계', hasW: k !== '경험치 획득', w: String(W[k] ?? ''), onW: e => setW(k, e.target.value), bars: COST.map((_, i) => ({ bg: i < n ? 'oklch(0.62 0.17 300)' : '#e3e8ec' })), next: n < 5 ? fmt(COST[n]) + ' 코인' : '완료', used: fmt(cum(n)),
+                    onUp: () => setLv(k, n + 1), onDown: () => setLv(k, n - 1), onMax: () => setLv(k, 5), onMin: () => setLv(k, 0) }; }) };
+              })(), champCoins: [50, 125, 200, 300, 500].map((n, i) => ({ lv: (i + 1) + '단계', coin: String(n), bg: i % 2 ? '#fff' : 'oklch(0.97 0.012 220)' })), champGrades: [['B', 'b', '스우 하드', '7,500', '올스탯 20 · 최대HP/MP 1000 증가'], ['A', 'a', '진힐라 하드', '23,000', '공격력/마력 10 증가'], ['S', 's', '검마 하드', '32,000', '보스몬스터 공격 시 데미지 5% 증가'], ['SS', 'ss', '세렌 하드', '45,000', '크리티컬 데미지 3% 증가'], ['SSS', 'sss', '칼로스 노말', '56,500', '방어율 무시 5% 증가']].map(([grade, id, boss, hexa, badge]) => ({ grade, boss, hexa, badge, card: 'img/champ-card-' + id + '.png', bossImg: 'img/champ-mob-' + id + '.png' })), raidCols: [['사냥', '좌', '사냥', '우', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥'], ['좌', '사냥', '중', '사냥', '우'], ['사냥', '좌', '사냥', '중', '사냥'], ['좌', '사냥', '중', '사냥', '우']].map((ps, i) => ({ stage: (i + 1) + '지역', rows: ps.map((p, j) => ({ no: (i + 1) + '-' + (j + 1), pos: p, bg: j % 2 ? '#fff' : 'oklch(0.97 0.012 220)', color: p === '사냥' ? '#2a2b2f' : 'oklch(0.5 0.17 25)' })) })), adminInfo: isAI, growAdminTab: !!this.state.admin, spcGroups, aiTabs, aiSub, aiArt: aiT !== '특수코어', artJobs, jobMenu: !!this.state.jobMenu, jobMenuOpen: () => this.setState({ jobMenu: true }), jobMenuClose: () => this.setState({ jobMenu: false }),
               setMenu: !!this.state.setMenu, setMenuOpen: () => this.setState({ setMenu: true }), setMenuClose: () => this.setState({ setMenu: false }),
               setLvs: ['6만', '8만', '10만'].map(n => { const cur = this.state.setLv || (() => { try { return localStorage.getItem(KEY + ':setLv'); } catch (e) { return null; } })(), on = g === '환산별템세팅' && n === cur;
                 return { name: n, bg: on ? 'oklch(0.48 0.17 255)' : 'transparent', color: on ? '#fff' : '#3a3b3f',
@@ -6452,7 +6606,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 82,
+      isAdmin: admin, appVer: 83,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
