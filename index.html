@@ -5346,7 +5346,7 @@ class Component extends DCLogic {
           const exp = rem != null && !fake ? rem + JB_LAG / 1000 : null;
           if (exp == null) { setT(); this._alerted[s.id] = false; D.down = 0; }
           else if (sec > exp + 3) { setT(); if (sec - 1 > (Number(s.before) || 0)) this._alerted[s.id] = false; D.down = 0; }
-          else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= (exp - sec > 15 ? 12 : 4)) { setT(); D.down = 0; } }
+          else if (sec < exp - 1.5) { const trustedNow = D.secAt && now - D.secAt < 90000 && exp >= 10 && exp - sec > 3; const df = exp - sec, cut = exp >= 61 && sec < 60 && Math.abs(df - Math.round(df / 10) * 10) <= 1.5; D.down = (D.down || 0) + 1; if (!trustedNow && D.down >= (cut ? 60 : df > 15 ? 12 : 4)) { setT(); D.down = 0; } }
           else D.down = 0; }
         else if (D.down) D.down = 0;
         const shown = rem != null && !fake ? Math.max(0, Math.round(rem + JB_LAG / 1000)) : sec;
@@ -6639,7 +6639,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 88,
+      isAdmin: admin, appVer: 89,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
