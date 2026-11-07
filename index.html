@@ -2371,28 +2371,52 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <div data-m="hide"></div>
   </div>
 
+  <div ref="{{ mesoImgRef }}" style="display:flex;flex-direction:column;"><div data-imgsec="" style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;">
+  <div style="display:contents;">
   <sc-if value="{{ mesoNone }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 입력된 메소 시세가 없어요.</div>
+    <div style="flex:1 1 100%;padding:48px 22px;text-align:center;font-size:14px;color:#6b6d73;background:#fff;border:1px solid #e3e3e0;border-radius:14px;">아직 입력된 메소 시세가 없어요.</div>
   </sc-if>
-
-  <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
-    <div ref="{{ mesoImgRef }}" style="display:flex;flex-direction:column;gap:20px;"><div data-imgsec="" style="display:flex;flex-direction:column;gap:20px;">
-    <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
-      <div style="order:9;background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:4px;">
-        <span style="font-size:17px;font-weight:800;line-height:24px;color:#1b1c1f;">현재 시세</span>
-        <span style="font-size:36px;font-weight:800;line-height:44px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:17px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
-        <span style="font-size:13px;font-weight:700;line-height:18px;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
-      </div>
-      <sc-for list="{{ mesoStats }}" as="s" hint-placeholder-count="3">
-        <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:4px;">
-          <span style="font-size:17px;font-weight:800;line-height:24px;color:#1b1c1f;">{{ s.label }}</span>
-          <span style="font-size:36px;font-weight:800;line-height:44px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:{{ s.color }};">{{ s.val }}<span style="font-size:17px;font-weight:700;color:#6b6d73;margin-left:3px;">원</span></span>
-          <span style="font-size:13px;font-weight:700;line-height:18px;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
+  </div>
+  <section style="order:2;flex:1 1 340px;min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#f7f7f5;border-bottom:1px solid #ececea;font-size:13px;font-weight:700;color:#6b6d73;">
+      <span style="flex:1;min-width:0;font-size:16px;font-weight:800;color:#1b1c1f;">변동 TOP 10</span>
+      <span style="flex:none;text-align:right;font-size:12px;">이전 주 → 이번 주</span>
+      <span style="width:58px;flex:none;text-align:right;font-size:12px;">변동</span>
+    </div>
+    <sc-for list="{{ mesoTop }}" as="r" hint-placeholder-count="10">
+      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:6px;padding:3px 10px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:oklch(0.97 0.015 255);">
+        <span style="width:18px;flex:none;text-align:center;font-size:14px;font-weight:800;color:oklch(0.48 0.17 255);font-variant-numeric:tabular-nums;">{{ r.rank }}</span>
+        <div title="{{ r.where }}" style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25;">
+          <span style="font-size:14px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
+          <span style="font-size:11px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.where }}</span>
         </div>
-      </sc-for>
+        <span style="flex:none;text-align:right;font-size:13px;font-weight:600;color:#3a3c41;font-variant-numeric:tabular-nums;white-space:nowrap;">{{ r.prev }} → <span style="font-weight:800;color:#1b1c1f;">{{ r.cur }}</span></span>
+        <span style="width:58px;flex:none;text-align:right;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ r.color }};">{{ r.pct }}</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <div style="order:1;flex:1 1 540px;min-width:0;">
+  <sc-if value="{{ mesoHas }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:12px;"><div style="display:flex;flex-direction:column;gap:12px;">
+    <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">
+      <div style="order:9;background:#fff;border:2px solid oklch(0.55 0.17 255);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;">
+        <span style="padding:1px 10px;border-radius:999px;background:oklch(0.48 0.17 255);font-size:14px;font-weight:800;line-height:20px;color:#fff;">현재 시세</span>
+        <span style="font-size:34px;font-weight:800;line-height:40px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:2px;">원</span></span>
+        <span style="font-size:11px;font-weight:700;line-height:15px;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
+      </div>
+      <div style="background:#fff;border:1px solid #e3e3e0;border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;justify-content:center;gap:1px;">
+        <sc-for list="{{ mesoStats }}" as="s" hint-placeholder-count="3">
+          <div title="{{ s.sub }}" style="display:flex;align-items:baseline;gap:8px;">
+            <span style="flex:none;width:58px;font-size:13px;font-weight:800;color:#1b1c1f;">{{ s.label }}</span>
+            <span style="flex:none;width:74px;font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
+            <span style="flex:1;text-align:right;font-size:19px;font-weight:800;line-height:26px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:{{ s.color }};">{{ s.val }}<span style="font-size:12px;font-weight:700;color:#6b6d73;margin-left:2px;">원</span></span>
+          </div>
+        </sc-for>
+      </div>
     </div>
 
-    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">시세 추이 · {{ mesoRangeLabel }}</h2>
         <div data-noimg="1" style="display:flex;flex-wrap:wrap;gap:4px;padding:3px;background:#f0f0ee;border-radius:9px;">
@@ -2440,6 +2464,8 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     </section>
     </div></div>
   </sc-if>
+  </div>
+  </div></div>
 
   <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
     <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
@@ -3750,8 +3776,8 @@ class Component extends DCLogic {
       const mi = vs.indexOf(lo), ma = vs.lastIndexOf(hi), avg = vs.reduce((a, b) => a + b, 0) / n;
       stats = [
         { label: '기간 최고', val: W(hi), sub: pts[ma].date, color: up },
+        { label: '기간 평균', val: W(Math.round(avg * 10) / 10), sub: '', color: '#1b1c1f' },
         { label: '기간 최저', val: W(lo), sub: pts[mi].date, color: down },
-        { label: '기간 평균', val: W(Math.round(avg * 10) / 10), sub: pts[0].date + ' ~ ' + pts[n - 1].date, color: '#1b1c1f' },
       ];
       if (hi === lo) { hi += 1; lo -= 1; }
       const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
@@ -3789,6 +3815,7 @@ class Component extends DCLogic {
     };
     return {
       isMeso, mesoTab: tabBtn, mesoLastDate: last ? last.date : '–',
+      mesoTop: this.weekChanges(0).slice(0, 10).map((x, i) => ({ ...x, rank: i + 1 })),
       mesoImgRef: this._mesoImgRef || (this._mesoImgRef = el => { this._mesoEl = el; }),
       saveMesoImage: (this._saveMeso = opt => this.saveImage('메소', last ? String(last.date) : '', this._mesoEl, 1064, opt), () => this._saveMeso()),
       mesoHas: allP.length > 0, mesoNone: allP.length === 0,
@@ -5930,6 +5957,10 @@ class Component extends DCLogic {
   reviewVals(on) {
     const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
     if (!on) return { reviewTab, reviewRows: [], reviewEmpty: false };
+    const out = this.weekChanges(0.3);
+    return { reviewTab, reviewRows: out, reviewEmpty: !out.length };
+  }
+  weekChanges(min) {
     const all = this.state.all || {}, out = [], UR = /\s*\((만|억)\)\s*$/;
     const KRE = /^노작 · (STR|DEX|INT|LUK) (27|30|33)%$/, S22 = /^(\d+성 · .+) · (STR|INT)$/;
     TABS.filter(t => !HIDDEN_TABS.includes(t)).forEach(t => {
@@ -5942,7 +5973,7 @@ class Component extends DCLogic {
         if (it.hidden) return;
         const cur = num(it.values[n - 1]), prev = num(it.values[n - 2]);
         if (cur === null || prev === null || prev === 0) return;
-        const r = (cur - prev) / prev; if (Math.abs(r) < 0.3) return;
+        const r = (cur - prev) / prev; if (Math.abs(r) < min || r === 0) return;
         let sk = null, sv = null, mk = g.match(KRE), ms = g.match(S22);
         if (mk) { sk = mk[2] === '30' ? 'ktStat' : 'ktStat' + mk[2]; sv = mk[1]; } else if (ms) { sk = 'ktStat_' + ms[1]; sv = ms[2]; }
         out.push({ r, name: (it.name || '').replace(UR, ''), where: t + (g ? ' · ' + g : '') + (u ? ' · ' + u + ' 단위' : ''),
@@ -5952,7 +5983,7 @@ class Component extends DCLogic {
       });
     });
     out.sort((a, b) => Math.abs(b.r) - Math.abs(a.r));
-    return { reviewTab, reviewRows: out, reviewEmpty: !out.length };
+    return out;
   }
   switchTab(tab) {
     if (tab !== '문의' && tab !== '방문자' && tab !== '검토') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
@@ -6607,7 +6638,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 85,
+      isAdmin: admin, appVer: 86,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
