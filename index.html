@@ -2752,7 +2752,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           </div>
         </sc-if>
         <div style="min-height:44px;box-sizing:border-box;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:4px 18px;background:oklch(0.94 0.035 255);border-bottom:1px solid #ececea;">
-          <span style="font-size:17px;font-weight:800;color:oklch(0.36 0.17 255);margin-right:6px;">{{ pg.label }}</span>
+          <span onClick="{{ pg.onRename }}" title="{{ pg.tip }}" style="font-size:17px;font-weight:800;color:oklch(0.36 0.17 255);margin-right:6px;cursor:{{ pg.cursor }};">{{ pg.label }}</span>
           <sc-for list="{{ pg.ktChips }}" as="c" hint-placeholder-count="4">
             <button onClick="{{ c.onClick }}" style="padding:3px 12px;line-height:20px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ c.label }}</button>
           </sc-for>
@@ -6587,7 +6587,8 @@ class Component extends DCLogic {
         const byId = new Map(data.items.map(it => [it.id, it])), curOf = r => num((byId.get(r.id) || {}).values ? byId.get(r.id).values[n - 1] : null);
         const mx = Math.max(1, ...sp.rows.map(r => curOf(r) || 0));
         const anyHas = ks.some(p => p.hasLine), fi = out.indexOf(ks[0]);
-        const kg = { label: title, first: ks[0].first, normal: false, isKt: true, noLineNormal: !anyHas, cgs: sp.cgs, hasLine: anyHas, noLine: !anyHas, lineTop: anyHas && !this.state.narrow && ks[0].first ? '52px' : '0',
+        const ktT = (data.ktNames || {})[SK] || title;
+        const kg = { label: ktT, onRename: () => { if (!admin) return; const v = window.prompt('묶음 이름 수정 (비우면 원래 이름)', ktT); if (v == null || v.trim() === ktT) return; this.updateTab(tab, y => { const m = { ...(y.ktNames || {}) }; if (v.trim()) m[SK] = v.trim(); else delete m[SK]; y.ktNames = m; }); }, cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '', first: ks[0].first, normal: false, isKt: true, noLineNormal: !anyHas, cgs: sp.cgs, hasLine: anyHas, noLine: !anyHas, lineTop: anyHas && !this.state.narrow && ks[0].first ? '52px' : '0',
           ktPrev: data.dates[n - 2] || '', ktCur: data.dates[n - 1] || '',
           ktChips: stats.map(s => { const on = s === st; return { label: s, onClick: () => this.setState({ [SK]: s }), bg: on ? 'oklch(0.48 0.17 255)' : '#fff', color: on ? '#fff' : '#3a3b3f', border: on ? 'oklch(0.48 0.17 255)' : '#d6d6d2' }; }),
           ktRows: sp.rows.map(r => { const c = curOf(r), L = r.vals.length; return { ...r, prevText: L > 1 ? r.vals[L - 2].text : '–', curText: L ? r.vals[L - 1].text : '–', barW: c === null ? '0%' : (c / mx * 100).toFixed(1) + '%' }; }) };
@@ -6606,7 +6607,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 84,
+      isAdmin: admin, appVer: 85,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
