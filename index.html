@@ -6511,10 +6511,11 @@ class Component extends DCLogic {
       this.updateTab(tab, y => { y.items.forEach(it => { if (unitOf(it) === u) it.group = v.trim(); }); }); };
     const rowGroups = units.map(u => ({ label: unitLabel(u), showLabel: true, rows: rows.filter(r => r.unit === u), onRename: renameUnit(u), cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '' }));
     const chartGroups = units.map((u, gi) => {
-      const its = data.items.filter(it => unitOf(it) === u);
+      const its = data.items.filter(it => unitOf(it) === u && !/루나드림/.test(it.name || ''));
       let max = 0;
       its.filter(it => !it.hideBar).forEach(it => it.values.slice(last4).forEach(v => { const x = num(v); if (x !== null && x > max) max = x; }));
-      max = max * 1.12 || 1;
+      let base = 0;
+      { let mn = Infinity; its.filter(it => !it.hideBar).forEach(it => it.values.slice(last4).forEach(v => { const x = num(v); if (x !== null && x > 0 && x < mn) mn = x; })); if (mn < Infinity) { base = mn * 0.9; max = base + (max - base) / 0.92; } else max = max * 1.12 || 1; }
       return {
         label: unitLabel(u), showLabel: true, onRename: renameUnit(u), cursor: admin ? 'pointer' : 'default', tip: admin ? '클릭해서 이름 수정' : '',
         pad: gi > 0 ? '18px' : '0', border: gi > 0 ? '1px solid #ececea' : 'none',
@@ -6523,7 +6524,7 @@ class Component extends DCLogic {
           fs: String(it.short || it.name).replace(/\s/g, '').length <= 4 ? '18px' : String(it.short || it.name).replace(/\s/g, '').length <= 5 ? '15px' : '13px',
           bars: it.hideBar ? [] : it.values.slice(last4).map((v, i) => {
             const x = num(v);
-            return { width: x === null ? '0%' : (x / max * 100).toFixed(2) + '%', color: colors[i], value: fmt(v), weight: i === chartDates.length - 1 ? 700 : 500 };
+            return { width: x === null ? '0%' : Math.max(0, (x - base) / ((max - base) || 1) * 100).toFixed(2) + '%', color: colors[i], value: fmt(v), weight: i === chartDates.length - 1 ? 700 : 500 };
           }),
         })),
       };
@@ -6638,7 +6639,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 86,
+      isAdmin: admin, appVer: 87,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
