@@ -1083,6 +1083,103 @@ body{overflow-x:clip;}
   </sc-if>
 </div>
 </sc-if>
+<sc-if value="{{ isTsTab }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
+    <h1 data-m="h1" style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">주문의 흔적 기댓값</h1>
+    <span style="font-size:13px;font-weight:600;color:#6b6d73;">주흔작 시뮬레이션 · 순백의 주문서 / 이노센트 주문서 · 10만 번</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start;">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">설정</h2></div>
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;flex-wrap:wrap;gap:16px 32px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 종류</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ ts.types }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:7px 14px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:13px;font-weight:700;color:#6b6d73;">장비 레벨</span>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="text" inputmode="numeric" value="{{ ts.lv }}" onChange="{{ ts.onLv }}" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"><span style="font-size:12px;font-weight:600;color:#8a8c92;">{{ ts.band }}</span></label>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:13px;font-weight:700;color:#6b6d73;">주문서 <span style="font-weight:600;color:#8a8c92;">눌러서 고르기</span></span>
+          <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:64px 84px minmax(0,1fr) 84px;gap:8px;padding:8px 12px;background:#f7f7f5;font-size:12px;font-weight:700;color:#6b6d73;"><span>주문서</span><span>성공 확률</span><span>1번 성공 시</span><span style="text-align:right;">흔적 개수</span></div>
+            <sc-for list="{{ ts.rows }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.pick }}" style="display:grid;grid-template-columns:64px 84px minmax(0,1fr) 84px;gap:8px;align-items:center;padding:10px 12px;border:none;border-top:1px solid #efefec;background:{{ r.bg }};font-family:inherit;text-align:left;cursor:pointer;"><span style="font-size:15px;font-weight:800;color:{{ r.color }};">{{ r.label }}</span><span style="font-size:14px;font-weight:700;color:#3a3c41;font-variant-numeric:tabular-nums;">{{ r.rate }}</span><span style="font-size:14px;font-weight:600;color:#3a3c41;">{{ r.eff }}</span><span style="font-size:14px;font-weight:700;color:#3a3c41;text-align:right;font-variant-numeric:tabular-nums;">{{ r.cnt }}</span></button></sc-for>
+          </div>
+          <span style="font-size:12px;color:#8a8c92;">{{ ts.tblNote }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 24px;">
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">고른 주문서 흔적 개수</span><input type="text" inputmode="numeric" value="{{ ts.cnt }}" onChange="{{ ts.onCnt }}" style="box-sizing:border-box;width:96px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">추가 확률 (손재주 10 + 길드 4)</span><span style="display:flex;align-items:center;gap:6px;"><input type="text" inputmode="decimal" value="{{ ts.bonus }}" onChange="{{ ts.onBonus }}" placeholder="0" style="box-sizing:border-box;width:64px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">%p</span></span></label>
+          <button onClick="{{ ts.feverToggle }}" style="padding:8px 14px;border:1px solid {{ ts.feverBorder }};border-radius:999px;background:{{ ts.feverBg }};color:{{ ts.feverColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">금·토·일 피버 타임</button>
+          <button onClick="{{ ts.sunToggle }}" style="padding:8px 14px;border:1px solid {{ ts.sunBorder }};border-radius:999px;background:{{ ts.sunBg }};color:{{ ts.sunColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">썬데이 주문의 흔적 50% 할인</button>
+          <button onClick="{{ ts.guardToggle }}" style="padding:8px 14px;border:1px solid {{ ts.guardBorder }};border-radius:999px;background:{{ ts.guardBg }};color:{{ ts.guardColor }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">길드 '실패를 두려워하지 않는' (4% 업횟 유지)</button>
+        </div>
+        <button onClick="{{ ts.run }}" style="padding:13px;border:none;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;">{{ ts.runLabel }}</button>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 24px;padding-top:16px;border-top:1px solid #efefec;">
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">업그레이드 가능 횟수</span><input type="text" inputmode="numeric" value="{{ ts.slots }}" onChange="{{ ts.onSlots }}" placeholder="직접 입력" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"></label>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 24px;">
+          <sc-if value="{{ ts.isWhite }}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">순백의 주문서 확률</span><span style="display:flex;align-items:center;gap:6px;"><input type="text" inputmode="decimal" value="{{ ts.wP }}" onChange="{{ ts.onWP }}" style="box-sizing:border-box;width:64px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">%</span></span></label></sc-if>
+          <sc-if value="{{ ts.isInno }}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">목표 성공 횟수</span><input type="text" inputmode="numeric" value="{{ ts.goal }}" onChange="{{ ts.onGoal }}" placeholder="{{ ts.goalMax }}" style="box-sizing:border-box;width:76px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"></label><label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">이노센트 주문서 확률</span><span style="display:flex;align-items:center;gap:6px;"><input type="text" inputmode="decimal" value="{{ ts.iP }}" onChange="{{ ts.onIP }}" style="box-sizing:border-box;width:64px;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:center;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">%</span></span></label></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <sc-for list="{{ ts.srcRows }}" as="g" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">{{ g.title }}</span><div style="display:flex;flex-wrap:wrap;gap:6px;"><sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" style="padding:6px 12px;border:1px solid {{ o.border }};border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ o.label }}</button></sc-for></div><span style="font-size:12px;color:#8a8c92;">{{ g.note }}</span></div></sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #efefec;">
+          <span style="font-size:13px;font-weight:700;color:#6b6d73;">가격 정하기 <span style="font-weight:600;color:#8a8c92;">메소 · 비우면 옥션 기타아이템 최신 시세 · 이 기기에 저장</span></span>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;"><sc-for list="{{ ts.prices }}" as="o" hint-placeholder-count="4"><label style="display:flex;flex-direction:column;gap:5px;"><span style="font-size:12px;font-weight:700;color:#6b6d73;">{{ o.label }}</span><input type="text" inputmode="numeric" value="{{ o.v }}" onChange="{{ o.on }}" placeholder="{{ o.ph }}" style="box-sizing:border-box;width:100%;padding:7px 9px;border:1px solid #e3e3e0;border-radius:8px;font-size:14px;text-align:right;"></label></sc-for></div>
+        </div>
+      </div>
+    </section>
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="padding:12px 20px;background:oklch(0.94 0.035 255);"><h2 style="margin:0;font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">결과</h2></div>
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px;">
+        <sc-if value="{{ ts.err }}" hint-placeholder-val="{{ false }}"><span style="padding:20px 0;text-align:center;font-size:14px;font-weight:700;color:oklch(0.5 0.18 25);">{{ ts.err }}</span></sc-if>
+        <sc-if value="{{ ts.noRes }}" hint-placeholder-val="{{ true }}"><span style="padding:40px 0;text-align:center;font-size:14px;font-weight:600;color:#8a8c92;">설정을 고르고 '시뮬레이션 돌리기'를 눌러 주세요</span></sc-if>
+        <sc-if value="{{ ts.hasRes }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size:14px;font-weight:800;color:#2a2b2f;">{{ ts.res.title }}</span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;"><sc-for list="{{ ts.res.cards }}" as="c" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:10px;background:#f7f7f5;"><span style="font-size:13px;font-weight:700;color:#6b6d73;">{{ c.label }}</span><span style="font-size:{{ c.fs }};font-weight:800;color:oklch(0.3 0.09 255);font-variant-numeric:tabular-nums;">{{ c.val }}</span><span style="font-size:12px;font-weight:600;color:#8a8c92;">{{ c.sub }}</span></div></sc-for></div>
+        <sc-if value="{{ ts.res.hasPol }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:10px;border:1px solid oklch(0.85 0.06 255);background:oklch(0.98 0.01 255);">
+          <span style="font-size:15px;font-weight:800;color:oklch(0.3 0.09 255);">추천 전략</span>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:8px;background:#fff;border:1px solid #e3e3e0;">
+            <span style="font-size:13px;font-weight:800;color:#6b6d73;">순백? 이노센트?</span>
+            <sc-for list="{{ ts.res.polSum }}" as="t" hint-placeholder-count="2"><span style="font-size:15px;font-weight:800;color:#2a2b2f;">{{ t.txt }}</span></sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;overflow-x:auto;padding-top:4px;">
+            <div style="display:grid;grid-template-columns:{{ ts.res.polCols }};gap:3px;align-items:end;"><span style="font-size:12px;font-weight:800;color:oklch(0.45 0.15 150);">성공 ↓</span><span style="grid-column:2 / -1;padding:4px 0;border-radius:5px;background:oklch(0.95 0.04 25);font-size:12px;font-weight:800;color:oklch(0.48 0.17 25);text-align:center;">실패 횟수 →</span></div>
+            <div style="display:grid;grid-template-columns:{{ ts.res.polCols }};gap:3px;font-size:12px;font-weight:800;color:oklch(0.48 0.17 25);text-align:center;"><span></span><sc-for list="{{ ts.res.polHead }}" as="h" hint-placeholder-count="8"><span>{{ h.t }}</span></sc-for></div>
+            <sc-for list="{{ ts.res.pol }}" as="row" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:{{ ts.res.polCols }};gap:3px;"><span style="align-self:center;font-size:12px;font-weight:800;color:oklch(0.45 0.15 150);">{{ row.label }}</span><sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="8"><span style="padding:5px 0;border-radius:5px;background:{{ c.bg }};color:{{ c.color }};font-size:12px;font-weight:800;text-align:center;">{{ c.t }}</span></sc-for></div></sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;font-weight:700;color:#6b6d73;"><span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#f1f1ef;border:1px solid #e3e3e0;"></span>계속: 주흔작 계속</span><span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.9 0.06 255);"></span>순백: 순백의 주문서</span><span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.9 0.07 45);"></span>이노: 이노센트 주문서</span></div>
+          <span style="font-size:12px;color:#8a8c92;">지금 성공·실패 횟수의 칸을 보고 따라 하기 · 입력한 가격·확률 기준 메소가 가장 적게 드는 방법</span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ ts.res.hasPct }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:90px repeat(2,minmax(0,1fr));gap:8px;padding:8px 12px;background:#f7f7f5;font-size:12px;font-weight:700;color:#6b6d73;"><span>운</span><span style="text-align:right;">흔적 개수</span><span style="text-align:right;">메소</span></div>
+          <sc-for list="{{ ts.res.pct }}" as="q" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:90px repeat(2,minmax(0,1fr));gap:8px;padding:9px 12px;border-top:1px solid #efefec;font-size:14px;font-variant-numeric:tabular-nums;"><span style="font-weight:700;color:#3a3c41;">{{ q.label }}</span><span style="text-align:right;font-weight:700;color:#3a3c41;">{{ q.tr }}</span><span style="text-align:right;font-weight:700;color:#3a3c41;">{{ q.meso }}</span></div></sc-for>
+        </div>
+        </sc-if>
+        <sc-if value="{{ ts.res.hasDist }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px 12px;background:#f7f7f5;font-size:12px;font-weight:700;color:#6b6d73;"><span>성공 횟수</span><span style="text-align:right;">확률</span><span style="text-align:right;">공/마</span><span style="text-align:right;">주스탯</span></div>
+          <sc-for list="{{ ts.res.dist }}" as="d" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px 12px;border-top:1px solid #efefec;font-size:14px;font-variant-numeric:tabular-nums;background:{{ d.bg }};"><span style="font-weight:800;color:#3a3c41;">{{ d.c }}</span><span style="text-align:right;font-weight:700;color:#3a3c41;">{{ d.prob }}</span><span style="text-align:right;font-weight:700;color:#3a3c41;">{{ d.atk }}</span><span style="text-align:right;font-weight:700;color:#3a3c41;">{{ d.stat }}</span></div></sc-for>
+        </div>
+        </sc-if>
+        <span style="font-size:12px;color:#8a8c92;">{{ ts.res.note }}</span>
+        </sc-if>
+      </div>
+    </section>
+  </div>
+</div>
+</sc-if>
 </sc-if>
 <sc-if value="{{ isGrow }}" hint-placeholder-val="{{ false }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
@@ -3441,7 +3538,209 @@ class Component extends DCLogic {
     setTimeout(step, 0);
   }
   enhVals() {
-    const tab = this.state.enhTab || (() => { try { return localStorage.getItem(KEY + ':enhTab'); } catch (e) { return null; } })() || '스타포스', pot = tab === '잠재능력';
+    const tab = this.state.enhTab || (() => { try { return localStorage.getItem(KEY + ':enhTab'); } catch (e) { return null; } })() || '스타포스', pot = tab === '잠재능력', tsT = tab === '주문의 흔적';
+    if (tsT) return { isSfTab: false, isPotTab: false, isTsTab: true, enhTabs: this.enhTabList(tab), ts: this.tsVals() };
+    return { isSfTab: !pot, isPotTab: pot, isTsTab: false, enhTabs: this.enhTabList(tab), ...(pot ? this.potVals() : this.sfVals()) };
+  }
+  enhTabList(tab) {
+    return ['스타포스', '잠재능력', '주문의 흔적'].map(l => ({ label: l, bar: l === tab ? 'oklch(0.48 0.17 255)' : 'transparent', color: l === tab ? 'oklch(0.3 0.09 255)' : '#6b6d73', pick: () => { try { localStorage.setItem(KEY + ':enhTab', l); } catch (e) {} this.setState({ enhTab: l }); } }));
+  }
+  tsS() {
+    const d = { type: '무기', lv: 200, pct: 15, slots: 8, ham: true, hamP: 50, fever: true, bonus: 14, mode: 'best', goal: '', wP: '', iP: '', cnt: {}, price: {} };
+    let s = this.state.ts; if (!s) { try { s = JSON.parse(localStorage.getItem(KEY + ':ts') || 'null'); } catch (e) {} }
+    if (s && !s.dv) s = { ...s, fever: true, bonus: 14, dv: 1 };
+    if (s && (s.dv || 0) < 2) s = { ...s, mode: 'best', dv: 2 };
+    if (s && (s.dv || 0) < 3) s = { ...s, pu: {}, dv: 3 };
+    if (s && s.dv < 4) { const pu = { ...(s.pu || {}) }; const t = parseFloat(String(pu.trace ?? '').replace(/,/g, '')); if (t > 0) pu.trace = String(Math.round(t * 1000)); s = { ...s, pu, dv: 4 }; }
+    const pd = { trace: 2000000, white: 1500000, inno: 4000000, ...this.tsAucPrice() }, sp = (s && s.pu) || {};
+    Object.keys(sp).forEach(k => { if (sp[k] !== '' && sp[k] != null) pd[k] = sp[k]; });
+    const r0 = { ...d, ...(s || {}), pu: sp, price: pd, ham: false, mode: 'best', dv: 4 }; if (r0.guard == null) r0.guard = true; if (!r0.dv5) { r0.fever = true; r0.sun = true; r0.dv5 = true; } if (!r0.dv6) { r0.slots = { 무기: 9, 모자: 12, 방어구: 8, 어깨: 2, 장갑: 8, 장신구: '', 기계심장: 10 }[r0.type] ?? r0.slots; r0.dv6 = true; } return r0;
+  }
+  tsSet(p) { const ts = { ...this.tsS(), ...p }; try { localStorage.setItem(KEY + ':ts', JSON.stringify(ts)); } catch (e) {} this.setState({ ts, tsRes: null, tsErr: '' }); }
+  tsTable(type, lv) {
+    const b = lv <= 70 ? 0 : lv <= (type === '무기' ? 110 : 115) ? 1 : 2;
+    if (type === '무기') return [[100, [1, 2, 3][b], [0, 0, 1][b]], [70, [2, 3, 5][b], [0, 1, 2][b]], [30, [3, 5, 7][b], [1, 2, 3][b]], [15, [5, 7, 9][b], [2, 3, 4][b]]];
+    if (type === '방어구') return [[100, 0, [1, 2, 3][b]], [70, 0, [2, 3, 4][b]], [30, 0, [3, 5, 7][b]], [15, 0, [4, 7, 10][b]]];
+    if (type === '장갑') return b === 0 ? [[100, 0, 0], [70, 1, 0], [30, 2, 0], [15, 3, 0]] : [[100, 1, 0], [70, 2, 0], [30, 3, 0], [15, 4, 0]];
+    if (type === '기계심장') { const h = lv >= 130 ? [3, 4, 7] : lv >= 100 ? [2, 3, 5] : [1, 2, 3]; return [[100, h[0], 0], [70, h[1], 0], [30, h[2], 0]]; }
+    return [[100, 0, [1, 1, 2][b]], [70, 0, [2, 2, 3][b]], [30, 0, [3, 4, 5][b]]];
+  }
+  tsCntDef(type, lv, pct) {
+    const k = { 100: 0, 70: 1, 30: 2, 15: 3 }[pct];
+    const TC = {
+      장신구: [[100, 18, 24, 28], [110, 22, 28, 34], [120, 57, 72, 87], [130, 100, 130, 155], [140, 125, 160, 195], [160, 185, 240, 285], [200, 360, 470, 560]],
+      기계심장: [[100, 36, 47, 56], [130, 200, 260, 310], [200, 725, 940, 1125]],
+      방어구: [[100, 13, 17, 20, 24], [110, 16, 20, 24, 29], [120, 57, 72, 87, 104], [130, 72, 93, 114, 133], [140, 90, 117, 138, 166], [150, 185, 240, 290, 342], [160, 220, 285, 345, 414], [200, 435, 565, 675, 910], [250, 850, 1100, 1325, 1560]],
+      무기: [[100, 22, 28, 30, 40], [110, 26, 34, 40, 48], [120, 93, 120, 144, 174], [130, 120, 156, 186, 222], [140, 144, 192, 228, 276], [150, 300, 390, 470, 570], [160, 370, 480, 575, 690], [200, 725, 940, 1125, 1350]],
+      장갑: [[100, 17, 23, 27, 32], [110, 20, 27, 33, 38], [120, 75, 96, 117, 139], [130, 96, 123, 150, 178], [140, 120, 156, 186, 221], [150, 245, 320, 380, 456], [160, 295, 385, 460, 550], [200, 580, 750, 900, 1080], [250, 1135, 1475, 1770, 2080]]
+    }[type];
+    if (TC) { let row = TC[0]; TC.forEach(r => { if (lv >= r[0]) row = r; }); if (row[k + 1] != null) return row[k + 1]; }
+    if (lv <= 110) { const w = lv <= 100 ? [22, 28, 30, 40] : [26, 34, 40, 48], a = lv <= 100 ? [13, 17, 20, 24] : [16, 20, 24, 29]; return (type === '무기' ? w : a)[k]; }
+    const pts = [[120, 174], [150, 570], [200, 1350]];
+    let w15 = lv >= 200 ? 1350 + (lv - 200) * 15.6 : (() => { const i = lv < 150 ? 0 : 1, [x0, y0] = pts[i], [x1, y1] = pts[i + 1]; return y0 + (y1 - y0) * (lv - x0) / (x1 - x0); })();
+    const rw = [0.534, 0.69, 0.828, 1][k], ra = type === '무기' ? 1 : lv >= 150 ? 0.81 : 0.6 + 0.21 * (lv - 120) / 30;
+    return Math.round(w15 * rw * ra);
+  }
+  tsSrc(s, num) {
+    const pt = (num(s.price.trace) || 0) / 1000, wP = num(s.wP === '' ? 10 : s.wP) || 0, iP = num(s.iP === '' ? 50 : s.iP) || 0;
+    const mk = (k, pm, tn) => { tn = s.sun ? tn / 2 : tn; const cm = pm > 0 ? (num(s.price[k]) || 0) / (pm / 100) : Infinity, ct = tn * pt, pick = s.src?.[k] || 'auto'; return { pm, tn, cm, ct, use: pick === 'auto' ? (ct < cm ? 'trace' : 'market') : pick }; };
+    return { white: mk('white', wP, 20000), inno: mk('inno', iP, 12000) };
+  }
+  tsRate(pct, fever, bonus) { return Math.min(100, (fever ? { 100: 100, 70: 95, 30: 45, 15: 25 }[pct] : pct) + (bonus || 0)); }
+  tsVals() {
+    const s = this.tsS(), num = v => { const n = parseFloat(String(v ?? '').replace(/,/g, '')); return isFinite(n) ? n : null; };
+    const bt = s.type === '모자' || s.type === '어깨' ? '방어구' : s.type;
+    const lv = Math.max(0, Math.min(300, Math.round(num(s.lv) ?? 200))), tbl = this.tsTable(bt, lv), bonus = num(s.bonus) || 0;
+    const pct = tbl.some(r => r[0] === s.pct) ? s.pct : tbl[tbl.length - 1][0], key = p => s.type + '|' + lv + '|' + p;
+    const cntOf = p => s.cnt[key(p)] != null && s.cnt[key(p)] !== '' ? num(s.cnt[key(p)]) || 0 : this.tsCntDef(bt, lv, p);
+    const four = bt === '방어구';
+    const effTxt = (a, st) => [a ? '공/마 +' + a : '', st ? '주스탯 +' + st : '', !a && !st ? '방어력' : ''].filter(Boolean).join(' · ');
+    const on = sel => sel ? { bg: 'oklch(0.48 0.17 255)', border: 'oklch(0.48 0.17 255)', color: '#fff' } : { bg: '#fff', border: '#e3e3e0', color: '#3a3c41' };
+    const pill = v => v ? { Bg: 'oklch(0.95 0.03 255)', Border: 'oklch(0.48 0.17 255)', Color: 'oklch(0.35 0.1 255)' } : { Bg: '#fff', Border: '#e3e3e0', Color: '#6b6d73' };
+    const slotDef = { 무기: 9, 모자: 12, 방어구: 8, 어깨: 2, 장갑: 8, 장신구: '', 기계심장: 10 };
+    const wDef = 10, iDef = 50, noSlots = num(s.slots) == null || num(s.slots) < 1, slots = Math.max(1, Math.round(num(s.slots) ?? 1)), gMax = slots + (s.ham ? 1 : 0);
+    const fv = pill(s.fever), hm = pill(s.ham), gd = pill(s.guard), sn = pill(s.sun), half = s.sun ? 0.5 : 1;
+    const P = [['trace', '주문의 흔적 1000개'], ['white', '순백의 주문서 1개'], ['inno', '이노센트 주문서 1개']];
+    const modeNote = { none: '업그레이드 횟수를 다 쓰고 끝. 성공 횟수 분포를 보여줘요.', white: '실패할 때마다 순백의 주문서로 횟수를 되살려 전부 성공시켜요.', inno: '목표 성공 횟수가 불가능해지면 이노센트 주문서로 처음부터 다시 해요.', best: '입력한 가격으로 메소가 가장 적게 드는 방법을 계산해서, 언제 이노센트·언제 순백을 쓸지 표로 알려줘요.' }[s.mode];
+    const r = this.state.tsRes, busy = this.state.tsBusy;
+    const srcOf = this.tsSrc(s, num), mzS = x => { x = Math.round(x); return x >= 1e8 ? (Math.round(x / 1e6) / 100) + '억' : x >= 1e4 ? Math.round(x / 1e4).toLocaleString() + '만' : x.toLocaleString(); };
+    const srcRow = (k, nm, tn) => { const o = srcOf[k], cur = s.src?.[k] || 'auto';
+      return { title: nm + ' 구하는 방법', opts: [['auto', '자동 (싼 쪽)'], ['market', '경매장 ' + o.pm + '%'], ['trace', '흔적 ' + o.tn.toLocaleString() + '개 (100%)']].map(([v, l]) => ({ label: l, ...on(v === cur), pick: () => this.tsSet({ src: { ...(s.src || {}), [k]: v } }) })),
+        note: '1번 복구 기준 · 경매장 ' + (isFinite(o.cm) ? mzS(o.cm) : '-') + ' / 흔적 ' + mzS(o.ct) + ' → ' + (o.use === 'trace' ? '흔적' : '경매장') + ' 사용' + (cur === 'auto' ? ' (자동)' : '') }; };
+    return {
+      types: [['무기', '무기·보조무기'], ['모자', '모자'], ['방어구', '방어구'], ['어깨', '어깨장식'], ['장갑', '장갑'], ['장신구', '장신구'], ['기계심장', '기계심장']].map(([t, l]) => ({ label: l, ...on(t === s.type), pick: () => this.tsSet({ type: t, slots: slotDef[t], pct: (t === '장신구' || t === '기계심장') && s.pct === 15 ? 30 : s.pct }) })),
+      lv: s.lv, onLv: e => this.tsSet({ lv: e.target.value }), band: s.type === '기계심장' ? (lv >= 130 ? '130제 이상' : lv >= 100 ? '100~129제' : '30~99제') : lv <= 70 ? '0~70제' : bt === '무기' ? (lv <= 110 ? '80~110제' : '120제 이상') : bt === '장갑' ? '75제 이상' : lv <= 115 ? '75~115제' : '120제 이상',
+      rows: tbl.map(([p, a, st]) => { const sel = p === pct; return { label: p + '%', rate: this.tsRate(p, s.fever, bonus) + '%', eff: effTxt(a, st), cnt: Math.ceil(cntOf(p) * half).toLocaleString() + (s.sun ? ' (반값)' : ''), bg: sel ? 'oklch(0.95 0.03 255)' : '#fff', color: sel ? 'oklch(0.48 0.17 255)' : '#3a3c41', pick: () => this.tsSet({ pct: p }) }; }),
+      tblNote: (four ? '4번째 성공 시 공/마 +1 추가 · ' : '') + (s.type === '장신구' || s.type === '기계심장' ? s.type + '는 15% 없음 · ' : '') + (s.type === '방어구' ? '상의·하의·한벌옷·신발·망토·방패 · ' : '') + '흔적 개수는 표의 가장 가까운 아래 레벨 기준이에요. 다르면 아래 칸에 고쳐 쓰세요.',
+      cnt: cntOf(pct), onCnt: e => this.tsSet({ cnt: { ...s.cnt, [key(pct)]: e.target.value } }),
+      bonus: s.bonus, onBonus: e => this.tsSet({ bonus: e.target.value }),
+      sunToggle: () => this.tsSet({ sun: !s.sun }), sunBg: sn.Bg, sunBorder: sn.Border, sunColor: sn.Color,
+      guardToggle: () => this.tsSet({ guard: !s.guard }), guardBg: gd.Bg, guardBorder: gd.Border, guardColor: gd.Color,
+      feverToggle: () => this.tsSet({ fever: !s.fever }), feverBg: fv.Bg, feverBorder: fv.Border, feverColor: fv.Color,
+      slots: s.slots, onSlots: e => this.tsSet({ slots: e.target.value }),
+      hamOn: !!s.ham, hamToggle: () => this.tsSet({ ham: !s.ham }), hamBg: hm.Bg, hamBorder: hm.Border, hamColor: hm.Color, hamP: s.hamP, onHamP: e => this.tsSet({ hamP: e.target.value }),
+      modes: [['none', '그냥 다 쓰기'], ['white', '순백의 주문서로 복구'], ['inno', '이노센트로 다시'], ['best', '순백+이노센트 (추천 전략)']].map(([k, l]) => ({ label: l, ...on(k === s.mode), pick: () => this.tsSet({ mode: k }) })), modeNote,
+      srcRows: [srcRow('white', '순백의 주문서', 20000), srcRow('inno', '이노센트 주문서', 12000)],
+      isWhite: s.mode === 'white' || s.mode === 'best', isInno: s.mode === 'inno' || s.mode === 'best',
+      wP: s.wP === '' ? wDef : s.wP, onWP: e => this.tsSet({ wP: e.target.value }), iP: s.iP === '' ? iDef : s.iP, onIP: e => this.tsSet({ iP: e.target.value }),
+      goal: s.goal, goalMax: String(gMax), onGoal: e => this.tsSet({ goal: e.target.value }),
+      prices: P.map(([k, l]) => ({ label: l, v: s.pu[k] ?? '', ph: (s.price[k] || 0).toLocaleString(), on: e => this.tsSet({ pu: { ...s.pu, [k]: e.target.value } }) })),
+      runLabel: busy ? '계산 중…' : '시뮬레이션 돌리기', run: () => { if (noSlots) return this.setState({ tsErr: '업그레이드 가능 횟수를 넣어 주세요', tsRes: null }); if (!busy) this.tsRun({ s, lv, tbl, pct, cnt: Math.ceil(cntOf(pct) * half), rate: this.tsRate(pct, s.fever, bonus), slots, gMax, wP: num(s.wP === '' ? wDef : s.wP) || 0, iP: num(s.iP === '' ? iDef : s.iP) || 0, num, four }); },
+      err: this.state.tsErr || '', noRes: !r && !this.state.tsErr, hasRes: !!r, res: r ? { ...r, cards: (r.cards || []).filter(c => c.label !== '순백의 주문서' && c.label !== '이노센트 주문서').map(c => ({ ...c, fs: c.small || c.label === '전부 성공 시 능력치' || c.label === '순백의 주문서' || c.label === '이노센트 주문서' ? '17px' : '24px' })), pol: (r.pol || []).map((row, i) => ({ ...row, label: '성공 ' + i, cells: row.cells.map(c => ({ ...c, t: c.t === '성공' ? '계속' : c.t === '실패' ? (String(c.bg).includes(' 45)') ? '이노' : '순백') : c.t })) })) } : { cards: [], pct: [], dist: [] }
+    };
+  }
+  tsRun(c) {
+    const { s, tbl, pct, cnt, slots, num, four } = c, SRC = this.tsSrc(s, num), wT = SRC.white.use === 'trace', iT = SRC.inno.use === 'trace';
+    const g = s.guard ? 0.04 : 0, p = c.rate / 100, hp = (num(s.hamP) ?? 50) / 100, wp = wT ? 1 : c.wP / 100, ip = iT ? 1 : c.iP / 100, ham = !!s.ham, mode = s.mode;
+    const K = mode === 'inno' || mode === 'best' ? Math.round(num(s.goal) ?? c.gMax) : 0, [, atk, stat] = tbl.find(r => r[0] === pct);
+    const err = m => this.setState({ tsErr: m, tsRes: null, tsBusy: false });
+    if (p <= 0) return err('성공 확률이 0%예요');
+    if (mode === 'white' && wp <= 0) return err('순백의 주문서 확률을 넣어 주세요');
+    if (mode === 'best' && ip <= 0 && wp <= 0) return err('순백·이노센트 확률을 넣어 주세요');
+    if (mode === 'inno' || mode === 'best') { if (mode === 'inno' && ip <= 0) return err('이노센트 주문서 확률을 넣어 주세요'); if (K < 1 || K > c.gMax) return err('목표 성공 횟수는 1~' + c.gMax + ' 사이로 넣어 주세요'); if (ham && hp <= 0 && K > slots) return err('황금 망치 확률이 0%라 목표를 못 채워요'); }
+    const pr = k => (num(s.price[k]) || 0) / (k === 'trace' ? 1000 : 1), sh = s.sun ? 0.5 : 1, P = { t: pr('trace'), w: wT ? 20000 * sh * pr('trace') : pr('white'), i: iT ? 12000 * sh * pr('trace') : pr('inno'), h: pr('ham') }, wTr = wT ? 20000 * sh : 0, iTr = iT ? 12000 * sh : 0;
+    let pol = null;
+    if (mode === 'best') { const ct0 = cnt * P.t, tot = ct0 + P.w + P.i, R0 = this.tsPolicy(slots, K, p, wp, ip, tot ? ct0 : 1, tot ? P.w : 0, tot ? P.i : 0, g); if (!R0) return err('확률이 너무 낮아 계산이 안 돼요'); pol = R0; }
+    const N = 100000, TR = new Float64Array(N), MS = new Float64Array(N), dist = new Array(c.gMax + 1).fill(0);
+    let sT = 0, sW = 0, sI = 0, sH = 0, sC = 0, sHamOk = 0, done = 0, ops = 0, aborted = false;
+    const rnd = Math.random, LIMIT = 4e7;
+    this.setState({ tsBusy: true, tsErr: '' });
+    const step = () => {
+      const end = Math.min(N, done + 4000);
+      for (let n = done; n < end; n++) {
+        let tries = 0, wh = 0, inn = 0, hams = 0, succ = 0;
+        if (mode === 'best') {
+          let st = 0, f = 0, r = slots;
+          for (;;) {
+            if (st >= K) { while (r > 0) { tries++; if (rnd() < p) { st++; r--; } else if (rnd() >= g) r--; } break; }
+            const a = pol[st][f];
+            if (a === 0) { tries++; if (rnd() < p) { st++; r--; } else if (rnd() >= g) { f++; r--; } }
+            else if (a === 1) { wh++; if (rnd() < wp) { f--; r++; } }
+            else { inn++; if (rnd() < ip) { st = 0; f = 0; r = slots; } }
+            if (tries + inn + wh > 2e6) { aborted = true; break; }
+          }
+          succ = st;
+        } else if (mode === 'inno') {
+          for (;;) {
+            let sl = slots; if (ham) { hams++; if (rnd() < hp) sl++; }
+            if (sl >= K) { let rem = sl; succ = 0; while (rem > 0 && succ + rem >= K) { tries++; rem--; if (rnd() < p) succ++; } if (succ >= K) { while (rem > 0) { tries++; rem--; if (rnd() < p) succ++; } if (sl > slots) sHamOk++; break; } }
+            do { inn++; } while (rnd() >= ip);
+            if (tries + inn > 2e6) { aborted = true; break; }
+          }
+        } else {
+          let sl = slots; if (ham) { hams++; if (rnd() < hp) { sl++; sHamOk++; } }
+          if (mode === 'none') { for (let i = 0; i < sl; i++) { tries++; if (rnd() < p) succ++; } }
+          else { while (succ < sl) { tries++; if (rnd() < p) succ++; else { do { wh++; } while (rnd() >= wp); } } }
+        }
+        ops += tries + inn + wh;
+        TR[n] = tries * cnt + wh * wTr + inn * iTr; MS[n] = tries * cnt * P.t + wh * P.w + inn * P.i + hams * P.h;
+        sT += tries; sW += wh; sI += inn; sH += hams; sC += succ; dist[Math.min(succ, c.gMax)]++;
+        if (aborted || ops > LIMIT) { done = n + 1; aborted = true; break; }
+      }
+      if (!aborted) done = end;
+      if (done < N && !aborted) return setTimeout(step, 0);
+      if (done < 200) return err('확률이 너무 낮아서 계산이 끝나지 않아요. 목표 성공 횟수를 낮춰 보세요.');
+      const R = done, f = x => Math.round(x).toLocaleString(), f1 = x => (Math.round(x * 10) / 10).toLocaleString();
+      const mz = x => { x = Math.round(x); if (x >= 1e8) { const e = Math.floor(x / 1e8), m = Math.round((x % 1e8) / 1e4); return e + '억' + (m ? ' ' + m.toLocaleString() + '만' : ''); } if (x >= 1e4) return Math.round(x / 1e4).toLocaleString() + '만'; return x.toLocaleString(); };
+      const tr = Array.from(TR.subarray(0, R)).sort((a, b) => a - b), ms = Array.from(MS.subarray(0, R)).sort((a, b) => a - b), q = (a, v) => a[Math.min(a.length - 1, Math.floor(a.length * v))];
+      const avgT = sT / R, hasMeso = P.t || P.w || P.i || P.h;
+      const cards = [{ label: '평균 흔적', val: f(avgT * cnt + (sW * wTr + sI * iTr) / R), sub: '주흔작 ' + f1(avgT) + '번 · 순백 ' + f1(sW / R) + '개 · 이노 ' + f1(sI / R) + '개' + (wT || iT ? ' (' + [wT ? '순백' : '', iT ? '이노' : ''].filter(Boolean).join('·') + ' 흔적 포함)' : '') }];
+      if (hasMeso) cards.push({ label: '평균 메소', val: mz(ms.reduce((a, b) => a + b, 0) / R), sub: '입력한 가격 기준' });
+      if (mode === 'white' || mode === 'best') cards.push({ label: '순백의 주문서', val: f1(sW / R) + '개', sub: wT ? '흔적 20,000개짜리 · 평균 사용' : '경매장 ' + c.wP + '% · 평균 사용' });
+      if (mode === 'inno' || mode === 'best') cards.push({ label: '이노센트 주문서', val: f1(sI / R) + '개', sub: iT ? '흔적 12,000개짜리 · 평균 사용' : '경매장 ' + c.iP + '% · 평균 사용' });
+      if (ham) cards.push({ label: '황금 망치', val: f1(sH / R) + '개', sub: mode === 'inno' ? '평균 사용' : '성공 ' + (Math.round(sHamOk / R * 1000) / 10) + '%' });
+      const fullA = slots * atk + (four && slots >= 4 ? 1 : 0), fullS = slots * stat;
+      cards.push({ label: '전부 성공 시 능력치', val: [fullA ? '공/마 +' + fullA : '', fullS ? '주스탯 +' + fullS : ''].filter(Boolean).join(' · ') || '방어력', sub: slots + '번 성공 기준', small: true });
+      const pctRows = mode === 'none' ? [] : [['운 좋음 (상위 10%)', 0.1], ['보통 (중간)', 0.5], ['운 나쁨 (하위 10%)', 0.9]].map(([l, v]) => ({ label: l, tr: f(q(tr, v)), meso: hasMeso ? mz(q(ms, v)) : '-' }));
+      const distRows = mode === 'white' ? [] : dist.map((v, i) => ({ i, v })).filter(o => o.v > 0 && (mode === 'none' || o.i >= K)).reverse().map(o => ({ c: o.i + '번', prob: (Math.round(o.v / R * 10000) / 100) + '%', atk: '+' + (o.i * atk + (four && o.i >= 4 ? 1 : 0)), stat: '+' + o.i * stat, bg: '#fff' }));
+      const title = s.type + ' ' + c.lv + '제 · ' + pct + '% (' + c.rate + '%) · 업횟 ' + slots + (ham ? ' + 황금 망치' : '') + (mode === 'inno' || mode === 'best' ? ' · 목표 ' + K + '번 성공' : '');
+      this.setState({ tsBusy: false, tsRes: { ...this.tsPolView(pol, slots, K), title, cards, hasPct: pctRows.length > 0, pct: pctRows, hasDist: distRows.length > 0, dist: distRows, note: (aborted ? '계산량이 많아 ' + R.toLocaleString() + '번만 돌렸어요 · ' : R.toLocaleString() + '번 시뮬레이션 · ') + '이노센트 실패·순백 실패도 1개씩 계산 · 실제 게임 결과와 다를 수 있어요' } });
+    };
+    setTimeout(step, 0);
+  }
+  tsPolicy(N, K, p, wp, ip, ct, cw, ci, g = 0) {
+    const V = [], A = [], dn = 1 - (1 - p) * g;
+    for (let s = 0; s < K; s++) { V.push(new Float64Array(N - s + 1)); A.push(new Int8Array(N - s + 1)); }
+    const val = (s, f) => s >= K ? (N - s - f) * ct / dn : V[s][f];
+    const solve = X => {
+      for (let it = 0; it < 3000; it++) {
+        let d = 0;
+        for (let s = K - 1; s >= 0; s--) for (let f = N - s; f >= 0; f--) {
+          const r = N - s - f; let b = Infinity, a = 0;
+          if (r > 0) b = (ct + p * val(s + 1, f) + (1 - p) * (1 - g) * val(s, f + 1)) / dn;
+          else if (wp > 0 && f > 0) { b = cw / wp + val(s, f - 1); a = 1; }
+          if ((s > 0 || f > 0) && ip > 0) { const v = ci / ip + X; if (v < b - 1e-9) { b = v; a = 2; } }
+          if (!isFinite(b)) b = 1e30;
+          d = Math.max(d, Math.abs(b - V[s][f])); V[s][f] = b; A[s][f] = a;
+        }
+        if (d <= 1e-10 * (1 + Math.abs(V[0][0]))) break;
+      }
+      return V[0][0];
+    };
+    let lo = 0, hi = 1;
+    while (solve(hi) >= hi) { hi *= 4; if (hi > 1e28) return null; }
+    for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (solve(m) > m) lo = m; else hi = m; }
+    solve(hi);
+    return A;
+  }
+  tsPolView(A, N, K) {
+    if (!A) return { hasPol: false, pol: [], polHead: [], polSum: [] };
+    const L = [{ t: '계속', bg: '#f1f1ef', color: '#6b6d73' }, { t: '순백', bg: 'oklch(0.9 0.06 255)', color: 'oklch(0.32 0.12 255)' }, { t: '이노', bg: 'oklch(0.9 0.07 45)', color: 'oklch(0.4 0.14 40)' }];
+    const pol = [], endI = [], endW = []; let mid = false;
+    for (let s = 0; s < K; s++) {
+      const cells = [];
+      for (let f = 0; f <= N; f++) { if (f > N - s) { cells.push({ t: '', bg: 'transparent', color: 'transparent' }); continue; } const a = A[s][f]; cells.push(L[a]); if (f === N - s) (a === 2 ? endI : endW).push(s); else if (a === 2) mid = true; }
+      pol.push({ label: '성공 ' + s, cells });
+    }
+    const rg = a => { const o = []; let i = 0; while (i < a.length) { let j = i; while (j + 1 < a.length && a[j + 1] === a[j] + 1) j++; o.push(j > i ? a[i] + '~' + a[j] : '' + a[i]); i = j + 1; } return o.join('·'); };
+    const sum = [];
+    if (!endI.length) sum.push({ txt: '업횟 0 → 순백' });
+    else if (!endW.length) sum.push({ txt: '업횟 0 → 이노센트' });
+    else { sum.push({ txt: '업횟 0 · 성공 ' + rg(endI) + '번 → 이노센트' }); sum.push({ txt: '업횟 0 · 성공 ' + rg(endW) + '번 → 순백' }); }
+    if (mid) sum.push({ txt: '\'이노\' 칸 → 바로 이노센트' });
+    return { hasPol: true, pol, polSum: sum, polHead: Array.from({ length: N + 1 }, (_, i) => ({ t: i + '번' })), polCols: '62px repeat(' + (N + 1) + ',minmax(38px,1fr))' };
+  }
+  enhOld(tab, pot) {
     return { isSfTab: !pot, isPotTab: pot, enhTabs: ['스타포스', '잠재능력'].map(l => ({ label: l, bar: l === tab ? 'oklch(0.48 0.17 255)' : 'transparent', color: l === tab ? 'oklch(0.3 0.09 255)' : '#6b6d73', pick: () => { try { localStorage.setItem(KEY + ':enhTab', l); } catch (e) {} this.setState({ enhTab: l }); } })), ...(pot ? this.potVals() : this.sfVals()) };
   }
   potS() {
@@ -4386,7 +4685,22 @@ class Component extends DCLogic {
   bjSwap(all) { const y = all['보조무기']; if (!y || !y.items || y.bjSw) return false;
     const isB = it => it.group === '쌍레 5줄 · 방무 포함', b = y.items.filter(isB); if (!b.length) return false;
     all['보조무기'] = { ...y, bjSw: true, items: [...b, ...y.items.filter(it => !isB(it))] }; return true; }
-  moveKt(all) { const bj = this.bjSwap(all), cf = this.codiFirst(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return bj || cf || e || s || f2 || z || a || b || c; }
+  addTsItems(all) { const y = all['기타아이템']; if (!y || !y.items) return false;
+    if (y.tsAdd2 && !y.tsAdd3) { all['기타아이템'] = { ...y, tsAdd3: true, items: y.items.map(it => it.id === 'e_ts' && it.name === '주문의 흔적 (만)' ? { ...it, name: '주문의 흔적 1000개 (만)' } : it) }; return true; }
+    if (y.tsAdd2) return false;
+    const T = [['e_ts', '주문의 흔적 1000개 (만)', '주흔1000'], ['e_wh', '순백의 주문서 10% (만)', '순백10%'], ['e_in', '이노센트 주문서 50% (만)', '이노50%']], ids = T.map(t => t[0]);
+    const old = y.items.filter(it => ids.includes(it.id)), rest = y.items.filter(it => !ids.includes(it.id));
+    const isMan = it => /만 단위/.test(it.group || '') || /\(만\)/.test(it.name || ''), gm = (rest.find(it => /만 단위/.test(it.group || '')) || {}).group || '기타아이템(만 단위)';
+    const add = T.map(([id, name, short]) => { const o = old.find(it => it.id === id); return o ? { ...o, group: gm } : { id, name, short, group: gm, values: (y.dates || []).map(() => '') }; });
+    let li = -1; rest.forEach((it, i) => { if (isMan(it)) li = i; }); const items = rest.slice(); items.splice(li + 1, 0, ...add);
+    all['기타아이템'] = { ...y, tsAdd: true, tsAdd2: true, tsAdd3: true, items }; return true; }
+  tsAucPrice() {
+    const d = (this.state.all || {})['기타아이템'], o = {}; if (!d || !d.items) return o;
+    const lastV = it => { for (let i = (it.values || []).length - 1; i >= 0; i--) { const v = parseFloat(String(it.values[i]).replace(/,/g, '')); if (v > 0) return v; } return null; };
+    [['trace', /주문의 ?흔적/], ['white', /순백/], ['inno', /이노센트/]].forEach(([k, re]) => { const it = d.items.find(x => re.test(x.name || '')); const v = it && lastV(it); if (v) o[k] = Math.round(v * (/\(억\)/.test(it.name) ? 1e8 : 1e4)); });
+    return o;
+  }
+  moveKt(all) { const ts = this.addTsItems(all), bj = this.bjSwap(all), cf = this.codiFirst(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return ts || bj || cf || e || s || f2 || z || a || b || c; }
   moveKtTo(all, dest, NM) {
     const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
     const isY = it => NM.includes(it.name);
@@ -6153,15 +6467,15 @@ class Component extends DCLogic {
       isReview, ...this.reviewVals(isReview),
       isSunday,
       ...(() => {
-        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '스타포스', '나의매애기'] : ['옥션', '사냥', '스타포스'];
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기'] : ['옥션', '사냥', '강화'];
         let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
-        if (area === '강화') area = '스타포스';
+        if (area === '스타포스') area = '강화';
         if (!AREAS.includes(area)) area = '옥션';
         return {
-          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '스타포스', isMm: area === '나의매애기',
+          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화', isMm: area === '나의매애기',
           ...(area === '나의매애기' ? this.mmVals() : {}),
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
-          ...(area === '스타포스' ? this.enhVals() : {}),
+          ...(area === '강화' ? this.enhVals() : {}),
           ...(() => {
             const GT = ['직업가이드', '보약', '환산별템세팅', '유니온챔피언', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
@@ -6639,7 +6953,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 89,
+      isAdmin: admin, appVer: 90,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
