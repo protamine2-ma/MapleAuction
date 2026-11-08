@@ -3538,12 +3538,14 @@ class Component extends DCLogic {
     setTimeout(step, 0);
   }
   enhVals() {
-    const tab = this.state.enhTab || (() => { try { return localStorage.getItem(KEY + ':enhTab'); } catch (e) { return null; } })() || '스타포스', pot = tab === '잠재능력', tsT = tab === '주문의 흔적';
+    let tab = this.state.enhTab || (() => { try { return localStorage.getItem(KEY + ':enhTab'); } catch (e) { return null; } })() || '스타포스';
+    if (tab === '잠재능력' && !this.state.admin) tab = '스타포스';
+    const pot = tab === '잠재능력', tsT = tab === '주문의 흔적';
     if (tsT) return { isSfTab: false, isPotTab: false, isTsTab: true, enhTabs: this.enhTabList(tab), ts: this.tsVals() };
     return { isSfTab: !pot, isPotTab: pot, isTsTab: false, enhTabs: this.enhTabList(tab), ...(pot ? this.potVals() : this.sfVals()) };
   }
   enhTabList(tab) {
-    return ['스타포스', '잠재능력', '주문의 흔적'].map(l => ({ label: l, bar: l === tab ? 'oklch(0.48 0.17 255)' : 'transparent', color: l === tab ? 'oklch(0.3 0.09 255)' : '#6b6d73', pick: () => { try { localStorage.setItem(KEY + ':enhTab', l); } catch (e) {} this.setState({ enhTab: l }); } }));
+    return (this.state.admin ? ['스타포스', '잠재능력', '주문의 흔적'] : ['스타포스', '주문의 흔적']).map(l => ({ label: l, bar: l === tab ? 'oklch(0.48 0.17 255)' : 'transparent', color: l === tab ? 'oklch(0.3 0.09 255)' : '#6b6d73', pick: () => { try { localStorage.setItem(KEY + ':enhTab', l); } catch (e) {} this.setState({ enhTab: l }); } }));
   }
   tsS() {
     const d = { type: '무기', lv: 200, pct: 15, slots: 8, ham: true, hamP: 50, fever: true, bonus: 14, mode: 'best', goal: '', wP: '', iP: '', cnt: {}, price: {} };
@@ -6956,7 +6958,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 92,
+      isAdmin: admin, appVer: 93,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
