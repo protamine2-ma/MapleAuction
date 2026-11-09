@@ -5102,14 +5102,18 @@ class Component extends DCLogic {
     this.forceUpdate();
   }
   findMpBar(W, H) {
-    const v = this._video, X0 = Math.floor(W * 0.15), Y0 = Math.floor(H * 0.45), w = Math.floor(W * 0.7), hh = H - Y0;
+    const v = this._video, X0 = Math.floor(W * 0.05), Y0 = Math.floor(H * 0.4), w = Math.floor(W * 0.9), hh = H - Y0;
     const c = this._mpFc || (this._mpFc = document.createElement('canvas')); c.width = w; c.height = hh;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(v, X0, Y0, w, hh, 0, 0, w, hh); const d = x.getImageData(0, 0, w, hh).data;
     const cy = (i) => { const r = d[i], g = d[i + 1], b = d[i + 2]; return b > 150 && g > 110 && r < 100 && b - r > 100; };
     const pk = (i) => { const r = d[i], g = d[i + 1], b = d[i + 2]; return r > 190 && g < 110 && b > 70 && b < 170; };
     const minRun = Math.max(12, Math.floor(W * 0.015)), rows = [];
     // 한 줄에 하늘색 구간이 여러 개일 수 있음(파란 하늘 배경) → 가장 긴 것 하나만 보지 않고 전부 모아서 x 위치가 이어지는 것끼리 묶기
-    for (let y = 0; y < hh; y++) { let run = 0; for (let X = 0; X <= w; X++) { if (X < w && cy((y * w + X) * 4)) run++; else { if (run >= minRun) rows.push({ y, x0: X - run, x1: X - 1 }); run = 0; } } }
+    const gapMax = Math.max(24, Math.floor(W * 0.04));
+    for (let y = 0; y < hh; y++) { let run = 0, segs = []; for (let X = 0; X <= w; X++) { if (X < w && cy((y * w + X) * 4)) run++; else { if (run >= 3) segs.push([X - run, X - 1]); run = 0; } }
+      // MP 숫자(흰 글씨)가 바를 끊으므로 가까운 구간은 이어 붙이기
+      const m = []; for (const s of segs) { const l = m[m.length - 1]; if (l && s[0] - l[1] <= gapMax) l[1] = s[1]; else m.push([s[0], s[1]]); }
+      for (const s of m) if (s[1] - s[0] + 1 >= minRun) rows.push({ y, x0: s[0], x1: s[1] }); }
     if (!rows.length) return null;
     const groups = [], open = [];
     for (const r of rows) { let G = null; for (const o of open) { const l = o[o.length - 1]; if (r.y - l.y <= 2 && r.y > l.y && Math.abs(r.x0 - l.x0) <= 4) { G = o; break; } } if (G) G.push(r); else { const n = [r]; open.push(n); groups.push(n); } for (let k = open.length - 1; k >= 0; k--) if (r.y - open[k][open[k].length - 1].y > 2) open.splice(k, 1); }
@@ -5119,7 +5123,7 @@ class Component extends DCLogic {
       const top = G[0].y, bot = G[G.length - 1].y, bx0 = Math.min(...G.map(r => r.x0)), bh = bot - top + 1;
       let pmax = -1, prow = 0;
       for (let y = Math.max(0, top - Math.round(bh * 1.8)); y < top; y++) { let n = 0, gap = 0, end = -1; for (let X = Math.max(0, bx0 - 2); X < Math.min(w, bx0 + W * 0.45); X++) { if (pk((y * w + X) * 4)) { if (end < 0 && X > bx0 + 6) break; n++; gap = 0; end = X; } else if (end >= 0 && ++gap > Math.max(8, W * 0.012)) break; } if (n >= minRun) { prow++; pmax = Math.max(pmax, end); } }
-      const hasHp = prow >= 3, cand = { top, bot, bx0, bh, pmax, cmax: G.map(r => r.x1).sort((a, b) => a - b)[Math.floor(G.length / 2)], hasHp };
+      const hasHp = prow >= 3, cand = { top, bot, bx0, bh, pmax, cmax: G.map(r => r.x1).sort((a, b) => a - b)[Math.floor(G.length * 0.75)], hasHp };
       if (!best || (cand.hasHp && !best.hasHp) || (cand.hasHp === best.hasHp && cand.top > best.top)) best = cand;
     }
     if (!best) return null;
@@ -6959,7 +6963,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 94,
+      isAdmin: admin, appVer: 95,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
