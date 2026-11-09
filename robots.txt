@@ -3,6 +3,7 @@ Allow: /
 Disallow: /rest/
 Disallow: /storage/
 Disallow: /auth/
+Disallow: /api/
 Disallow: /%7B%7B
 Disallow: /{{
 
