@@ -2237,6 +2237,7 @@ body{overflow-x:clip;}
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
       <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
       <button onClick="{{ reviewTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ reviewTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ reviewTab.weight }};color:{{ reviewTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">검토</button>
+      <button onClick="{{ chalTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ chalTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ chalTab.weight }};color:{{ chalTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">챌린저스</button>
     </sc-if>
   </div>
 </nav>
@@ -2267,6 +2268,66 @@ body{overflow-x:clip;}
       </div>
     </sc-for>
   </section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isChal }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;flex-direction:column;gap:6px;">
+    <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em;">지금 사서 다음 챌린저스 때 팔면 좋은 것</h1>
+    <span style="font-size:14px;color:#6b6d73;text-wrap:pretty;">예전: 1주 6/20 · 2주 6/27 · 3주 7/03 · 4주 7/11 → 지금: 옥션 {{ chalDate }} · 같은 아이템·같은 조건만 비교({{ chalCount }}개) · 예상 판매가 = 1~4주 중 최고가(파란 칸) · 단위는 옥션 탭과 같음</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;">
+    <button onClick="{{ chalAll.onClick }}" style="padding:8px 14px;border-radius:8px;border:1px solid {{ chalAll.bd }};background:{{ chalAll.bg }};color:{{ chalAll.c }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">전체</button>
+    <button onClick="{{ chalEx.onClick }}" style="padding:8px 14px;border-radius:8px;border:1px solid {{ chalEx.bd }};background:{{ chalEx.bg }};color:{{ chalEx.c }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">조건 똑같은 것만</button>
+  </div>
+  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+    <div style="padding:12px 16px;background:oklch(0.5 0.18 260);color:#fff;font-size:17px;font-weight:800;">TOP 40</div>
+    <div style="display:grid;grid-template-columns:26px minmax(0,2fr) repeat(4,minmax(0,0.55fr)) repeat(4,minmax(0,0.65fr));gap:6px;padding:6px 16px;font-size:12px;font-weight:700;color:#6b6d73;border-bottom:1px solid #f0f0ee;">
+      <span></span><span>아이템</span><span style="text-align:right;">1주</span><span style="text-align:right;">2주</span><span style="text-align:right;">3주</span><span style="text-align:right;">4주</span><span style="text-align:right;">4주 최고가</span><span style="text-align:right;">지금</span><span style="text-align:right;">차액</span><span style="text-align:right;">기대 차익</span>
+    </div>
+    <sc-for list="{{ chalRows }}" as="r" hint-placeholder-count="10">
+      <div style="display:grid;grid-template-columns:26px minmax(0,2fr) repeat(4,minmax(0,0.55fr)) repeat(4,minmax(0,0.65fr));gap:6px;align-items:center;padding:7px 16px;border-bottom:1px solid #f4f4f2;font-size:14px;font-variant-numeric:tabular-nums;">
+        <span style="font-weight:800;color:oklch(0.5 0.18 260);text-align:center;">{{ r.rank }}</span>
+        <div style="min-width:0;display:flex;flex-direction:column;line-height:1.3;">
+          <span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
+          <span style="font-size:12px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.cat }}{{ r.mark }}</span>
+        </div>
+        <sc-for list="{{ r.olds }}" as="o" hint-placeholder-count="4">
+          <span style="text-align:right;padding:2px 4px;border-radius:5px;background:{{ o.bg }};font-weight:{{ o.w }};color:{{ o.c }};">{{ o.v }}</span>
+        </sc-for>
+        <span style="text-align:right;font-weight:700;color:#3a3c41;">{{ r.mx }}</span>
+        <span style="text-align:right;font-weight:800;">{{ r.cur }}</span>
+        <span style="text-align:right;font-weight:700;color:oklch(0.45 0.15 150);">{{ r.diff }}</span>
+        <span style="text-align:right;font-weight:800;color:oklch(0.5 0.18 260);">{{ r.pct }}</span>
+      </div>
+    </sc-for>
+  </section>
+  <h2 style="margin:8px 0 0;font-size:22px;font-weight:800;">TOP 40 묶음별 보기</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px;align-items:start;">
+    <sc-for list="{{ chalCats }}" as="g" hint-placeholder-count="6">
+      <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f7f7f5;border-bottom:1px solid #ececea;">
+          <span style="flex:1;min-width:0;font-size:16px;font-weight:800;">{{ g.title }}</span>
+          <span style="font-size:13px;font-weight:700;color:oklch(0.5 0.18 260);">{{ g.n }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:26px minmax(0,1.8fr) repeat(4,minmax(0,0.7fr));gap:6px;padding:5px 14px;font-size:11px;font-weight:700;color:#6b6d73;border-bottom:1px solid #f0f0ee;">
+          <span>순위</span><span>아이템</span><span style="text-align:right;">최고가</span><span style="text-align:right;">지금</span><span style="text-align:right;">차액</span><span style="text-align:right;">차익</span>
+        </div>
+        <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:26px minmax(0,1.8fr) repeat(4,minmax(0,0.7fr));gap:6px;align-items:center;padding:6px 14px;border-bottom:1px solid #f4f4f2;font-size:13px;font-variant-numeric:tabular-nums;">
+            <span style="font-weight:800;color:oklch(0.5 0.18 260);text-align:center;">{{ r.rank }}</span>
+            <span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
+            <span style="text-align:right;color:#3a3c41;">{{ r.mx }}</span>
+            <span style="text-align:right;font-weight:800;">{{ r.cur }}</span>
+            <span style="text-align:right;font-weight:700;color:oklch(0.45 0.15 150);">{{ r.diff }}</span>
+            <span style="text-align:right;font-weight:800;color:oklch(0.5 0.18 260);">{{ r.pct }}</span>
+          </div>
+        </sc-for>
+      </section>
+    </sc-for>
+  </div>
+  <div style="font-size:13px;color:#6b6d73;text-wrap:pretty;">* 표시: 조건이 비슷하지만 똑같지는 않음(예전 유에 19·21% / 지금 유니크15%·에디에픽). 비교에서 뺀 것: 22성 장비, 칠흑 18성·22성, 에테 17·18·22성, 쿨뚝·크뎀장갑, 매지컬·에픽50%·추가경험치.</div>
 </div>
 </sc-if>
 
@@ -6278,6 +6339,23 @@ class Component extends DCLogic {
       boxMsgColor: this._boxMode === 'none' ? 'oklch(0.5 0.19 25)' : 'oklch(0.45 0.15 150)', runeCvDisplay: this._stream ? 'block' : 'none',
     };
   }
+  chalVals(on) {
+    const chalTab = { onClick: () => this.switchTab('챌린저스'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    const D = this.state.chalData;
+    if (on && !D && !this._chalLoading) { this._chalLoading = true; fetch('data/compare.json').then(r => r.json()).then(d => this.setState({ chalData: d })).catch(() => { this._chalLoading = false; }); }
+    const ex = !!this.state.chalExact, B = 'oklch(0.48 0.17 255)';
+    const btn = (s, v) => ({ onClick: () => this.setState({ chalExact: v }), ...(s ? { bd: B, bg: 'oklch(0.94 0.035 255)', c: 'oklch(0.3 0.09 255)' } : { bd: '#e3e3e0', bg: '#fff', c: '#3a3c41' }) });
+    const base = { chalTab, chalRows: [], chalCats: [], chalDate: '', chalCount: 0, chalAll: btn(!ex, false), chalEx: btn(ex, true) };
+    if (!on || !D) return base;
+    const r2 = v => String(Math.round(v * 100) / 100);
+    const rows = D.rows.filter(r => !ex || !r.note).map(r => { const v = r.old.filter(x => x != null && x > 0); const mx = Math.max(...v); return { ...r, mx, w: r.old.indexOf(mx) + 1, gain: mx / r.cur - 1 }; });
+    const dn = rows.filter(r => r.mx > r.cur).sort((x, y) => y.gain - x.gain).slice(0, 40);
+    const chalRows = dn.map((r, i) => ({ rank: i + 1, name: r.name, cat: r.cat, mark: r.note ? ' *' : '', cur: String(r.cur), mx: r2(r.mx), diff: '+' + r2(r.mx - r.cur), pct: '+' + Math.round(r.gain * 100) + '%',
+      olds: r.old.map((v, k) => { const s = k + 1 === r.w; return { v: v == null ? '' : String(v), bg: s ? 'oklch(0.93 0.04 255)' : 'transparent', w: s ? 800 : 500, c: s ? 'oklch(0.3 0.09 255)' : '#3a3c41' }; }) }));
+    const gm = new Map();
+    chalRows.forEach(x => { if (!gm.has(x.cat)) gm.set(x.cat, { title: x.cat + x.mark, rows: [] }); gm.get(x.cat).rows.push(x); });
+    return { ...base, chalRows, chalCats: [...gm.values()].map(g => ({ ...g, n: g.rows.length + '개' })), chalDate: D.curDate, chalCount: rows.length };
+  }
   reviewVals(on) {
     const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
     if (!on) return { reviewTab, reviewRows: [], reviewEmpty: false };
@@ -6310,7 +6388,7 @@ class Component extends DCLogic {
     return out;
   }
   switchTab(tab) {
-    if (tab !== '문의' && tab !== '방문자' && tab !== '검토') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
+    if (tab !== '문의' && tab !== '방문자' && tab !== '검토' && tab !== '챌린저스') { try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {} }
     this.setState({ tab, selected: null });
     window.scrollTo(0, 0);
     if (tab === '방문자') this.loadStats();
@@ -6467,14 +6545,16 @@ class Component extends DCLogic {
     const isSunday = this.state.tab === '썬데이';
     const isMeso = this.state.tab === '메소';
     const isReview = this.state.tab === '검토' && admin;
-    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || this.state.tab === '검토' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
+    const isChal = this.state.tab === '챌린저스' && admin;
+    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || this.state.tab === '검토' || this.state.tab === '챌린저스' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
     const data = all[tab] && { ...all[tab], items: all[tab].items.filter(it => !it.hidden) };
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso && !isReview,
+      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso && !isReview && !isChal,
       isReview, ...this.reviewVals(isReview),
+      isChal, ...this.chalVals(isChal),
       isSunday,
       ...(() => {
         const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기'] : ['옥션', '사냥', '강화'];
@@ -6963,7 +7043,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 95,
+      isAdmin: admin, appVer: 96,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
