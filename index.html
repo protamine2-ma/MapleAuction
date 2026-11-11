@@ -72,7 +72,7 @@ body{overflow-x:clip;}
 </helmet>
 <div style="background:oklch(0.22 0.04 260);border-bottom:1px solid oklch(0.3 0.05 260);color:#fff;">
   <div data-m="hdr" style="max-width:1320px;margin:0 auto;padding:12px 28px;min-height:80px;box-sizing:border-box;display:flex;align-items:center;flex-wrap:wrap;gap:12px 24px;">
-    <div data-m="hcol" style="display:flex;align-items:center;gap:12px;flex:none;">
+    <div data-m="hcol" onClick="{{ goHome }}" title="첫 화면으로" style="display:flex;align-items:center;gap:12px;flex:none;cursor:pointer;">
       <image-slot id="banner-logo" shape="rounded" radius="12" fit="contain" placeholder="+" compact="" style="width:44px;height:44px;flex:none;"></image-slot>
       <h1 style="margin:0;font-size:26px;font-weight:900;letter-spacing:-0.02em;line-height:1.1;white-space:nowrap;color:#fff;">메이플 <span style="color:oklch(0.75 0.13 255);">경매장 시세</span></h1>
     </div>
@@ -264,49 +264,48 @@ body{overflow-x:clip;}
   </sc-if>
   </div>
 
-  <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;">
+  <section style="background:oklch(0.22 0.04 260);color:#fff;border-radius:14px;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;">
     <sc-if value="{{ notSharing }}" hint-placeholder-val="{{ true }}">
-      <button onClick="{{ onShare }}" style="padding:10px 18px;border:none;border-radius:10px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">게임 화면 공유</button>
-    </sc-if>
-    <button onClick="{{ togglePause }}" style="padding:10px 16px;border:1px solid {{ pauseBorder }};border-radius:10px;background:{{ pauseBg }};color:{{ pauseColor }};font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">{{ pauseLabel }}</button>
-    <button onClick="{{ togglePip }}" title="게임 위에 떠 있는 작은 창으로 남은 시간을 보여줘요 (크롬·엣지 PC)" style="padding:10px 16px;border:1px solid oklch(0.85 0.04 255);border-radius:10px;background:{{ pipBg }};color:{{ pipColor }};font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">{{ pipLabel }}</button>
-    <button onClick="{{ togglePipMini }}" title="켜져 있는 알림만 초록불로 한 줄에 보여줘요 (크롬·엣지 PC)" style="padding:10px 16px;border:1px solid oklch(0.85 0.04 255);border-radius:10px;background:{{ pipMiniBg }};color:{{ pipColor }};font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">{{ pipMiniLabel }}</button>
-    <sc-if value="{{ isPaused }}" hint-placeholder-val="{{ false }}">
-      <span style="font-size:13px;font-weight:700;color:oklch(0.5 0.19 25);">모든 알림이 꺼져 있어요</span>
-    </sc-if>
-    <sc-if value="{{ hasShareErr }}" hint-placeholder-val="{{ false }}">
-      <span style="font-size:13px;font-weight:600;color:oklch(0.5 0.19 25);">{{ shareErr }}</span>
+      <button onClick="{{ onShare }}" style="padding:8px 16px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.6 0.17 255);">게임 화면 공유</button>
     </sc-if>
     <sc-if value="{{ sharing }}" hint-placeholder-val="{{ false }}">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:oklch(0.45 0.15 150);"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.6 0.17 150);"></span>공유 중 · {{ shareRes }}</span>
-        <button onClick="{{ onStopShare }}" style="padding:7px 12px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#6b6d73;cursor:pointer;" style-hover="background:#f4f4f2;">공유 중지</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:oklch(0.3 0.08 150);font-size:13px;font-weight:800;color:oklch(0.88 0.14 150);"><span style="width:7px;height:7px;border-radius:50%;background:oklch(0.8 0.18 150);"></span>공유 중 · {{ shareRes }}</span>
+        <button onClick="{{ onStopShare }}" style="padding:6px 10px;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:oklch(0.8 0.03 260);cursor:pointer;" style-hover="background:oklch(0.28 0.05 260);">공유 중지</button>
       </div>
     </sc-if>
+    <div style="display:flex;gap:6px;padding:3px;border-radius:12px;background:oklch(0.26 0.05 260);">
+      <button onClick="{{ togglePause }}" style="padding:6px 12px;border:1px solid {{ pauseBorder }};border-radius:9px;background:{{ pauseBg }};color:{{ pauseColor }};font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;">{{ pauseLabel }}</button>
+      <button onClick="{{ togglePip }}" title="게임 위에 떠 있는 작은 창으로 남은 시간을 보여줘요 (크롬·엣지 PC)" style="padding:6px 12px;border:1px solid oklch(0.35 0.05 260);border-radius:9px;background:{{ pipBg }};color:{{ pipColor }};font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;">{{ pipLabel }}</button>
+      <button onClick="{{ togglePipMini }}" title="켜져 있는 알림만 초록불로 한 줄에 보여줘요 (크롬·엣지 PC)" style="padding:6px 12px;border:1px solid oklch(0.35 0.05 260);border-radius:9px;background:{{ pipMiniBg }};color:{{ pipColor }};font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;">{{ pipMiniLabel }}</button>
+    </div>
+    <sc-if value="{{ isPaused }}" hint-placeholder-val="{{ false }}">
+      <span style="font-size:13px;font-weight:700;color:oklch(0.78 0.14 25);">모든 알림이 꺼져 있어요</span>
+    </sc-if>
+    <sc-if value="{{ hasShareErr }}" hint-placeholder-val="{{ false }}">
+      <span style="font-size:13px;font-weight:600;color:oklch(0.78 0.14 25);">{{ shareErr }}</span>
+    </sc-if>
     <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap;">
-      <button onClick="{{ toggleBeep }}" style="display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:600;color:#3a3b3f;cursor:pointer;">
-        <span style="width:40px;height:22px;border-radius:999px;padding:2px;background:{{ beepSw.swBg }};display:flex;justify-content:{{ beepSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>알림음
-      </button>
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#3a3b3f;">전체 음성<select value="{{ sndAll.val }}" onChange="{{ sndAll.onChange }}" style="padding:6px 10px;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;"><option value="mixed" disabled="{{ true }}">개별 설정</option><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="10"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></label>
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#3a3b3f;">전체 볼륨<input type="range" min="0" max="100" value="{{ huntVol }}" onChange="{{ onHuntVol }}" style="width:110px;accent-color:oklch(0.48 0.17 255);"><span style="width:38px;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ huntVol }}%</span></label>
-      <button onClick="{{ testSound }}" style="padding:7px 12px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">소리 테스트</button>
+      <label title="전체 음성" style="display:flex;align-items:center;"><select value="{{ sndAll.val }}" onChange="{{ sndAll.onChange }}" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><option value="mixed" disabled="{{ true }}">개별 설정</option><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="10"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></label>
+      <label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">전체 볼륨<input type="range" min="0" max="100" value="{{ huntVol }}" onChange="{{ onHuntVol }}" style="width:90px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ huntVol }}%</span></label>
+      <button onClick="{{ testSound }}" style="padding:5px 10px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;color:oklch(0.85 0.03 260);cursor:pointer;" style-hover="background:oklch(0.28 0.05 260);">▶ 테스트</button>
     </div>
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.skill.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.skill.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.42 0.08 255);">(퀵슬롯 지정)</span><span style="align-self:center;font-size:12px;font-weight:600;color:oklch(0.42 0.12 255);">게임 설정: 퀵슬롯&amp;버프 시간표시 <b>중앙, 크게</b> · 표시방식 <b>분 + 초</b></span></h2><div style="flex-basis:100%;height:0;"></div><button onClick="{{ toggleSkillAll }}" style="display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:oklch(0.3 0.09 255);cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ skillAllSw.swBg }};display:flex;justify-content:{{ skillAllSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>{{ skillAllLabel }}</button><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label></div>
-      <button onClick="{{ addSkill }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 스킬 추가</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.skill.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.skill.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">스킬 알림<span style="font-size:14px;font-weight:600;color:oklch(0.75 0.13 255);">(퀵슬롯 지정)</span></h2><span style="order:2;flex-basis:100%;text-align:left;font-size:12px;font-weight:600;color:oklch(0.78 0.03 260);">게임 설정: 퀵슬롯&amp;버프 시간표시 <b style="color:#fff;">중앙, 크게</b> · 표시방식 <b style="color:#fff;">분 + 초</b></span></div><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ toggleSkillAll }}" style="display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ skillAllSw.swBg }};display:flex;justify-content:{{ skillAllSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>{{ skillAllLabel }}</button><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volSkill.val }}" onChange="{{ volSkill.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volSkill.val }}%</span></label>
+      <button onClick="{{ addSkill }}" style="padding:8px 14px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.6 0.17 255);">+ 스킬 추가</button></div>
     </div>
     <sc-if value="{{ huntFold.skill.open }}" hint-placeholder-val="{{ true }}">
-    <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #f0f0ee;font-size:12px;font-weight:600;color:#9a9ca1;">
+    <div style="display:grid;grid-template-columns:52px minmax(160px,1fr) 84px 84px 120px 36px;gap:12px;align-items:center;padding:10px 20px;border-bottom:1px solid #efefec;background:#f7f7f5;font-size:12px;font-weight:700;color:#8a8c92;">
       <span>작동</span><span>스킬 이름</span><span style="text-align:center;">지속시간(초)</span><span style="text-align:center;">알림 시점(초 전)</span><span style="text-align:center;">남은 시간</span><span></span>
     </div>
     <sc-if value="{{ huntNoSkills }}" hint-placeholder-val="{{ false }}">
       <div style="padding:28px;text-align:center;font-size:14px;color:#9a9ca1;">'+ 스킬 추가'로 알림 받을 스킬을 넣어주세요.</div>
     </sc-if>
     <sc-for list="{{ huntSkills }}" as="s" hint-placeholder-count="1">
-      <div style="display:grid;grid-template-columns:52px minmax(120px,1.8fr) minmax(70px,1fr) minmax(70px,1fr) minmax(90px,1.2fr) 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0ee;">
+      <div style="display:grid;grid-template-columns:52px minmax(160px,1fr) 84px 84px 120px 36px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid #f1f1ef;background:{{ s.rowBg }};">
         <button onClick="{{ s.toggleRun }}" title="끄면 이 스킬 알림을 쓰지 않아요" style="width:44px;height:24px;border-radius:999px;border:none;padding:2px;background:{{ s.swBg }};display:flex;justify-content:{{ s.swJustify }};cursor:pointer;"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></button>
         <div style="display:flex;align-items:center;gap:8px;min-width:0;">
           <sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ false }}">
@@ -314,11 +313,14 @@ body{overflow-x:clip;}
           </sc-if>
           <div style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;">
             <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-            <select value="{{ s.presetVal }}" onChange="{{ s.onPreset }}" style="box-sizing:border-box;min-width:0;flex:1;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;background:#fff;cursor:pointer;">
+            <select value="{{ s.presetVal }}" onChange="{{ s.onPreset }}" style="box-sizing:border-box;field-sizing:content;min-width:0;max-width:100%;flex:0 1 auto;padding:7px 2px 7px 8px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:15px;font-weight:600;background:#fff;cursor:pointer;">
               <sc-for list="{{ skillPresets }}" as="p" hint-placeholder-count="5">
                 <option value="{{ p.key }}">{{ p.label }}</option>
               </sc-for>
             </select>
+            <sc-if value="{{ s.custom }}" hint-placeholder-val="{{ false }}">
+              <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;flex:0 1 160px;min-width:80px;padding:7px 8px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;background:#fff;">
+            </sc-if>
             <sc-if value="{{ s.isBm }}" hint-placeholder-val="{{ false }}">
               <span onMouseEnter="{{ s.bmIn }}" onMouseLeave="{{ s.bmOut }}" style="position:relative;flex:none;font-size:12px;font-weight:700;color:oklch(0.48 0.17 255);text-decoration:underline;cursor:help;white-space:nowrap;">예시사진
                 <sc-if value="{{ s.bmShow }}" hint-placeholder-val="{{ false }}">
@@ -327,11 +329,19 @@ body{overflow-x:clip;}
               </span>
             </sc-if>
             </div>
-            <select value="{{ s.sndVal }}" onChange="{{ s.onSnd }}" title="이 스킬 알림 소리" style="box-sizing:border-box;min-width:0;width:100%;padding:5px 8px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;background:#fafaf8;cursor:pointer;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;">
+            <select value="{{ s.sndVal }}" onChange="{{ s.onSnd }}" title="이 스킬 알림 소리" style="box-sizing:border-box;flex:none;width:150px;padding:5px 8px;border:1px solid #e3e3e0;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;background:#fafaf8;cursor:pointer;">
               <sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9">
                 <option value="{{ o.key }}" disabled="{{ o.dis }}">소리: {{ o.label }}</option>
               </sc-for>
             </select>
+            <sc-if value="{{ s.dragMode }}" hint-placeholder-val="{{ false }}">
+              <div style="flex:1 1 160px;display:flex;align-items:center;gap:8px;min-width:0;">
+                <button onClick="{{ s.pickPos }}" style="flex:none;white-space:nowrap;padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
+                <span title="{{ s.customMsg }}" style="flex:1;min-width:0;font-size:12px;font-weight:600;color:{{ s.customColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.customMsg }}</span>
+              </div>
+            </sc-if>
+            </div>
             <sc-if value="{{ s.hasDet }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}">
@@ -341,14 +351,8 @@ body{overflow-x:clip;}
                 <span style="font-size:12px;font-weight:600;color:{{ s.detColor }};">{{ s.detMsg }}</span>
               </div>
             </sc-if>
-            <sc-if value="{{ s.custom }}" hint-placeholder-val="{{ false }}">
-              <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:100%;padding:8px 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
-            </sc-if>
-            <sc-if value="{{ s.dragMode }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-                <button onClick="{{ s.pickPos }}" style="flex:none;white-space:nowrap;padding:5px 10px;border:1px solid {{ s.pickBorder }};border-radius:6px;background:{{ s.pickBg }};font-family:inherit;font-size:12px;font-weight:700;color:{{ s.pickColor }};cursor:pointer;">{{ s.pickLabel }}</button>
-                <span title="{{ s.customMsg }}" style="flex:1;min-width:0;font-size:12px;font-weight:600;color:{{ s.customColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.customMsg }}</span>
-              </div>
+            <sc-if value="{{ false }}" hint-placeholder-val="{{ false }}">
+              <input value="{{ s.name }}" onChange="{{ s.onName }}" placeholder="스킬 이름" style="box-sizing:border-box;min-width:0;width:220px;max-width:100%;padding:6px 8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;font-weight:600;background:#fff;">
             </sc-if>
           </div>
         </div>
@@ -356,8 +360,7 @@ body{overflow-x:clip;}
         <sc-if value="{{ s.showCd }}" hint-placeholder-val="{{ true }}"><input type="number" min="1" value="{{ s.cdVal }}" onChange="{{ s.onCd }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;"></sc-if>
         <input type="number" value="{{ s.beforeVal }}" onChange="{{ s.onBefore }}" style="box-sizing:border-box;min-width:0;width:100%;padding:8px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;font-variant-numeric:tabular-nums;">
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
-          <span style="font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:{{ s.remainColor }};">{{ s.remain }}</span>
-          <span style="width:100%;height:4px;border-radius:2px;background:#f0f0ee;overflow:hidden;"><span style="display:block;height:100%;width:{{ s.pct }};background:oklch(0.48 0.17 255);"></span></span>
+          <span style="min-width:96px;box-sizing:border-box;padding:8px 12px;border-radius:10px;background:{{ s.pillBg }};color:{{ s.pillC }};text-align:center;font-size:24px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1;">{{ s.remain }}</span>
           <sc-if value="{{ s.canReset }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ s.resetRun }}" title="남은 시간을 지우고 다음 사용을 기다려요" style="padding:2px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
           </sc-if>
@@ -381,11 +384,11 @@ body{overflow-x:clip;}
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span><span style="align-self:center;font-size:12px;font-weight:600;color:oklch(0.42 0.12 255);">게임 설정: 퀵슬롯&amp;버프 시간표시 <b>중앙, 크게</b> · 표시방식 <b>분 + 초</b></span></h2><div style="flex-basis:100%;height:0;"></div><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label><select value="{{ sndSel.buff.val }}" onChange="{{ sndSel.buff.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.buff.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.buff.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">버프 종료 알림<span onMouseEnter="{{ buffVidShow }}" onMouseLeave="{{ buffVidHide }}" style="position:relative;align-self:center;padding:3px 10px;border-radius:999px;border:1px solid oklch(0.8 0.06 255);background:#fff;color:oklch(0.42 0.12 255);font-size:12px;font-weight:700;cursor:pointer;">▶ 예시영상<sc-if value="{{ buffVidOn }}" hint-placeholder-val="{{ false }}"><span style="position:fixed;top:{{ buffVidTop }}px;left:{{ buffVidLeft }}px;z-index:1000;display:block;width:480px;max-width:80vw;padding:6px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);"><video src="video/buff-example.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="display:block;width:100%;border-radius:6px;"></video></span></sc-if></span></h2><span style="order:2;flex-basis:100%;text-align:left;font-size:12px;font-weight:600;color:oklch(0.78 0.03 260);">게임 설정: 퀵슬롯&amp;버프 시간표시 <b style="color:#fff;">중앙, 크게</b> · 표시방식 <b style="color:#fff;">분 + 초</b></span></div><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBuff.val }}" onChange="{{ volBuff.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBuff.val }}%</span></label><select value="{{ sndSel.buff.val }}" onChange="{{ sndSel.buff.onChange }}" title="알림 소리" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button onClick="{{ addBuff }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 버프 추가</button>
-      </div>
+      <button onClick="{{ addBuff }}" style="padding:8px 14px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.6 0.17 255);">+ 버프 추가</button>
+      </div></div>
     </div>
     <sc-if value="{{ huntFold.buff.open }}" hint-placeholder-val="{{ true }}">
     <sc-if value="{{ buffNone }}" hint-placeholder-val="{{ false }}">
@@ -426,16 +429,13 @@ body{overflow-x:clip;}
   </section>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.rune.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.rune.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">룬 알림</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label><select value="{{ sndSel.rune.val }}" onChange="{{ sndSel.rune.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.rune.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.rune.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;">룬 알림</h2><button onClick="{{ toggleRune }}" title="룬 감지 켜기/끄기" style="display:flex;align-items:center;padding:0;border:none;background:transparent;cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ runeSw.swBg }};display:flex;justify-content:{{ runeSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span></button><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volRune.val }}" onChange="{{ volRune.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volRune.val }}%</span></label><select value="{{ sndSel.rune.val }}" onChange="{{ sndSel.rune.onChange }}" title="알림 소리" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ runeStatusBg }};color:{{ runeStatusColor }};font-size:13px;font-weight:700;">{{ runeStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.rune.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
-        <button onClick="{{ toggleRune }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
-          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ runeSw.swBg }};display:flex;justify-content:{{ runeSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>룬 감지
-        </button>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">평소 보라색 픽셀 (기준)<button onClick="{{ resetRuneBase }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">기준 다시 잡기</button></span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ runeBase }}</span>
           <span>새로 생긴 룬 색 픽셀</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ runePx }}</span>
@@ -443,7 +443,6 @@ body{overflow-x:clip;}
           <span>다시 알림 간격 (초)</span><input type="number" min="3" value="{{ runeEvery }}" onChange="{{ onRuneEvery }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>알림 반복 횟수</span><input type="number" min="1" value="{{ runeRep }}" onChange="{{ onRuneRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">미니맵의 흰 테두리를 찾아 자동으로 영역을 잡고, 맵을 옮겨 미니맵 크기가 바뀌어도 다시 찾아요. 룬이 있는 동안 '룬 생성'을 다시 알려줘요. 맵을 옮기면 룬이 없을 때 '기준 다시 잡기'를 눌러주세요. 공유할 때는 전체 화면이 아니라 메이플스토리 창을 고르세요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
@@ -464,24 +463,25 @@ body{overflow-x:clip;}
 
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">사냥 멈춤 감지</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volStop.val }}" onChange="{{ volStop.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volStop.val }}%</span></label><select value="{{ sndSel.stop.val }}" onChange="{{ sndSel.stop.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.stop.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.stop.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;">사냥 멈춤 감지</h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volStop.val }}" onChange="{{ volStop.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volStop.val }}%</span></label><select value="{{ sndSel.stop.val }}" onChange="{{ sndSel.stop.onChange }}" title="알림 소리" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ stopStatusBg }};color:{{ stopStatusColor }};font-size:13px;font-weight:700;">{{ stopStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.stop.open }}" hint-placeholder-val="{{ true }}">
-    <button onClick="{{ huntFold.stopExp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopExp.icon }}</span>경험치 바 감지</button>
+    <div style="display:flex;align-items:center;gap:16px;padding:8px 20px;border-bottom:1px solid #efefec;background:#fafaf8;">
+      <button onClick="{{ huntFold.stopExp.toggle }}" style="display:flex;align-items:center;gap:8px;padding:2px 0;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopExp.icon }}</span>경험치 바 감지</button>
+      <button onClick="{{ toggleStop }}" style="display:flex;align-items:center;gap:8px;padding:0;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:#3a3b3f;cursor:pointer;">
+        <span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ stopSw.swBg }};display:flex;justify-content:{{ stopSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>
+      </button>
+    </div>
     <sc-if value="{{ huntFold.stopExp.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
-        <button onClick="{{ toggleStop }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
-          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ stopSw.swBg }};display:flex;justify-content:{{ stopSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>경험치 변화 감지
-        </button>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>변화 없으면 알림 (초)</span><input type="number" min="3" value="{{ stopSec }}" onChange="{{ onStopSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>알림 반복 횟수</span><input type="number" min="1" value="{{ stopRep }}" onChange="{{ onStopRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ stopIdleColor }};">{{ stopIdle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">화면 맨 아래 경험치 바 가운데의 흰 숫자(초록으로 표시)만 비교해서, 정해진 시간 동안 안 바뀌면 '사냥 멈춤'을 알려줘요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <span style="font-size:12px;color:#9a9ca1;">감지 중인 경험치 바 영역</span>
@@ -492,22 +492,21 @@ body{overflow-x:clip;}
       </div>
     </div>
     </sc-if>
-    <button onClick="{{ huntFold.stopMp.toggle }}" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 20px;border:none;border-top:1px solid #efefec;border-bottom:1px solid #efefec;background:#fafaf8;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopMp.icon }}</span>마나 사용 감지</button>
+    <div style="display:flex;align-items:center;gap:16px;padding:8px 20px;border-top:1px solid #efefec;border-bottom:1px solid #efefec;background:#fafaf8;">
+      <button onClick="{{ huntFold.stopMp.toggle }}" style="display:flex;align-items:center;gap:8px;padding:2px 0;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:800;color:oklch(0.3 0.09 255);cursor:pointer;text-align:left;"><span style="width:16px;">{{ huntFold.stopMp.icon }}</span>마나 사용 감지</button>
+      <button onClick="{{ mp.toggle }}" style="display:flex;align-items:center;padding:0;border:none;background:transparent;cursor:pointer;">
+        <span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ mp.swBg }};display:flex;justify-content:{{ mp.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>
+      </button>
+      <span style="padding:4px 10px;border-radius:999px;background:{{ mp.stBg }};color:{{ mp.stColor }};font-size:12px;font-weight:700;">{{ mp.status }}</span>
+    </div>
     <sc-if value="{{ huntFold.stopMp.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-          <button onClick="{{ mp.toggle }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
-            <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ mp.swBg }};display:flex;justify-content:{{ mp.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>마나 사용 감지
-          </button>
-          <span style="padding:4px 10px;border-radius:999px;background:{{ mp.stBg }};color:{{ mp.stColor }};font-size:12px;font-weight:700;">{{ mp.status }}</span>
-        </div>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>MP 변화 없으면 알림 (초)</span><input type="number" min="1" value="{{ mp.sec }}" onChange="{{ mp.onSec }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>알림 반복 횟수</span><input type="number" min="1" value="{{ mp.rep }}" onChange="{{ mp.onRep }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>마지막 MP 변화 후</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:{{ mp.idleColor }};">{{ mp.idle }}</span>
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">하늘색 MP 바를 자동으로 찾아서, 바 위의 흰 MP 숫자(초록으로 표시)가 정한 시간 동안 줄지 않으면 바로 '사냥 멈춤'을 알려줘요. MP가 회복돼서 바가 늘어난 건 사용으로 치지 않아요. 멈춰 있는 동안 같은 간격으로 반복 횟수만큼 다시 알려줘요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -527,23 +526,19 @@ body{overflow-x:clip;}
 
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">부스터 알림</h2><span style="font-size:13px;font-weight:600;color:oklch(0.4 0.08 255);">인식이 잘 안될 경우 감지 기준을 낮춰주세요</span><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBooster.val }}" onChange="{{ volBooster.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBooster.val }}%</span></label><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.boost.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.boost.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;">부스터 알림</h2><button onClick="{{ toggleBoost }}" title="부스터 감지 켜기/끄기" style="display:flex;align-items:center;padding:0;border:none;background:transparent;cursor:pointer;"><span style="width:40px;height:22px;border-radius:999px;padding:2px;box-sizing:border-box;background:{{ boostSw.swBg }};display:flex;justify-content:{{ boostSw.swJustify }};"><span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span></button><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volBooster.val }}" onChange="{{ volBooster.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volBooster.val }}%</span></label><select value="{{ sndSel.booster.val }}" onChange="{{ sndSel.booster.onChange }}" title="알림 소리" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
       <span style="padding:5px 12px;border-radius:999px;background:{{ boostStatusBg }};color:{{ boostStatusColor }};font-size:13px;font-weight:700;">{{ boostStatus }}</span>
     </div>
     <sc-if value="{{ huntFold.boost.open }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
-        <button onClick="{{ toggleBoost }}" style="display:flex;align-items:center;gap:10px;padding:0;border:none;background:transparent;font-family:inherit;font-size:15px;font-weight:700;color:#3a3b3f;cursor:pointer;">
-          <span style="width:44px;height:24px;border-radius:999px;padding:2px;background:{{ boostSw.swBg }};display:flex;justify-content:{{ boostSw.swJustify }};"><span style="width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.2);"></span></span>부스터 타이머 감지
-        </button>
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
           <span>남은 시간</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ boostRemain }}</span>
           <span>타이머 숫자 픽셀</span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ boostPx }}</span>
           <span>감지 기준 (픽셀 이상)</span><input type="text" inputmode="numeric" placeholder="예: 80" value="{{ boostMin }}" onChange="{{ onBoostMin }}" onBlur="{{ onBoostMinBlur }}" onKeyDown="{{ onNumEnter }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>부스터 시간 (초)</span><input type="text" inputmode="numeric" value="{{ boostSec }}" onChange="{{ onBoostSec }}" onBlur="{{ onBoostSecBlur }}" onKeyDown="{{ onNumEnter }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
         </div>
-        <span style="font-size:12px;color:#9a9ca1;line-height:1.6;text-wrap:pretty;">화면 위쪽 가운데의 '남은시간' 주황색 숫자가 2초 이상 보이면 부스터 시작으로 보고, 처음 보인 때부터 부스터 시간이 지나면 '부스터 끝'을 알려줘요. 타이머가 사라진 뒤 다시 뜨면 새로 시작해요.</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <span style="font-size:12px;color:#9a9ca1;">감지 영역 · 숫자로 잡힌 부분은 초록색</span>
@@ -558,9 +553,9 @@ body{overflow-x:clip;}
   </sc-if>
 
   <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:oklch(0.94 0.035 255);">
-      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.timer.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.85 0.04 255);border-radius:8px;background:#fff;color:oklch(0.3 0.09 255);font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.timer.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:oklch(0.3 0.09 255);">타이머 <span style="font-size:14px;font-weight:600;color:#6b6d73;">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.48 0.17 255);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:#fff;"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label><select value="{{ sndSel.timer.val }}" onChange="{{ sndSel.timer.onChange }}" title="알림 소리" style="padding:5px 8px;border:1px solid oklch(0.85 0.04 255);border-radius:999px;background:#fff;color:oklch(0.3 0.09 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
-      <button onClick="{{ addTimer }}" style="padding:7px 14px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="background:oklch(0.42 0.17 255);">+ 타이머 추가</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:oklch(0.22 0.04 260);color:#fff;">
+      <div style="flex:1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;"><button onClick="{{ huntFold.timer.toggle }}" title="접기/펼치기" style="flex:none;width:30px;height:30px;padding:0;border:1px solid oklch(0.35 0.05 260);border-radius:8px;background:oklch(0.28 0.05 260);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">{{ huntFold.timer.icon }}</button><h2 style="margin:0;font-size:19px;font-weight:800;color:#fff;">타이머 <span style="font-size:14px;font-weight:600;color:oklch(0.75 0.13 255);">(화면공유X)</span></h2><label style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-size:12px;font-weight:700;">볼륨<input type="range" min="0" max="100" value="{{ volTimer.val }}" onChange="{{ volTimer.onChange }}" style="width:80px;accent-color:oklch(0.65 0.15 255);"><span style="width:34px;font-variant-numeric:tabular-nums;">{{ volTimer.val }}%</span></label><select value="{{ sndSel.timer.val }}" onChange="{{ sndSel.timer.onChange }}" title="알림 소리" style="field-sizing:content;padding:5px 2px 5px 8px;border:1px solid oklch(0.35 0.05 260);border-radius:999px;background:oklch(0.28 0.05 260);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;"><sc-for list="{{ sndOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.key }}" disabled="{{ o.dis }}">{{ o.label }}</option></sc-for></select></div>
+      <button onClick="{{ addTimer }}" style="padding:8px 14px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;" style-hover="background:oklch(0.6 0.17 255);">+ 타이머 추가</button>
     </div>
     <sc-if value="{{ huntFold.timer.open }}" hint-placeholder-val="{{ true }}">
     <sc-for list="{{ timers }}" as="t" hint-placeholder-count="1">
@@ -2221,20 +2216,20 @@ body{overflow-x:clip;}
 </sc-if>
 <sc-if value="{{ isAuction }}" hint-placeholder-val="{{ true }}">
 <nav style="background:#fff;border-bottom:1px solid #e3e3e0;">
-  <div data-m="tabs" style="max-width:1320px;margin:0 auto;padding:0 28px;display:flex;flex-wrap:wrap;justify-content:center;column-gap:4px;">
-    <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ sundayTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">썬데이</button>
-    <button onClick="{{ mesoTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ mesoTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ mesoTab.weight }};color:{{ mesoTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">메소</button>
+  <div data-m="tabs" style="max-width:1320px;margin:0 auto;padding:14px 28px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 6px;">
+    <button onClick="{{ sundayTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ sundayTab.border }};background:{{ sundayTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ sundayTab.weight }};color:{{ sundayTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">썬데이</button>
+    <button onClick="{{ mesoTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ mesoTab.border }};background:{{ mesoTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ mesoTab.weight }};color:{{ mesoTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">메소 · TOP10</button>
+    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ popTab.border }};background:{{ popTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">인구수</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="13">
-      <button onClick="{{ t.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ t.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">{{ t.label }}</button>
+      <button onClick="{{ t.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};font-family:inherit;font-size:14px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">{{ t.label }}</button>
     </sc-for>
-    <button onClick="{{ popTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ popTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ popTab.weight }};color:{{ popTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">인구수</button>
     <span style="width:1px;align-self:center;height:18px;background:#e3e3e0;margin:0 6px;"></span>
-    <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ contactTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">문의</button>
+    <button onClick="{{ contactTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ contactTab.border }};background:{{ contactTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ contactTab.weight }};color:{{ contactTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">문의</button>
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ statsTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">방문자</button>
-      <button onClick="{{ reviewTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ reviewTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ reviewTab.weight }};color:{{ reviewTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">검토</button>
-      <button onClick="{{ chalTab.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ chalTab.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ chalTab.weight }};color:{{ chalTab.color }};cursor:pointer;white-space:nowrap;" style-hover="color:oklch(0.3 0.09 255);">챌린저스</button>
+      <button onClick="{{ statsTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ statsTab.border }};background:{{ statsTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ statsTab.weight }};color:{{ statsTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">방문자</button>
+      <button onClick="{{ reviewTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ reviewTab.border }};background:{{ reviewTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ reviewTab.weight }};color:{{ reviewTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">검토</button>
+      <button onClick="{{ chalTab.onClick }}" style="flex:none;padding:7px 14px;border-radius:999px;border:1px solid {{ chalTab.border }};background:{{ chalTab.bg }};font-family:inherit;font-size:14px;font-weight:{{ chalTab.weight }};color:{{ chalTab.color }};cursor:pointer;white-space:nowrap;" style-hover="opacity:0.85;">챌린저스</button>
     </sc-if>
   </div>
 </nav>
@@ -2613,8 +2608,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </sc-if>
     </div>
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">메소 시세</h1>
-    <span style="font-size:13px;color:#6b6d73;">1억 메소당 원 · 최근 기록 {{ mesoLastDate }}</span>
+
     <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
       <button onClick="{{ saveMesoImage }}" title="카드+그래프를 1920×1080 PNG로 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
@@ -2656,7 +2650,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
     <div data-m="g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">
       <div style="order:9;background:#fff;border:2px solid oklch(0.55 0.17 255);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;">
         <span style="padding:1px 10px;border-radius:999px;background:oklch(0.48 0.17 255);font-size:14px;font-weight:800;line-height:20px;color:#fff;">현재 시세</span>
-        <span style="font-size:34px;font-weight:800;line-height:40px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:2px;">원</span></span>
+        <span style="font-size:34px;font-weight:800;line-height:40px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">{{ mesoCur }}<span style="font-size:15px;font-weight:700;color:#6b6d73;margin-left:2px;">메포</span></span>
         <span style="font-size:11px;font-weight:700;line-height:15px;color:{{ mesoDeltaColor }};font-variant-numeric:tabular-nums;">{{ mesoDelta }}</span>
       </div>
       <div style="background:#fff;border:1px solid #e3e3e0;border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;justify-content:center;gap:1px;">
@@ -2664,7 +2658,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <div title="{{ s.sub }}" style="display:flex;align-items:baseline;gap:8px;">
             <span style="flex:none;width:58px;font-size:13px;font-weight:800;color:#1b1c1f;">{{ s.label }}</span>
             <span style="flex:none;width:74px;font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.sub }}</span>
-            <span style="flex:1;text-align:right;font-size:19px;font-weight:800;line-height:26px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:{{ s.color }};">{{ s.val }}<span style="font-size:12px;font-weight:700;color:#6b6d73;margin-left:2px;">원</span></span>
+            <span style="flex:1;text-align:right;font-size:19px;font-weight:800;line-height:26px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;color:{{ s.color }};">{{ s.val }}<span style="font-size:12px;font-weight:700;color:#6b6d73;margin-left:2px;">메포</span></span>
           </div>
         </sc-for>
       </div>
@@ -2705,7 +2699,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
           <sc-if value="{{ mesoTipShow }}" hint-placeholder-val="{{ false }}">
             <div style="position:absolute;left:{{ mesoTip.left }};top:{{ mesoTip.top }};transform:{{ mesoTip.tf }};padding:7px 11px;border-radius:8px;background:#1b1c1f;color:#fff;font-size:12px;line-height:1.4;white-space:nowrap;pointer-events:none;display:flex;flex-direction:column;">
               <span style="color:#bfc1c6;">{{ mesoTip.date }}</span>
-              <strong style="font-size:15px;font-variant-numeric:tabular-nums;">{{ mesoTip.val }}원</strong>
+              <strong style="font-size:15px;font-variant-numeric:tabular-nums;">{{ mesoTip.val }}메포</strong>
             </div>
           </sc-if>
         </div>
@@ -2729,7 +2723,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </div>
       <div style="padding:16px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;border-bottom:1px solid #ececea;">
         <input type="date" value="{{ mesoInDate }}" onChange="{{ onMesoDate }}" style="padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;">
-        <input value="{{ mesoInVal }}" onChange="{{ onMesoVal }}" onKeyDown="{{ onMesoKey }}" inputMode="decimal" placeholder="1억 메소당 원 (예: 2650)" style="width:200px;padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;">
+        <input value="{{ mesoInVal }}" onChange="{{ onMesoVal }}" onKeyDown="{{ onMesoKey }}" inputMode="decimal" placeholder="1억 메소당 메포 (예: 2650)" style="width:200px;padding:8px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;">
         <button onClick="{{ addMeso }}" style="padding:8px 16px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">추가</button>
         <span style="font-size:12px;color:#9a9ca1;">같은 날짜를 다시 넣으면 값이 바뀌어요.</span>
       </div>
@@ -2737,7 +2731,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         <sc-for list="{{ mesoList }}" as="r" hint-placeholder-count="3">
           <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:40px;border-bottom:1px solid #f0f0ee;font-size:14px;font-variant-numeric:tabular-nums;">
             <span style="width:110px;color:#6b6d73;">{{ r.date }}</span>
-            <strong style="flex:1;">{{ r.val }}원</strong>
+            <strong style="flex:1;">{{ r.val }}메포</strong>
             <button onClick="{{ r.onDel }}" style="padding:4px 10px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:oklch(0.5 0.17 25);cursor:pointer;">삭제</button>
           </div>
         </sc-for>
@@ -2750,7 +2744,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <sc-if value="{{ isPop }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1120px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
-    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수 <span style="font-size:20px;font-weight:700;color:#6b6d73;vertical-align:middle;">(테스트중)</span></h1>
+    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">월드별 인구수</h1>
     <span style="font-size:13px;color:#6b6d73;text-wrap:pretty;">넥슨 Open API 기준 · 매주 목요일 집계 · 활동 계정 = 최근 7일 접속 또는 유니온·아티팩트·본캐가 성장한 계정</span>
   </div>
 
@@ -2768,30 +2762,30 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 
   <sc-if value="{{ popHas }}" hint-placeholder-val="{{ false }}">
-    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;">
-        <h2 style="margin:0;font-size:17px;font-weight:700;">월드별 비율 · {{ popB }}</h2>
-        <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-          <span style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;">활동 {{ popTotal }}명</span>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;">
+    <section style="flex:none;align-self:flex-start;width:max-content;max-width:100%;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <div style="width:max-content;">
+          <div style="display:grid;grid-template-columns:120px 56px 76px 76px 64px 64px;gap:6px;padding:6px 12px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
+            <span></span><span style="text-align:center;">비율</span><span style="text-align:center;">{{ popAShort }}</span><span style="text-align:center;">{{ popBShort }}</span><span style="text-align:center;">증감</span><span style="text-align:center;">증감률</span>
+          </div>
+          <sc-for list="{{ popTable }}" as="r" hint-placeholder-count="17">
+            <div style="display:grid;grid-template-columns:120px 56px 76px 76px 64px 64px;gap:6px;align-items:center;padding:0 12px;height:32px;border-top:{{ r.topBd }};border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
+              <span style="display:flex;align-items:center;gap:8px;font-weight:{{ r.weight }};min-width:0;"><span style="width:10px;height:10px;border-radius:2px;background:{{ r.dot }};flex:none;"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.label }}</span></span>
+              <span style="text-align:right;font-weight:700;color:oklch(0.4 0.15 255);">{{ r.share }}</span>
+              <span style="text-align:right;color:#6b6d73;">{{ r.a }}</span>
+              <span style="text-align:right;font-weight:{{ r.weight }};">{{ r.b }}</span>
+              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.diff }}</span>
+              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.pct }}</span>
+            </div>
+          </sc-for>
         </div>
-      </div>
-      <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;background:#f0f0ee;">
-        <sc-for list="{{ popBar }}" as="s" hint-placeholder-count="14">
-          <div title="{{ s.title }}" style="width:{{ s.w }};background:{{ s.color }};"></div>
-        </sc-for>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px 16px;">
-        <sc-for list="{{ popLegend }}" as="l" hint-placeholder-count="14">
-          <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#3a3c41;">
-            <span style="width:10px;height:10px;border-radius:2px;background:{{ l.color }};flex:none;"></span>
-            <strong style="font-weight:700;">{{ l.label }}</strong>
-            <span style="color:#6b6d73;font-variant-numeric:tabular-nums;">{{ l.text }}</span>
-          </span>
-        </sc-for>
       </div>
     </section>
 
-    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
+    <div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:20px;">
+
+    <section style="min-width:0;background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;">
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
         <h2 style="margin:0;font-size:17px;font-weight:700;">활동 계정 추이 · {{ popWeeks }}주</h2>
         <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">
@@ -2801,9 +2795,16 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <div style="position:relative;width:100%;aspect-ratio:600/280;">
         <svg viewBox="0 0 600 280" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
           <path d="{{ popChart.gridPath }}" stroke="#ececea" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"></path>
-          <path d="{{ popChart.totA }}" fill="oklch(0.48 0.17 255 / 0.12)"></path>
-          <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+          <path d="{{ popChart.totA }}" fill="oklch(0.48 0.17 255 / 0.10)"></path>
+          <polyline points="{{ popChart.totP }}" fill="none" stroke="oklch(0.48 0.17 255)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
         </svg>
+        <sc-for list="{{ popChart.dots }}" as="p" hint-placeholder-count="4">
+          <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};width:{{ p.r }};height:{{ p.r }};transform:translate(-50%,-50%);border-radius:50%;background:{{ p.bg }};border:2.5px solid oklch(0.48 0.17 255);box-sizing:border-box;"></span>
+          <span style="position:absolute;left:{{ p.left }};top:{{ p.top }};transform:translate(-50%,calc(-100% - 10px));display:flex;flex-direction:column;align-items:center;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums;">
+            <span style="font-size:{{ p.fs }};font-weight:{{ p.fw }};color:{{ p.tc }};">{{ p.val }}</span>
+            <span style="font-size:10px;font-weight:700;color:{{ p.cc }};">{{ p.chg }}</span>
+          </span>
+        </sc-for>
         <sc-for list="{{ popChart.grid }}" as="g" hint-placeholder-count="5">
           <span style="position:absolute;left:0;top:{{ g.top }};width:{{ g.w }};transform:translateY(-50%);text-align:right;font-size:11px;color:#6b6d73;font-variant-numeric:tabular-nums;">{{ g.label }}</span>
         </sc-for>
@@ -2815,34 +2816,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       </div>
     </section>
 
-    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
-      <div style="padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#f7f7f5;border-bottom:1px solid #ececea;">
-        <h2 style="margin:0 auto 0 0;font-size:17px;font-weight:700;">주간 비교</h2>
-        <select value="{{ popA }}" onChange="{{ onPopA }}" style="padding:7px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
-          <sc-for list="{{ popOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
-        </select>
-        <span style="color:#9a9ca1;">→</span>
-        <select value="{{ popB }}" onChange="{{ onPopB }}" style="padding:7px 10px;border:1px solid #d6d6d2;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
-          <sc-for list="{{ popOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
-        </select>
-      </div>
-      <div style="overflow-x:auto;">
-        <div style="min-width:520px;">
-          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;padding:10px 18px;font-size:13px;font-weight:700;color:oklch(0.36 0.17 255);background:oklch(0.94 0.035 255);">
-            <span>월드</span><span style="text-align:right;">{{ popAShort }}</span><span style="text-align:right;">{{ popBShort }}</span><span style="text-align:right;">증감</span><span style="text-align:right;">증감률</span>
-          </div>
-          <sc-for list="{{ popTable }}" as="r" hint-placeholder-count="17">
-            <div style="display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));gap:8px;align-items:center;padding:0 18px;height:42px;border-bottom:1px solid #f0f0ee;background:{{ r.bg }};font-size:15px;font-variant-numeric:tabular-nums;">
-              <span style="display:flex;align-items:center;gap:8px;font-weight:{{ r.weight }};min-width:0;"><span style="width:10px;height:10px;border-radius:2px;background:{{ r.dot }};flex:none;"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.label }}</span></span>
-              <span style="text-align:right;color:#6b6d73;">{{ r.a }}</span>
-              <span style="text-align:right;font-weight:{{ r.weight }};">{{ r.b }}</span>
-              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.diff }}</span>
-              <span style="text-align:right;font-weight:700;color:{{ r.dColor }};">{{ r.pct }}</span>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-    </section>
+
+    </div>
+    </div>
   </sc-if>
 </div>
 </sc-if>
@@ -2911,15 +2887,15 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         </section>
       </sc-if>
     </div>
-    <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
+    <h1 data-m="h1" style="display:none;margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;text-align:center;">{{ title }}</h1>
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
     <div data-m="dmeta" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span style="padding:8px 14px;border-radius:999px;background:#fff;border:1px solid #e3e3e0;font-size:14px;font-weight:600;">{{ server }}</span>
-      <span style="font-size:14px;color:#6b6d73;">업데이트 {{ latestDate }}</span>
       <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ toggleEdit }}" style="padding:9px 16px;border-radius:8px;border:1px solid #1b1c1f;background:#1b1c1f;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">시세 입력</button>
         <button onClick="{{ saveImage }}" title="표+그래프를 1920×1080 PNG로 저장" style="padding:9px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ saveImageLabel }}</button>
       </sc-if>
     </div>
+    </sc-if>
   </header>
 
   <sc-if value="{{ showLine }}" hint-placeholder-val="{{ false }}">
@@ -4221,7 +4197,7 @@ class Component extends DCLogic {
     }, 600);
   }
   mesoVals(isMeso, up, down) {
-    const tabBtn = { onClick: () => this.switchTab('메소'), color: isMeso ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isMeso ? 700 : 500, border: isMeso ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    const tabBtn = { onClick: () => this.switchTab('메소'), color: isMeso ? '#fff' : '#3a3b3f', weight: 800, border: isMeso ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: isMeso ? 'oklch(0.26 0.06 260)' : '#fff' };
     if (!isMeso) return { isMeso, mesoTab: tabBtn };
     const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     const today = ds(new Date());
@@ -4236,7 +4212,7 @@ class Component extends DCLogic {
     const n = pts.length, vs = pts.map(p => num(p.v));
     const last = allP[allP.length - 1], prev = allP[allP.length - 2];
     let delta = '', dColor = '#9a9ca1';
-    if (last && prev) { const d = num(last.v) - num(prev.v), pc = d / num(prev.v) * 100; delta = (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + W(Math.abs(d)) + '원 (' + (d > 0 ? '+' : '') + pc.toFixed(1) + '%) · 직전 ' + prev.date; dColor = d > 0 ? up : d < 0 ? down : '#9a9ca1'; }
+    if (last && prev) { const d = num(last.v) - num(prev.v), pc = d / num(prev.v) * 100; delta = (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + W(Math.abs(d)) + '메포 (' + (d > 0 ? '+' : '') + pc.toFixed(1) + '%) · 직전 ' + prev.date; dColor = d > 0 ? up : d < 0 ? down : '#9a9ca1'; }
     let chart = { gridPath: '', area: '', pts: '', hoverLine: '', grid: [], marks: [], cur: [], xl: [] }, tip = null, stats = [];
     this._mesoXY = [];
     if (n) {
@@ -4305,7 +4281,7 @@ class Component extends DCLogic {
     const by = {}, act = {};
     rows.forEach(r => { if (r.active != null) (by[r.date] = by[r.date] || {})[r.world] = r.active; });
     const sumAct = (d, ws) => act[d] && ws.every(w => act[d][w] != null) ? ws.reduce((a, w) => a + act[d][w], 0) : null;
-    const dates = Object.keys(by).filter(d => POP_ALL.every(w => by[d][w] != null)).sort();
+    const dates = Object.keys(by).filter(d => POP_ALL.filter(w => !['에오스', '헬리오스', '핼리오스'].includes(w)).every(w => by[d][w] != null)).sort();
     const n = dates.length;
     const fmtN = v => v == null ? '–' : Number(v).toLocaleString('ko-KR');
     const sum = (d, ws) => ws.reduce((a, w) => a + (by[d][w] || 0), 0);
@@ -4319,12 +4295,14 @@ class Component extends DCLogic {
       const pct = d != null && a ? d / a * 100 : null;
       const ac = o.act;
       return { act: fmtN(ac), rate: ac != null && b ? (ac / b * 100).toFixed(1) + '%' : '–', label, a: fmtN(a), b: fmtN(b), diff: d == null ? '–' : (d > 0 ? '+' : '') + fmtN(d), pct: pct == null ? '–' : (pct > 0 ? '+' : '') + pct.toFixed(2) + '%',
+        topBd: o.sepTop ? '3px solid oklch(0.3 0.09 255)' : '0 solid transparent',
+        share: o.tot && b != null ? (b / o.tot * 100).toFixed(1) + '%' : '100%',
         dColor: d > 0 ? up : d < 0 ? down : '#6b6d73', dot: o.color || 'transparent', weight: o.total ? 800 : 600, bg: o.bg || '#fff' };
     };
     let table = [], bar = [], legend = [], total = '', chart = { grid: [], xl: [], totP: '', g1P: '', g2P: '', totA: '', g1A: '', g2A: '' }, latest = { tot: '', g1: '', g2: '' };
     if (B) {
       table = [
-        ...POP_ALL.slice().sort((x, y) => by[B][y] - by[B][x]).map(w => mk(w, by[A][w], by[B][w], { color: colorOf(w) })),
+        ...POP_ALL.slice().sort((x, y) => { const L = ['에오스', '헬리오스', '핼리오스'], lx = L.indexOf(x), ly = L.indexOf(y); return lx !== ly ? lx - ly : by[B][y] - by[B][x]; }).map((w, i, arr) => mk(w, by[A][w], by[B][w], { color: colorOf(w), tot: sum(B, POP_ALL) || 1, sepTop: ['에오스', '헬리오스', '핼리오스'].includes(w) && !['에오스', '헬리오스', '핼리오스'].includes(arr[i - 1]) })),
         mk('전체 월드', sum(A, POP_ALL), sum(B, POP_ALL), { total: 1, bg: 'oklch(0.94 0.035 255)' }),
       ];
       const tot = sum(B, POP_ALL) || 1;
@@ -4333,23 +4311,23 @@ class Component extends DCLogic {
       bar = sorted.filter(w => by[B][w] > 0).map(w => ({ w: (by[B][w] / tot * 100).toFixed(3) + '%', color: colorOf(w), title: w + ' ' + fmtN(by[B][w]) + '명' }));
       legend = sorted.map(w => ({ label: w, color: colorOf(w), text: (by[B][w] / tot * 100).toFixed(1) + '% · ' + fmtN(by[B][w]) + '명' }));
       const sT = dates.map(d => sum(d, POP_ALL)), s1 = dates.map(d => sum(d, POP_W1)), s2 = dates.map(d => sum(d, POP_W2)), sA = dates.map(d => sumAct(d, POP_ALL));
-      const maxV = Math.max(1, ...sT);
-      const raw = maxV / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      const maxV = Math.max(1, ...sT), minV = Math.min(...sT);
+      const raw = Math.max(1, maxV - minV) / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
       const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => s >= raw);
-      const top = Math.ceil(maxV * 1.05 / step) * step;
-      const X0 = 70, X1 = 590, Y0 = 10, Y1 = 270;
+      const top = Math.ceil((maxV + step * 0.6) / step) * step, bot = Math.max(0, Math.floor((minV - step * 0.6) / step) * step);
+      const X0 = 70, X1 = 570, Y0 = 30, Y1 = 260;
       const xAt = i => n === 1 ? (X0 + X1) / 2 : X0 + (X1 - X0) * i / (n - 1);
-      const yAt = v => Y1 - v / top * (Y1 - Y0);
+      const yAt = v => Y1 - (v - bot) / (top - bot) * (Y1 - Y0);
       const line = s => s.map((v, i) => xAt(i).toFixed(1) + ',' + yAt(v).toFixed(1)).join(' ');
       const area = s => 'M' + xAt(0).toFixed(1) + ' ' + Y1 + ' L' + s.map((v, i) => xAt(i).toFixed(1) + ' ' + yAt(v).toFixed(1)).join(' L') + ' L' + xAt(n - 1).toFixed(1) + ' ' + Y1 + ' Z';
       const pct = (v, t) => (v / t * 100).toFixed(2) + '%';
-      const ticks = []; for (let v = 0; v <= top + 1e-9; v += step) ticks.push(v);
+      const ticks = []; for (let v = bot; v <= top + 1e-9; v += step) ticks.push(v);
       const xl = [];
-      dates.forEach((d, i) => { const [y, m] = d.split('-').map(Number); const prev = dates[i - 1]; if (!prev || prev.slice(0, 7) !== d.slice(0, 7)) { if (m === 1) xl.push({ left: pct(xAt(i), 600), label: y + '년' }); else if (m % 3 === 1) xl.push({ left: pct(xAt(i), 600), label: m + '월' }); } });
+      const every = Math.max(1, Math.ceil(n / 8)); dates.forEach((d, i) => { if ((n - 1 - i) % every) return; const [, m, dd] = d.split('-').map(Number); xl.push({ left: pct(xAt(i), 600), label: m + '/' + dd }); });
       chart = {
         grid: ticks.map(v => ({ top: pct(yAt(v), 280), label: fmtN(v), w: pct(X0 - 8, 600) })),
         gridPath: ticks.map(v => 'M' + X0 + ' ' + yAt(v).toFixed(1) + 'H' + X1).join(' '),
-        xl, totP: line(sT), g1P: line(s1), g2P: line(s2), totA: area(sT), g1A: area(s1), g2A: area(s2),
+        xl, dots: sT.map((v, i) => { const last = i === n - 1, d = i ? v - sT[i - 1] : 0; return { left: pct(xAt(i), 600), top: pct(yAt(v), 280), val: fmtN(v), r: last ? '12px' : '9px', bg: last ? 'oklch(0.48 0.17 255)' : '#fff', fw: last ? 800 : 700, tc: last ? 'oklch(0.36 0.17 255)' : '#3a3b3f', fs: last ? '13px' : '11px', chg: i ? (d > 0 ? '+' : '') + fmtN(d) : '', cc: d > 0 ? 'oklch(0.55 0.2 25)' : d < 0 ? 'oklch(0.5 0.17 255)' : '#9a9ca1' }; }), totP: line(sT), g1P: line(s1), g2P: line(s2), totA: area(sT), g1A: area(s1), g2A: area(s2),
         actP: sA.map((v, i) => v == null ? null : xAt(i).toFixed(1) + ',' + yAt(v).toFixed(1)).filter(Boolean).join(' '),
       };
       const lastAct = sA.filter(v => v != null).slice(-1)[0];
@@ -4358,7 +4336,7 @@ class Component extends DCLogic {
     const opts = dates.slice().reverse().map(d => ({ value: d, label: d }));
     return {
       isPop,
-      popTab: { onClick: () => this.switchTab('인구수'), color: isPop ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isPop ? 700 : 500, border: isPop ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      popTab: { onClick: () => this.switchTab('인구수'), color: isPop ? '#fff' : '#3a3b3f', weight: 800, border: isPop ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: isPop ? 'oklch(0.26 0.06 260)' : '#fff' },
       popHas: n > 0, popNone: n === 0 && !this.state.popLoading && !this.state.popErr,
       popLoading: !!this.state.popLoading, popSetup: this.state.popErr === 'setup', popFail: this.state.popErr === 'fail',
       popA: A || '', popB: B || '', popAShort: short(A), popBShort: short(B), popOpts: opts,
@@ -4411,7 +4389,7 @@ class Component extends DCLogic {
     const err = this.state.statsErr;
     return {
       isStats,
-      statsTab: { onClick: () => this.switchTab('방문자'), color: isStats ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isStats ? 700 : 500, border: isStats ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      statsTab: { onClick: () => this.switchTab('방문자'), color: isStats ? '#fff' : 'oklch(0.55 0.2 25)', weight: 800, border: isStats ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: isStats ? 'oklch(0.26 0.06 260)' : '#fff' },
       statsKpis: [kpi('오늘', days.slice(-1)), kpi('어제', days.slice(-2, -1)), kpi('최근 7일', days.slice(-7)), kpi('최근 30일', days)],
       statsBars: days.map((d, i) => ({ h: (d.vids.size / max * 100).toFixed(1) + '%', n: d.vids.size || '', title: d.label + ' · 방문자 ' + d.vids.size + '명 · 방문 ' + d.visits + '회', color: i === 29 ? 'oklch(0.48 0.17 255)' : 'oklch(0.78 0.075 255)' })),
       statsLabels: days.map((d, i) => ({ label: (29 - i) % 5 === 0 ? d.label : '' })),
@@ -6349,6 +6327,8 @@ class Component extends DCLogic {
             this.saveHunt({ ...h, skills: h.skills.map(x => x.id !== s.id ? x : p ? { ...x, preset: k, name: p[3], cd: p[2], durV: 1 } : k === 'custombuff' ? { ...x, preset: 'custombuff', name: '', cd: 60, durV: 1 } : { ...x, preset: 'custom', name: '' }) }); },
           showCd: pv !== 'janusbuff' && pv !== 'custombuff', noCd: pv === 'janusbuff' || pv === 'custombuff',
           remain: on ? (((this._det || {})[s.id] || {}).noNum ? '켜짐' : fmt(rem)) : '--', remainColor: soon ? 'oklch(0.55 0.2 25)' : 'oklch(0.3 0.09 255)',
+          pillBg: !on ? '#f4f4f2' : soon ? 'oklch(0.94 0.08 85)' : 'oklch(0.94 0.035 255)', pillC: !on ? '#b5b6b2' : soon ? 'oklch(0.48 0.14 60)' : 'oklch(0.36 0.15 255)',
+          rowBg: on && soon ? 'oklch(0.98 0.03 85)' : '#fff',
           pct: on && s.cd ? Math.min(100, rem / (this.skillDur(s) * 1000) * 100).toFixed(1) + '%' : '0%',
           toggleRun: () => this.toggleSkill(s), resetRun: () => this.resetSkill(s), canReset: on,
           onName: e => upd(s.id, 'name', e.target.value), onCd: e => { const nv = num(e.target.value), R = this._run && this._run[s.id];
@@ -6403,10 +6383,10 @@ class Component extends DCLogic {
       huntFold, skillAllSw: sw(!h.skillOff), skillAllLabel: h.skillOff ? '스킬 알림 꺼짐' : '스킬 알림 켜짐', toggleSkillAll: () => { if (!h.skillOff) { this._run = {}; this._alerted = {}; } set('skillOff', !h.skillOff); },
       beepSw: sw(h.beep), voiceSw: sw(h.voice), toggleBeep: () => set('beep', !h.beep), toggleVoice: () => set('voice', !h.voice),
       testSound: () => this.huntAlert('알림 테스트'),
-      pauseLabel: h.paused ? '전체 다시 켜기' : '전체 비활성화', pauseBg: h.paused ? 'oklch(0.55 0.2 25)' : '#fff', pauseColor: h.paused ? '#fff' : 'oklch(0.5 0.19 25)', pauseBorder: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.85 0.06 25)',
+      pauseLabel: h.paused ? '전체 다시 켜기' : '전체 비활성화', pauseBg: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.28 0.05 260)', pauseColor: h.paused ? '#fff' : 'oklch(0.78 0.14 25)', pauseBorder: h.paused ? 'oklch(0.55 0.2 25)' : 'oklch(0.35 0.05 260)',
       isPaused: !!h.paused,
       togglePause: () => this.huntTogglePause(),
-      togglePip: () => this.togglePip('full'), togglePipMini: () => this.togglePip('mini'), pipLabel: this._pipWin && this._pipMode !== 'mini' ? '작은창 닫기' : '작은창', pipMiniLabel: this._pipWin && this._pipMode === 'mini' ? '최소창 닫기' : '최소창', pipMiniBg: this._pipWin && this._pipMode === 'mini' ? 'oklch(0.94 0.035 255)' : '#fff', pipBg: this._pipWin && this._pipMode !== 'mini' ? 'oklch(0.94 0.035 255)' : '#fff', pipColor: 'oklch(0.3 0.09 255)',
+      togglePip: () => this.togglePip('full'), togglePipMini: () => this.togglePip('mini'), pipLabel: this._pipWin && this._pipMode !== 'mini' ? '작은창 닫기' : '작은창', pipMiniLabel: this._pipWin && this._pipMode === 'mini' ? '최소창 닫기' : '최소창', pipMiniBg: this._pipWin && this._pipMode === 'mini' ? 'oklch(0.55 0.17 255)' : 'oklch(0.28 0.05 260)', pipBg: this._pipWin && this._pipMode !== 'mini' ? 'oklch(0.55 0.17 255)' : 'oklch(0.28 0.05 260)', pipColor: '#fff',
       sharing: !!this._stream, notSharing: !this._stream, shareErr: this._stream ? '' : this._shareErr || '', hasShareErr: !this._stream && !!this._shareErr, shareRes: r.res || '연결 중', onShare: () => this.startShare(), onStopShare: () => this.stopShare(),
       ...(() => { if (!this._stopCv) this._stopCv = React.createRef(); const S = this._stop || {}, sec = Number(h.stopSec) || 15, idle = h.stopOn && this._stream && S.last ? (now - S.last) / 1000 : null, stopped = idle != null && idle >= sec;
         const ss = !h.stopOn ? ['꺼짐', '#f0f0ee', '#6b6d73'] : !this._stream ? ['화면 공유 필요', '#f0f0ee', '#6b6d73'] : stopped ? ['사냥 멈춤!', 'oklch(0.6 0.2 25)', '#fff'] : ['사냥 중', 'oklch(0.48 0.17 255)', '#fff'];
@@ -6443,7 +6423,7 @@ class Component extends DCLogic {
     };
   }
   chalVals(on) {
-    const chalTab = { onClick: () => this.switchTab('챌린저스'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    const chalTab = { onClick: () => this.switchTab('챌린저스'), color: on ? '#fff' : 'oklch(0.55 0.2 25)', weight: 800, border: on ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: on ? 'oklch(0.26 0.06 260)' : '#fff' };
     const D = this.state.chalData;
     if (on && !D && !this._chalLoading) { this._chalLoading = true; fetch('data/compare.json').then(r => r.json()).then(d => this.setState({ chalData: d })).catch(() => { this._chalLoading = false; }); }
     const ex = !!this.state.chalExact, B = 'oklch(0.48 0.17 255)';
@@ -6494,7 +6474,7 @@ class Component extends DCLogic {
     return { ...base, chalShot, chalShotOn: !!shot, chalPrevRef: this._chalPrevRef, chalScaleRef: this._chalScaleRef, chalShotRef: el => { this._chalShotEl = el; }, chalSave: () => this.saveChalImages(), chalSaveLabel: this._chalBusy ? this._chalBusy : '묶음별 이미지 저장', chalRows, chalCats: [...(topN ? [{ title: topT, rows: chalRows.slice(0, topN).map(x => ({ ...x, name: x.name + ' · ' + x.cat })) }] : []), ...gm.values()].map(g => ({ ...g, n: g.rows.length + '개' })), chalDate: D.curDate, chalCount: rows.length };
   }
   reviewVals(on) {
-    const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' };
+    const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? '#fff' : 'oklch(0.55 0.2 25)', weight: 800, border: on ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: on ? 'oklch(0.26 0.06 260)' : '#fff' };
     if (!on) return { reviewTab, reviewRows: [], reviewEmpty: false };
     const out = this.weekChanges(0.3);
     return { reviewTab, reviewRows: out, reviewEmpty: !out.length };
@@ -6976,10 +6956,11 @@ class Component extends DCLogic {
           })(),
           areas: AREAS.map(l => ({ label: l, beta: l === '사냥', soon: l === '육성', bg: l === area ? 'oklch(0.55 0.17 255)' : 'transparent', color: l === area ? '#fff' : 'oklch(0.85 0.03 260)', fw: l === area ? 800 : 700,
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
+          goHome: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션', selected: null }); if (this.state.tab !== '메소') this.switchTab('메소'); window.scrollTo(0, 0); },
         };
       })(),
-      sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isSunday ? 700 : 500, border: isSunday ? 'oklch(0.48 0.17 255)' : 'transparent' },
-      contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: isContact ? 700 : 500, border: isContact ? 'oklch(0.48 0.17 255)' : 'transparent' },
+      sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? '#fff' : '#3a3b3f', weight: 800, border: isSunday ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: isSunday ? 'oklch(0.26 0.06 260)' : '#fff' },
+      contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? '#fff' : '#3a3b3f', weight: 800, border: isContact ? 'oklch(0.26 0.06 260)' : '#e3e3e0', bg: isContact ? 'oklch(0.26 0.06 260)' : '#fff' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
       onContactName: e => setC('name', e.target.value),
@@ -7164,7 +7145,7 @@ class Component extends DCLogic {
       syncMsg: this.state.syncMsg || '',
       syncNow: () => this.pushAll(),
       title: tab,
-      tabs: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), color: on ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: on ? 700 : 500, border: on ? 'oklch(0.48 0.17 255)' : 'transparent' }; }),
+      tabs: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), bg: on ? 'oklch(0.26 0.06 260)' : '#fff', color: on ? '#fff' : '#3a3b3f', weight: 800, border: on ? 'oklch(0.26 0.06 260)' : '#e3e3e0' }; }),
       isEmpty: data.items.length === 0,
       server: this.props.server ?? '전서버',
       categoryLabel: data.categoryLabel ?? this.props.categoryLabel ?? '아이템드랍 1줄',
@@ -7210,7 +7191,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 99,
+      isAdmin: admin, appVer: 100,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
