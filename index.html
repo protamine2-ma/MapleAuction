@@ -68,6 +68,7 @@ body{overflow-x:clip;}
 [data-m="top"]{right:14px!important;bottom:14px!important;width:46px!important;height:46px!important;}
 }
 html[data-dk="1"] body{background:#0b0b0c;}
+html[data-dk="1"] body [style*="background: oklch(0.97"],html[data-dk="1"] body [style*="background: oklch(0.96"],html[data-dk="1"] body [style*="background: oklch(0.95"],html[data-dk="1"] body [style*="background: oklch(0.94"],html[data-dk="1"] body [style*="background: oklch(0.93"],html[data-dk="1"] body [style*="background: oklch(0.92"],html[data-dk="1"] body [style*="background: oklch(0.98"]{background:#232325!important;}
 html[data-dk="1"] body [style*="color: oklch(0.48 0.17 255)"]:not([style*="background-color: oklch(0.48 0.17 255)"]),html[data-dk="1"] body [style*="color: oklch(0.44 0.08 262)"]:not([style*="background-color: oklch(0.44 0.08 262)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.08 262)"]:not([style*="background-color: oklch(0.42 0.08 262)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.09 262)"]:not([style*="background-color: oklch(0.42 0.09 262)"]),html[data-dk="1"] body [style*="color: oklch(0.46 0.09 258)"]:not([style*="background-color: oklch(0.46 0.09 258)"]),html[data-dk="1"] body [style*="color: oklch(0.4 0.17 255)"]:not([style*="background-color: oklch(0.4 0.17 255)"]),html[data-dk="1"] body [style*="color: oklch(0.4 0.15 255)"]:not([style*="background-color: oklch(0.4 0.15 255)"]),html[data-dk="1"] body [style*="color: oklch(0.55 0.17 255)"]:not([style*="background-color: oklch(0.55 0.17 255)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.12 255)"]:not([style*="background-color: oklch(0.42 0.12 255)"]),html[data-dk="1"] body [style*="color: oklch(0.45 0.17 255)"]:not([style*="background-color: oklch(0.45 0.17 255)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.17 255)"]:not([style*="background-color: oklch(0.42 0.17 255)"]),html[data-dk="1"] body [style*="color: oklch(0.4 0.08 255)"]:not([style*="background-color: oklch(0.4 0.08 255)"]),html[data-dk="1"] body [style*="color: oklch(0.5 0.15 255)"]:not([style*="background-color: oklch(0.5 0.15 255)"]),html[data-dk="1"] body [style*="color: oklch(0.45 0.15 255)"]:not([style*="background-color: oklch(0.45 0.15 255)"]),html[data-dk="1"] body [style*="color: oklch(0.45 0.08 245)"]:not([style*="background-color: oklch(0.45 0.08 245)"]),html[data-dk="1"] body [style*="color: oklch(0.5 0.15 250)"]:not([style*="background-color: oklch(0.5 0.15 250)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.15 250)"]:not([style*="background-color: oklch(0.42 0.15 250)"]),html[data-dk="1"] body [style*="color: oklch(0.45 0.1 255)"]:not([style*="background-color: oklch(0.45 0.1 255)"]),html[data-dk="1"] body [style*="color: oklch(0.5 0.18 260)"]:not([style*="background-color: oklch(0.5 0.18 260)"]),html[data-dk="1"] body [style*="color: oklch(0.4 0.12 255)"]:not([style*="background-color: oklch(0.4 0.12 255)"]),html[data-dk="1"] body [style*="color: oklch(0.52 0.2 258)"]:not([style*="background-color: oklch(0.52 0.2 258)"]),html[data-dk="1"] body [style*="color: oklch(0.56 0.16 255)"]:not([style*="background-color: oklch(0.56 0.16 255)"]),html[data-dk="1"] body [style*="color: oklch(0.42 0.2 262)"]:not([style*="background-color: oklch(0.42 0.2 262)"]),html[data-dk="1"] body [style*="color: oklch(0.5 0.2 258)"]:not([style*="background-color: oklch(0.5 0.2 258)"]),html[data-dk="1"] body [style*="color: oklch(0.55 0.13 240)"]:not([style*="background-color: oklch(0.55 0.13 240)"]),html[data-dk="1"] body [style*="color: oklch(0.5 0.17 255)"]:not([style*="background-color: oklch(0.5 0.17 255)"]){color:oklch(0.78 0.12 255)!important;}
 html[data-dk="1"] body [style*="background: oklch(0.95 0.06 145)"],html[data-dk="1"] body [style*="background: oklch(0.94 0.06 145)"]{background:oklch(0.33 0.08 145)!important;}
 html[data-dk="1"] body [style*="background: oklch(0.96 0.07 85)"]{background:oklch(0.36 0.08 75)!important;}
@@ -410,7 +411,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                 <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}">
                   <span title="지금 보고 있는 칸" style="width:28px;height:28px;border-radius:4px;border:1px solid #e3e3e0;image-rendering:pixelated;background-size:cover;background-image:{{ s.thumbBg }};"></span>
-                  <button onClick="{{ s.refind }}" style="padding:3px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">다시 찾기</button>
+                  <button onClick="{{ s.refind }}" style="padding:3px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">다시 찾기</button>
                 </sc-if>
                 <span style="font-size:12px;font-weight:600;color:{{ s.detColor }};">{{ s.detMsg }}</span>
               </div>
@@ -426,10 +427,10 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <div style="display:flex;flex-direction:column;gap:5px;align-items:center;">
           <span style="min-width:96px;box-sizing:border-box;padding:8px 12px;border-radius:10px;background:{{ s.pillBg }};color:{{ s.pillC }};text-align:center;font-size:24px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1;">{{ s.remain }}</span>
           <sc-if value="{{ s.canReset }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ s.resetRun }}" title="남은 시간을 지우고 다음 사용을 기다려요" style="padding:2px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+            <button onClick="{{ s.resetRun }}" title="남은 시간을 지우고 다음 사용을 기다려요" style="padding:2px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">초기화</button>
           </sc-if>
         </div>
-        <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
+        <button onClick="{{ s.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
     <sc-if value="{{ pickingSkill }}" hint-placeholder-val="{{ false }}">
@@ -474,7 +475,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
             <button onClick="{{ b.resetTimer }}" title="타이머 취소" style="padding:4px 8px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:11px;font-weight:600;color:#3a3b3f;cursor:pointer;">취소</button>
           </sc-if>
         </div>
-        <button onClick="{{ b.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
+        <button onClick="{{ b.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);color:oklch(0.55 0.2 25);">×</button>
       </div>
     </sc-for>
     <sc-if value="{{ pickingBuff }}" hint-placeholder-val="{{ false }}">
@@ -501,7 +502,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;padding:18px 20px;">
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="display:grid;grid-template-columns:auto 90px;gap:10px 14px;align-items:center;font-size:14px;color:#3a3b3f;">
-          <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">평소 보라색 픽셀 (기준)<button onClick="{{ resetRuneBase }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">기준 다시 잡기</button></span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ runeBase }}</span>
+          <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">평소 보라색 픽셀 (기준)<button onClick="{{ resetRuneBase }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">기준 다시 잡기</button></span><span style="font-size:16px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;color:#6b6d73;">{{ runeBase }}</span>
           <span>새로 생긴 룬 색 픽셀</span><span style="font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:oklch(0.4 0.17 255);">{{ runePx }}</span>
           <span>감지 기준 (픽셀 이상)</span><input type="number" min="1" value="{{ runeMin }}" onChange="{{ onRuneMin }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
           <span>다시 알림 간격 (초)</span><input type="number" min="3" value="{{ runeEvery }}" onChange="{{ onRuneEvery }}" style="box-sizing:border-box;min-width:0;width:100%;padding:7px;border:1px solid #e3e3e0;border-radius:8px;font-size:15px;text-align:center;">
@@ -512,7 +513,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
           <span style="font-size:13px;font-weight:700;color:{{ boxMsgColor }};">{{ boxMsg }}</span>
           <sc-if value="{{ hasMinimapBox }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ resetMinimapBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">영역 초기화</button>
+            <button onClick="{{ resetMinimapBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">영역 초기화</button>
           </sc-if>
         </div>
         <span style="font-size:12px;color:#9a9ca1;">노란 네모 안만 감지해요 · 감지된 부분은 초록색 · 위치가 틀리면 드래그로 직접 지정 (해상도별 저장)</span>
@@ -639,7 +640,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <button onClick="{{ t.tmToggle }}" style="padding:10px 22px;border:none;border-radius:10px;background:{{ t.tmBtnBg }};color:#fff;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;">{{ t.tmBtn }}</button>
         <sc-if value="{{ t.showReset }}" hint-placeholder-val="{{ false }}"><button onClick="{{ t.tmReset }}" style="padding:10px 16px;border:1px solid #e3e3e0;border-radius:10px;background:#fff;color:oklch(0.55 0.2 25);font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;">정지</button></sc-if>
         <sc-if value="{{ t.canRemove }}" hint-placeholder-val="{{ false }}">
-          <button onClick="{{ t.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:oklch(0.95 0.03 25);color:oklch(0.55 0.2 25);">×</button>
+          <button onClick="{{ t.remove }}" title="삭제" style="width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:#b0b2b6;font-size:18px;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);color:oklch(0.55 0.2 25);">×</button>
         </sc-if>
       </div>
     </div>
@@ -734,7 +735,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
           <span style="font-size:12px;font-weight:600;color:#9a9ca1;">게임 화면 전체 미리보기 · 유지 중이면 초록 네모 · 퀵슬롯 위치를 옮기면 다시 지정</span>
           <sc-if value="{{ hasBuffBox }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ resetBuffBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">아이콘 다시 지정</button>
+            <button onClick="{{ resetBuffBox }}" style="padding:4px 9px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">아이콘 다시 지정</button>
           </sc-if>
         </div>
         <div style="min-height:120px;border-radius:10px;background:#1d1e22;display:flex;align-items:center;justify-content:center;overflow:hidden;">
@@ -1220,7 +1221,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <span style="font-size:12px;font-weight:800;color:oklch(0.4 0.17 255);padding:0 4px;">{{ g.name }}</span>
               <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;">
                 <sc-for list="{{ g.jobs }}" as="j" hint-placeholder-count="3">
-                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">{{ j.name }}</button>
+                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">{{ j.name }}</button>
                 </sc-for>
               </div>
             </div>
@@ -1234,7 +1235,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:50;width:min(560px,92vw);max-height:420px;overflow-y:auto;background:#fff;border:1px solid #e3e3e0;border-radius:12px;box-shadow:0 12px 32px rgba(20,30,60,0.14);padding:14px;display:flex;flex-direction:column;gap:12px;">
           <div style="display:flex;gap:4px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid #ececea;">
             <sc-for list="{{ byTabs }}" as="s" hint-placeholder-count="1">
-              <button onClick="{{ s.onClick }}" style="padding:8px 14px;border:none;border-radius:7px;background:{{ s.mbg }};color:{{ s.mfg }};font-family:inherit;font-size:15px;font-weight:700;text-align:left;cursor:pointer;white-space:nowrap;" style-hover="background:oklch(0.94 0.035 255);">{{ s.label }}</button>
+              <button onClick="{{ s.onClick }}" style="padding:8px 14px;border:none;border-radius:7px;background:{{ s.mbg }};color:{{ s.mfg }};font-family:inherit;font-size:15px;font-weight:700;text-align:left;cursor:pointer;white-space:nowrap;" style-hover="background:rgba(120,140,200,0.12);">{{ s.label }}</button>
             </sc-for>
           </div>
           <sc-for list="{{ byJobGroups }}" as="g" hint-placeholder-count="4">
@@ -1242,7 +1243,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <span style="font-size:12px;font-weight:800;color:oklch(0.4 0.17 255);padding:0 4px;">{{ g.name }}</span>
               <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;">
                 <sc-for list="{{ g.jobs }}" as="j" hint-placeholder-count="3">
-                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">{{ j.name }}</button>
+                  <button onClick="{{ j.onClick }}" style="padding:7px 10px;border:none;border-radius:7px;background:{{ j.bg }};color:{{ j.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">{{ j.name }}</button>
                 </sc-for>
               </div>
             </div>
@@ -1255,7 +1256,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
       <sc-if value="{{ setMenu }}" hint-placeholder-val="{{ false }}">
         <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:50;min-width:140px;background:#fff;border:1px solid #e3e3e0;border-radius:12px;box-shadow:0 12px 32px rgba(20,30,60,0.14);padding:8px;display:flex;flex-direction:column;gap:2px;">
           <sc-for list="{{ setLvs }}" as="s" hint-placeholder-count="3">
-            <button onClick="{{ s.onClick }}" style="padding:8px 12px;border:none;border-radius:7px;background:{{ s.bg }};color:{{ s.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;white-space:nowrap;" style-hover="background:oklch(0.94 0.035 255);">{{ s.name }}</button>
+            <button onClick="{{ s.onClick }}" style="padding:8px 12px;border:none;border-radius:7px;background:{{ s.bg }};color:{{ s.color }};font-family:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;white-space:nowrap;" style-hover="background:rgba(120,140,200,0.12);">{{ s.name }}</button>
           </sc-for>
         </div>
       </sc-if>
@@ -1267,7 +1268,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
 <sc-if value="{{ raidSimOn }}" hint-placeholder-val="{{ false }}">
 <div style="max-width:1320px;margin:0 auto;padding:24px 28px 80px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <button onClick="{{ champSimClose }}" style="padding:7px 14px;border:1px solid #d6dde4;border-radius:8px;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;cursor:pointer;" style-hover="background:#f2f4f6;">← 돌아가기</button>
+    <button onClick="{{ champSimClose }}" style="padding:7px 14px;border:1px solid #d6dde4;border-radius:8px;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">← 돌아가기</button>
     <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:oklch(0.3 0.09 255);">챔피언의 가호 시뮬레이션</h1>
     <span style="padding:4px 10px;border-radius:999px;background:oklch(0.5 0.17 25);color:#fff;font-size:12px;font-weight:800;">관리자</span>
   </div>
@@ -1486,7 +1487,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
           <span style="font-size:18px;font-weight:800;color:#2a2b2f;">가중치</span>
-          <button onClick="{{ byWtReset }}" style="padding:3px 10px;border:1px solid #d6d6d2;border-radius:6px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+          <button onClick="{{ byWtReset }}" style="padding:3px 10px;border:1px solid #d6d6d2;border-radius:6px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">초기화</button>
         </div>
         <sc-for list="{{ byWeights }}" as="wt" hint-placeholder-count="11">
           <label style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:#3a3b3f;"><span style="flex:1;min-width:0;white-space:nowrap;">{{ wt.name }}</span>
@@ -1538,7 +1539,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                 <input type="text" autoFocus="{{ true }}" defaultValue="{{ ws.name }}" onBlur="{{ ws.rename }}" onKeyDown="{{ ws.key }}" style="flex:1;min-width:0;padding:4px 8px;border:none;outline:2px solid oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;"></input>
               </sc-if>
               <sc-if value="{{ ws.notEditing }}" hint-placeholder-val="{{ true }}">
-                <button onClick="{{ ws.load }}" title="불러오기" style="flex:1;min-width:0;padding:4px 8px;border:none;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" style-hover="background:oklch(0.95 0.03 255);">{{ ws.name }}</button>
+                <button onClick="{{ ws.load }}" title="불러오기" style="flex:1;min-width:0;padding:4px 8px;border:none;background:#fff;font-family:inherit;font-size:14px;font-weight:700;color:#2a2b2f;text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" style-hover="background:rgba(120,140,200,0.12);">{{ ws.name }}</button>
               </sc-if>
               <button onClick="{{ ws.edit }}" title="이름 변경" style="padding:4px 7px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#6a6c71;cursor:pointer;" style-hover="color:oklch(0.48 0.17 255);">✎</button>
               <button onClick="{{ ws.del }}" title="삭제" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#9a9ca1;cursor:pointer;" style-hover="color:oklch(0.55 0.2 25);">✕</button>
@@ -1558,7 +1559,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
           <span style="font-size:16px;font-weight:600;color:#3a3b3f;">{{ byWkLabel }} 총 <b style="font-variant-numeric:tabular-nums;">{{ byTotal }}</b></span>
           <span style="font-size:16px;font-weight:600;color:#3a3b3f;">사용 <b style="font-variant-numeric:tabular-nums;">{{ byUsed }}</b></span>
           <span style="font-size:16px;font-weight:600;color:#3a3b3f;">남음 <b style="font-size:20px;color:{{ byLeftColor }};font-variant-numeric:tabular-nums;">{{ byLeft }}</b></span>
-          <button onClick="{{ byReset }}" style="padding:6px 12px;border:1px solid #d6d6d2;border-radius:7px;background:#fff;font-family:inherit;font-size:16px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:#f4f4f2;">초기화</button>
+          <button onClick="{{ byReset }}" style="padding:6px 12px;border:1px solid #d6d6d2;border-radius:7px;background:#fff;font-family:inherit;font-size:16px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">초기화</button>
         </div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;justify-content:center;">
@@ -1628,7 +1629,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
             <sc-for list="{{ bySaves }}" as="sv" hint-placeholder-count="2">
               <div style="display:flex;align-items:center;border:1px solid {{ sv.border }};border-radius:8px;background:{{ sv.bg }};overflow:hidden;">
                 <button onClick="{{ sv.view }}" style="padding:4px 10px;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:{{ sv.fg }};cursor:pointer;display:flex;gap:6px;align-items:baseline;">{{ sv.name }}<span style="font-size:12px;font-weight:500;opacity:0.7;">{{ sv.info }}</span></button>
-                <button onClick="{{ sv.load }}" title="위 시뮬로 불러오기" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:oklch(0.95 0.03 255);">불러오기</button>
+                <button onClick="{{ sv.load }}" title="위 시뮬로 불러오기" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#3a3b3f;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">불러오기</button>
                 <button onClick="{{ sv.del }}" title="삭제" style="padding:4px 8px;border:none;border-left:1px solid #ececea;background:#fff;font-family:inherit;font-size:13px;color:#9a9ca1;cursor:pointer;" style-hover="color:oklch(0.55 0.2 25);">✕</button>
               </div>
             </sc-for>
@@ -2240,11 +2241,11 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
 <aside data-m="aside" style="position:fixed;right:16px;bottom:16px;width:max-content;z-index:20;overflow:hidden;background:rgba(255,255,255,0.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;gap:0;box-shadow:0 4px 16px rgba(20,30,60,0.08);">
   <span style="font-size:11px;font-weight:800;letter-spacing:0.06em;color:oklch(0.48 0.17 255);padding:2px 8px 4px;">목차</span>
   <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="8">
-    <button onClick="{{ s.goTo }}" style="display:flex;align-items:baseline;gap:5px;padding:4px 8px;border:none;border-radius:6px;background:{{ s.navBg }};color:{{ s.navColor }};font-family:inherit;font-size:13px;font-weight:{{ s.navWeight }};text-align:left;white-space:nowrap;cursor:pointer;" style-hover="background:oklch(0.94 0.035 255);">
+    <button onClick="{{ s.goTo }}" style="display:flex;align-items:baseline;gap:5px;padding:4px 8px;border:none;border-radius:6px;background:{{ s.navBg }};color:{{ s.navColor }};font-family:inherit;font-size:13px;font-weight:{{ s.navWeight }};text-align:left;white-space:nowrap;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">
       <span style="font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.no }}</span>{{ s.title }}
     </button>
   </sc-for>
-  <button onClick="{{ guideTop }}" style="margin:4px 4px 0;padding:4px 6px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#6b6d73;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;" style-hover="background:#f4f4f2;">↑ 맨 위로</button>
+  <button onClick="{{ guideTop }}" style="margin:4px 4px 0;padding:4px 6px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#6b6d73;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">↑ 맨 위로</button>
 </aside>
 </div>
 </sc-if>
@@ -2285,7 +2286,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
       <div style="padding:48px 22px;text-align:center;font-size:15px;color:#6b6d73;">30% 넘게 바뀐 아이템이 없어요.</div>
     </sc-if>
     <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="6">
-      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:oklch(0.97 0.015 255);">
+      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">
         <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
           <span style="font-size:17px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
           <span style="font-size:13px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.where }}</span>
@@ -2667,7 +2668,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
       <span style="width:58px;flex:none;text-align:right;font-size:12px;">변동</span>
     </div>
     <sc-for list="{{ mesoTop }}" as="r" hint-placeholder-count="10">
-      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:6px;padding:3px 10px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:oklch(0.97 0.015 255);">
+      <div onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:6px;padding:3px 10px;border-bottom:1px solid #f0f0ee;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">
         <span style="width:18px;flex:none;text-align:center;font-size:14px;font-weight:800;color:oklch(0.48 0.17 255);font-variant-numeric:tabular-nums;">{{ r.rank }}</span>
         <div title="{{ r.where }}" style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25;">
           <span style="font-size:14px;font-weight:700;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.name }}</span>
@@ -7252,7 +7253,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 103,
+      isAdmin: admin, appVer: 104,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
