@@ -6679,7 +6679,7 @@ class Component extends DCLogic {
     if (!this._slotIcoLoading) { this._slotIcoLoading = true; (async () => { for (const f of ['image-slots.state.json', '.image-slots.state.json']) { try { const r = await fetch(f, { cache: 'no-store' }); if (!r.ok) continue; const j = await r.json(), S = j.slots || j, o = {}; Object.keys(S).forEach(k => { const v = S[k]; const u = typeof v === 'string' ? v : v && v.u; if (u) o[k] = u; }); this.setState({ slotIcons: o }); return; } catch (e) {} } })(); }
     const SI = this.state.slotIcons || {};
     const icoOf = ik => { const id = ik.slot, iv = (this.state.icons || {})[ik.key]; if (iv) return SB_URL + '/storage/v1/object/public/icons/' + ik.key + '?v=' + encodeURIComponent(iv); return SI[id] || ''; };
-    const icoKey = r => { const nk = r.name.replace(/\s*\((만|억)\)\s*$/, '').split(' · ')[0].replace(/\s+/g, ''), slot = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk); return { slot, key: this.iconKey(slot) }; };
+    const icoKey = r => { const nk = r.name.replace(/\s*\((만|억)\)\s*$/, '').split(' · ')[0].replace(/\s+/g, ''), slot = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트', '블랙빈마크깡통': '블빈마깡통', '파풀라투스마크깡통': '파풀마깡통' }[nk] || nk); return { slot, key: this.iconKey(slot) }; };
     let chalShot = { title: '', unit: '억', cols: '', cards: [], grid: true, list: false, items: [] };
     if (shot && shot.list) {
       const UR = /\s*\((만|억)\)\s*$/, uOf = r => (r.name.match(UR) || [])[1] || '억';
@@ -7461,7 +7461,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 114,
+      isAdmin: admin, appVer: 115,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
