@@ -149,6 +149,15 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
       </sc-for>
     </nav>
     <div style="margin-left:auto;display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;">
+      <sc-if value="{{ liveShow }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;">
+          <button onClick="{{ goLive }}" style="display:flex;align-items:center;gap:8px;padding:7px 14px;border:none;border-radius:999px;background:oklch(0.3 0.06 262);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;" style-hover="background:oklch(0.36 0.07 262);">
+            <sc-if value="{{ liveAny }}" hint-placeholder-val="{{ false }}"><span style="width:9px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 0 3px rgba(255,59,59,0.3);"></span></sc-if>
+            <sc-if value="{{ liveNone }}" hint-placeholder-val="{{ true }}"><span style="width:9px;height:9px;border-radius:50%;background:#6b7289;"></span></sc-if>
+            <span>{{ liveBtnLabel }}</span>
+          </button>
+        </div>
+      </sc-if>
       <sc-if value="{{ sundayShow }}" hint-placeholder-val="{{ false }}">
         <div onMouseEnter="{{ sundayHoverOn }}" onMouseLeave="{{ sundayHoverOff }}" data-m="hide" style="position:relative;z-index:6;">
           <button onClick="{{ sundayTab.onClick }}" style="padding:7px 14px;border:none;border-radius:999px;background:oklch(0.35 0.07 80);color:oklch(0.9 0.12 85);font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;" style-hover="background:oklch(0.4 0.08 80);">썬데이 메이플</button>
@@ -2598,6 +2607,66 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </div>
 </sc-if>
 
+<sc-if value="{{ isLive }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">방송</h1>
+      <span style="font-size:14px;color:#6b6d73;">메이플 방송 · 지금 방송 중 <b style="color:#e5322d;">{{ liveN }}명</b> · 2분마다 새로 확인</span>
+    </div>
+    <sc-if value="{{ liveHasErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:#e5322d;">{{ liveErr }}</span></sc-if>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+    <sc-for list="{{ liveRows }}" as="s" hint-placeholder-count="8">
+      <div style="display:flex;flex-direction:column;background:#fff;border:1px solid #e3e3e0;border-radius:14px;overflow:hidden;">
+        <a href="{{ s.href }}" target="_blank" rel="noopener" style="position:relative;display:block;aspect-ratio:16/9;background:#141a2e;overflow:hidden;text-decoration:none;" style-hover="opacity:0.92;">
+          <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}"><img src="{{ s.thumb }}" alt="" referrerpolicy="no-referrer" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></sc-if>
+          <sc-if value="{{ s.offAvatar }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:grid;place-items:center;">
+              <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" referrerpolicy="no-referrer" style="width:72px;height:72px;border-radius:50%;object-fit:cover;filter:grayscale(1);opacity:0.55;"></sc-if>
+            </div>
+          </sc-if>
+          <span style="position:absolute;left:10px;top:10px;display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;background:{{ s.badgeBg }};color:#fff;font-size:12px;font-weight:900;letter-spacing:0.04em;"><span style="width:7px;height:7px;border-radius:50%;background:#fff;opacity:{{ s.dotOp }};"></span>{{ s.badge }}</span>
+          <sc-if value="{{ s.hasViewers }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:10px;bottom:10px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,0.65);color:#fff;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;">{{ s.viewers }}</span></sc-if>
+        </a>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;">
+          <div style="width:36px;height:36px;flex:none;border-radius:50%;background:#e3e3e0;overflow:hidden;">
+            <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" referrerpolicy="no-referrer" style="display:block;width:36px;height:36px;object-fit:cover;"></sc-if>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">
+            <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+              <span style="font-size:15px;font-weight:800;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
+              <span style="flex:none;font-size:11px;font-weight:800;color:{{ s.plC }};">{{ s.pl }}</span>
+            </div>
+            <span style="font-size:13px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.sub }}</span>
+          </div>
+          <sc-if value="{{ liveAdmin }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:2px;flex:none;">
+              <button onClick="{{ s.up }}" title="앞으로" style="width:24px;height:24px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#3a3c41;font-size:11px;cursor:pointer;">◀</button>
+              <button onClick="{{ s.down }}" title="뒤로" style="width:24px;height:24px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#3a3c41;font-size:11px;cursor:pointer;">▶</button>
+              <button onClick="{{ s.del }}" title="삭제" style="width:24px;height:24px;border:1px solid #f0c8c6;border-radius:6px;background:#fff;color:#e5322d;font-size:12px;cursor:pointer;">✕</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <sc-if value="{{ liveEmpty }}" hint-placeholder-val="{{ false }}"><span style="padding:40px 0;text-align:center;font-size:14px;color:#6b6d73;">아직 등록된 방송이 없어요.</span></sc-if>
+  <sc-if value="{{ liveAdmin }}" hint-placeholder-val="{{ false }}">
+    <section style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;max-width:720px;">
+      <span style="font-size:14px;font-weight:800;color:oklch(0.55 0.2 25);">관리자 · 방송 추가 <span style="font-weight:600;color:#6b6d73;">(◀▶ 순서는 원래 순서 기준, 방송 중이면 맨 앞)</span></span>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <input value="{{ liveNewU }}" onChange="{{ setLiveNewU }}" placeholder="채널 주소 (유튜브 @아이디 · 치지직 · SOOP)" style="flex:2 1 280px;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:14px;">
+        <input value="{{ liveNewN }}" onChange="{{ setLiveNewN }}" placeholder="이름 (비우면 자동)" style="flex:1 1 140px;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:14px;">
+        <button onClick="{{ liveAdd }}" style="padding:9px 18px;border:none;border-radius:8px;background:oklch(0.42 0.09 262);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">추가</button>
+      </div>
+      <input value="{{ liveWorker }}" onChange="{{ setLiveWorker }}" placeholder="Worker 주소 (https://….workers.dev)" style="padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#3a3c41;font-family:inherit;font-size:13px;">
+      <span style="font-size:12px;color:#6b6d73;">{{ liveMsg }}</span>
+    </section>
+  </sc-if>
+</div>
+</sc-if>
+
 <sc-if value="{{ isSunday }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:760px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:20px;">
   <div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;">
@@ -4539,6 +4608,7 @@ class Component extends DCLogic {
       const cwr = rows.find(row => row.tab === 'champW'); if (cwr && cwr.data && cwr.data.w && !this._cwDirty) { this.setState({ champW: cwr.data.w }); try { localStorage.setItem(KEY + ':champW', JSON.stringify(cwr.data.w)); } catch (e) {} }
       const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
       const mmr = rows.find(row => row.tab === 'mymae'); if (mmr && mmr.data && Array.isArray(mmr.data.prompts) && !this._mmDirty) this.setState({ mmPrompts: mmr.data.prompts });
+      const str = rows.find(row => row.tab === 'streamers'); if (str && str.data && !this._stDirty) this.setState({ streamers: str.data }, () => this.refreshLive());
       const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
       if (mr && mr.data && mr.data.points) { this.setState({ meso: mr.data }); try { localStorage.setItem(KEY + ':meso', JSON.stringify(mr.data)); } catch (e) {} }
@@ -4691,6 +4761,65 @@ class Component extends DCLogic {
     clearTimeout(this._cwT); this._cwDirty = true;
     this._cwT = setTimeout(async () => { const token = await this.ensureToken(); if (!token) return;
       try { await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'champW', data: { w }, updated_at: new Date().toISOString() }]) }); this._cwDirty = false; } catch (e) {} }, 800);
+  }
+  liveParse(u) {
+    u = String(u || '').trim(); let m;
+    if ((m = u.match(/chzzk\.naver\.com\/(?:live\/)?([0-9a-f]{32})/i))) return { p: 'chzzk', id: m[1].toLowerCase() };
+    if ((m = u.match(/(?:sooplive\.co\.kr|sooplive\.com|afreecatv\.com)\/(?:station\/)?([a-z0-9_]+)/i))) return { p: 'soop', id: m[1].toLowerCase() };
+    if ((m = u.match(/youtube\.com\/(@[^\/?#\s]+|channel\/UC[\w-]+)/i))) return { p: 'yt', id: decodeURIComponent(m[1]) };
+    if (/^@[^\s\/]+$/.test(u)) return { p: 'yt', id: u };
+    return null;
+  }
+  async refreshLive() {
+    clearTimeout(this._liveT); this._liveT = setTimeout(() => this.refreshLive(), 120000);
+    if (typeof document !== 'undefined' && document.hidden) return;
+    const S = this.state.streamers; if (!S || !S.worker || !(S.list || []).length) return;
+    const keys = [...new Set(S.list.map(x => this.liveParse(x.u)).filter(Boolean).map(x => x.p + ':' + x.id))];
+    if (!keys.length) return;
+    try {
+      const r = await fetch(S.worker.replace(/\/+$/, '') + '/live?c=' + encodeURIComponent(keys.join(',')));
+      if (!r.ok) throw new Error();
+      const j = await r.json(), map = {}; (j.items || []).forEach(it => { map[it.key] = it; });
+      this.setState({ liveMap: map, liveErr: '' });
+    } catch (e) { this.setState({ liveErr: '방송 상태를 못 불러왔어요' }); }
+  }
+  saveStreamers(data) {
+    this._stDirty = true; this.setState({ streamers: data, liveMsg: '저장 중…' });
+    clearTimeout(this._stT);
+    this._stT = setTimeout(async () => {
+      const token = await this.ensureToken(); if (!token) { this.setState({ liveMsg: '로그인이 만료됐어요.' }); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/prices', { method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify([{ tab: 'streamers', data, updated_at: new Date().toISOString() }]) });
+        if (!r.ok) throw new Error();
+        this._stDirty = false; this.setState({ liveMsg: '저장됨 · ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) }); this.refreshLive();
+      } catch (e) { this.setState({ liveMsg: '저장 실패' }); }
+    }, 700);
+  }
+  liveVals() {
+    const S = this.state.streamers || { worker: '', list: [] }, list = S.list || [], M = this.state.liveMap || {}, admin = !!this.state.admin;
+    const PL = { yt: ['유튜브', '#ff6b63'], chzzk: ['치지직', '#3ee6a8'], soop: ['SOOP', '#6cb2ff'] };
+    const rows = list.map((x, i) => {
+      const q = this.liveParse(x.u), d = (q && M[q.p + ':' + q.id]) || {}, live = !!d.live;
+      return { i, live, name: x.n || d.name || (q ? q.id : x.u), img: d.img || '', hasImg: !!d.img, pl: q ? PL[q.p][0] : '?', plC: q ? PL[q.p][1] : '#aab3c8',
+        title: live ? d.title || '' : '', hasTitle: live && !!d.title, viewers: live && d.viewers ? Number(d.viewers).toLocaleString('ko-KR') + '명' : '',
+        href: (live ? d.liveUrl : d.url) || x.u, thumb: live ? d.thumb || '' : '', hasThumb: live && !!d.thumb, offAvatar: !(live && d.thumb), hasViewers: live && !!d.viewers,
+        badge: live ? 'LIVE' : 'OFF', badgeBg: live ? '#e5322d' : 'rgba(120,128,150,0.85)', dotOp: live ? 1 : 0.5, sub: live ? d.title || '방송 중' : '방송 꺼짐' };
+    });
+    const n = rows.filter(r => r.live).length;
+    const mv = (i, dd) => { const l = list.slice(), j = i + dd; if (j < 0 || j >= l.length) return; [l[i], l[j]] = [l[j], l[i]]; this.saveStreamers({ ...S, list: l }); };
+    return {
+      liveShow: admin || rows.length > 0,
+      isLive: this.state.tab === '방송' && this._area === '옥션',
+      goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); this.refreshLive(); },
+      liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? 'LIVE ' + n : '방송',
+      liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
+      liveEmpty: rows.length === 0, liveErr: this.state.liveErr || '', liveHasErr: !!this.state.liveErr, liveAdmin: admin,
+      liveWorker: S.worker || '', setLiveWorker: e => this.saveStreamers({ ...S, worker: e.target.value.trim() }),
+      liveNewU: this.state.liveNewU || '', setLiveNewU: e => this.setState({ liveNewU: e.target.value }),
+      liveNewN: this.state.liveNewN || '', setLiveNewN: e => this.setState({ liveNewN: e.target.value }),
+      liveAdd: () => { const u = (this.state.liveNewU || '').trim(); if (!u) return; if (!this.liveParse(u)) { alert('유튜브(@아이디)·치지직·SOOP 채널 주소를 넣어 주세요.'); return; } this.saveStreamers({ ...S, list: [...list, { u, n: (this.state.liveNewN || '').trim() }] }); this.setState({ liveNewU: '', liveNewN: '' }); },
+      liveMsg: this.state.liveMsg || '',
+    };
   }
   async saveByStart(date) {
     this.setState({ byStart: date, byStartMsg: '저장 중…' }); try { localStorage.setItem(KEY + ':byStart', date); } catch (e) {}
@@ -6761,17 +6890,17 @@ class Component extends DCLogic {
     const isStats = this.state.tab === '방문자' && admin;
     const isContact = this.state.tab === '문의';
     const isPop = this.state.tab === '인구수';
-    const isSunday = this.state.tab === '썬데이';
+    const isSunday = this.state.tab === '썬데이', isLiveTab = this.state.tab === '방송';
     const isMeso = this.state.tab === '메소';
     const isReview = this.state.tab === '검토' && admin;
     const isChal = this.state.tab === '챌린저스' && admin;
-    const tab = (isContact || isPop || isSunday || isMeso || this.state.tab === '방문자' || this.state.tab === '검토' || this.state.tab === '챌린저스' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
+    const tab = (isContact || isPop || isSunday || isLiveTab || isMeso || this.state.tab === '방문자' || this.state.tab === '검토' || this.state.tab === '챌린저스' || HIDDEN_TABS.includes(this.state.tab)) ? REF : this.state.tab;
     const data = all[tab] && { ...all[tab], items: all[tab].items.filter(it => !it.hidden) };
     const contact = this.state.contact || {};
     const cType = contact.type || '버그';
     const setC = (k, v) => this.setState(s => ({ contact: { ...(s.contact || {}), [k]: v }, contactError: '' }));
     const contactVals = {
-      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isMeso && !isReview && !isChal,
+      isContact, isData: !isContact && !isStats && !isPop && !isSunday && !isLiveTab && !isMeso && !isReview && !isChal,
       isReview, ...this.reviewVals(isReview),
       isChal, ...this.chalVals(isChal),
       isSunday,
@@ -7199,7 +7328,7 @@ class Component extends DCLogic {
           sundayBannerImg: sd ? React.createElement('img', { src: sunday.img, alt: '이번 주 썬데이 메이플', style: { display: 'block', width: 'auto', maxWidth: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left center' } }) : null,
           sundayHover: !!sd && !!this.state.sundayHover, sundayHoverOn: () => this.setState({ sundayHover: true }), sundayHoverOff: () => this.setState({ sundayHover: false }),
           sundayBigImg: sd ? React.createElement('img', { src: sunday.img, alt: '썬데이 메이플 크게 보기', style: { display: 'block', width: '100%', height: 'auto', maxHeight: '75vh', objectFit: 'contain', borderRadius: 8 } }) : null,
-          ...this.themeVals(),
+          ...this.themeVals(), ...this.liveVals(),
           adPadL: '28px',
           sundayImgH: topAd ? 'calc(100% + 95px)' : 'calc(100% - 16px)',
           adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
@@ -7272,7 +7401,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 109,
+      isAdmin: admin, appVer: 110,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
