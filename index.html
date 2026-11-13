@@ -2344,6 +2344,14 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
   </section>
   <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px;">
     <h2 style="margin:0;font-size:22px;font-weight:800;flex:1;">TOP 40 묶음별 보기</h2>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-size:13px;font-weight:700;color:#6b6d73;">미리보기</span>
+      <button onClick="{{ chalPv0 }}" style="padding:6px 10px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">묶음</button>
+      <button onClick="{{ chalPv1 }}" style="padding:6px 10px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">1~10위</button>
+      <button onClick="{{ chalPv2 }}" style="padding:6px 10px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">11~20위</button>
+      <button onClick="{{ chalPv3 }}" style="padding:6px 10px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">21~30위</button>
+    </div>
+    <button onClick="{{ chalSaveList }}" title="1~10위·11~20위·21~30위를 1920×1080 이미지 3장으로 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ chalListLabel }}</button>
     <button onClick="{{ chalSave }}" title="묶음마다 1920×1080 영상용 이미지로 저장" style="padding:8px 16px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ chalSaveLabel }}</button>
   </div>
   <sc-if value="{{ chalShotOn }}" hint-placeholder-val="{{ false }}">
@@ -2361,6 +2369,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <span>지난 시즌 1~4주 최고가 ↔ {{ chalDate }}</span>
       </div>
     </div>
+    <sc-if value="{{ chalShot.grid }}" hint-placeholder-val="{{ true }}">
     <div style="flex:1;display:grid;grid-template-columns:{{ chalShot.cols }};grid-template-rows:{{ chalShot.rows }};justify-content:center;gap:{{ chalShot.gap }};min-height:0;">
       <sc-for list="{{ chalShot.cards }}" as="c" hint-placeholder-count="4">
         <div style="background:#182036;border:2px solid {{ c.bd }};border-radius:20px;padding:{{ chalShot.pad }};display:flex;flex-direction:column;gap:{{ chalShot.g }};min-width:0;min-height:0;overflow:hidden;">
@@ -2434,6 +2443,27 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         </div>
       </sc-for>
     </div>
+    </sc-if>
+    <sc-if value="{{ chalShot.list }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));grid-auto-flow:column;gap:16px 28px;">
+      <sc-for list="{{ chalShot.items }}" as="c" hint-placeholder-count="10">
+        <div style="display:flex;align-items:center;gap:22px;padding:0 30px 0 24px;background:#182036;border:2px solid {{ c.bd }};border-radius:18px;min-width:0;min-height:0;">
+          <span style="width:84px;flex:none;text-align:center;font-size:52px;font-weight:900;letter-spacing:-0.04em;color:{{ c.rankC }};font-variant-numeric:tabular-nums;">{{ c.rank }}</span>
+          <div style="width:84px;height:84px;flex:none;border-radius:14px;background:#0f1424;display:grid;place-items:center;">
+            <sc-if value="{{ c.hasIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ c.icon }}" alt="" crossorigin="anonymous" style="width:62px;height:62px;image-rendering:pixelated;object-fit:contain;"></sc-if>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
+            <span style="font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.name }}</span>
+            <span style="font-size:22px;font-weight:700;color:#ffb547;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.cat }}</span>
+          </div>
+          <div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            <span style="font-size:54px;font-weight:900;letter-spacing:-0.04em;line-height:1;color:{{ c.pctC }};white-space:nowrap;">{{ c.pct }}</span>
+            <span style="font-size:22px;font-weight:800;white-space:nowrap;"><span style="color:#ffb547;">{{ c.cur }}{{ c.u }}</span><span style="color:#8792ab;"> → </span><span style="color:#6fa8ff;">{{ c.mx }}{{ c.u }}</span></span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
     <div style="display:flex;justify-content:flex-end;align-items:center;font-size:24px;color:#8792ab;">
       <span>투자에 대한 책임은 본인에게 있습니다</span>
     </div>
@@ -6645,8 +6675,17 @@ class Component extends DCLogic {
       this._chalPrevRef = el => { if (el === this._chalPrevEl) return; if (this._chalRO) this._chalRO.disconnect(); this._chalPrevEl = el; if (el) { this._chalRO = new ResizeObserver(fit); this._chalRO.observe(el); fit(); } };
       this._chalScaleRef = el => { this._chalScaleEl = el; fit(); };
     }
-    let chalShot = { title: '', unit: '억', cols: '', cards: [] };
-    if (shot) {
+    this._chalDn = dn;
+    let chalShot = { title: '', unit: '억', cols: '', cards: [], grid: true, list: false, items: [] };
+    if (shot && shot.list) {
+      const UR = /\s*\((만|억)\)\s*$/, uOf = r => (r.name.match(UR) || [])[1] || '억';
+      chalShot = { title: shot.cat, grid: false, list: true, cards: [], items: shot.rows.map((r, i) => {
+        const nk = r.name.replace(UR, '').split(' · ')[0].replace(/\s+/g, ''), ik = this.iconKey('icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk)), iv = (this.state.icons || {})[ik];
+        const rk = shot.start + i + 1, first = rk === 1;
+        return { rank: rk, name: r.name.replace(UR, ''), cat: r.cat, u: uOf(r), hasIcon: !!iv, icon: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+          pct: '+' + Math.round(r.gain * 100) + '%', cur: String(r.cur), mx: r2(r.mx), rankC: first ? '#ff6b6b' : rk <= 3 ? '#ffb547' : '#f3f5fa', pctC: first ? '#ff6b6b' : '#f3f5fa', bd: first ? '#ff6b6b' : '#26304a' };
+      }) };
+    } else if (shot) {
       const UR = /\s*\((만|억)\)\s*$/, uOf = r => (r.name.match(UR) || [])[1] || '억';
       const top = Math.max(...shot.rows.flatMap(r => [...r.old.filter(v => v > 0), r.cur])) * 1.3;
       const us = [...new Set(shot.rows.map(uOf))];
@@ -6659,7 +6698,7 @@ class Component extends DCLogic {
         : { gap: '28px', pad: '32px 30px 28px', g: '22px', ib: '88px', ic: '64px', rk: '24px', nm: '32px', pc: '96px', lb: '22px', pr: '44px', bv: '24px', bl: '22px' };
       if (shot.top) P.nm = Math.round(parseInt(P.nm) * 0.85) + 'px';
       P.sb = Math.round(parseInt(P.lb || P.bl) * 1.25) + 'px';
-      chalShot = { title: shot.cat, unit: us.join('/'), ...P, big: nr === 1, compact: nr > 1, pcols: n <= 4 ? '1fr 1fr' : '1fr', rows: 'repeat(' + nr + ',minmax(0,1fr))',
+      chalShot = { title: shot.cat, unit: us.join('/'), ...P, grid: true, list: false, items: [], big: nr === 1, compact: nr > 1, pcols: n <= 4 ? '1fr 1fr' : '1fr', rows: 'repeat(' + nr + ',minmax(0,1fr))',
         cols: n <= 4 ? 'repeat(' + n + ',415px)' : 'repeat(' + nc + ',minmax(0,1fr))',
         cards: shot.rows.map((r, i) => {
           const nk = r.name.replace(UR, '').split(' · ')[0].replace(/\s+/g, ''), ik = this.iconKey('icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk)), iv = (this.state.icons || {})[ik];
@@ -6670,7 +6709,10 @@ class Component extends DCLogic {
             pct: '+' + Math.round(r.gain * 100) + '%', diff: '차액 +' + r2(r.mx - r.cur) + uOf(r), cur: String(r.cur), mx: r2(r.mx), mw: r.w, rankC: first ? '#ff6b6b' : '#f3f5fa', bd: first ? '#ff6b6b' : '#26304a', bars };
         }) };
     }
-    return { ...base, chalShot, chalShotOn: !!shot, chalPrevRef: this._chalPrevRef, chalScaleRef: this._chalScaleRef, chalShotRef: el => { this._chalShotEl = el; }, chalSave: () => this.saveChalImages(), chalSaveLabel: this._chalBusy ? this._chalBusy : '묶음별 이미지 저장', chalRows, chalCats: [...(topN ? [{ title: topT, rows: chalRows.slice(0, topN).map(x => ({ ...x, name: x.name + ' · ' + x.cat })) }] : []), ...gm.values()].map(g => ({ ...g, n: g.rows.length + '개' })), chalDate: D.curDate, chalCount: rows.length };
+    return { ...base, chalShot, chalShotOn: !!shot, chalPrevRef: this._chalPrevRef, chalScaleRef: this._chalScaleRef, chalShotRef: el => { this._chalShotEl = el; }, chalSave: () => this.saveChalImages(), chalSaveLabel: this._chalBusy && !this._chalListMode ? this._chalBusy : '묶음별 이미지 저장',
+      chalSaveList: () => this.saveChalImages(this.chalListJobs()), chalListLabel: this._chalBusy && this._chalListMode ? this._chalBusy : '순위표 이미지 저장 (1~30위)',
+      chalPv0: () => this.setState({ chalShot: null }), chalPv1: () => this.setState({ chalShot: this.chalListJobs()[0] || null }),
+      chalPv2: () => this.setState({ chalShot: this.chalListJobs()[1] || null }), chalPv3: () => this.setState({ chalShot: this.chalListJobs()[2] || null }), chalRows, chalCats: [...(topN ? [{ title: topT, rows: chalRows.slice(0, topN).map(x => ({ ...x, name: x.name + ' · ' + x.cat })) }] : []), ...gm.values()].map(g => ({ ...g, n: g.rows.length + '개' })), chalDate: D.curDate, chalCount: rows.length };
   }
   reviewVals(on) {
     const reviewTab = { onClick: () => this.switchTab('검토'), color: on ? '#fff' : 'oklch(0.55 0.2 25)', weight: 800, border: on ? 'oklch(0.42 0.09 262)' : '#e3e3e0', bg: on ? 'oklch(0.42 0.09 262)' : '#fff' };
@@ -6768,11 +6810,16 @@ class Component extends DCLogic {
     this._pairRO = new ResizeObserver(check); this._pairRO.observe(el); check();
   };
   componentWillUnmount() { if (this._topScroll) window.removeEventListener('scroll', this._topScroll); if (this._pairRO) this._pairRO.disconnect(); if (this._onResize) window.removeEventListener('resize', this._onResize); }
-  async saveChalImages() {
+  chalListJobs() {
+    const dn = this._chalDn || [];
+    return [0, 10, 20].filter(s => dn.length > s).map(s => ({ list: true, cat: (s + 1) + '~' + Math.min(s + 10, dn.length) + '위', start: s, rows: dn.slice(s, s + 10), part: '' }));
+  }
+  async saveChalImages(listJobs) {
     if (this._chalBusy || !this._chalGroups || !this._chalGroups.length) return;
     let dir = null;
     if (window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-img', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
-    const jobs = this._chalGroups.map(g => ({ cat: g.cat, top: g.top, start: 0, rows: g.rows.slice(0, 21), part: '' }));
+    this._chalListMode = !!listJobs;
+    const jobs = listJobs || this._chalGroups.map(g => ({ cat: g.cat, top: g.top, start: 0, rows: g.rows.slice(0, 21), part: '' }));
     try {
       if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
       if (!this._fontCss9) { try { const base = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-'; const ws = [[400, 'Regular'], [600, 'SemiBold'], [700, 'Bold'], [800, 'ExtraBold'], [900, 'Black']];
@@ -6786,12 +6833,12 @@ class Component extends DCLogic {
         await new Promise(r => setTimeout(r, 250));
         const el = this._chalShotEl; if (!el) continue;
         const c = await window.htmlToImage.toCanvas(el, { width: 1920, height: 1080, pixelRatio: 1, backgroundColor: '#0f1424', cacheBust: true, fontEmbedCSS: this._fontCss9 || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' });
-        const fname = (j + 1) + '_챌린저스_' + jobs[j].cat + jobs[j].part + '_' + date + '.png';
+        const fname = (j + 1) + '_챌린저스_' + (jobs[j].list ? '순위_' : '') + jobs[j].cat + jobs[j].part + '_' + date + '.png';
         if (dir) { const blob = await new Promise(r => c.toBlob(r, 'image/png')); const fh = await dir.getFileHandle(fname.replace(/[\\/:*?"<>|]/g, '-'), { create: true }); const w = await fh.createWritable(); await w.write(blob); await w.close(); }
         else { const a = document.createElement('a'); a.download = fname; a.href = c.toDataURL('image/png'); a.click(); await new Promise(r => setTimeout(r, 500)); }
       }
     } catch (e) { alert('이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
-    this._chalBusy = ''; this.setState({ chalShot: null });
+    this._chalBusy = ''; this._chalListMode = false; this.setState({ chalShot: null });
   }
   async saveAllImages() {
     if (this._imgBusy || this._allBusy) return;
@@ -7402,7 +7449,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 111,
+      isAdmin: admin, appVer: 112,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
