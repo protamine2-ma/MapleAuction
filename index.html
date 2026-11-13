@@ -6707,7 +6707,10 @@ class Component extends DCLogic {
       finally { el.style.width = ow; el.style.minWidth = oc; rules.forEach(([r, m]) => { r.media.mediaText = m; }); rules.length = 0; }
       const per = this.getImgPer(tab);
       if (per > 1 && shots.length > 1) { const s0 = tab === '칠흑장신구' && shots[0][0] === '노작' ? 1 : 0, out = shots.slice(0, s0);
-        for (let i = s0; i < shots.length; i += per) { const g = shots.slice(i, i + per); if (g.length === 1) { out.push(g[0]); continue; }
+        const solo = s => tab === '보스장신구' && /^1[78]성/.test(s[0] || ''), chunks = []; let cur = [];
+        for (let i = s0; i < shots.length; i++) { const s = shots[i]; if (solo(s)) { if (cur.length) chunks.push(cur); chunks.push([s]); cur = []; continue; } cur.push(s); if (cur.length >= per) { chunks.push(cur); cur = []; } }
+        if (cur.length) chunks.push(cur);
+        for (const g of chunks) { if (g.length === 1) { out.push(g[0]); continue; }
           const G = 60, aw = 1800, ah = 860, cs = g.map(s => s[1]), cw = Math.max(...cs.map(s => s.width)), chh = Math.max(...cs.map(s => s.height));
           let best = null; for (let cols = 1; cols <= cs.length; cols++) { const rows = Math.ceil(cs.length / cols), W = cw * cols + G * (cols - 1), H = chh * rows + G * (rows - 1), sc = Math.min(aw / W, ah / H); if (!best || sc > best.sc) best = { cols, rows, W, H, sc }; }
           const m = document.createElement('canvas'); m.width = best.W; m.height = best.H; const mx = m.getContext('2d');
@@ -7269,7 +7272,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 107,
+      isAdmin: admin, appVer: 108,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
