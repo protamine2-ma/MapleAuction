@@ -2611,7 +2611,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 <div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:40px 28px 64px;display:flex;flex-direction:column;gap:24px;">
   <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
     <div style="display:flex;flex-direction:column;gap:6px;">
-      <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">방송</h1>
+      <h1 data-m="h1" style="margin:0;font-size:40px;font-weight:800;letter-spacing:-0.03em;">재획반찬</h1>
       <span style="font-size:14px;color:#6b6d73;">메이플 방송 · 지금 방송 중 <b style="color:#e5322d;">{{ liveN }}명</b> · 2분마다 새로 확인</span>
     </div>
     <sc-if value="{{ liveHasErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:700;color:#e5322d;">{{ liveErr }}</span></sc-if>
@@ -2660,7 +2660,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
         <input value="{{ liveNewN }}" onChange="{{ setLiveNewN }}" placeholder="이름 (비우면 자동)" style="flex:1 1 140px;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#1b1c1f;font-family:inherit;font-size:14px;">
         <button onClick="{{ liveAdd }}" style="padding:9px 18px;border:none;border-radius:8px;background:oklch(0.42 0.09 262);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">추가</button>
       </div>
-      <input value="{{ liveWorker }}" onChange="{{ setLiveWorker }}" placeholder="Worker 주소 (https://….workers.dev)" style="padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#3a3c41;font-family:inherit;font-size:13px;">
+      <input value="{{ liveWorker }}" onChange="{{ setLiveWorker }}" placeholder="Worker 주소 (비우면 https://live.protamine2.workers.dev)" style="padding:9px 12px;border-radius:8px;border:1px solid #d6d6d2;background:#fff;color:#3a3c41;font-family:inherit;font-size:13px;">
       <span style="font-size:12px;color:#6b6d73;">{{ liveMsg }}</span>
     </section>
   </sc-if>
@@ -4812,7 +4812,7 @@ class Component extends DCLogic {
       liveShow: admin || rows.length > 0,
       isLive: this.state.tab === '방송' && this._area === '옥션',
       goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); this.refreshLive(); },
-      liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? 'LIVE ' + n : '방송',
+      liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? '재획반찬 LIVE ' + n : '재획반찬',
       liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
       liveEmpty: rows.length === 0, liveErr: this.state.liveErr || '', liveHasErr: !!this.state.liveErr, liveAdmin: admin,
       liveWorker: S.worker || '', setLiveWorker: e => this.saveStreamers({ ...S, worker: e.target.value.trim() }),
@@ -7402,7 +7402,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 110,
+      isAdmin: admin, appVer: 111,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
