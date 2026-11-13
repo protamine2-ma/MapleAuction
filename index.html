@@ -6676,13 +6676,17 @@ class Component extends DCLogic {
       this._chalScaleRef = el => { this._chalScaleEl = el; fit(); };
     }
     this._chalDn = dn;
+    if (!this._slotIcoLoading) { this._slotIcoLoading = true; (async () => { for (const f of ['image-slots.state.json', '.image-slots.state.json']) { try { const r = await fetch(f, { cache: 'no-store' }); if (!r.ok) continue; const j = await r.json(), S = j.slots || j, o = {}; Object.keys(S).forEach(k => { const v = S[k]; const u = typeof v === 'string' ? v : v && v.u; if (u) o[k] = u; }); this.setState({ slotIcons: o }); return; } catch (e) {} } })(); }
+    const SI = this.state.slotIcons || {};
+    const icoOf = ik => { const id = ik.slot, iv = (this.state.icons || {})[ik.key]; if (iv) return SB_URL + '/storage/v1/object/public/icons/' + ik.key + '?v=' + encodeURIComponent(iv); return SI[id] || ''; };
+    const icoKey = r => { const nk = r.name.replace(/\s*\((만|억)\)\s*$/, '').split(' · ')[0].replace(/\s+/g, ''), slot = 'icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk); return { slot, key: this.iconKey(slot) }; };
     let chalShot = { title: '', unit: '억', cols: '', cards: [], grid: true, list: false, items: [] };
     if (shot && shot.list) {
       const UR = /\s*\((만|억)\)\s*$/, uOf = r => (r.name.match(UR) || [])[1] || '억';
       chalShot = { title: shot.cat, grid: false, list: true, cards: [], items: shot.rows.map((r, i) => {
         const nk = r.name.replace(UR, '').split(' · ')[0].replace(/\s+/g, ''), ik = this.iconKey('icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk)), iv = (this.state.icons || {})[ik];
-        const rk = shot.start + i + 1, first = rk === 1;
-        return { rank: rk, name: r.name.replace(UR, ''), cat: r.cat, u: uOf(r), hasIcon: !!iv, icon: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+        const rk = shot.start + i + 1, first = rk === 1, ico = icoOf(icoKey(r));
+        return { rank: rk, name: r.name.replace(UR, ''), cat: r.cat, u: uOf(r), hasIcon: !!ico, icon: ico,
           pct: '+' + Math.round(r.gain * 100) + '%', cur: String(r.cur), mx: r2(r.mx), rankC: first ? '#ff6b6b' : rk <= 3 ? '#ffb547' : '#f3f5fa', pctC: first ? '#ff6b6b' : '#f3f5fa', bd: first ? '#ff6b6b' : '#26304a' };
       }) };
     } else if (shot) {
@@ -6704,8 +6708,8 @@ class Component extends DCLogic {
           const nk = r.name.replace(UR, '').split(' · ')[0].replace(/\s+/g, ''), ik = this.iconKey('icon-' + ({ '도미네이트펜던트': '도미네이터펜던트' }[nk] || nk)), iv = (this.state.icons || {})[ik];
           const bars = [...r.old.map((v, k) => ({ v, max: k + 1 === r.w })), { v: r.cur, now: true }].map(b => ({ v: b.v == null ? '' : String(b.v), h: Math.round((b.v || 0) / top * 100) + '%',
             bg: b.now ? '#ffb547' : b.max ? '#4d8dff' : '#33405f', tc: b.now ? '#ffb547' : b.max ? '#6fa8ff' : '#aab3c8' }));
-          const first = i === 0 && shot.start === 0;
-          return { rank: shot.start + i + 1, name: r.name.replace(UR, ''), sub: shot.top ? r.cat : '', hasSub: !!shot.top, u: uOf(r), hasIcon: !!iv, icon: iv ? SB_URL + '/storage/v1/object/public/icons/' + ik + '?v=' + encodeURIComponent(iv) : '',
+          const first = i === 0 && shot.start === 0, ico = icoOf(icoKey(r));
+          return { rank: shot.start + i + 1, name: r.name.replace(UR, ''), sub: shot.top ? r.cat : '', hasSub: !!shot.top, u: uOf(r), hasIcon: !!ico, icon: ico,
             pct: '+' + Math.round(r.gain * 100) + '%', diff: '차액 +' + r2(r.mx - r.cur) + uOf(r), cur: String(r.cur), mx: r2(r.mx), mw: r.w, rankC: first ? '#ff6b6b' : '#f3f5fa', bd: first ? '#ff6b6b' : '#26304a', bars };
         }) };
     }
@@ -7457,7 +7461,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 113,
+      isAdmin: admin, appVer: 114,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
