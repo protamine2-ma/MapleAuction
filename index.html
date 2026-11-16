@@ -1812,6 +1812,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;">
       <button onClick="{{ toggleGuideEdit }}" style="padding:8px 16px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.9;">{{ guideEditLabel }}</button>
       <button onClick="{{ guideShotAll }}" style="padding:8px 16px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.85;">{{ guideShotLabel }}</button>
+      <button onClick="{{ guideTitleShot }}" style="padding:8px 16px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.85;">제목만 이미지 만들기</button>
       <span style="font-size:13px;color:#6b6d73;">{{ guideMsg }}</span>
     </div>
   </sc-if>
@@ -5115,6 +5116,7 @@ class Component extends DCLogic {
       guideEditLabel: edit ? '수정 완료' : '페이지 수정',
       toggleGuideEdit: () => this.setState(s => ({ guideEdit: !s.guideEdit })),
       guideShotAll: () => this.saveGuideImgs(job, g.sections.map((s, i) => ({ i, title: s.title, skip: s.type === 'video' })), null),
+      guideTitleShot: () => this.saveTitleImg(job),
       guideShotLabel: this._gShotBusy ? '이미지 저장 중…' : '메뉴별 이미지 저장 (전체)',
       onGuideTagline: e => { const v = e.target.value; upd(n => { n.tagline = v; }); },
       onGuideMeta: e => { const v = e.target.value; upd(n => { n.meta = v; }); },
@@ -7126,6 +7128,17 @@ class Component extends DCLogic {
     } catch (e) { this._zipFiles = null; rules.forEach(([r, m]) => { r.media.mediaText = m; }); alert('이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
     this._imgBusy = false; this.forceUpdate();
   }
+  async saveTitleImg(job) {
+    const t = (window.prompt('이미지에 넣을 제목을 입력하세요', '') || '').trim(); if (!t) return;
+    try { await document.fonts.load("800 80px Pretendard"); await document.fonts.load("700 30px Pretendard"); } catch (e) {}
+    const W = 1920, H = 1080, PAD = 90, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+    x.fillStyle = '#f1eef6'; x.fillRect(0, 0, W, H); x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    const gem = (X, Y, w, h, k, col) => { x.beginPath(); x.moveTo(X + w / 2, Y); x.lineTo(X + w, Y + h * k); x.lineTo(X + w / 2, Y + h); x.lineTo(X, Y + h * k); x.closePath(); x.fillStyle = col; x.fill(); };
+    gem(PAD, 88, 44, 96, 0.4, '#7d4fc0'); gem(PAD + 11, 100, 22, 44, 0.45, '#c9b0f0');
+    x.font = "700 30px Pretendard, sans-serif"; x.fillStyle = '#7d4fc0'; x.fillText(job + ' · 직업가이드', PAD + 72, 104);
+    x.font = "800 80px Pretendard, sans-serif"; x.fillStyle = '#1c1626'; x.fillText(t, PAD + 68, 186);
+    const a = document.createElement('a'); a.download = job + '_' + t.replace(/[\\/:*?"<>|\s]+/g, '') + '_제목만.png'; a.href = c.toDataURL('image/png'); a.click();
+  }
   async saveGuideImgs(job, list, mode) {
     if (this._gShotBusy) return;
     list = list.filter(x => !x.skip && String(x.title || '').trim());
@@ -7730,7 +7743,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 118,
+      isAdmin: admin, appVer: 119,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
