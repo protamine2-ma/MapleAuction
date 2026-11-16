@@ -2007,6 +2007,76 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <img src="{{ mx.src }}" alt="{{ mx.title }}" style="display:block;width:100%;max-width:1000px;height:auto;border-radius:8px;"></img>
             </div>
           </sc-for>
+          <sc-if value="{{ s.hasCs }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:18px;margin-bottom:14px;align-items:stretch;">
+              <div style="display:flex;flex-direction:column;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;">
+                <span style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:oklch(0.95 0.04 290);color:oklch(0.42 0.17 290);font-size:15px;font-weight:800;">쿨뚝 (쿨타임 감소)</span>
+                <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;flex:1;">
+                  <sc-for list="{{ s.csCool }}" as="c" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:84px;padding:12px 14px;border-radius:10px;background:oklch(0.97 0.015 290);border:1px solid oklch(0.88 0.05 290);">
+                        <span style="font-size:13px;font-weight:700;color:oklch(0.5 0.1 290);">{{ c.no }}순위</span>
+                        <span style="font-size:26px;font-weight:900;color:#1d1e22;font-variant-numeric:tabular-nums;">{{ c.t }}</span>
+                        <sc-if value="{{ c.sub }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;font-weight:700;color:#5a5b60;white-space:nowrap;">{{ c.sub }}</span></sc-if>
+                      </div>
+                      <sc-if value="{{ c.notLast }}" hint-placeholder-val="{{ true }}">
+                        <span style="font-size:20px;font-weight:900;color:oklch(0.6 0.2 15);">▶</span>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;">
+                <span style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:oklch(0.95 0.04 290);color:oklch(0.42 0.17 290);font-size:15px;font-weight:800;">시드링</span>
+                <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;flex:1;">
+                  <sc-for list="{{ s.csSeed }}" as="r" hint-placeholder-count="2">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <sc-if value="{{ r.notFirst }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size:24px;font-weight:900;color:oklch(0.5 0.17 290);">+</span>
+                      </sc-if>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 16px;border-radius:10px;background:oklch(0.97 0.015 290);border:1px solid oklch(0.88 0.05 290);">
+                        <img src="{{ r.src }}" alt="{{ r.n }}" style="display:block;width:64px;height:64px;object-fit:contain;image-rendering:pixelated;"></img>
+                        <span style="font-size:19px;font-weight:800;color:#1d1e22;">{{ r.n }}</span>
+                        <span style="font-size:16px;font-weight:800;color:oklch(0.45 0.17 290);">{{ r.lv }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasHow }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:18px;margin-bottom:14px;align-items:start;">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{ s.howGroups }}" as="g" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <span style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:oklch(0.5 0.17 290);color:#fff;font-size:15px;font-weight:800;flex-shrink:0;">{{ g.no }}</span>
+                      <span style="font-size:19px;font-weight:800;color:#1d1e22;">{{ g.label }}</span>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:14px;">
+                      <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:92px;">
+                          <img src="{{ it.src }}" alt="{{ it.n }}" style="display:block;width:64px;height:64px;object-fit:contain;"></img>
+                          <span style="font-size:14px;font-weight:700;color:#3a3b3f;text-align:center;line-height:1.3;">{{ it.n }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{ s.howLv }}" as="lv" hint-placeholder-count="2">
+                  <div style="display:flex;flex-direction:column;gap:8px;padding:18px 20px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;">
+                    <span style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:oklch(0.95 0.04 290);color:oklch(0.42 0.17 290);font-size:15px;font-weight:800;">{{ lv.lv }}</span>
+                    <sc-for list="{{ lv.lines }}" as="ln" hint-placeholder-count="2">
+                      <span style="font-size:19px;font-weight:700;color:#1d1e22;line-height:1.45;">{{ ln.t }}</span>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
           <sc-if value="{{ s.hasSpot }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;margin-bottom:14px;">
               <sc-for list="{{ s.spots }}" as="sp" hint-placeholder-count="6">
@@ -2258,11 +2328,13 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
           </sc-if>
           <sc-if value="{{ s.hasAbil }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
-              <div style="display:flex;gap:14px;font-size:13px;font-weight:600;color:#6b6d73;">
+              <span data-seqhead="어빌리티" data-seqgrp="0" style="display:none;"></span>
+              <span data-seqhead="어빌리티 뽑는 법" data-seqgrp="1" style="display:none;"></span>
+              <div data-seqgrp="0" style="display:flex;gap:14px;font-size:13px;font-weight:600;color:#6b6d73;">
                 <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.72 0.17 145);"></span>레전드리</span>
                 <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:oklch(0.8 0.16 80);"></span>유니크</span>
               </div>
-              <div data-m="abil" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:12px;">
+              <div data-m="abil" data-seqgrp="0" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:12px;">
                 <sc-for list="{{ s.abilSets }}" as="a" hint-placeholder-count="6">
                   <div style="border:1px solid #e3e3e0;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
                     <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);margin-bottom:2px;">{{ a.name }}</span>
@@ -2273,6 +2345,77 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                     </sc-for>
                   </div>
                 </sc-for>
+              </div>
+              <div data-m="abilhow" data-seqgrp="1" style="border:1px solid #e3e3e0;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
+                <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">뽑는 법 <span style="font-size:13px;font-weight:600;color:#9a9ca1;">(제일 처음 어빌 뽑을 때)</span></span>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;">1</span>
+                  <span style="font-size:15px;font-weight:700;color:#2a2b2f;">프리셋 3개 모두 <span style="color:oklch(0.5 0.15 145);">레전드리</span> 만들기</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;">2</span>
+                  <span style="font-size:15px;font-weight:700;color:#2a2b2f;">돌리다가 아래 옵션이 뜨면 오른쪽대로 진행</span>
+                </div>
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.3fr);gap:8px 10px;align-items:center;">
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.95 0.05 145);border-left:4px solid oklch(0.72 0.17 145);font-size:15px;font-weight:600;color:#2a2b2f;">스킬 사용 시 20% 확률로 재사용 대기시간 미적용</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">보스 예비 1번으로 사용 / 다른 프리셋 돌리기</div>
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.95 0.05 145);border-left:4px solid oklch(0.72 0.17 145);font-size:15px;font-weight:600;color:#2a2b2f;">아이템 드롭률 20% 증가</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">보스 드롭용으로 사용 / 다른 프리셋 돌리기</div>
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">보스 몬스터 공격 시 데미지 5% 증가</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">고정하고 돌리기 <span style="color:#e5484d;">▶</span> 보스 3줄 뽑는 법으로 가기</div>
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">상태 이상에 걸린 대상 공격 시 데미지 7% 증가</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">고정하고 돌리기 <span style="color:#e5484d;">▶</span> 재사용 20% 뜨면 임시 보스용</div>
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">메소 획득량 15% 증가</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">고정하고 레전 아이템 드롭률 20% 찾기</div>
+                  <div style="padding:7px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">아이템 드롭률 15% 증가</div>
+                  <span style="color:#e5484d;font-size:16px;">▶</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;">고정하고 메소 획득량 20% 찾기</div>
+                </div>
+              </div>
+              <div data-m="abilboss" data-seqgrp="1" id="abilboss" style="max-width:620px;box-sizing:border-box;border:1px solid #e3e3e0;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
+                <span style="font-size:17px;font-weight:800;color:oklch(0.3 0.09 255);">보스 3줄 뽑는 법</span>
+                <div style="display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px 10px;align-items:start;">
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">1</span>
+                  <div style="font-size:15px;font-weight:700;color:#2a2b2f;padding-top:3px;"><span style="color:oklch(0.5 0.15 145);">레전드리</span> 어빌리티 만들기</div>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">2</span>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:1px;">
+                    <span style="font-size:14px;font-weight:600;color:#fff;background:#3a3c44;padding:4px 10px;border-radius:6px;">유니크 · 보스 몬스터 공격 시 데미지 · 5%</span>
+                    <span style="font-size:15px;font-weight:700;color:#2a2b2f;">자동재설정 돌리기</span>
+                  </div>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">3</span>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="padding:5px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">보스 몬스터 공격 시 데미지 7% 증가</span><span style="font-size:15px;font-weight:700;color:#e5484d;">잠금</span></div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-size:14px;font-weight:600;color:#fff;background:#3a3c44;padding:4px 10px;border-radius:6px;">유니크 · 상태 이상에 걸린 대상 공격 시 데미지 · 7%</span><span style="font-size:15px;font-weight:700;color:#2a2b2f;">자동재설정 돌리기</span></div>
+                  </div>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">4</span>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <span style="padding:5px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">보스 몬스터 공격 시 데미지 7% 증가</span>
+                    <span style="padding:5px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">상태 이상에 걸린 대상 공격 시 데미지 7% 증가</span>
+                  </div>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">5</span>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <span style="font-size:15px;font-weight:700;color:#e5484d;">최고 수치까지 <span style="color:#2a2b2f;">블랙서큘과 카오스서큘로 돌리기</span></span>
+                    <span style="padding:5px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">보스 몬스터 공격 시 데미지 10% 증가</span>
+                    <span style="padding:5px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;">상태 이상에 걸린 대상 공격 시 데미지 8% 증가</span>
+                  </div>
+                  <span style="width:26px;height:26px;border-radius:50%;background:#2a2b2f;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;">6</span>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:1px;">
+                    <span style="font-size:15px;font-weight:700;color:#e5484d;">두 줄 잠금</span>
+                    <span style="font-size:14px;font-weight:600;color:#fff;background:#3a3c44;padding:4px 10px;border-radius:6px;">레전드리 · 스킬 사용 시 % 확률로 재사용 · 20</span>
+                    <span style="font-size:15px;font-weight:700;color:#2a2b2f;">자동재설정 돌리기</span>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:10px;border:2px solid #2a2b2f;">
+                  <span style="font-size:16px;font-weight:800;color:#2a2b2f;">목표 옵션</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:oklch(0.95 0.05 145);border-left:4px solid oklch(0.72 0.17 145);font-size:15px;font-weight:600;color:#2a2b2f;text-align:center;">스킬 사용 시 20% 확률로 재사용 대기시간 미적용</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;text-align:center;">보스 몬스터 공격 시 데미지 10% 증가</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:oklch(0.96 0.05 85);border-left:4px solid oklch(0.8 0.16 80);font-size:15px;font-weight:600;color:#2a2b2f;text-align:center;">상태 이상에 걸린 대상 공격 시 데미지 8% 증가</span>
+                </div>
               </div>
             </div>
           </sc-if>
@@ -2317,7 +2460,14 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
             </div>
           </sc-if>
           <sc-if value="{{ s.hasPet }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 32px;margin-bottom:14px;">
+            <div style="position:relative;flex:0 1 338px;min-width:240px;">
+              <img src="img/petbuff-slots.png" alt="" style="display:block;width:100%;height:auto;"></img>
+              <sc-for list="{{ s.petSlots }}" as="q" hint-placeholder-count="6">
+                <span style="position:absolute;left:{{ q.left }};top:{{ q.top }};width:11.2%;aspect-ratio:1;border-radius:4px;background-color:#fff;background-image:{{ q.iconBg }};background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;"></span>
+              </sc-for>
+            </div>
+            <div style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:6px;">
               <sc-for list="{{ s.petRows }}" as="p" hint-placeholder-count="8">
                 <div style="display:grid;grid-template-columns:28px 40px minmax(0,1fr);align-items:center;gap:12px;padding:4px 0;">
                   <span style="font-size:16px;font-weight:800;color:oklch(0.48 0.17 255);text-align:center;font-variant-numeric:tabular-nums;">{{ p.rank }}</span>
@@ -2350,6 +2500,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   </span>
                 </div>
               </sc-for>
+            </div>
             </div>
           </sc-if>
           <sc-if value="{{ s.hasHyper }}" hint-placeholder-val="{{ false }}">
@@ -3911,6 +4062,9 @@ BURST['레테'].seqs = [{ label: BURST['레테'].label, steps: BURST['레테'].s
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }, { label: '1분 준극딜', steps: [
   [[['엔버링크 (일반서버)', 'soulcontract']]], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }];
+const HUNTHOW = { '레테': { groups: [['스캐터 켜기', [['스캐터', 'skill-lethe-scatter']]], ['소환하기', [['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['드라이브/임펠', 'skill-lethe-drive']]], ['설치기', [['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9']]]],
+  lv: [['260Lv 이전', '소환수 뽑고', '에르다 파운틴 쓰고 임펠 쓰면서 돌기'], ['260Lv 이후', '소환수 뽑고', '에르다 파운틴 / 솔 야누스 설치 후', '임펠 쓰면서 제자리 사냥하기']] } };
+const COOLSEED = { '레테': { cool: [['2초', ''], ['3초', '2초 + 1초'], ['5초', '2초 + 2초 + 1초']], seed: [['리스트레인트 링', '4레벨', 'ring-restraint'], ['컨티뉴어스 링', '4레벨', 'ring-continuous']] } };
 const KEYSET = { '레테': 'img/keyset-lethe.png' };
 const KEYNAMES = { '레테': [
   ['에르다의지', 275, 148], ['포티튜드', 372, 148], ['니게이트', 470, 148], ['소환시퀀스', 567, 148], ['스캐터', 720, 148], ['오버로드마나', 820, 148], ['퍼미에이션', 918, 148], ['보스시퀀스', 1016, 148],
@@ -4899,6 +5053,11 @@ class Component extends DCLogic {
         const item = typeof tpl === 'string' ? '하이퍼패시브' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '하이퍼패시브', ...(tpl && 'name' in tpl ? { name: '하이퍼패시브' } : {}), ...(tpl && 'id' in tpl ? { id: 'hp' + Date.now() } : {}) };
         g = { ...g, sections: [...g.sections.slice(0, i + 1), item, ...g.sections.slice(i + 1)] };
       }
+      if (!g.sections.some(x => nm(x) === '쿨뚝 | 시드링')) {
+        const i = g.sections.findIndex(x => nm(x) === '극딜순서'), tpl = g.sections[0];
+        const item = typeof tpl === 'string' ? '쿨뚝 | 시드링' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '쿨뚝 | 시드링', ...(tpl && 'name' in tpl ? { name: '쿨뚝 | 시드링' } : {}), ...(tpl && 'id' in tpl ? { id: 'cs' + Date.now() } : {}) };
+        g = { ...g, sections: i < 0 ? [...g.sections, item] : [...g.sections.slice(0, i + 1), item, ...g.sections.slice(i + 1)] };
+      }
       if (!g.sections.some(x => nm(x) === '필수퀘스트')) {
         const i = g.sections.findIndex(x => nm(x) === '펫버프'), tpl = g.sections[0];
         const item = typeof tpl === 'string' ? '필수퀘스트' : { ...Object.fromEntries(Object.keys(tpl || {}).map(k => [k, typeof tpl[k] === 'string' ? '' : Array.isArray(tpl[k]) ? [] : tpl[k]])), title: '필수퀘스트', ...(tpl && 'name' in tpl ? { name: '필수퀘스트' } : {}), ...(tpl && 'id' in tpl ? { id: 'mq' + Date.now() } : {}) };
@@ -5135,6 +5294,7 @@ class Component extends DCLogic {
         hasLink: s.title === '링크' && !!(lk && lk.boss),
         linkCols: s.title === '링크' && lk && lk.boss ? [['boss', '링크 - 보스'], ['hunt', '링크 - 사냥']].map(([k, t]) => ({ title: t, sample: (lk[k].sample || 0) + '명 기준', rows: lk[k].items.slice(0, 14).map((x, r) => ({ rank: r + 1, name: x.name, job: LINK_JOB[x.name] ? '(' + LINK_JOB[x.name] + ')' : '', pct: x.pct.toFixed(1) + '%', bar: Math.max(2, x.pct) + '%', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', rankBg: 'transparent', rankColor: '#6b6d73', ...this.tipOf('lk:' + k + ':' + x.name, { info: '', top: '', effLabel: x.descLv ? '[현재 레벨 ' + x.descLv + ']' : '', eff: x.desc }) })) })) : [],
         petRows: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50) : []).map((x, k) => ({ rank: k + 1, name: x.name, tier: x.tier || '', hasTier: !!x.tier, pctText: Math.round(x.pct) + '% 사용', iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', pct: x.pct + '%', bar: Math.max(2, x.pct) + '%', ...this.tipOf('pb:' + x.name, { info: x.info, top: x.tier ? '[' + x.tier + ' 스킬]' : '', effLabel: x.lv ? '[현재 레벨 ' + x.lv + ']' : '', eff: x.effect }) })),
+        petSlots: (s.title === '펫버프' && pb ? pb.items.filter(x => x.pct > 50).slice(0, 6) : []).map((x, k) => ({ iconBg: x.icon ? 'url(' + x.icon + ')' : 'none', left: (([9, 55, 117, 163, 225, 271][k] + 21 - 18) / 322 * 100) + '%', top: ((123 - 18) / 157 * 100) + '%' })),
         hasHyper: s.title === '하이퍼패시브' && hpRows.length > 0, hyperRows: s.title === '하이퍼패시브' ? hpRows : [],
         hasVm: s.title === 'V매트릭스' && !!VMATRIX[job], vmImg: VMATRIX[job] || '',
         hasVmx: s.title === 'V매트릭스' && !!VMX[job], vmxImg: (VMX[job] || {}).img || '', vmxW: ((VMX[job] || {}).w || 489) + 'px',
@@ -5157,6 +5317,8 @@ class Component extends DCLogic {
         hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', src: f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
         msExtras: s.title === '주요스킬' && MAINSKILL[job] ? MAINSKILL[job].extras || [] : [],
         hasOnoff: s.title === '주요스킬' && !!(MAINSKILL[job] && MAINSKILL[job].onoff), onoff: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].onoff || []).map(([name, grade, f], k) => { const hunt = grade === '사냥', boss = grade === '보스'; return { no: String(k + 1).padStart(2, '0'), name, grade: hunt ? '사냥 ON · 보스 OFF' : boss ? '보스 ON · 사냥 OFF' : grade + ' 스킬', src: 'img/' + f, gBg: hunt ? 'oklch(0.94 0.06 145)' : boss ? 'oklch(0.94 0.05 25)' : 'oklch(0.94 0.035 255)', gC: hunt ? 'oklch(0.4 0.12 150)' : boss ? 'oklch(0.45 0.15 25)' : 'oklch(0.4 0.12 255)' }; }) : [],
+        hasHow: s.title === '사냥방법' && !!HUNTHOW[job], howGroups: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].groups.map(([label, its], k) => ({ no: String(k + 1), label, items: its.map(([n, f]) => ({ n, src: 'img/' + f + '.png' })) })) : [], howLv: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].lv.map(([lv, ...ls]) => ({ lv, lines: ls.map(t => ({ t })) })) : [],
+        hasCs: s.title === '쿨뚝 | 시드링' && !!COOLSEED[job], csCool: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].cool.map(([t, sub], k) => ({ t, sub, no: String(k + 1), notLast: k < COOLSEED[job].cool.length - 1 })) : [], csSeed: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].seed.map(([n, lv, f], k) => ({ n, lv, src: 'img/' + f + '.png', notFirst: k > 0 })) : [],
         hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
         hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {}, questImgs: ((QUEST[job] || {}).imgs || []).map(([f, alt, w]) => ({ src: 'img/' + f, alt, mw: w + 'px' })),
         hasUnion: s.title === '유니온' && !!UNION[job],
@@ -5191,7 +5353,7 @@ class Component extends DCLogic {
           rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, jc: g === 'O' ? 'center' : 'flex-start', grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && !(s.title === '버프즐겨찾기' && BUFFFAV[job]) && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '사냥방법' && HUNTHOW[job]) && !(s.title === '쿨뚝 | 시드링' && COOLSEED[job]) && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && !(s.title === '버프즐겨찾기' && BUFFFAV[job]) && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
@@ -7743,7 +7905,8 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 119,
+      isAdmin: admin, appVer: 120,
+      goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
