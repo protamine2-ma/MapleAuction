@@ -1811,6 +1811,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
   <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;">
       <button onClick="{{ toggleGuideEdit }}" style="padding:8px 16px;border:none;border-radius:8px;background:oklch(0.48 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.9;">{{ guideEditLabel }}</button>
+      <button onClick="{{ guideShotAll }}" style="padding:8px 16px;border:1px solid oklch(0.48 0.17 255);border-radius:8px;background:#fff;color:oklch(0.48 0.17 255);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;" style-hover="opacity:0.85;">{{ guideShotLabel }}</button>
       <span style="font-size:13px;color:#6b6d73;">{{ guideMsg }}</span>
     </div>
   </sc-if>
@@ -1843,12 +1844,168 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
           <input value="{{ s.title }}" onChange="{{ s.onTitle }}" style="flex:1;min-width:0;padding:6px 10px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:17px;font-weight:800;">
         </sc-if>
+        <sc-if value="{{ s.canShot }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ s.shot }}" title="이 메뉴 이미지 저장 (1920×1080)" style="margin-left:auto;padding:4px 10px;border:1px solid oklch(0.8 0.06 255);border-radius:6px;background:#fff;color:oklch(0.48 0.17 255);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;" style-hover="opacity:0.85;">이미지 저장</button>
+        </sc-if>
       </div>
       <div style="padding:18px 22px;">
         <sc-if value="{{ guideEdit }}" hint-placeholder-val="{{ false }}">
           <textarea value="{{ s.rawText }}" onChange="{{ s.onText }}" rows="10" placeholder="내용을 입력하세요" style="box-sizing:border-box;width:100%;padding:10px 12px;border:1px solid #d6d7d3;border-radius:8px;font-family:inherit;font-size:15px;line-height:1.7;resize:vertical;"></textarea>
         </sc-if>
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ s.hasBurst }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <img src="{{ s.burst.preSrc }}" alt="" style="width:48px;height:48px;border-radius:8px;"></img>
+                <span style="padding:6px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fafaf8;font-size:15px;font-weight:800;color:#1d1e22;">{{ s.burst.preText }}</span>
+              </div>
+              <sc-for list="{{ s.burst.seqs }}" as="sq" hint-placeholder-count="1">
+              <div style="display:flex;align-items:flex-start;flex-wrap:wrap;row-gap:16px;column-gap:6px;">
+                <span style="align-self:flex-start;flex:none;box-sizing:border-box;width:112px;margin-top:12px;margin-right:8px;padding:5px 8px;border-radius:8px;background:#2a2b2f;font-size:15px;font-weight:800;color:#fff;white-space:nowrap;text-align:center;">{{ sq.label }}</span>
+                <sc-for list="{{ sq.steps }}" as="st" hint-placeholder-count="10">
+                  <div style="display:flex;align-items:flex-start;gap:6px;">
+                    <sc-if value="{{ st.notFirst }}" hint-placeholder-val="{{ true }}"><span style="margin-top:15px;font-size:16px;color:oklch(0.58 0.21 27);line-height:1;">▶</span></sc-if>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                      <div style="display:flex;align-items:flex-start;gap:0;">
+                        <sc-for list="{{ st.items }}" as="it" hint-placeholder-count="1">
+                          <sc-if value="{{ it.arrow }}" hint-placeholder-val="{{ false }}"><span style="margin:15px 4px 0;font-size:16px;color:oklch(0.58 0.21 27);line-height:1;">▶</span></sc-if>
+                          <div style="width:52px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                            <sc-if value="{{ it.isImg }}" hint-placeholder-val="{{ true }}"><img src="{{ it.src }}" alt="{{ it.n }}" style="width:48px;height:48px;border-radius:8px;"></img></sc-if>
+                            <sc-if value="{{ it.isTile }}" hint-placeholder-val="{{ false }}"><span style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:oklch(0.62 0.17 0);font-size:15px;font-weight:800;color:#fff;">{{ it.n }}</span></sc-if>
+                            <sc-if value="{{ it.isImg }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px;font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;">{{ it.n }}</span></sc-if>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ st.hasTag }}" hint-placeholder-val="{{ false }}"><span style="align-self:stretch;padding:3px 6px;border-radius:6px;background:oklch(0.85 0.15 80);font-size:12px;font-weight:800;color:#1d1e22;white-space:nowrap;text-align:center;">{{ st.tag }}</span></sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasBfav }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:14px;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:240px;flex:none;">
+                <img src="img/buffbm-setting.png" alt="게임 설정 · 버프 즐겨찾기 설정" style="width:100%;height:auto;border-radius:8px;"></img>
+                <span style="font-size:13px;font-weight:700;color:#3a3b3f;text-align:center;">게임 설정 › UI › 버프 즐겨찾기 설정</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px;min-width:0;">
+                <sc-for list="{{ s.bfavRows }}" as="br" hint-placeholder-count="2">
+                  <div style="display:flex;flex-direction:column;">
+                    <div style="display:flex;gap:4px;padding:6px;border-radius:10px;background:#d6d9de;align-self:flex-start;">
+                      <sc-for list="{{ br.items }}" as="bi" hint-placeholder-count="9">
+                        <img src="{{ bi.src }}" alt="{{ bi.n }}" style="width:52px;height:52px;flex:none;border-radius:8px;"></img>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex;gap:4px;padding:6px 6px 0;">
+                      <sc-for list="{{ br.items }}" as="bi" hint-placeholder-count="9">
+                        <div style="width:52px;flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                          <span style="font-size:11px;font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;">{{ bi.n }}</span>
+                          <sc-if value="{{ bi.hasNote }}" hint-placeholder-val="{{ false }}"><span style="padding:1px 4px;border-radius:5px;background:oklch(0.94 0.05 25);font-size:10px;font-weight:800;color:oklch(0.45 0.15 25);white-space:nowrap;">{{ bi.note }}</span></sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasKeyset }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;width:100%;max-width:1000px;margin:0 auto 14px;container-type:inline-size;">
+              <img src="{{ s.keysetImg }}" alt="추천 키세팅" style="display:block;width:100%;height:auto;border-radius:8px;"></img>
+              <sc-if value="{{ s.hasKeyNames }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ s.keyTags }}" as="kk" hint-placeholder-count="0">
+                  <div style="position:absolute;left:{{ kk.l }};top:{{ kk.t }};transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;padding:0.25cqw 0.55cqw;border-radius:0.45cqw;background:rgba(20,18,26,0.88);pointer-events:none;">
+                    <span style="font-size:1.3cqw;font-weight:800;color:#fff;white-space:nowrap;line-height:1.25;">{{ kk.n }}</span>
+                    <sc-if value="{{ kk.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:1.1cqw;font-weight:800;color:#ffb3a8;white-space:nowrap;line-height:1.25;">{{ kk.note }}</span></sc-if>
+                  </div>
+                </sc-for>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ s.hasSeq }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ s.seqs }}" as="q" hint-placeholder-count="1">
+              <sc-if value="{{ q.hasHead }}" hint-placeholder-val="{{ false }}">
+                <div data-seqhead="{{ q.head }}" data-seqgrp="{{ q.grp }}" style="display:flex;align-items:center;gap:10px;margin:{{ q.headMt }} 0 10px;">
+                  <span style="font-size:18px;font-weight:800;color:#1d1e22;">{{ q.head }}</span>
+                  <div data-noimg="1" style="flex:1;height:1px;background:#e3e3e0;"></div>
+                </div>
+              </sc-if>
+              <div data-seqgrp="{{ q.grp }}" style="display:flex;align-items:flex-start;gap:28px;margin-bottom:14px;flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:column;">
+                  <div style="display:flex;gap:{{ q.gap }};padding:0 6px 4px;">
+                    <span style="width:{{ q.w }};flex:none;"></span>
+                    <sc-for list="{{ q.skills }}" as="k" hint-placeholder-count="7">
+                      <div style="width:{{ q.w }};flex:none;display:flex;align-items:flex-end;justify-content:center;">
+                        <sc-if value="{{ k.hasTop }}" hint-placeholder-val="{{ false }}"><span style="padding:2px 3px;border-radius:5px;background:#1d1e22;font-size:{{ q.topFs }};font-weight:800;color:#fff;white-space:nowrap;">{{ k.top }}</span></sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;gap:{{ q.gap }};padding:6px;border-radius:10px;background:#d6d9de;">
+                    <span style="width:{{ q.w }};height:{{ q.w }};flex:none;display:flex;align-items:center;justify-content:center;border-radius:10px;background:{{ q.tileBg }};font-size:{{ q.tfs }};font-weight:800;color:#fff;">{{ q.name }}</span>
+                    <sc-for list="{{ q.skills }}" as="k" hint-placeholder-count="7">
+                      <img src="{{ k.src }}" alt="{{ k.name }}" style="width:{{ q.w }};height:{{ q.w }};flex:none;border-radius:8px;"></img>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;gap:{{ q.gap }};padding:6px 6px 0;">
+                    <span style="width:{{ q.w }};flex:none;"></span>
+                    <sc-for list="{{ q.skills }}" as="k" hint-placeholder-count="7">
+                      <div style="width:{{ q.w }};flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                        <span style="font-size:{{ q.fs }};font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;">{{ k.name }}</span>
+                        <sc-if value="{{ k.hasNote }}" hint-placeholder-val="{{ false }}"><span style="width:84px;padding:3px 4px;border-radius:6px;background:oklch(0.94 0.05 25);font-size:11px;font-weight:700;color:oklch(0.45 0.15 25);text-align:center;line-height:1.3;word-break:keep-all;">{{ k.note }}</span></sc-if>
+                        <sc-if value="{{ k.hasAlt }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:4px;">
+                            <span style="font-size:16px;font-weight:800;color:oklch(0.55 0.2 27);line-height:1;">↕</span>
+                            <sc-if value="{{ k.hasWhy }}" hint-placeholder-val="{{ false }}"><span style="padding:2px 6px;border-radius:5px;background:oklch(0.94 0.05 25);font-size:11px;font-weight:800;color:oklch(0.45 0.15 25);white-space:nowrap;">{{ k.altWhy }}</span></sc-if>
+                            <img src="{{ k.altSrc }}" alt="{{ k.altName }}" style="width:{{ q.w }};height:auto;border-radius:8px;"></img>
+                            <span style="font-size:{{ q.fs }};font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;">{{ k.altName }}</span>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <sc-if value="{{ q.hasSides }}" hint-placeholder-val="{{ false }}">
+                  <sc-for list="{{ q.sides }}" as="k" hint-placeholder-count="1">
+                    <div style="display:flex;flex-direction:column;align-items:center;">
+                      <div style="padding:6px;border-radius:10px;background:#d6d9de;"><img src="{{ k.src }}" alt="{{ k.name }}" style="width:64px;height:64px;display:block;border-radius:8px;"></img></div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:6px;">
+                        <span style="font-size:12px;font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;max-width:76px;">{{ k.name }}</span>
+                        <sc-if value="{{ k.hasNote }}" hint-placeholder-val="{{ false }}"><span style="padding:3px 8px;border-radius:6px;background:oklch(0.94 0.05 25);font-size:11px;font-weight:700;color:oklch(0.45 0.15 25);text-align:center;">{{ k.note }}</span></sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </sc-if>
+              </div>
+            </sc-for>
+          </sc-if>
+          <sc-if value="{{ s.hasOnoff }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
+              <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+                <span style="font-size:17px;font-weight:800;color:#1d1e22;">온오프 스킬</span>
+                <span style="font-size:13px;font-weight:600;color:#6b6d73;">켜 두기만 하면 되는 스킬이에요</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
+                <sc-for list="{{ s.onoff }}" as="o" hint-placeholder-count="4">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 12px 16px;border:1px solid #e3e3e0;border-radius:12px;background:#fafaf8;">
+                    <img src="{{ o.src }}" alt="{{ o.name }}" style="width:72px;height:72px;image-rendering:pixelated;border-radius:8px;"></img>
+                    <span style="font-size:16px;font-weight:800;color:#1d1e22;text-align:center;">{{ o.name }}</span>
+                    <span style="padding:3px 10px;border-radius:999px;background:{{ o.gBg }};font-size:12px;font-weight:700;color:{{ o.gC }};">{{ o.grade }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-for list="{{ s.msExtras }}" as="mx" hint-placeholder-count="0">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+              <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+                <span style="font-size:17px;font-weight:800;color:#1d1e22;">{{ mx.title }}</span>
+                <span style="font-size:13px;font-weight:600;color:#6b6d73;">{{ mx.note }}</span>
+              </div>
+              <img src="{{ mx.src }}" alt="{{ mx.title }}" style="display:block;width:100%;max-width:1000px;height:auto;border-radius:8px;"></img>
+            </div>
+          </sc-for>
           <sc-if value="{{ s.hasSpot }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;border:1px solid #e3e3e0;border-radius:10px;overflow:hidden;margin-bottom:14px;">
               <sc-for list="{{ s.spots }}" as="sp" hint-placeholder-count="6">
@@ -2025,11 +2182,11 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   <sc-for list="{{ h.cores }}" as="c" hint-placeholder-count="3">
                     <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:stretch;">
                       <span style="display:flex;align-items:center;justify-content:center;border-radius:10px;background:#f1f2f4;font-size:20px;font-weight:700;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ c.n }}</span>
-                      <div style="display:flex;flex-direction:column;gap:6px;">
+                      <div style="display:flex;flex-direction:column;gap:4px;">
                         <sc-for list="{{ c.lines }}" as="l" hint-placeholder-count="3">
                           <div style="display:grid;grid-template-columns:90px minmax(0,1fr);align-items:center;gap:10px;">
                             <span style="font-size:14px;font-weight:600;color:#3a3b3f;">{{ l.label }}</span>
-                            <span style="padding:8px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fff;font-size:15px;font-weight:700;color:#2a2b2f;">{{ l.v }}</span>
+                            <span style="padding:4px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fff;font-size:15px;font-weight:700;color:#2a2b2f;text-align:center;">{{ l.v }}</span>
                           </div>
                         </sc-for>
                       </div>
@@ -3736,6 +3893,40 @@ const UNION = {
         const bi = base.findIndex(r => r[0] === m); if (bi >= 0) base[bi] = [m, st[1], st[2], m === '최대 HP' ? '3750' : st[3]];
         return { ...u, pri, base }; }); }); });
 })();
+const MAINSKILL = {
+  '레테': { onoff: [['오버로드 마나', '5차', 'skill-lethe-overloadmana.png'], ['솔 헤카테', '6차', 'skill-lethe-solhecate.png'], ['에르다 퍼미에이션', '5차', 'skill-lethe-erdapermeation.png'], ['포티튜드', '보스', 'skill-lethe-fortitude.png'], ['스캐터', '사냥', 'skill-lethe-scatter.png']], extras: [{ title: '솔 헤카테 · 감응 스킬', note: '감응 스킬을 오버로드 : 템플러 온슬로트로 설정', src: 'img/mainskill-lethe-hecate.png' }] },
+};
+const BUFFFAV = { '레테': [
+  [['솔 헤카테', 'bfav-lethe-1'], ['오버로드 마나', 'bfav-lethe-2'], ['퍼미에이션', 'bfav-lethe-3'], ['스캐터', 'bfav-lethe-4'], ['포티튜드', 'bfav-lethe-5'], ['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9'], ['팩트 매니페스트', 'bfav-lethe-18']],
+  [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]] };
+const BURST = { '레테': { pre: ['입장 후 컨버지 묻히기', 'converge'], label: '오리진 극딜', steps: [
+  [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['오버로드 아즈라스', 'azras']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오리진', 'origin']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] } };
+BURST['레테'].seqs = [{ label: BURST['레테'].label, steps: BURST['레테'].steps }, { label: '2분 극딜', steps: [
+  [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['오버로드 아즈라스', 'azras']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }, { label: '1분 준극딜', steps: [
+  [[['엔버링크 (일반서버)', 'soulcontract']]], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
+  [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }];
+const KEYSET = { '레테': 'img/keyset-lethe.png' };
+const KEYNAMES = { '레테': [
+  ['에르다의지', 275, 148], ['포티튜드', 372, 148], ['니게이트', 470, 148], ['소환시퀀스', 567, 148], ['스캐터', 720, 148], ['오버로드마나', 820, 148], ['퍼미에이션', 918, 148], ['보스시퀀스', 1016, 148],
+  ['에테리얼폼', 175, 262], ['해방무적', 272, 262], ['홀리파운틴', 370, 262], ['아즈라스', 468, 262], ['오버로드', 568, 262], ['오버로드', 667, 262], ['솔헤카테', 768, 262], ['챔피언의가호', 968, 262, '일반서버'],
+  ['에르다노바', 225, 360], ['극딜시퀀스', 322, 360], ['템플러', 420, 360], ['바르가르', 518, 360], ['오리진', 618, 360],
+  ['드라이브', 270, 455], ['텔레포트', 370, 455], ['컨버지', 468, 455], ['에르다파운틴', 568, 455], ['솔야누스', 668, 455],
+  ['솔헤카테:스틱스', 150, 555], ['로프커넥트', 320, 555], ['블링크', 618, 555], ['엔버링크', 715, 555, '일반서버'], ['어센트스킬', 100, 655]] };
+const SEQUENCE = {
+  '레테': [{ name: '보스', head: '버프 시퀀스', skills: [['', 'img/buff-lethe-b01.png'], ['', 'img/buff-lethe-b02.png'], ['', 'img/buff-lethe-b03.png'], ['', 'img/buff-lethe-b04.png'], ['', 'img/buff-lethe-b05.png'],
+    ['익스트림 블루', 'img/buff-lethe-extremeblue.png', '', 0, '몬파상점'], ['반짝이는 빨간별물약', 'img/buff-lethe-redstar.png', '', 0, '', ['반짝이는 파란별물약', 'img/buff-lethe-bluestar.png', '가성비']], ['VIP버프 (능력치)', 'img/buff-lethe-vip.png'],
+    ['10단계 지능의 물약', 'img/buff-lethe-int10.png'], ['전설의 영웅비약', 'img/buff-lethe-heroelixir.png', '', 0, '', ['장비명장버프', 'img/buff-lethe-guildwar.png', '최소컷도전']], ['유니온의 힘', 'img/buff-lethe-unionpower.png', '', 0, '일반서버'],
+    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]]] },
+    { name: '경치', skills: [['', 'img/buff-lethe-b01.png'], ['', 'img/buff-lethe-b02.png'], ['', 'img/buff-lethe-b03.png'], ['', 'img/buff-lethe-b04.png'], ['', 'img/buff-lethe-b05.png'],
+    ['익스트림 골드', 'img/buff-lethe-extremegold.png', '', 0, '몬파상점'], ['VIP버프 (경험치)', 'img/buff-lethe-vipexp.png'], ['추가경험치 50%쿠폰', 'img/buff-lethe-exp50.png'], ['소형 경축비', 'img/buff-lethe-smallexp.png', '', 0, '효율낮음'],
+    ['소형 재획비', 'img/buff-lethe-smallwealth.png'], ['경험치 3배쿠폰', 'img/buff-lethe-exp3x.png'], ['유니온의 부', 'img/buff-lethe-unionwealth.png', '', 0, '일반서버']] },
+    { name: '극딜', head: '스킬 시퀀스', skills: [['마스테리안 그릿', 'grit'], ['펠 템페스트', 'feltempest'], ['이계 여신의 축복', 'goddess'], ['프라이멀 퓨리', 'primalfury'], ['체인 커맨드', 'chaincommand'], ['보이드 오리진', 'voidorigin'], ['링 액티베이션', 'ringactivation'], ['소울 컨트랙션', 'soulcontract', '일반서버', 1]] }, { name: '소환', skills: [['인보크 바르가르', 'invokevargar'], ['인보크 템플러', 'invoketemplar'], ['아케인 부스트', 'arcaneboost']] }],
+};
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -4584,6 +4775,7 @@ class Component extends DCLogic {
   componentDidUpdate() { const on = this.state.theme === 'dark' && !this._imgBusy && !this._chalBusy, de = document.documentElement;
     if (on && de.dataset.dk !== '1') de.dataset.dk = '1'; else if (!on && de.dataset.dk) delete de.dataset.dk; }
   componentDidMount() {
+    window.__mapleDC = this;
     try { const t = localStorage.getItem('mapleTheme'); if (t === 'dark' || t === 'light') this.setState({ theme: t }); } catch (e) {}
     this.bindGuideScroll();
     this._topScroll = () => { const s = window.scrollY > 400; if (s !== !!this.state.topShow) this.setState({ topShow: s }); };
@@ -4892,7 +5084,8 @@ class Component extends DCLogic {
     this._pb[key] = null; job = key;
     const f = kind + '-' + encodeURIComponent(key.slice(kind.length + 1)) + '.json?t=' + Date.now();
     const get = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-    get(f).then(j => j && (j.items || j.boss) ? j : get(f.split('?')[0])).then(j => j && (j.items || j.boss) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (j && (j.items || j.boss)) { this._pb[job] = j; this.forceUpdate(); } });
+    const ok = j => j && (j.items || j.boss || j.names);
+    get(f).then(j => ok(j) ? j : get(f.split('?')[0])).then(j => ok(j) ? j : get('https://mapleauction.kr/' + f)).then(j => { if (ok(j)) { this._pb[job] = j; this.forceUpdate(); } });
     return null;
   }
   tipOf(key, o) {
@@ -4921,6 +5114,8 @@ class Component extends DCLogic {
       guideAdmin: admin, guideEdit: edit, guideView: !edit, guideMsg: this.state.guideMsg || '',
       guideEditLabel: edit ? '수정 완료' : '페이지 수정',
       toggleGuideEdit: () => this.setState(s => ({ guideEdit: !s.guideEdit })),
+      guideShotAll: () => this.saveGuideImgs(job, g.sections.map((s, i) => ({ i, title: s.title, skip: s.type === 'video' })), null),
+      guideShotLabel: this._gShotBusy ? '이미지 저장 중…' : '메뉴별 이미지 저장 (전체)',
       onGuideTagline: e => { const v = e.target.value; upd(n => { n.tagline = v; }); },
       onGuideMeta: e => { const v = e.target.value; upd(n => { n.meta = v; }); },
       onGuideImg: e => {
@@ -4931,6 +5126,7 @@ class Component extends DCLogic {
       removeGuideImg: () => upd(n => { n.img = ''; }),
       guideTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       guideSections: g.sections.map((s, i) => ({ no: String(i + 1).padStart(2, '0'), title: s.title, anchor: 'gs-' + i,
+        canShot: admin && !edit && s.type !== 'video', shot: () => this.saveGuideImgs(job, [{ i, title: s.title }], 'one'),
         navBg: this.state.guideActive === i ? 'oklch(0.94 0.035 255)' : 'transparent', navColor: this.state.guideActive === i ? 'oklch(0.3 0.09 255)' : '#3a3b3f', navWeight: this.state.guideActive === i ? 700 : 500,
         goTo: () => { const el = document.getElementById('gs-' + i); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, rawText: s.text || '', text: String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('\n').trim(),
         hasPet: s.title === '펫버프' && !!pb, petInfo: pb ? (pb.active ? '최근 7일 접속한 ' : '랭킹 상위 ') + pb.sample + '명 기준 · ' + pb.date : '',
@@ -4952,6 +5148,13 @@ class Component extends DCLogic {
           return P.map(([key, x, y]) => { const v = String((g.vmN || {})[key] || '');
             return { left: ((x + 8) / L.w * 100).toFixed(2) + '%', top: ((y - 34) / L.h * 100).toFixed(2) + '%', val: v, show: !admin && !!v,
               onChange: e => { const t = e.target.value.replace(/\D/g, '').slice(0, 2); upd(n => { n.vmN = { ...(n.vmN || {}), [key]: t }; if (!t) delete n.vmN[key]; }); } }; }); })() : [],
+        hasBfav: s.title === '버프즐겨찾기' && !!BUFFFAV[job], bfavRows: s.title === '버프즐겨찾기' && BUFFFAV[job] ? BUFFFAV[job].map(r => ({ items: r.map(([n, f, note]) => ({ n, src: 'img/' + f + '.png', note: note || '', hasNote: !!note })) })) : [],
+        hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { preText: b.pre[0], preSrc: 'img/skill-lethe-' + b.pre[1] + '.png', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag], k) => ({ first: k === 0, notFirst: k > 0, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? 'img/skill-lethe-' + f + '.png' : '', arrow: !!ar })) })) })) }; })() : {},
+        hasKeyset: s.title === '추천키세팅' && !!KEYSET[job], keysetImg: s.title === '추천키세팅' ? KEYSET[job] || '' : '',
+        keyTags: s.title === '추천키세팅' && KEYNAMES[job] ? KEYNAMES[job].map(([n, lx, ly, note]) => ({ n, note: note || '', hasNote: !!note, l: (lx * 0.5786 / 891 * 100).toFixed(2) + '%', t: (((ly - 148) * 0.5786 + 70) / 573 * 100).toFixed(2) + '%' })) : [], hasKeyNames: s.title === '추천키세팅' && !!KEYNAMES[job],
+        hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', src: f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
+        msExtras: s.title === '주요스킬' && MAINSKILL[job] ? MAINSKILL[job].extras || [] : [],
+        hasOnoff: s.title === '주요스킬' && !!(MAINSKILL[job] && MAINSKILL[job].onoff), onoff: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].onoff || []).map(([name, grade, f], k) => { const hunt = grade === '사냥', boss = grade === '보스'; return { no: String(k + 1).padStart(2, '0'), name, grade: hunt ? '사냥 ON · 보스 OFF' : boss ? '보스 ON · 사냥 OFF' : grade + ' 스킬', src: 'img/' + f, gBg: hunt ? 'oklch(0.94 0.06 145)' : boss ? 'oklch(0.94 0.05 25)' : 'oklch(0.94 0.035 255)', gC: hunt ? 'oklch(0.4 0.12 150)' : boss ? 'oklch(0.45 0.15 25)' : 'oklch(0.4 0.12 255)' }; }) : [],
         hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
         hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {}, questImgs: ((QUEST[job] || {}).imgs || []).map(([f, alt, w]) => ({ src: 'img/' + f, alt, mw: w + 'px' })),
         hasUnion: s.title === '유니온' && !!UNION[job],
@@ -4977,7 +5180,7 @@ class Component extends DCLogic {
             steps: he.items.reduce((a, t) => { const p = a[a.length - 1]; if (p && p.core === t.core && p.to === t.lv - 1) p.to = t.lv; else a.push({ core: t.core, from: t.lv, to: t.lv }); return a; }, [])
               .map((g, k) => ({ n: k + 1, short: sh(g.core), lv: g.from === g.to ? g.to : (g.from - 1) + '→' + g.to, tip: g.core + ' ' + (g.from === g.to ? g.to + '레벨' : (g.from - 1) + '→' + g.to + '레벨'), bg: pal[ci[g.core] ?? 0] })) } }; })(),
         hasHxs: s.title === '헥사스탯',
-        hxsSets: s.title === '헥사스탯' ? (HEXASTAT[job] || HEXASTAT['아델']).map(h => ({ name: h.name, cores: h.cores.map((c, k) => ({ n: k + 1, lines: c.map((v, m) => ({ label: m ? '에디셔널' + m : '메인', v })) })) })) : [],
+        hxsSets: s.title === '헥사스탯' ? (HEXASTAT[job] || HEXASTAT['아델']).map(h => ({ name: h.name, cores: h.cores.map((c, k) => ({ n: k + 1, lines: c.map((v, m) => ({ label: m ? '에디셔널' + m : '메인', v: ({ '공/마': '공격력/마력', '크뎀': '크리티컬 데미지', '보공': '보스 몬스터 공격 시 데미지' })[v] || v })) })) })) : [],
         hasHexa: s.title === '헥사스킬' && !!HEXA[job], hexaImgs: s.title === '헥사스킬' && HEXA[job] ? HEXA[job].map((src, k) => { const hm = HEXAMARK[src], hd = this.loadPetBuff(job, 'hexaicon'), hn = HEXANAME[src] || (hd && hd.names && hd.img === src ? { w: hd.w, x0: hd.x0, step: hd.step, n: hd.names } : null); return { src, hasNames: !!hn, names: hn ? hn.n.map((t, q) => ({ t, l: ((hn.x0 + hn.step * q) / hn.w * 100) + '%' })) : [], alt: '헥사스킬 강화 순서 ' + (k + 1), marks: hm ? hm.m.map(([t, x, y], q) => { const key = src + q, on = this.state.hxTip === key;
             const px = x / hm.w; return { l: (px * 100) + '%', t: (y / hm.h * 100) + '%', tl: px < 0.2 ? '-8px' : px > 0.8 ? 'auto' : '50%', tr: px > 0.8 ? '-8px' : 'auto', tx: px < 0.2 || px > 0.8 ? 'none' : 'translateX(-50%)', tip: t === '!' ? '편의성때문에 우선개방 추천' : '해당 레벨까지 연속 강화', show: on,
               onEnter: () => this.setState({ hxTip: key }), onLeave: () => this.setState(st => st.hxTip === key ? { hxTip: null } : null) }; }) : [] }; }) : [],
@@ -4986,7 +5189,7 @@ class Component extends DCLogic {
           rows: h.rows.map(([n, v]) => ({ name: n, cells: v.map((x, k) => { const up = k > 0 && x > v[k - 1]; return { v: x, bg: up ? 'oklch(0.94 0.06 145)' : 'transparent', color: up ? 'oklch(0.4 0.14 150)' : x === 0 ? '#b5b6b9' : '#1c1d21' }; }) })) })) : [],
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, jc: g === 'O' ? 'center' : 'flex-start', grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && !(s.title === '버프즐겨찾기' && BUFFFAV[job]) && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
@@ -6923,6 +7126,72 @@ class Component extends DCLogic {
     } catch (e) { this._zipFiles = null; rules.forEach(([r, m]) => { r.media.mediaText = m; }); alert('이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
     this._imgBusy = false; this.forceUpdate();
   }
+  async saveGuideImgs(job, list, mode) {
+    if (this._gShotBusy) return;
+    list = list.filter(x => !x.skip && String(x.title || '').trim());
+    let dir = null;
+    if (mode !== 'one' && window.showDirectoryPicker) { try { dir = await window.showDirectoryPicker({ id: 'maple-guide', mode: 'readwrite', startIn: 'downloads' }); } catch (e) { if (e && e.name === 'AbortError') return; dir = null; } }
+    this._gShotBusy = true; this._imgBusy = true; this.forceUpdate();
+    const rules = [];
+    try {
+      if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+      for (const sh of document.styleSheets) { let rs; try { rs = sh.cssRules; } catch (e) { continue; } for (const r of rs) if (r.media && /max-width:\s*760px/.test(r.media.mediaText)) { rules.push([r, r.media.mediaText]); r.media.mediaText = 'not all'; } }
+      if (this.state.narrow) this.setState({ narrow: false });
+      if (!this._fontCss) { try { const base = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-'; const ws = [[400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'], [700, 'Bold'], [800, 'ExtraBold']];
+        const parts = await Promise.all(ws.map(async ([w, n]) => { const res = await fetch(base + n + '.woff2'); if (!res.ok) throw new Error('font'); const b = await res.blob(); const u = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); }); return "@font-face{font-family:'Pretendard';font-weight:" + w + ";src:url(" + u + ") format('woff2');}"; }));
+        this._fontCss = parts.join(''); } catch (e) { this._fontCss = null; } }
+      try { await document.fonts.load("800 80px Pretendard"); await document.fonts.load("700 28px Pretendard"); } catch (e) {}
+      await new Promise(r => setTimeout(r, 300));
+      const W = 1920, H = 1080, PAD = 90, TOP = 222, BOT = 60, CP = 44;
+      const rr = (x, X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
+      let seq = 0;
+      list = list.flatMap(it => { const sec = document.getElementById('gs-' + it.i); const hs = sec ? [...sec.querySelectorAll('[data-seqhead]')] : []; return hs.length > 1 ? hs.map(h => ({ ...it, title: h.getAttribute('data-seqhead'), grp: h.getAttribute('data-seqgrp') })) : [it]; });
+      for (const it of list) {
+        const sec = document.getElementById('gs-' + it.i), body = sec && sec.children[1]; if (!body || !body.offsetHeight) continue;
+        const hid = it.grp != null ? [...body.querySelectorAll('[data-seqgrp]')].filter(e => e.getAttribute('data-seqgrp') !== it.grp || e.hasAttribute('data-seqhead')) : [];
+        hid.forEach(e => { e.dataset.prevDisp = e.style.display; e.style.display = 'none'; });
+        const ow = sec.style.width, ah0 = 1080 - 222 - 60 - 88, aw0 = 1920 - 180 - 88;
+        const mc = document.createElement('canvas').getContext('2d'); mc.font = "700 30px Pretendard, sans-serif"; const lw = mc.measureText(job + ' · 직업가이드').width; mc.font = "800 80px Pretendard, sans-serif"; const tw0 = mc.measureText(it.title).width;
+        const titleR = Math.max(90 + 72 + lw, 90 + 68 + tw0), bxL = titleR + 40, awB = 1920 - 90 - bxL - 88, ahB = 1080 - 60 - 60 - 88;
+        let bestW = 1180, bestS = 0, bestG = false;
+        const col = [...body.querySelectorAll('div')].filter(d => { const cs = getComputedStyle(d); return cs.display === 'flex' && cs.flexDirection === 'column' && [...d.children].filter(c => c.tagName === 'DIV' && c.offsetHeight > 120).length >= 2; }).sort((a, b) => b.offsetHeight - a.offsetHeight)[0];
+        const colSt = col ? col.getAttribute('style') || '' : '';
+        const setG = on => { if (!col) return; col.setAttribute('style', colSt); if (on) { col.style.display = 'grid'; col.style.gridTemplateColumns = 'repeat(2,minmax(0,1fr))'; col.style.alignItems = 'start'; [...col.children].forEach(c => { if (!(c.tagName === 'DIV' && c.offsetHeight > 120)) c.style.gridColumn = '1 / -1'; }); } else [...col.children].forEach(c => { c.style.gridColumn = ''; }); };
+        for (const gOn of col ? [false, true] : [false]) { setG(gOn); for (const tw of gOn ? [1500, 1640, 1800, 2000, 2400] : [1000, 1180, 1400, 1640]) { sec.style.width = tw + 'px'; await new Promise(r => setTimeout(r, 60)); const sc = Math.max(Math.min(aw0 / body.offsetWidth, ah0 / body.offsetHeight), Math.min(awB / body.offsetWidth, ahB / body.offsetHeight)); if (sc > bestS + 0.02) { bestS = sc; bestW = tw; bestG = gOn; } } }
+        setG(bestG);
+        sec.style.width = bestW + 'px';
+        await new Promise(r => setTimeout(r, 120));
+        let shot;
+        const cap = noSlot => window.htmlToImage.toCanvas(body, { filter: n => !(n.tagName === 'LABEL' && n.title === '이미지 올리기 (관리자)') && !(n.dataset && n.dataset.noimg) && n.tagName !== 'IFRAME' && !(n.tagName === 'IMAGE-SLOT' && (noSlot || !n.hasAttribute('data-filled'))), pixelRatio: 2, backgroundColor: '#ffffff', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' });
+        try { try { shot = await cap(false); } catch (e) { shot = await cap(true); } } finally { sec.style.width = ow; if (col) setG(false); hid.forEach(e => { e.style.display = e.dataset.prevDisp || ''; delete e.dataset.prevDisp; }); }
+        { const sw = shot.width, sh = shot.height, d = shot.getContext('2d').getImageData(0, 0, sw, sh).data; let x0 = sw, y0 = sh, x1 = -1, y1 = -1;
+          for (let yy = 0; yy < sh; yy += 2) for (let xx = 0; xx < sw; xx += 2) { const p = (yy * sw + xx) * 4; if (d[p] < 240 || d[p + 1] < 240 || d[p + 2] < 240) { if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; } }
+          if (x1 > x0 && y1 > y0) { const m = 8; x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(sw, x1 + m); y1 = Math.min(sh, y1 + m); const t = document.createElement('canvas'); t.width = x1 - x0; t.height = y1 - y0; t.getContext('2d').drawImage(shot, x0, y0, t.width, t.height, 0, 0, t.width, t.height); shot = t; } }
+        const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+        x.fillStyle = '#f1eef6'; x.fillRect(0, 0, W, H);
+        x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+        const gem = (X, Y, w, h, k, col) => { x.beginPath(); x.moveTo(X + w / 2, Y); x.lineTo(X + w, Y + h * k); x.lineTo(X + w / 2, Y + h); x.lineTo(X, Y + h * k); x.closePath(); x.fillStyle = col; x.fill(); };
+        gem(PAD, 88, 44, 96, 0.4, '#7d4fc0'); gem(PAD + 11, 100, 22, 44, 0.45, '#c9b0f0');
+        x.font = "700 30px Pretendard, sans-serif"; x.fillStyle = '#7d4fc0'; x.fillText(job + ' · 직업가이드', PAD + 72, 104);
+        x.font = "800 80px Pretendard, sans-serif"; x.fillStyle = '#1c1626'; x.fillText(it.title, PAD + 68, 186);
+        const cw = shot.width / 2, ch = shot.height / 2, aw = W - PAD * 2 - CP * 2, ah = H - TOP - BOT - CP * 2;
+        const sA = Math.min(aw / cw, ah / ch, 1.7), sB = Math.min(awB / cw, ahB / ch, 1.7), useB = sB > sA * 1.05;
+        const s = useB ? sB : sA, dw = cw * s, dh = ch * s, bw = dw + CP * 2, bh = dh + CP * 2, bx = useB ? bxL : (W - bw) / 2, by = useB ? 60 + (H - 120 - bh) / 2 : TOP;
+        x.save(); x.shadowColor = 'rgba(28,22,38,0.10)'; x.shadowBlur = 40; x.shadowOffsetY = 12; x.fillStyle = '#fff'; rr(x, bx, by, bw, bh, 28); x.fill(); x.restore();
+        x.imageSmoothingQuality = 'high'; x.drawImage(shot, bx + CP, by + CP, dw, dh);
+        const fname = (mode === 'one' ? '' : (++seq) + '_') + job + '_' + it.title.replace(/[\\/:*?"<>|\s]+/g, '') + '.png';
+        if (mode === 'hook') { window.__gShot = c.toDataURL('image/png'); (window.__gShots = window.__gShots || []).push(window.__gShot); continue; }
+        if (dir) { const blob = await new Promise(r => c.toBlob(r, 'image/png')); const fh = await dir.getFileHandle(fname, { create: true }); const w = await fh.createWritable(); await w.write(blob); await w.close(); }
+        else { const a = document.createElement('a'); a.download = fname; a.href = c.toDataURL('image/png'); a.click(); await new Promise(r => setTimeout(r, 500)); }
+        if (it.title === '주요스킬') { const c2 = document.createElement('canvas'); c2.width = W; c2.height = H; const x2 = c2.getContext('2d'); x2.fillStyle = '#f1eef6'; x2.fillRect(0, 0, W, H); x2.drawImage(c, 0, 0, bxL - 20, 210, 0, 0, bxL - 20, 210);
+          const f2 = fname.replace(/\.png$/, '_제목만.png');
+          if (dir) { const blob = await new Promise(r => c2.toBlob(r, 'image/png')); const fh = await dir.getFileHandle(f2, { create: true }); const w = await fh.createWritable(); await w.write(blob); await w.close(); }
+          else { const a = document.createElement('a'); a.download = f2; a.href = c2.toDataURL('image/png'); a.click(); await new Promise(r => setTimeout(r, 500)); } }
+      }
+    } catch (e) { alert('이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+    finally { rules.forEach(([r, m]) => { r.media.mediaText = m; }); }
+    this._gShotBusy = false; this._imgBusy = false; this.forceUpdate();
+  }
   async sendContact() {
     const c = this.state.contact || {};
     if (!(c.body || '').trim()) { this.setState({ contactError: '내용을 입력해 주세요.' }); return; }
@@ -7461,7 +7730,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 117,
+      isAdmin: admin, appVer: 118,
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
       oldWeeks: (() => { const s = []; TABS.forEach(t => ((all[t] || {}).removed || []).forEach(q => { if (q.date && !s.includes(q.date)) s.push(q.date); })); return s.reverse(); })(),
