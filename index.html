@@ -2252,7 +2252,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   <span style="font-size:20px;font-weight:800;color:#2a2b2f;text-align:center;">{{ h.name }}</span>
                   <sc-for list="{{ h.cores }}" as="c" hint-placeholder-count="3">
                     <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:stretch;">
-                      <span style="display:flex;align-items:center;justify-content:center;border-radius:10px;background:#f1f2f4;font-size:20px;font-weight:700;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ c.n }}</span>
+                      <span style="display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid #dcdde0;background:#f1f2f4;font-size:20px;font-weight:700;color:#2a2b2f;font-variant-numeric:tabular-nums;">{{ c.n }}</span>
                       <div style="display:flex;flex-direction:column;gap:4px;">
                         <sc-for list="{{ c.lines }}" as="l" hint-placeholder-count="3">
                           <div style="display:grid;grid-template-columns:90px minmax(0,1fr);align-items:center;gap:10px;">
@@ -5159,12 +5159,16 @@ class Component extends DCLogic {
     const W = (S.worker || 'https://live.protamine2.workers.dev').replace(/\/+$/, '');
     const keys = [...new Set(S.list.map(x => this.liveParse(x.u)).filter(Boolean).map(x => x.p + ':' + x.id))];
     if (!keys.length) return;
-    try {
-      const r = await fetch(W + '/live?c=' + encodeURIComponent(keys.join(',')));
-      if (!r.ok) throw new Error();
-      const j = await r.json(), map = {}; (j.items || []).forEach(it => { map[it.key] = it; });
-      this.setState({ liveMap: map, liveErr: '' });
-    } catch (e) { this.setState({ liveErr: '방송 상태를 못 불러왔어요' }); }
+    const yt = keys.filter(k => k.startsWith('yt:')), other = keys.filter(k => !k.startsWith('yt:'));
+    const groups = [...(other.length ? [other] : []), ...yt.map(k => [k])];
+    const res = await Promise.all(groups.map(async g => {
+      try { const r = await fetch(W + '/live?c=' + encodeURIComponent(g.join(','))); if (!r.ok) throw 0; return (await r.json()).items || []; } catch (e) { return null; }
+    }));
+    if (res.every(x => !x)) { this.setState({ liveErr: '방송 상태를 못 불러왔어요' }); return; }
+    const old = this.state.liveMap || {}, map = {};
+    keys.forEach(k => { if (old[k]) map[k] = old[k]; });
+    res.forEach(a => (a || []).forEach(it => { if (it && it.key && (it.ok || !map[it.key])) map[it.key] = it; }));
+    this.setState({ liveMap: map, liveErr: '' });
   }
   saveStreamers(data) {
     this._stDirty = true; this.setState({ streamers: data, liveMsg: '저장 중…' });
@@ -7965,7 +7969,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 125,
+      isAdmin: admin, appVer: 126,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
