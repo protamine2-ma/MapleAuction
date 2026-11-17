@@ -2976,6 +2976,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
             <div style="display:flex;align-items:center;gap:6px;min-width:0;">
               <span style="font-size:15px;font-weight:800;color:#1b1c1f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
               <span style="flex:none;font-size:11px;font-weight:800;color:{{ s.plC }};">{{ s.pl }}</span>
+              <sc-if value="{{ s.hasViewers }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:800;color:#e5322d;font-variant-numeric:tabular-nums;"><span style="width:6px;height:6px;border-radius:50%;background:#e5322d;"></span>{{ s.viewers }}</span></sc-if>
             </div>
             <span style="font-size:13px;color:#6b6d73;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.sub }}</span>
           </div>
@@ -5187,7 +5188,7 @@ class Component extends DCLogic {
     const PL = { yt: ['유튜브', '#ff6b63'], chzzk: ['치지직', '#3ee6a8'], soop: ['SOOP', '#6cb2ff'] };
     const rows = list.map((x, i) => {
       const q = this.liveParse(x.u), d = (q && M[q.p + ':' + q.id]) || {}, live = !!d.live;
-      return { i, live, name: x.n || d.name || (q ? q.id : x.u), img: d.img || '', hasImg: !!d.img, pl: q ? PL[q.p][0] : '?', plC: q ? PL[q.p][1] : '#aab3c8',
+      return { i, live, vn: live ? +d.viewers || 0 : 0, name: x.n || d.name || (q ? q.id : x.u), img: d.img || '', hasImg: !!d.img, pl: q ? PL[q.p][0] : '?', plC: q ? PL[q.p][1] : '#aab3c8',
         title: live ? d.title || '' : '', hasTitle: live && !!d.title, viewers: live && d.viewers ? Number(d.viewers).toLocaleString('ko-KR') + '명' : '',
         href: (live ? d.liveUrl : d.url) || x.u, thumb: live ? d.thumb || '' : '', hasThumb: live && !!d.thumb, offAvatar: !(live && d.thumb), hasViewers: live && !!d.viewers,
         badge: live ? 'LIVE' : 'OFF', badgeBg: live ? '#e5322d' : 'rgba(120,128,150,0.85)', dotOp: live ? 1 : 0.5, sub: live ? d.title || '방송 중' : '방송 꺼짐' };
@@ -5199,7 +5200,7 @@ class Component extends DCLogic {
       isLive: this.state.tab === '방송' && this._area === '옥션',
       goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); this.refreshLive(); },
       liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? '재획반찬 LIVE ' + n : '재획반찬',
-      liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
+      liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (b.vn - a.vn) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
       liveEmpty: rows.length === 0, liveErr: this.state.liveErr || '', liveHasErr: !!this.state.liveErr, liveAdmin: admin,
       liveWorker: S.worker || '', setLiveWorker: e => this.saveStreamers({ ...S, worker: e.target.value.trim() }),
       liveNewU: this.state.liveNewU || '', setLiveNewU: e => this.setState({ liveNewU: e.target.value }),
@@ -7969,7 +7970,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 126,
+      isAdmin: admin, appVer: 127,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
