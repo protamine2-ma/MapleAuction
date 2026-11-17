@@ -5329,6 +5329,7 @@ class Component extends DCLogic {
           const ART0 = () => [['보스 공격시 뎀증', '크리티컬 데미지', '데미지 증가'], ['크리티컬 데미지', '보스 공격시 뎀증', '데미지 증가'], ['방어율 무시', '크리티컬 확률', '올스탯 증가'], ['크리티컬 확률', '방어율 무시', '올스탯 증가'], ...Array.from({ length: 5 }, () => ['', '', ''])];
           const A40N = { '공격력/마력 증가': '공격력 / 마력', '메소 획득량 증가': '메소 획득량', '아이템 드롭률 증가': '아이템 드롭', '추가 경험치 획득 증가': '경험치 증가', '버프 지속시간 증가': '버프 지속 증가', '재사용 대기시간 미적용 확률 증가': '재사용 초기화', '파이널 어택류 스킬 데미지 증가': '파이널 어택류', '상태이상 내성 증가': '상태이상 내성', '소환수 지속시간 증가': '소환수 지속시간', '최대 HP/MP 증가': '최대 HP/MP' };
           const a40 = this.loadPetBuff(job, 'artifact'), top6 = a40 && a40.opts ? a40.opts.filter(o => A40N[o.name]).sort((x, y) => y.pct - x.pct).map(o => A40N[o.name]) : [];
+          const SWAP = { '레테': ['재사용 초기화', '공격력 / 마력'] }; if (SWAP[job]) { const [p, q] = SWAP[job].map(t => top6.indexOf(t)); if (p >= 0 && q >= 0) [top6[p], top6[q]] = [top6[q], top6[p]]; }
           const art0 = g.art || ARTIFACT[job] || ART0(), cnt = {}, tops = new Set();
           art0.forEach(e => e.forEach((t, m) => { if (t) { cnt[t] = (cnt[t] || 0) + 1; if (!m) tops.add(t); } }));
           const base = art0.map((e, k) => { if (k < 4 || top6.length < 6 || e.some(t => t)) return e;
@@ -7964,7 +7965,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 124,
+      isAdmin: admin, appVer: 125,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
