@@ -2016,7 +2016,6 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   <sc-for list="{{ s.csCool }}" as="c" hint-placeholder-count="3">
                     <div style="display:flex;align-items:center;gap:12px;">
                       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:84px;padding:12px 14px;border-radius:10px;background:oklch(0.97 0.015 290);border:1px solid oklch(0.88 0.05 290);">
-                        <span style="font-size:13px;font-weight:700;color:oklch(0.5 0.1 290);">{{ c.no }}순위</span>
                         <span style="font-size:26px;font-weight:900;color:#1d1e22;font-variant-numeric:tabular-nums;">{{ c.t }}</span>
                         <sc-if value="{{ c.sub }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;font-weight:700;color:#5a5b60;white-space:nowrap;">{{ c.sub }}</span></sc-if>
                       </div>
@@ -2128,7 +2127,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                 <sc-for list="{{ s.vmxNums }}" as="c" hint-placeholder-count="24">
                   <div style="position:absolute;left:{{ c.left }};top:{{ c.top }};width:8%;height:6%;display:flex;align-items:center;justify-content:center;">
                     <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
-                      <input value="{{ c.val }}" onChange="{{ c.onChange }}" maxlength="2" style="box-sizing:border-box;width:100%;height:100%;padding:0;border:1px dashed rgba(255,255,255,0.45);border-radius:4px;background:rgba(0,0,0,0.25);color:#ff2222;font-family:inherit;font-size:clamp(14px,4.6vw,24px);font-weight:900;text-align:center;text-shadow:0 0 2px #fff,0 0 2px #fff;outline:none;">
+                      <input data-vmx-in="1" value="{{ c.val }}" onChange="{{ c.onChange }}" maxlength="2" style="box-sizing:border-box;width:100%;height:100%;padding:0;border:1px dashed rgba(255,255,255,0.45);border-radius:4px;background:rgba(0,0,0,0.25);color:#ff2222;font-family:inherit;font-size:clamp(14px,4.6vw,24px);font-weight:900;text-align:center;text-shadow:0 0 2px #fff,0 0 2px #fff;outline:none;">
                     </sc-if>
                     <sc-if value="{{ c.show }}" hint-placeholder-val="{{ false }}">
                       <span style="color:#ff2222;font-size:clamp(14px,4.6vw,24px);font-weight:900;line-height:1;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;">{{ c.val }}</span>
@@ -2137,7 +2136,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                 </sc-for>
               </div>
               <sc-if value="{{ guideAdmin }}" hint-placeholder-val="{{ false }}">
-                <span style="font-size:12px;color:#6b6d73;">관리자: 강화 코어를 누를 때마다 ✕ → △ → 없음, 직업·공용 코어 오른쪽 위 칸에 숫자를 적으면 빨간 숫자로 보여요.</span>
+                <span data-noshot="1" style="font-size:12px;color:#6b6d73;">관리자: 강화 코어를 누를 때마다 ✕ → △ → 없음, 직업·공용 코어 오른쪽 위 칸에 숫자를 적으면 빨간 숫자로 보여요.</span>
               </sc-if>
             </div>
           </sc-if>
@@ -7394,9 +7393,11 @@ class Component extends DCLogic {
           const d = await toData(m[1]); if (!d) return;
           bgBack.push([el, bi]); el.style.backgroundImage = 'url("' + d + '")';
         }));
+        const hideBack = [...body.querySelectorAll('[data-noshot]')].map(el => { const d = el.style.display; el.style.display = 'none'; return [el, d]; });
+        const vmxBack = [...body.querySelectorAll('input[data-vmx-in]')].map(el => { const b = [el, el.style.border, el.style.background]; el.style.border = '1px solid transparent'; el.style.background = 'transparent'; return b; });
         await new Promise(r => setTimeout(r, 80));
         const cap = noSlot => window.htmlToImage.toCanvas(body, { filter: n => !(n.tagName === 'LABEL' && n.title === '이미지 올리기 (관리자)') && !(n.dataset && n.dataset.noimg) && n.tagName !== 'IFRAME' && !(n.tagName === 'IMAGE-SLOT' && (noSlot || !n.hasAttribute('data-filled'))), pixelRatio: 2, backgroundColor: '#ffffff', cacheBust: true, fontEmbedCSS: this._fontCss || undefined, imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' });
-        try { try { shot = await cap(false); } catch (e) { shot = await cap(true); } } finally { imgBack.forEach(([im, src, ld]) => { im.src = src; if (ld) im.setAttribute('loading', ld); }); bgBack.forEach(([el, bi]) => { el.style.backgroundImage = bi; }); sec.style.width = ow; if (col) setG(false); hid.forEach(e => { e.style.display = e.dataset.prevDisp || ''; delete e.dataset.prevDisp; }); }
+        try { try { shot = await cap(false); } catch (e) { shot = await cap(true); } } finally { imgBack.forEach(([im, src, ld]) => { im.src = src; if (ld) im.setAttribute('loading', ld); }); bgBack.forEach(([el, bi]) => { el.style.backgroundImage = bi; }); vmxBack.forEach(([el, bd, bg]) => { el.style.border = bd; el.style.background = bg; }); hideBack.forEach(([el, d]) => { el.style.display = d; }); sec.style.width = ow; if (col) setG(false); hid.forEach(e => { e.style.display = e.dataset.prevDisp || ''; delete e.dataset.prevDisp; }); }
         { const sw = shot.width, sh = shot.height, d = shot.getContext('2d').getImageData(0, 0, sw, sh).data; let x0 = sw, y0 = sh, x1 = -1, y1 = -1;
           for (let yy = 0; yy < sh; yy += 2) for (let xx = 0; xx < sw; xx += 2) { const p = (yy * sw + xx) * 4; if (d[p] < 240 || d[p + 1] < 240 || d[p + 2] < 240) { if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; } }
           if (x1 > x0 && y1 > y0) { const m = 8; x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(sw, x1 + m); y1 = Math.min(sh, y1 + m); const t = document.createElement('canvas'); t.width = x1 - x0; t.height = y1 - y0; t.getContext('2d').drawImage(shot, x0, y0, t.width, t.height, 0, 0, t.width, t.height); shot = t; } }
@@ -7963,7 +7964,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 123,
+      isAdmin: admin, appVer: 124,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
