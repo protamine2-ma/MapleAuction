@@ -3761,6 +3761,13 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 </div>
 </sc-if>
+<sc-if value="{{ pageNoteOn }}" hint-placeholder-val="{{ false }}">
+  <section data-noshot="1" style="max-width:1320px;margin:0 auto;padding:8px 28px 18px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;font-size:12px;line-height:1.7;color:#8a8c92;text-wrap:pretty;">
+    <sc-for list="{{ pageNote }}" as="ln" hint-placeholder-count="3">
+      <p style="margin:0;">{{ ln }}</p>
+    </sc-for>
+  </section>
+</sc-if>
 <footer style="max-width:1320px;margin:0 auto;padding:0 28px 32px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:12px;color:#9a9ca1;">
   <a href="about.html" style="color:#6b6d73;padding:4px;text-decoration:none;" style-hover="text-decoration:underline;">사이트 소개</a>
   <a href="privacy.html" style="color:#6b6d73;padding:4px;text-decoration:none;font-weight:700;" style-hover="text-decoration:underline;">개인정보처리방침</a>
@@ -8169,7 +8176,18 @@ class Component extends DCLogic {
             const t = this.state.tab, ar = this._area || '옥션';
             const emptyData = ar === '옥션' && !['메소', '인구수', '썬데이', '방송', '문의'].includes(t) && !(data && data.items.length);
             const ok = ar !== '사냥' && ar !== '편집' && ar !== '나의매애기' && !['방송', '문의'].includes(t) && !emptyData;
-            return { adRealTop: ok && real && !!slotTop, adMockTop: mock, adRealSide: ok && real && !!slotSide && wide, adMockSide: mock && wide };
+            const DESC = { '기타아이템': '재료·소비 아이템과 주문서처럼 자주 거래되는 기타 아이템', '자석펫': '자석 기능이 있는 펫', '캐시아이템': '코디·캐시 아이템', '드메아이템': '드롭률·메소 획득량 옵션이 붙은 사냥용 장비', '여명장신구': '여명의 보스 세트 장신구', '보스장신구': '보스 장신구 세트', '칠흑장신구': '칠흑의 보스 세트 장신구', '미트라': '미트라의 분노 엠블렘', '보조무기': '직업별 보조무기' };
+            let note = [];
+            if (ar === '옥션' && t === '메소') note = ['메소 시세는 메이플포인트로 메소를 살 때의 가격 흐름을 기록한 것입니다. 그래프는 주 단위 기록이며, 기간 최고·평균·최저 가격과 현재 시세를 함께 보여줍니다.', '오른쪽 \'변동 TOP 10\'은 옥션 전체 아이템 중 지난주보다 가격이 가장 크게 오르거나 내린 10개입니다. 누르면 그 아이템이 있는 탭으로 이동합니다.', '시세는 매주 운영자가 게임 안에서 직접 확인해 기록하며, 실제 거래 가격과 조금 다를 수 있습니다.'];
+            else if (ar === '옥션' && t === '인구수') note = ['월드 인구수는 넥슨 Open API의 공개 랭킹 정보를 바탕으로, 최근 접속한 캐릭터를 월드별로 세어 주마다 기록한 값입니다.', '표의 비율은 전체 활동 캐릭터 중 해당 월드가 차지하는 몫이고, 그래프는 기록이 있는 모든 주의 증감을 보여줍니다. 에오스·핼리오스는 따로 구분해 맨 아래에 표시합니다.', '부캐릭터와 휴면 계정은 일부만 포함되므로 실제 유저 수가 아니라 월드 간 흐름을 비교하는 용도로 봐 주세요.'];
+            else if (ar === '옥션' && t === '썬데이') note = ['썬데이 메이플은 매주 일요일에 열리는 혜택 이벤트입니다. 메이플스토리 공식 공지에서 이번 주 혜택 이미지를 자동으로 받아와 보여줍니다.', '공지가 올라오는 금요일부터 일요일까지는 첫 화면 위쪽에도 표시됩니다.'];
+            else if (ar === '옥션' && data && data.items.length && !['방송', '문의', '방문자', '검토', '챌린저스'].includes(t)) note = [
+              '\'' + t + '\' 탭은 ' + (DESC[t] || t + ' 분류 아이템') + '의 경매장 가격을 매주 같은 조건으로 기록한 표입니다. 각 줄에는 최근 4주 가격과 지난주 대비 등락폭이 나옵니다.',
+              '빨간색은 가격이 오른 것, 파란색은 내린 것입니다. 오른쪽 막대그래프는 같은 묶음 안에서 아이템끼리 가격을 비교한 것으로, 막대가 길수록 비쌉니다. 스탯 버튼이 있는 묶음은 STR·DEX·INT·LUK별 가격을 따로 볼 수 있습니다.',
+              '가격은 전서버 기준으로 운영자가 게임 안 경매장에서 직접 확인한 최저가 근처 값이며, 매물 상황에 따라 실제 가격과 차이가 있을 수 있습니다. 같은 내용은 매주 유튜브 시세 영상으로도 정리합니다.'];
+            else if (ar === '강화') note = ['스타포스 기댓값은 장비 레벨, 시작·목표 별 수, 이벤트(샤이닝 스타포스, 썬데이 메이플 등) 조건으로 강화를 10만 번 시뮬레이션해 평균 메소, 파괴 횟수, 단계별 비용을 계산합니다. 강화 확률은 넥슨 공식 확률 공개 자료를 따릅니다.', '주문의 흔적 계산기는 장비 종류와 업그레이드 횟수, 순백·이노센트 주문서 가격(비우면 옥션 시세)을 넣으면 평균 흔적 개수와 메소, 상황별 추천 전략을 보여줍니다.', '결과는 평균값이라 실제 강화에서는 운에 따라 크게 달라질 수 있습니다.'];
+            else if (ar === '사냥') note = ['사냥 도우미는 브라우저 화면공유로 게임 화면을 보여주면 스킬 쿨타임, 버프 종료, 룬, 경험치 부스터, 사냥 멈춤을 인식해 소리로 알려주는 베타 기능입니다.', '화면은 이용자 컴퓨터 안에서만 처리되며 서버로 보내지 않습니다. 게임 해상도와 UI 크기에 따라 인식이 잘 안 될 수 있으니, 안 되는 경우 문의하기로 알려 주세요.'];
+            return { pageNote: note, pageNoteOn: note.length > 0, adRealTop: ok && real && !!slotTop, adMockTop: mock, adRealSide: ok && real && !!slotSide && wide, adMockSide: mock && wide };
           })(),
         };
       })(),
