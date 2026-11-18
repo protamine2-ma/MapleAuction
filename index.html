@@ -3762,7 +3762,7 @@ create policy "관리자만 보기" on visits for select to authenticated using 
 </div>
 </sc-if>
 <sc-if value="{{ pageNoteOn }}" hint-placeholder-val="{{ false }}">
-  <section data-noshot="1" style="max-width:1320px;margin:0 auto;padding:8px 28px 18px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;font-size:12px;line-height:1.7;color:#8a8c92;text-wrap:pretty;">
+  <section data-noshot="1" style="max-width:1320px;margin:0 auto;padding:8px 28px 18px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;line-height:1.7;color:#8a8c92;text-align:center;text-wrap:pretty;">
     <sc-for list="{{ pageNote }}" as="ln" hint-placeholder-count="3">
       <p style="margin:0;">{{ ln }}</p>
     </sc-for>
