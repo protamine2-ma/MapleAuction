@@ -759,6 +759,139 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
   </sc-if>
 </div>
 </sc-if>
+<sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
+<div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
+    <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em;color:#1d1e22;">편집</h1>
+    <span style="font-size:14px;color:#6b6d73;">영상용 이미지 만들기 · 관리자 전용</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;">
+    <sc-for list="{{ edTabs }}" as="t" hint-placeholder-count="2">
+      <button onClick="{{ t.onClick }}" style="padding:8px 18px;border:1px solid #d6d8de;border-radius:999px;background:{{ t.bg }};color:{{ t.color }};font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;">{{ t.label }}</button>
+    </sc-for>
+  </div>
+  <sc-if value="{{ edIsTr }}" hint-placeholder-val="{{ false }}">
+  <div style="display:grid;grid-template-columns:minmax(260px,320px) minmax(0,1fr);gap:20px;align-items:start;">
+    <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;">
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">큰 제목
+        <input value="{{ edTrTitle }}" onChange="{{ edTrOnTitle }}" placeholder="예: 1장" style="padding:10px 12px;border:1px solid #d6d8de;border-radius:8px;font-family:inherit;font-size:16px;font-weight:700;">
+      </label>
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">로고 옆 작은 글씨 (비우면 없음)
+        <input value="{{ edTrLabel }}" onChange="{{ edTrOnLabel }}" style="padding:9px 12px;border:1px solid #d6d8de;border-radius:8px;font-family:inherit;font-size:14px;">
+      </label>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">배경 / 캐릭터 그림 <span style="font-weight:500;color:#8a8c92;">가로 그림은 화면 전체(어두운 양식), 세로 그림은 오른쪽(밝은 양식)</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <sc-for list="{{ edTrPresets }}" as="p" hint-placeholder-count="2">
+            <button onClick="{{ p.onClick }}" style="padding:7px 14px;border:1px solid #d6d8de;border-radius:8px;background:{{ p.bg }};color:{{ p.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">{{ p.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label style="padding:8px 14px;border:1px solid oklch(0.55 0.17 255);border-radius:8px;color:oklch(0.5 0.17 255);font-size:13px;font-weight:700;cursor:pointer;">그림 올리기<input type="file" accept="image/*" onChange="{{ edTrOnFile }}" style="display:none;"></label>
+          <sc-if value="{{ edTrHasImg }}" hint-placeholder-val="{{ false }}"><button onClick="{{ edTrClearImg }}" style="padding:8px 14px;border:1px solid #d6d8de;border-radius:8px;background:#fff;color:#4a4c52;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">그림 빼기</button></sc-if>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">글자 색 (가로 그림)
+        <div style="display:flex;gap:6px;">
+          <sc-for list="{{ edTrThemes }}" as="t" hint-placeholder-count="2">
+            <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #d6d8de;border-radius:8px;background:{{ t.bg }};color:{{ t.color }};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;"><span style="width:10px;height:10px;border-radius:50%;background:{{ t.dot }};"></span>{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">그림 좌우 위치 {{ edTrShift }}
+        <input type="range" min="-600" max="900" step="10" value="{{ edTrShift }}" onChange="{{ edTrOnShift }}">
+      </label>
+      <button onClick="{{ edTrSave }}" style="padding:11px 14px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">PNG 저장 (1920×1080)</button>
+    </div>
+    <div style="min-width:0;border-radius:14px;border:1px solid #e3e3e0;overflow:hidden;background:#eef3fa;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
+      <sc-if value="{{ edTrHasPrev }}" hint-placeholder-val="{{ false }}"><img src="{{ edTrPrev }}" alt="" style="width:100%;height:100%;object-fit:contain;display:block;"></sc-if>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ edIsTitle }}" hint-placeholder-val="{{ true }}">
+  <div style="display:grid;grid-template-columns:minmax(260px,320px) minmax(0,1fr);gap:20px;align-items:start;">
+    <div style="background:#fff;border:1px solid #e3e3e0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;">
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">제목
+        <input value="{{ edTitle }}" onChange="{{ edOnTitle }}" style="padding:10px 12px;border:1px solid #d6d8de;border-radius:8px;font-family:inherit;font-size:16px;font-weight:700;">
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#4a4c52;"><input type="checkbox" checked="{{ edShowSub }}" onChange="{{ edOnShowSub }}">부제목 보이기</label>
+      <sc-if value="{{ edShowSub }}" hint-placeholder-val="{{ false }}">
+        <input value="{{ edSub }}" onChange="{{ edOnSub }}" style="padding:9px 12px;border:1px solid #d6d8de;border-radius:8px;font-family:inherit;font-size:14px;">
+      </sc-if>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">색
+        <div style="display:flex;gap:8px;">
+          <sc-for list="{{ edColors }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="width:32px;height:32px;border-radius:50%;border:{{ c.ring }};background:{{ c.c }};cursor:pointer;padding:0;"></button>
+          </sc-for>
+        </div>
+      </div>
+      <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:#4a4c52;">로고 크기 {{ edLogoH }}px
+        <input type="range" min="20" max="120" step="1" value="{{ edLogoH }}" onChange="{{ edOnLogo }}">
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#4a4c52;"><input type="checkbox" checked="{{ edSlant }}" onChange="{{ edOnSlant }}">글자 기울이기</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onClick="{{ edSave }}" disabled="{{ edBusy }}" style="flex:1;padding:11px 14px;border:none;border-radius:10px;background:oklch(0.55 0.17 255);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;">{{ edSaveLabel }}</button>
+        <button onClick="{{ edReset }}" style="padding:11px 14px;border:1px solid #d6d8de;border-radius:10px;background:#fff;color:#4a4c52;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">처음으로</button>
+      </div>
+    </div>
+    <div style="min-width:0;display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <sc-for list="{{ edSizes }}" as="z" hint-placeholder-count="2">
+        <button onClick="{{ z.onClick }}" style="padding:6px 12px;border:1px solid #d6d8de;border-radius:8px;background:{{ z.bg }};color:{{ z.color }};font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">{{ z.label }}</button>
+      </sc-for>
+      <span style="font-size:12px;color:#8a8c92;">배경 투명 (회색 격자 = 투명)</span>
+    </div>
+    <div style="overflow:auto;border-radius:14px;border:1px solid #e3e3e0;background:repeating-conic-gradient(#eef1f5 0 25%,#fff 0 50%) 0 0/24px 24px;width:100%;max-width:{{ edBoxMax }};">
+      <div style="zoom:{{ edZoom }};width:{{ edW }};height:{{ edH }};">
+      <div data-edtitle="1" style="width:{{ edW }};height:{{ edH }};position:relative;display:inline-block;">
+      <div style="position:{{ edPos }};left:60px;top:40px;display:inline-flex;flex-direction:column;gap:2px;padding:16px 40px 24px 30px;font-family:'Pretendard',sans-serif;">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <img src="img/ba-logo.svg" alt="Blue Archive" style="height:{{ edLogoH }}px;width:auto;display:block;">
+          <sc-if value="{{ eo_line }}" hint-placeholder-val="{{ false }}"><span style="width:120px;height:3px;background:{{ edColor }};"></span></sc-if>
+          <sc-if value="{{ eo_chev }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;gap:4px;">
+              <span style="width:16px;height:26px;background:{{ edColor }};clip-path:polygon(0 0,45% 0,100% 50%,45% 100%,0 100%,55% 50%);"></span>
+              <span style="width:16px;height:26px;background:{{ edColor }};opacity:.65;clip-path:polygon(0 0,45% 0,100% 50%,45% 100%,0 100%,55% 50%);"></span>
+              <span style="width:16px;height:26px;background:{{ edColor }};opacity:.35;clip-path:polygon(0 0,45% 0,100% 50%,45% 100%,0 100%,55% 50%);"></span>
+            </span>
+          </sc-if>
+          <sc-if value="{{ eo_stripe }}" hint-placeholder-val="{{ false }}"><span style="width:110px;height:14px;transform:skewX(-20deg);background:repeating-linear-gradient(90deg,{{ edColor }} 0 8px,transparent 8px 14px);"></span></sc-if>
+          <sc-if value="{{ eo_dots }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;align-items:center;gap:8px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:{{ edColor }};"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:{{ edColor }};opacity:.7;"></span>
+              <span style="width:6px;height:6px;border-radius:50%;background:{{ edColor }};opacity:.45;"></span>
+              <span style="width:4px;height:4px;border-radius:50%;background:{{ edColor }};opacity:.25;"></span>
+            </span>
+          </sc-if>
+          <sc-if value="{{ eo_tag }}" hint-placeholder-val="{{ false }}"><span style="padding:4px 14px 4px 12px;background:{{ edColor }};color:#fff;font-size:18px;font-weight:900;letter-spacing:.04em;transform:skewX(-12deg);white-space:nowrap;">{{ edTag }}</span></sc-if>
+          <sc-if value="{{ eo_spark }}" hint-placeholder-val="{{ true }}">
+            <span style="display:flex;align-items:flex-start;gap:6px;">
+              <span style="width:13px;height:13px;background:{{ edColor }};clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);"></span>
+              <span style="width:7px;height:7px;background:{{ edColor }};opacity:.6;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);"></span>
+            </span>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;padding-left:5px;margin-top:-3px;transform:{{ edSkew }};">
+          <div style="position:relative;display:flex;">
+            <span style="position:absolute;left:3px;top:3px;font-size:41px;font-weight:900;line-height:1.05;color:{{ edColor }};opacity:.35;white-space:nowrap;">{{ edTitle }}</span>
+            <span style="position:relative;font-size:41px;font-weight:900;line-height:1.05;color:#1d2b45;white-space:nowrap;text-shadow:2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;">{{ edTitle }}</span>
+          </div>
+          <sc-if value="{{ edShowSub }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <span style="width:14px;height:14px;background:{{ edColor }};clip-path:polygon(0 0,100% 50%,0 100%);"></span>
+              <span style="font-size:13px;font-weight:700;color:#2b3a55;white-space:nowrap;text-shadow:1px 1px 0 #fff,-1px -1px 0 #fff,1px -1px 0 #fff,-1px 1px 0 #fff;">{{ edSub }}</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
 <sc-if value="{{ isMm }}" hint-placeholder-val="{{ false }}">
 <div data-m="wrap" style="max-width:1320px;margin:0 auto;padding:28px 28px 60px;display:flex;flex-direction:column;gap:18px;">
   <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;">
@@ -3628,7 +3761,11 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   </sc-if>
 </div>
 </sc-if>
-<footer style="max-width:1320px;margin:0 auto;padding:0 28px 32px;display:flex;justify-content:center;gap:12px;font-size:12px;color:#9a9ca1;">
+<footer style="max-width:1320px;margin:0 auto;padding:0 28px 32px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:12px;color:#9a9ca1;">
+  <a href="about.html" style="color:#6b6d73;padding:4px;text-decoration:none;" style-hover="text-decoration:underline;">사이트 소개</a>
+  <a href="privacy.html" style="color:#6b6d73;padding:4px;text-decoration:none;font-weight:700;" style-hover="text-decoration:underline;">개인정보처리방침</a>
+  <button onClick="{{ goContact }}" style="border:none;background:transparent;color:#6b6d73;font-size:12px;cursor:pointer;font-family:inherit;padding:4px;" style-hover="text-decoration:underline;">문의하기</button>
+  <span style="padding:4px;">© 2026 메이플 경매장 시세 (mapleauction.kr) · 메이플스토리의 상표와 이미지는 넥슨에 있습니다</span>
   <sc-if value="{{ isVisitorFooter }}" hint-placeholder-val="{{ true }}">
     <button onClick="{{ openLogin }}" style="border:none;background:transparent;color:#9a9ca1;font-size:12px;cursor:pointer;font-family:inherit;padding:4px;" style-hover="color:#6b6d73;text-decoration:underline;">관리자</button>
   </sc-if>
@@ -5098,6 +5235,131 @@ class Component extends DCLogic {
       const d = await r.json().catch(() => ({}));
       this.setState({ mmBusy: false, mmUsed: d.prompt || '', mmOut: d.image ? 'data:image/png;base64,' + d.image : '', mmMsg: (d.image ? '완료!' : (d.error || '오류가 났어요 (' + r.status + ')')) + (d.note ? ' · ' + d.note : '') });
     } catch (e) { this.setState({ mmBusy: false, mmMsg: '서버에 연결하지 못했어요. Worker 주소를 확인해 주세요.' }); }
+  }
+  async edSave() {
+    const el = document.querySelector('[data-edtitle]'); if (!el) return;
+    this.setState({ edBusy: true });
+    try {
+      if (!window.htmlToImage) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+      if (!this._fontCssEd) { try { const base = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-';
+        const parts = await Promise.all([[700, 'Bold'], [900, 'Black']].map(async ([w, n]) => { const b = await (await fetch(base + n + '.woff2')).blob(); const u = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); }); return "@font-face{font-family:'Pretendard';font-weight:" + w + ";src:url(" + u + ") format('woff2');}"; }));
+        this._fontCssEd = parts.join(''); } catch (e) { this._fontCssEd = null; } }
+      const yt = (this.state.ed || {}).size === 'yt';
+      let c = await window.htmlToImage.toCanvas(el, yt ? { width: 1920, height: 1080, canvasWidth: 1920, canvasHeight: 1080, pixelRatio: 1, cacheBust: true, fontEmbedCSS: this._fontCssEd || undefined, style: { zoom: '1' } } : { pixelRatio: 2, cacheBust: true, fontEmbedCSS: this._fontCssEd || undefined });
+      if (!yt) {
+        const w = c.width, h = c.height, d = c.getContext('2d').getImageData(0, 0, w, h).data; let x0 = w, y0 = h, x1 = -1, y1 = -1;
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+        if (x1 >= x0) { const m = 4; x0 = Math.max(0, x0 - 24); y0 = Math.max(0, y0 - m); x1 = Math.min(w - 1, x1 + m); y1 = Math.min(h - 1, y1 + m);
+          const t = document.createElement('canvas'); t.width = x1 - x0 + 1; t.height = y1 - y0 + 1; t.getContext('2d').drawImage(c, -x0, -y0); c = t; }
+      }
+      const a = document.createElement('a'); a.download = '제목_' + ((this.state.ed || {}).title || '제목').replace(/[\\/:*?"<>|\s]+/g, '_') + '.png'; a.href = c.toDataURL('image/png'); a.click();
+    } catch (e) { alert('이미지 저장에 실패했어요.'); }
+    this.setState({ edBusy: false });
+  }
+  async edTrDraw(save) {
+    const tr = this.state.edTr || {}, t = (tr.title || '').trim() || '제목', label = (tr.label ?? '이벤트 스토리').trim();
+    try {
+      await Promise.all([document.fonts.load('900 220px Pretendard', t), document.fonts.load('700 34px Pretendard', label || 'a')]);
+      const load = s => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = s; });
+      const img = tr.img ? await load(tr.img).catch(() => null) : null;
+      const dk = !!(img && img.naturalWidth / img.naturalHeight > 1.5);
+      let logo = null;
+      try { let sv = await (await fetch('img/ba-logo.svg')).text(); if (dk) sv = sv.split('#2B2B2B').join('#FFFFFF'); logo = await load('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(sv)); } catch (e) { logo = await load('img/ba-logo.svg').catch(() => null); }
+      const blue = dk && (tr.theme || 'red') === 'blue', red = dk && !blue;
+      const AC = red ? '#ff3b4a' : blue ? '#2fb4ff' : '#128afa', ACa = a => red ? 'rgba(255,59,74,' + a + ')' : blue ? 'rgba(47,180,255,' + a + ')' : 'rgba(18,138,250,' + a + ')';
+      const SH = blue ? 'rgba(5,18,44,' : 'rgba(8,4,6,';
+      const W = 1920, H = 1080, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const c = cv.getContext('2d');
+      let g;
+      if (dk) {
+        c.fillStyle = '#0a0608'; c.fillRect(0, 0, W, H);
+        const s = Math.max(W / img.naturalWidth, H / img.naturalHeight), iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+        c.drawImage(img, (W - iw) / 2 + (tr.shift ?? 0), (H - ih) / 2, iw, ih);
+        g = c.createLinearGradient(0, 0, W, 0);
+        [[0, SH + (blue ? '0.7)' : '0.85)')], [0.35, SH + (blue ? '0.45)' : '0.6)')], [0.6, SH + '0)']].forEach(([p, col]) => g.addColorStop(p, col));
+        c.fillStyle = g; c.fillRect(0, 0, W, H);
+      } else {
+        g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#cfe6ff'); g.addColorStop(1, '#f5faff');
+        c.fillStyle = g; c.fillRect(0, 0, W, H);
+        if (img) { const iw = 1080 * img.naturalWidth / img.naturalHeight; c.drawImage(img, W + (tr.shift ?? 300) - iw, 0, iw, 1080); }
+        g = c.createLinearGradient(0, 0, W, 0);
+        [[0, '#f5faff'], [0.22, '#f5faff'], [0.42, 'rgba(240,247,255,0.85)'], [0.62, 'rgba(240,247,255,0.2)'], [0.75, 'rgba(240,247,255,0)']].forEach(([p, col]) => g.addColorStop(p, col));
+        c.fillStyle = g; c.fillRect(0, 0, W, H);
+      }
+      const top = Math.round((H - 323) / 2), ly = top + 20;
+      let lx = 150;
+      if (logo) { const lh = 64, lw = lh * 720 / 232; c.drawImage(logo, 150, ly - lh / 2 - 6, lw, lh); lx = 150 + lw + 24; }
+      c.textBaseline = 'middle';
+      if (label) { c.font = '700 34px Pretendard'; c.letterSpacing = '4px'; c.fillStyle = red ? '#ffb3b9' : blue ? '#cdeaff' : '#2b5a8f'; c.fillText(label, lx, ly + 2); }
+      const ty = top + 185;
+      c.font = '900 220px Pretendard'; c.letterSpacing = '-6.6px';
+      c.save(); c.transform(1, 0, -0.14, 1, ty * 0.14, 0);
+      if (dk) {
+        c.fillStyle = ACa(0.55); c.fillText(t, 162, ty + 12);
+        c.save(); c.shadowColor = ACa(0.6); c.shadowBlur = 40; c.fillStyle = '#fff'; c.fillText(t, 150, ty); c.restore();
+      } else {
+        c.fillStyle = ACa(0.35); c.fillText(t, 162, ty + 12);
+        c.lineJoin = 'round'; c.lineWidth = 16; c.strokeStyle = '#fff'; c.strokeText(t, 150, ty);
+        c.fillStyle = '#1d2b45'; c.fillText(t, 150, ty);
+      }
+      c.restore();
+      c.letterSpacing = '0px';
+      const lineY = top + 317;
+      g = c.createLinearGradient(150, 0, 570, 0); g.addColorStop(0, AC); g.addColorStop(1, ACa(0));
+      c.fillStyle = g; c.beginPath(); c.roundRect(150, lineY, 420, 6, 3); c.fill();
+      g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, AC); g.addColorStop(0.5, red ? '#ff9aa3' : blue ? '#bff0ff' : '#7fd0ff'); g.addColorStop(1, AC);
+      c.fillStyle = g; c.fillRect(0, H - 10, W, 10);
+      if (!save) { this.setState({ edTrPrev: cv.toDataURL('image/jpeg', 0.7) }); return; }
+      const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '블아_화면전환_' + t + '.png';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    } catch (e) { if (save) alert('이미지 저장에 실패했어요.'); }
+  }
+  edTrSet(k, v) {
+    const n = { ...(this.state.edTr || {}), [k]: v };
+    try { const { img, ...rest } = n; localStorage.setItem(KEY + ':edTr', JSON.stringify(rest)); if (k === 'img') localStorage.setItem(KEY + ':edTrImg', v || ''); } catch (e) {}
+    this.setState({ edTr: n }, () => { clearTimeout(this._edTrT); this._edTrT = setTimeout(() => this.edTrDraw(false), 150); });
+  }
+  edTrVals() {
+    if (!this.state.edTr) {
+      let tr = {}; try { tr = JSON.parse(localStorage.getItem(KEY + ':edTr') || '{}') || {}; tr.img = localStorage.getItem(KEY + ':edTrImg') || 'img/ba-rio-bg.jpg'; if (tr.img === 'img/ba-rio-c.png') tr.img = 'img/ba-rio-bg.jpg'; } catch (e) {}
+      if (tr.shift == null) tr.shift = 0;
+      setTimeout(() => this.setState({ edTr: tr }, () => this.edTrDraw(false)), 0);
+    }
+    const tr = this.state.edTr || {};
+    return {
+      edTrTitle: tr.title || '', edTrLabel: tr.label ?? '이벤트 스토리', edTrShift: tr.shift ?? 300, edTrPrev: this.state.edTrPrev || '', edTrHasPrev: !!this.state.edTrPrev,
+      edTrOnTitle: e => this.edTrSet('title', e.target.value), edTrOnLabel: e => this.edTrSet('label', e.target.value), edTrOnShift: e => this.edTrSet('shift', +e.target.value),
+      edTrOnFile: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = () => this.edTrSet('img', fr.result); fr.readAsDataURL(f); e.target.value = ''; },
+      edTrClearImg: () => this.edTrSet('img', ''), edTrHasImg: !!tr.img,
+      edTrPresets: [['리오', 'img/ba-rio-bg.jpg', 'red'], ['유우카', 'img/ba-yuuka-bg.jpg', 'blue']].map(([l, src, th]) => { const on = tr.img === src; return { label: l, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => { const n = { ...(this.state.edTr || {}), theme: th, img: src }; try { const { img, ...rest } = n; localStorage.setItem(KEY + ':edTr', JSON.stringify(rest)); localStorage.setItem(KEY + ':edTrImg', src); } catch (e) {} this.setState({ edTr: n }, () => this.edTrDraw(false)); } }; }),
+      edTrThemes: [['빨강', 'red', '#ff3b4a'], ['파랑', 'blue', '#2fb4ff']].map(([l, v, col]) => { const on = (tr.theme || 'red') === v; return { label: l, dot: col, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => this.edTrSet('theme', v) }; }),
+      edTrSave: () => this.edTrDraw(true)
+    };
+  }
+  editVals() {
+    const D = { title: '이벤트 제목', sub: '부제목을 입력하세요', showSub: false, color: '#128afa', orn: '반짝이', logoH: 70, slant: true, tag: '기간 한정' };
+    let ed = this.state.ed; if (!ed) { try { ed = JSON.parse(localStorage.getItem(KEY + ':edTitle') || 'null'); } catch (e) {} }
+    ed = { ...D, ...(ed || {}) }; if (!ed.half) { ed.logoH = Math.round((ed.logoH || 70) / 2); ed.half = 1; }
+    const set = (k, v) => { const n = { ...ed, [k]: v }; try { localStorage.setItem(KEY + ':edTitle', JSON.stringify(n)); } catch (e) {} this.setState({ ed: n }); };
+    const o = '반짝이', ET = ['제목', '화면전환'], et = ET.includes(this.state.edTab) ? this.state.edTab : '제목';
+    return {
+      edIsTr: et === '화면전환', ...(et === '화면전환' ? this.edTrVals() : {}),
+      edTabs: ET.map(l => ({ label: l, bg: l === et ? 'oklch(0.55 0.17 255)' : '#fff', color: l === et ? '#fff' : '#1d1e22', onClick: () => this.setState({ edTab: l }) })),
+      edIsTitle: et === '제목',
+      ...(() => { const yt = ed.size === 'yt'; return {
+        edSizes: [['제목만 (글자 크기)', 'fit'], ['유튜브 1920×1080', 'yt']].map(([l, v]) => { const on = (ed.size || 'fit') === v; return { label: l, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => set('size', v) }; }),
+        edZoom: yt ? '0.4' : '1', edW: yt ? '1920px' : 'auto', edH: yt ? '1080px' : 'auto', edPos: yt ? 'absolute' : 'static', edBoxMax: yt ? '768px' : '100%' }; })(),
+      edTitle: ed.title, edSub: ed.sub, edShowSub: !!ed.showSub, edTag: ed.tag, edLogoH: ed.logoH, edColor: ed.color, edSlant: !!ed.slant,
+      edSkew: ed.slant ? 'skewX(-8deg)' : 'none',
+      edOnTitle: e => set('title', e.target.value), edOnSub: e => set('sub', e.target.value), edOnTag: e => set('tag', e.target.value),
+      edOnLogo: e => set('logoH', +e.target.value), edOnShowSub: e => set('showSub', e.target.checked), edOnSlant: e => set('slant', e.target.checked),
+      edColors: ['#128afa', '#3ec6ff', '#ff6fa8', '#8a6bff'].map(c => ({ c, ring: c === ed.color ? '3px solid #1d1e22' : '3px solid transparent', onClick: () => set('color', c) })),
+      edOrns: ['반짝이', '선', '화살표', '줄무늬', '점', '태그', '없음'].map(l => ({ label: l, bg: l === o ? '#1d2b45' : '#fff', color: l === o ? '#fff' : '#1d1e22', onClick: () => set('orn', l) })),
+      eo_line: o === '선', eo_chev: o === '화살표', eo_stripe: o === '줄무늬', eo_dots: o === '점', eo_tag: o === '태그', eo_spark: o === '반짝이',
+      edSave: () => this.edSave(), edBusy: !!this.state.edBusy, edSaveLabel: this.state.edBusy ? '저장 중…' : 'PNG 저장 (투명 배경)',
+      edReset: () => { try { localStorage.removeItem(KEY + ':edTitle'); } catch (e) {} this.setState({ ed: { ...D } }); }
+    };
   }
   mmVals() {
     const st = this.state, list = st.mmPrompts || [], sel = Math.min(st.mmSel || 0, Math.max(0, list.length - 1));
@@ -7474,14 +7736,15 @@ class Component extends DCLogic {
       isChal, ...this.chalVals(isChal),
       isSunday,
       ...(() => {
-        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기'] : ['옥션', '사냥', '강화'];
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기', '편집'] : ['옥션', '사냥', '강화'];
         let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         if (area === '스타포스') area = '강화';
         if (!AREAS.includes(area)) area = '옥션';
         this._area = area;
         return {
-          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화', isMm: area === '나의매애기',
+          areaName: area, isAuction: area === '옥션', isHunt: area === '사냥', isGrow: area === '육성', isEnhance: area === '강화', isMm: area === '나의매애기', isEdit: area === '편집',
           ...(area === '나의매애기' ? this.mmVals() : {}),
+          ...(area === '편집' ? this.editVals() : {}),
           ...(area === '사냥' ? { ...this.huntVals(), ...this.buffVals(), ...this.buffListVals(), ...this.timerVals() } : {}),
           ...(area === '강화' ? this.enhVals() : {}),
           ...(() => {
@@ -7736,6 +7999,7 @@ class Component extends DCLogic {
         };
       })(),
       sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? '#fff' : '#3a3b3f', weight: 800, border: isSunday ? 'oklch(0.42 0.09 262)' : '#e3e3e0', bg: isSunday ? 'oklch(0.42 0.09 262)' : '#fff' },
+      goContact: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }, () => { this.switchTab('문의'); window.scrollTo(0, 0); }); },
       contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? '#fff' : '#3a3b3f', weight: 800, border: isContact ? 'oklch(0.42 0.09 262)' : '#e3e3e0', bg: isContact ? 'oklch(0.42 0.09 262)' : '#fff' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
@@ -7901,8 +8165,12 @@ class Component extends DCLogic {
           adPadL: '28px',
           sundayImgH: topAd ? 'calc(100% + 95px)' : 'calc(100% - 16px)',
           adRef: this.adRef, adClient: client, adSlotTop: slotTop, adSlotSide: slotSide,
-          adRealTop: real && !!slotTop, adMockTop: mock,
-          adRealSide: real && !!slotSide && wide, adMockSide: mock && wide,
+          ...(() => {
+            const t = this.state.tab, ar = this._area || '옥션';
+            const emptyData = ar === '옥션' && !['메소', '인구수', '썬데이', '방송', '문의'].includes(t) && !(data && data.items.length);
+            const ok = ar !== '사냥' && ar !== '편집' && ar !== '나의매애기' && !['방송', '문의'].includes(t) && !emptyData;
+            return { adRealTop: ok && real && !!slotTop, adMockTop: mock, adRealSide: ok && real && !!slotSide && wide, adMockSide: mock && wide };
+          })(),
         };
       })(),
       ...this.statsVals(isStats),
@@ -7924,7 +8192,7 @@ class Component extends DCLogic {
       syncMsg: this.state.syncMsg || '',
       syncNow: () => this.pushAll(),
       title: tab,
-      tabs: TABS.filter(t => !HIDDEN_TABS.includes(t)).map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), bg: on ? 'oklch(0.42 0.09 262)' : '#fff', color: on ? '#fff' : '#3a3b3f', weight: 800, border: on ? 'oklch(0.42 0.09 262)' : '#e3e3e0' }; }),
+      tabs: TABS.filter(t => !HIDDEN_TABS.includes(t) && (admin || !all[t] || (all[t].items || []).some(it => !it.hidden))).map(t => { const on = t === this.state.tab; return { label: t, onClick: () => this.switchTab(t), bg: on ? 'oklch(0.42 0.09 262)' : '#fff', color: on ? '#fff' : '#3a3b3f', weight: 800, border: on ? 'oklch(0.42 0.09 262)' : '#e3e3e0' }; }),
       isEmpty: data.items.length === 0,
       server: this.props.server ?? '전서버',
       categoryLabel: data.categoryLabel ?? this.props.categoryLabel ?? '아이템드랍 1줄',
@@ -7970,7 +8238,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 127,
+      isAdmin: admin, appVer: 128,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
