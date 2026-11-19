@@ -5707,6 +5707,12 @@ class Component extends DCLogic {
     all['캐시아이템'] = { ...y, ba1: true, ba2: true, items: y.items.filter(it => !isB(it)) }; return true; }
   baDate(all) { const z = all['블루아카이브']; if (!z || !z.dates || z.d1119 || !z.items || !z.items.length) return false;
     all['블루아카이브'] = { ...z, d1119: true, dates: z.dates.map(d => d === '11/13' ? '11/19' : d) }; return true; }
+  baTime(all) { const z = all['블루아카이브']; if (!z || !z.dates || z.t1119 || !z.items || !z.items.length) return false;
+    const a = z.dates.indexOf('11/7'), b = z.dates.indexOf('11/19'); if (a < 0 || b < 0) return false;
+    const vals = {}; z.items.forEach(it => { vals[it.id] = (it.values || [])[a] ?? ''; });
+    const items = z.items.map(it => { const v = (it.values || []).slice(); v[a] = v[b] ?? ''; v[b] = ''; return { ...it, values: v }; });
+    const dates = z.dates.map((d, i) => i === a ? '11/19 오후3시' : i === b ? '11/19 오후9시' : d);
+    all['블루아카이브'] = { ...z, t1119: true, dates, items, removed: [...(z.removed || []), { date: '11/7', vals }] }; return true; }
   baBubble(all) { const z = all['블루아카이브']; if (!z || !z.items || z.bub1) return false;
     const isB = it => /명찰말풍선/.test(it.name || ''), b = z.items.filter(isB).map(it => ({ ...it, group: '명찰말풍선' }));
     all['블루아카이브'] = { ...z, bub1: true, items: [...z.items.filter(it => !isB(it)), ...b] }; return true; }
@@ -5731,7 +5737,7 @@ class Component extends DCLogic {
     [['trace', /주문의 ?흔적/], ['white', /순백/], ['inno', /이노센트/]].forEach(([k, re]) => { const it = d.items.find(x => re.test(x.name || '')); const v = it && lastV(it); if (v) o[k] = Math.round(v * (/\(억\)/.test(it.name) ? 1e8 : 1e4)); });
     return o;
   }
-  moveKt(all) { const ts = this.addTsItems(all), bj = this.bjSwap(all), cf = this.codiFirst(all), ba = this.addBA(all), bd = this.baDate(all), bb = this.baBubble(all), be = this.baEtc(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), za = this.addKtAll(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return ts || bj || cf || ba || bd || bb || be || e || s || f2 || z || za || a || b || c; }
+  moveKt(all) { const ts = this.addTsItems(all), bj = this.bjSwap(all), cf = this.codiFirst(all), ba = this.addBA(all), bd = this.baDate(all), bt = this.baTime(all), bb = this.baBubble(all), be = this.baEtc(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), za = this.addKtAll(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return ts || bj || cf || ba || bd || bt || bb || be || e || s || f2 || z || za || a || b || c; }
   moveKtTo(all, dest, NM) {
     const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
     const isY = it => NM.includes(it.name);
@@ -8268,7 +8274,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 129,
+      isAdmin: admin, appVer: 130,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
