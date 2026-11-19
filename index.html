@@ -3978,7 +3978,7 @@ PRESETS['깡통30%'] = { dates: D4.slice(), categoryLabel: '노작 주스탯 30%
   ...ktCol('INT', 'kti_', [39, 36.5, 47.4, 25, 40, 33, 45, 40, 67.7, 82, 110, 74, 104, 118, 264]),
   ...ktCol('LUK', 'ktl_', [25, 26, 29.9, 19, 28, 31, 34.4, 25, 44, 63.3, 81, 48.9, 83, 91.1, 255]),
 ] };
-const TABS = ['기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '광휘의보스', '미트라', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
+const TABS = ['블루아카이브', '기타아이템', '자석펫', '캐시아이템', '드메아이템', '깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '광휘의보스', '미트라', '보조무기', '에테르넬', '쿨뚝크뎀장갑', '아케인', '앱솔랩스', '카루타'];
 const REF = '드메아이템';
 const HIDDEN_TABS = ['깡통30%', '쿨뚝크뎀장갑'];
 const MESO_SEED = {"points":[{"date":"2026-01-13","v":2085},{"date":"2026-01-20","v":2152},{"date":"2026-01-27","v":2068},{"date":"2026-02-03","v":2075},{"date":"2026-02-10","v":2099},{"date":"2026-02-14","v":2311},{"date":"2026-02-21","v":2309},{"date":"2026-02-28","v":2388},{"date":"2026-03-03","v":2441},{"date":"2026-03-06","v":2503},{"date":"2026-03-13","v":2497},{"date":"2026-03-20","v":2511},{"date":"2026-03-28","v":2531},{"date":"2026-04-03","v":2569},{"date":"2026-04-09","v":2559},{"date":"2026-04-18","v":2417},{"date":"2026-04-24","v":2402},{"date":"2026-05-01","v":2477},{"date":"2026-05-09","v":2425},{"date":"2026-05-15","v":2335},{"date":"2026-05-23","v":2337},{"date":"2026-05-29","v":2350},{"date":"2026-06-05","v":2440},{"date":"2026-06-12","v":2551},{"date":"2026-06-20","v":2471},{"date":"2026-06-26","v":2480},{"date":"2026-07-03","v":2756},{"date":"2026-07-10","v":2649},{"date":"2026-08-03","v":2202},{"date":"2026-08-07","v":2158},{"date":"2026-08-14","v":2139},{"date":"2026-08-21","v":2024},{"date":"2026-08-28","v":1987},{"date":"2026-09-06","v":2063},{"date":"2026-09-12","v":2271},{"date":"2026-09-18","v":2248},{"date":"2026-09-26","v":2269},{"date":"2026-09-27","v":2290},{"date":"2026-10-03","v":2370},{"date":"2026-10-10","v":2336},{"date":"2026-10-16","v":2250},{"date":"2026-10-24","v":2185}]};
@@ -5137,7 +5137,7 @@ class Component extends DCLogic {
       const moved = this.moveMitra(all), movedK = this.moveKt(all);
       this.setState({ all, guides, remoteEmpty: false });
       if (moved && this.state.admin) this.queuePush(['칠흑장신구', '미트라']);
-      if (movedK && this.state.admin) this.queuePush(['깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '캐시아이템', '보조무기']);
+      if (movedK && this.state.admin) this.queuePush(['깡통30%', '여명장신구', '보스장신구', '칠흑장신구', '에테르넬', '캐시아이템', '블루아카이브', '보조무기']);
       try { TABS.forEach(t => localStorage.setItem(keyFor(t), JSON.stringify(all[t]))); } catch (e) {}
     } catch (e) {}
   }
@@ -5339,7 +5339,7 @@ class Component extends DCLogic {
       edTrOnTitle: e => this.edTrSet('title', e.target.value), edTrOnLabel: e => this.edTrSet('label', e.target.value), edTrOnShift: e => this.edTrSet('shift', +e.target.value),
       edTrOnFile: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = () => this.edTrSet('img', fr.result); fr.readAsDataURL(f); e.target.value = ''; },
       edTrClearImg: () => this.edTrSet('img', ''), edTrHasImg: !!tr.img,
-      edTrPresets: [['리오', 'img/ba-rio-bg.jpg', 'red'], ['유우카', 'img/ba-yuuka-bg.jpg', 'blue']].map(([l, src, th]) => { const on = tr.img === src; return { label: l, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => { const n = { ...(this.state.edTr || {}), theme: th, img: src }; try { const { img, ...rest } = n; localStorage.setItem(KEY + ':edTr', JSON.stringify(rest)); localStorage.setItem(KEY + ':edTrImg', src); } catch (e) {} this.setState({ edTr: n }, () => this.edTrDraw(false)); } }; }),
+      edTrPresets: [['리오', 'img/ba-rio-bg.jpg', 'red'], ['유우카', 'img/ba-yuuka-bg.jpg', 'blue'], ['아로나', 'img/ba-arona-bg.jpg', 'blue']].map(([l, src, th]) => { const on = tr.img === src; return { label: l, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => { const n = { ...(this.state.edTr || {}), theme: th, img: src }; try { const { img, ...rest } = n; localStorage.setItem(KEY + ':edTr', JSON.stringify(rest)); localStorage.setItem(KEY + ':edTrImg', src); } catch (e) {} this.setState({ edTr: n }, () => this.edTrDraw(false)); } }; }),
       edTrThemes: [['빨강', 'red', '#ff3b4a'], ['파랑', 'blue', '#2fb4ff']].map(([l, v, col]) => { const on = (tr.theme || 'red') === v; return { label: l, dot: col, bg: on ? '#1d2b45' : '#fff', color: on ? '#fff' : '#1d1e22', onClick: () => this.edTrSet('theme', v) }; }),
       edTrSave: () => this.edTrDraw(true)
     };
@@ -5701,6 +5701,18 @@ class Component extends DCLogic {
     const t = y.items.filter(isT), c = y.items.filter(isC), at = y.items.findIndex(it => isT(it) || isC(it));
     const items = y.items.filter(it => !isT(it) && !isC(it)); if (at >= 0) items.splice(at, 0, ...c, ...t);
     all['캐시아이템'] = { ...y, codi1: true, items }; return true; }
+  addBA(all) { const y = all['캐시아이템'], z = all['블루아카이브']; if (!y || !y.items || y.ba2) return false;
+    const isB = it => it.group === '블루아카이브', b = y.items.filter(isB);
+    if (b.length && z && (!z.items || !z.items.length)) all['블루아카이브'] = { ...z, dates: (y.dates || []).slice(), removed: (y.removed || []).map(q => ({ date: q.date, vals: Object.fromEntries(Object.entries(q.vals || {}).filter(([k]) => b.some(it => it.id === k))) })), items: b };
+    all['캐시아이템'] = { ...y, ba1: true, ba2: true, items: y.items.filter(it => !isB(it)) }; return true; }
+  baDate(all) { const z = all['블루아카이브']; if (!z || !z.dates || z.d1119 || !z.items || !z.items.length) return false;
+    all['블루아카이브'] = { ...z, d1119: true, dates: z.dates.map(d => d === '11/13' ? '11/19' : d) }; return true; }
+  baBubble(all) { const z = all['블루아카이브']; if (!z || !z.items || z.bub1) return false;
+    const isB = it => /명찰말풍선/.test(it.name || ''), b = z.items.filter(isB).map(it => ({ ...it, group: '명찰말풍선' }));
+    all['블루아카이브'] = { ...z, bub1: true, items: [...z.items.filter(it => !isB(it)), ...b] }; return true; }
+  baEtc(all) { const z = all['블루아카이브']; if (!z || !z.items || z.etc1) return false;
+    const i0 = z.items.findIndex(it => it.name === '블아명찰반지교환권'), i1 = z.items.findIndex(it => it.name === '페로로지라얼장'); if (i0 < 0 || i1 < i0) return false;
+    all['블루아카이브'] = { ...z, etc1: true, items: z.items.map((it, i) => i >= i0 && i <= i1 ? { ...it, group: '기타 아이템' } : it) }; return true; }
   bjSwap(all) { const y = all['보조무기']; if (!y || !y.items || y.bjSw) return false;
     const isB = it => it.group === '쌍레 5줄 · 방무 포함', b = y.items.filter(isB); if (!b.length) return false;
     all['보조무기'] = { ...y, bjSw: true, items: [...b, ...y.items.filter(it => !isB(it))] }; return true; }
@@ -5719,7 +5731,7 @@ class Component extends DCLogic {
     [['trace', /주문의 ?흔적/], ['white', /순백/], ['inno', /이노센트/]].forEach(([k, re]) => { const it = d.items.find(x => re.test(x.name || '')); const v = it && lastV(it); if (v) o[k] = Math.round(v * (/\(억\)/.test(it.name) ? 1e8 : 1e4)); });
     return o;
   }
-  moveKt(all) { const ts = this.addTsItems(all), bj = this.bjSwap(all), cf = this.codiFirst(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), za = this.addKtAll(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return ts || bj || cf || e || s || f2 || z || za || a || b || c; }
+  moveKt(all) { const ts = this.addTsItems(all), bj = this.bjSwap(all), cf = this.codiFirst(all), ba = this.addBA(all), bd = this.baDate(all), bb = this.baBubble(all), be = this.baEtc(all), e = this.addE33(all), s = this.addS22(all), f2 = this.strFirst(all), z = this.addKt27(all), za = this.addKtAll(all), a = this.moveKtTo(all, '여명장신구', ['여명의 가디언 엔젤링', '에스텔라 이어링', '데이브레이크 펜던트', '트와일라이트 마크']), b = this.moveKtTo(all, '보스장신구', ['골든 클로버 벨트', '분노한 자쿰의 벨트', '파풀라투스 마크', '도미네이터 펜던트', '도미네이트 펜던트', '마이스터링']), c = this.moveKtTo(all, '칠흑장신구', ['루즈 컨트롤 머신 마크', '마력이 깃든 안대', '몽환의 벨트', '커맨더 포스 이어링', '거대한 공포', '고통의 근원', '컴플리트 언더컨트롤', '저주받은 마도서', '창세의 뱃지']); return ts || bj || cf || ba || bd || bb || be || e || s || f2 || z || za || a || b || c; }
   moveKtTo(all, dest, NM) {
     const k = all['깡통30%'], y = all[dest]; if (!k || !k.items || !y || !y.items) return false;
     const isY = it => NM.includes(it.name);
@@ -8256,7 +8268,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 128,
+      isAdmin: admin, appVer: 129,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
