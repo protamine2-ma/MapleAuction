@@ -3775,6 +3775,9 @@ create policy "관리자만 보기" on visits for select to authenticated using 
   <span style="padding:4px;">© 2026 메이플 경매장 시세 (mapleauction.kr) · 메이플스토리의 상표와 이미지는 넥슨에 있습니다</span>
   <sc-if value="{{ isVisitorFooter }}" hint-placeholder-val="{{ true }}">
     <button onClick="{{ openLogin }}" style="border:none;background:transparent;color:#9a9ca1;font-size:12px;cursor:pointer;font-family:inherit;padding:4px;" style-hover="color:#6b6d73;text-decoration:underline;">관리자</button>
+    <sc-if value="{{ isCanvasPreview }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ openPreviewAdmin }}" title="Claude 화면에서만 보여요 · 서버 저장은 안 돼요" style="border:1px dashed #9a9ca1;border-radius:6px;background:transparent;color:#6b6d73;font-size:12px;cursor:pointer;font-family:inherit;padding:3px 8px;" style-hover="color:#1b1c1f;border-color:#6b6d73;">관리자 화면 미리보기</button>
+    </sc-if>
   </sc-if>
   <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
     <span style="padding:4px;">{{ adminEmail }} 로그인됨</span>
@@ -5130,6 +5133,7 @@ class Component extends DCLogic {
       const cwr = rows.find(row => row.tab === 'champW'); if (cwr && cwr.data && cwr.data.w && !this._cwDirty) { this.setState({ champW: cwr.data.w }); try { localStorage.setItem(KEY + ':champW', JSON.stringify(cwr.data.w)); } catch (e) {} }
       const bys = rows.find(row => row.tab === 'byStart'); if (bys && bys.data && bys.data.date) { this.setState({ byStart: bys.data.date }); try { localStorage.setItem(KEY + ':byStart', bys.data.date); } catch (e) {} }
       const mmr = rows.find(row => row.tab === 'mymae'); if (mmr && mmr.data && Array.isArray(mmr.data.prompts) && !this._mmDirty) this.setState({ mmPrompts: mmr.data.prompts });
+      const lvr = rows.find(row => row.tab === 'live'); if (lvr && lvr.data && lvr.data.map) { this._liveAt = Date.now(); this.setState({ liveMap: lvr.data.map, liveErr: '' }); }
       const str = rows.find(row => row.tab === 'streamers'); if (str && str.data && !this._stDirty) this.setState({ streamers: str.data }, () => this.refreshLive());
       const an = rows.find(row => row.tab === 'aucnote'); if (an && an.data && !this._anDirty) this.setState({ aucNote: an.data.text || '', aucNoteAtIso: an.data.at || '' });
       const mr = rows.find(row => row.tab === 'meso');
@@ -5167,7 +5171,7 @@ class Component extends DCLogic {
       if (this.state.remoteEmpty) this.pushAll();
     } catch (e) { this.setState({ loginBusy: false, loginErr: '이메일 또는 비밀번호가 맞지 않아요.' }); }
   }
-  logout() { this.saveSession(null); this.setState(s => ({ editing: false, tab: s.tab === '방문자' ? REF : s.tab })); }
+  logout() { this.saveSession(null); this.setState(s => ({ previewAdmin: false, editing: false, tab: s.tab === '방문자' ? REF : s.tab })); }
   async pushTabs(tabs) {
     const token = await this.ensureToken();
     if (!token) { this.setState({ syncMsg: '로그인이 만료됐어요. 다시 로그인해 주세요.' }); return false; }
@@ -5423,27 +5427,18 @@ class Component extends DCLogic {
     return null;
   }
   async refreshLive() {
+    // 방송 상태는 워커가 1분마다 확인해 Supabase(prices 'live')에 저장해 둔 결과를 읽기만 함 → 방문자는 워커를 부르지 않음
     const onPage = this.state.tab === '방송' && this.state.area === '옥션';
-    clearTimeout(this._liveT); this._liveT = setTimeout(() => this.refreshLive(), onPage ? 180000 : 900000);
+    clearTimeout(this._liveT); this._liveT = setTimeout(() => this.refreshLive(), onPage ? 120000 : 600000);
     if (typeof document !== 'undefined' && document.hidden) return;
-    const S = this.state.streamers; if (!S || !(S.list || []).length) return;
-    const W = (S.worker || 'https://live.protamine2.workers.dev').replace(/\/+$/, '');
-    const keys = [...new Set(S.list.map(x => this.liveParse(x.u)).filter(Boolean).map(x => x.p + ':' + x.id))];
-    if (!keys.length) return;
-    const CK = KEY + ':liveCache', now = Date.now();
-    try { const c = JSON.parse(localStorage.getItem(CK) || 'null');
-      if (c && c.map && now - c.at < (onPage ? 150000 : 600000)) { if (!this.state.liveMap) this.setState({ liveMap: c.map, liveErr: '' }); return; } } catch (e) {}
-    const yt = keys.filter(k => k.startsWith('yt:')), other = keys.filter(k => !k.startsWith('yt:'));
-    const groups = onPage ? [...(other.length ? [other] : []), ...yt.map(k => [k])] : [keys];
-    const res = await Promise.all(groups.map(async g => {
-      try { const r = await fetch(W + '/live?c=' + encodeURIComponent(g.join(','))); if (!r.ok) throw 0; return (await r.json()).items || []; } catch (e) { return null; }
-    }));
-    if (res.every(x => !x)) { this.setState({ liveErr: '방송 상태를 못 불러왔어요' }); return; }
-    const old = this.state.liveMap || {}, map = {};
-    keys.forEach(k => { if (old[k]) map[k] = old[k]; });
-    res.forEach(a => (a || []).forEach(it => { if (it && it.key && (it.ok || !map[it.key])) map[it.key] = it; }));
-    this.setState({ liveMap: map, liveErr: '' });
-    try { localStorage.setItem(CK, JSON.stringify({ at: now, map })); } catch (e) {}
+    if (this._liveAt && Date.now() - this._liveAt < 60000) return;
+    try {
+      const r = await fetch(SB_URL + '/rest/v1/prices?select=data&tab=eq.live', { headers: { apikey: SB_KEY } });
+      if (!r.ok) throw 0;
+      const j = await r.json(), m = j[0] && j[0].data && j[0].data.map;
+      if (!m) throw 0;
+      this._liveAt = Date.now(); this.setState({ liveMap: m, liveErr: '' });
+    } catch (e) { if (!this.state.liveMap) this.setState({ liveErr: '방송 상태를 못 불러왔어요' }); }
   }
   saveStreamers(data) {
     this._stDirty = true; this.setState({ streamers: data, liveMsg: '저장 중…' });
@@ -8229,7 +8224,9 @@ class Component extends DCLogic {
       loginErr: this.state.loginErr || '',
       logout: () => this.logout(),
       isVisitorFooter: !admin,
-      adminEmail: (this.state.session && this.state.session.email) || '',
+      isCanvasPreview: !admin && (() => { try { return !/(^|\.)mapleauction\.(com|kr)$/i.test(location.hostname); } catch (e) { return false; } })(),
+      openPreviewAdmin: () => this.setState({ admin: true, previewAdmin: true, loginOpen: false }),
+      adminEmail: (this.state.session && this.state.session.email) || (this.state.previewAdmin ? '미리보기 모드(저장 안 됨) ·' : ''),
       syncMsg: this.state.syncMsg || '',
       syncNow: () => this.pushAll(),
       title: tab,
@@ -8279,7 +8276,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 131,
+      isAdmin: admin, appVer: 132,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
