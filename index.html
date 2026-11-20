@@ -5423,14 +5423,18 @@ class Component extends DCLogic {
     return null;
   }
   async refreshLive() {
-    clearTimeout(this._liveT); this._liveT = setTimeout(() => this.refreshLive(), 120000);
+    const onPage = this.state.tab === '방송' && this.state.area === '옥션';
+    clearTimeout(this._liveT); this._liveT = setTimeout(() => this.refreshLive(), onPage ? 180000 : 900000);
     if (typeof document !== 'undefined' && document.hidden) return;
     const S = this.state.streamers; if (!S || !(S.list || []).length) return;
     const W = (S.worker || 'https://live.protamine2.workers.dev').replace(/\/+$/, '');
     const keys = [...new Set(S.list.map(x => this.liveParse(x.u)).filter(Boolean).map(x => x.p + ':' + x.id))];
     if (!keys.length) return;
+    const CK = KEY + ':liveCache', now = Date.now();
+    try { const c = JSON.parse(localStorage.getItem(CK) || 'null');
+      if (c && c.map && now - c.at < (onPage ? 150000 : 600000)) { if (!this.state.liveMap) this.setState({ liveMap: c.map, liveErr: '' }); return; } } catch (e) {}
     const yt = keys.filter(k => k.startsWith('yt:')), other = keys.filter(k => !k.startsWith('yt:'));
-    const groups = [...(other.length ? [other] : []), ...yt.map(k => [k])];
+    const groups = onPage ? [...(other.length ? [other] : []), ...yt.map(k => [k])] : [keys];
     const res = await Promise.all(groups.map(async g => {
       try { const r = await fetch(W + '/live?c=' + encodeURIComponent(g.join(','))); if (!r.ok) throw 0; return (await r.json()).items || []; } catch (e) { return null; }
     }));
@@ -5439,6 +5443,7 @@ class Component extends DCLogic {
     keys.forEach(k => { if (old[k]) map[k] = old[k]; });
     res.forEach(a => (a || []).forEach(it => { if (it && it.key && (it.ok || !map[it.key])) map[it.key] = it; }));
     this.setState({ liveMap: map, liveErr: '' });
+    try { localStorage.setItem(CK, JSON.stringify({ at: now, map })); } catch (e) {}
   }
   saveStreamers(data) {
     this._stDirty = true; this.setState({ streamers: data, liveMsg: '저장 중…' });
@@ -5467,7 +5472,7 @@ class Component extends DCLogic {
     return {
       liveShow: true,
       isLive: this.state.tab === '방송' && this._area === '옥션',
-      goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); this.refreshLive(); },
+      goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); setTimeout(() => this.refreshLive(), 50); },
       liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? '재획반찬 LIVE ' + n : '재획반찬',
       liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (b.vn - a.vn) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
       liveEmpty: rows.length === 0, liveErr: this.state.liveErr || '', liveHasErr: !!this.state.liveErr, liveAdmin: admin,
@@ -8274,7 +8279,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 130,
+      isAdmin: admin, appVer: 131,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
