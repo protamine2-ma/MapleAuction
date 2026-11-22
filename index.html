@@ -1378,6 +1378,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         </div>
       </sc-if>
     </div>
+    <sc-if value="{{ growAdminTab }}" hint-placeholder-val="{{ false }}">
     <div onMouseEnter="{{ byMenuOpen }}" onMouseLeave="{{ byMenuClose }}" style="position:relative;">
       <button onClick="{{ growTabs.1.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.1.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.1.weight }};color:{{ growTabs.1.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">보약<span style="font-size:10px;opacity:0.6;">▼</span></button>
       <sc-if value="{{ byMenu }}" hint-placeholder-val="{{ false }}">
@@ -1400,6 +1401,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         </div>
       </sc-if>
     </div>
+    </sc-if>
     <div onMouseEnter="{{ setMenuOpen }}" onMouseLeave="{{ setMenuClose }}" style="position:relative;">
       <button onClick="{{ growTabs.2.onClick }}" style="flex:none;padding:16px 12px 13px;border:none;border-bottom:3px solid {{ growTabs.2.border }};background:transparent;font-family:inherit;font-size:15px;font-weight:{{ growTabs.2.weight }};color:{{ growTabs.2.color }};cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" style-hover="color:oklch(0.3 0.09 255);">환산별템세팅<span style="font-size:10px;opacity:0.6;">▼</span></button>
       <sc-if value="{{ setMenu }}" hint-placeholder-val="{{ false }}">
@@ -2690,7 +2692,15 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
           <sc-if value="{{ s.isVideo }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:14px;">
               <sc-for list="{{ s.videos }}" as="v" hint-placeholder-count="0">
-                <iframe src="{{ v.src }}" title="유튜브 영상" allowfullscreen="" style="width:100%;aspect-ratio:16/9;border:none;border-radius:10px;background:#000;"></iframe>
+                <sc-if value="{{ v.showFrame }}" hint-placeholder-val="{{ true }}">
+                  <iframe src="{{ v.src }}" title="유튜브 영상" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen="" style="width:100%;aspect-ratio:16/9;border:none;border-radius:10px;background:#000;"></iframe>
+                </sc-if>
+                <sc-if value="{{ v.showPoster }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ v.onPlay }}" aria-label="영상 재생" style="position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:none;border-radius:10px;overflow:hidden;cursor:pointer;background:#000;" style-hover="filter:brightness(1.08);">
+                    <img src="{{ v.poster }}" alt="" style="display:block;width:100%;height:100%;object-fit:cover;"></img>
+                    <span aria-hidden="true" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:48px;border-radius:14px;background:rgba(255,0,0,0.9);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.4);"><span style="width:0;height:0;border-left:20px solid #fff;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px;"></span></span>
+                  </button>
+                </sc-if>
               </sc-for>
             </div>
             <sc-if value="{{ s.noVideo }}" hint-placeholder-val="{{ false }}">
@@ -4210,6 +4220,7 @@ const MAINSKILL = {
 const BUFFFAV = { '레테': [
   [['솔 헤카테', 'bfav-lethe-1'], ['오버로드 마나', 'bfav-lethe-2'], ['퍼미에이션', 'bfav-lethe-3'], ['스캐터', 'bfav-lethe-4'], ['포티튜드', 'bfav-lethe-5'], ['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9'], ['팩트 매니페스트', 'bfav-lethe-18']],
   [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]] };
+const VPOSTER = { '레테': { '주요스킬': 'img/vposter-lethe-mainskill.jpg', '극딜순서': 'img/vposter-lethe-burst.jpg' } };
 const BURST = { '레테': { pre: ['입장 후 컨버지 묻히기', 'converge'], pre2: ['드라이브(임펠) 묻히기', 'drive'], label: '오리진 극딜', steps: [
   [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['오버로드 아즈라스', 'azras']]],
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
@@ -5101,7 +5112,7 @@ class Component extends DCLogic {
     const sBase = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? '' : 'https://mapleauction.kr/';
     fetch(sBase + 'sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
     if (this.state.tab === '인구수') this.loadPop();
-    try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); let ar = null; try { ar = localStorage.getItem(KEY + ':area'); } catch (e) {} this.logVisit('visit', ar === '사냥' || (ar === '육성' && this.state.admin) ? ar : this.state.tab); } } catch (e) {}
+    try { if (!sessionStorage.getItem('maple-visited')) { sessionStorage.setItem('maple-visited', '1'); let ar = null; try { ar = localStorage.getItem(KEY + ':area'); } catch (e) {} this.logVisit('visit', ar === '사냥' || ar === '육성' ? ar : this.state.tab); } } catch (e) {}
     if (this.state.session) this.ensureToken().then(ok => { if (!ok) this.logout(); });
   }
   iconKey(slotId) { return 'i_' + Array.from(new TextEncoder().encode(slotId)).map(b => b.toString(16).padStart(2, '0')).join('') + '.png'; }
@@ -5644,7 +5655,8 @@ class Component extends DCLogic {
         isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '사냥방법' && HUNTHOW[job]) && !(s.title === '쿨뚝 | 시드링' && COOLSEED[job]) && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && !(s.title === '버프즐겨찾기' && BUFFFAV[job]) && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
-        videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map(src => ({ src })),
+        videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map((src, vi) => { const pst = (VPOSTER[job] || {})[s.title] || '', key = job + '|' + i + '|' + vi, play = !pst || !!(this.state.vidPlay || {})[key];
+          return { src: pst && play ? src + (src.includes('?') ? '&' : '?') + 'autoplay=1' : src, showFrame: play, showPoster: !play, poster: pst, onPlay: () => this.setState(st => ({ vidPlay: { ...(st.vidPlay || {}), [key]: true } })) }; }),
         noVideo: s.type === 'video' && !String(s.text || '').split('\n').map(yt).filter(Boolean).length })),
     };
   }
@@ -7773,7 +7785,7 @@ class Component extends DCLogic {
       isChal, ...this.chalVals(isChal),
       isSunday,
       ...(() => {
-        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기', '편집'] : ['옥션', '사냥', '강화'];
+        const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기', '편집'] : ['옥션', '사냥', '육성', '강화'];
         let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         if (area === '스타포스') area = '강화';
         if (!AREAS.includes(area)) area = '옥션';
@@ -7788,6 +7800,7 @@ class Component extends DCLogic {
             const GT = ['직업가이드', '보약', '환산별템세팅', '유니온챔피언', ...(this.state.admin ? ['관리자 정보'] : [])];
             let g = this.state.growTab || (() => { try { return localStorage.getItem(KEY + ':growTab'); } catch (e) { return null; } })();
             if (!GT.includes(g)) g = GT[0];
+            if (g === '보약' && !this.state.admin) g = GT[0];
             const JG = [['모험가 전사', ['히어로', '팔라딘', '다크나이트']], ['모험가 마법사', ['아크메이지(불,독)', '아크메이지(썬,콜)', '비숍']], ['모험가 궁수', ['보우마스터', '신궁', '패스파인더']], ['모험가 도적', ['나이트로드', '섀도어', '듀얼블레이드']], ['모험가 해적', ['바이퍼', '캡틴', '캐논마스터']],
               ['시그너스 기사단', ['소울마스터', '미하일', '플레임위자드', '윈드브레이커', '나이트워커', '스트라이커']], ['레지스탕스', ['블래스터', '배틀메이지', '와일드헌터', '메카닉', '제논', '데몬슬레이어', '데몬어벤져']],
               ['영웅', ['아란', '에반', '루미너스', '메르세데스', '팬텀', '은월']], ['노바', ['카이저', '카인', '카데나', '엔젤릭버스터']], ['레프', ['아델', '일리움', '칼리', '아크']], ['아니마', ['라라', '호영', '렌']], ['기타', ['제로', '키네시스', '레테']]];
@@ -8030,7 +8043,7 @@ class Component extends DCLogic {
               growTab: g, growTabs: GT.map(l => ({ label: l, color: l === g ? 'oklch(0.3 0.09 255)' : '#6b6d73', weight: l === g ? 700 : 500, border: l === g ? 'oklch(0.48 0.17 255)' : 'transparent',
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
-          areas: AREAS.map(l => ({ label: l, beta: false, soon: l === '육성', bg: l === area ? 'oklch(0.55 0.17 255)' : 'transparent', color: l === area ? '#fff' : 'oklch(0.85 0.03 260)', fw: l === area ? 800 : 700,
+          areas: AREAS.map(l => ({ label: l, beta: false, soon: false, bg: l === area ? 'oklch(0.55 0.17 255)' : 'transparent', color: l === area ? '#fff' : 'oklch(0.85 0.03 260)', fw: l === area ? 800 : 700,
             onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
           goHome: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션', selected: null }); if (this.state.tab !== '메소') this.switchTab('메소'); window.scrollTo(0, 0); },
         };
@@ -8289,7 +8302,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 138,
+      isAdmin: admin, appVer: 140,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
