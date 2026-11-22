@@ -1998,6 +1998,10 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <div style="display:flex;align-items:center;gap:10px;">
                 <img src="{{ s.burst.preSrc }}" alt="" style="width:48px;height:48px;border-radius:8px;"></img>
                 <span style="padding:6px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fafaf8;font-size:15px;font-weight:800;color:#1d1e22;">{{ s.burst.preText }}</span>
+                <sc-if value="{{ s.burst.hasPre2 }}" hint-placeholder-val="{{ true }}">
+                  <img src="{{ s.burst.pre2Src }}" alt="" style="width:48px;height:48px;border-radius:8px;margin-left:14px;"></img>
+                  <span style="padding:6px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fafaf8;font-size:15px;font-weight:800;color:#1d1e22;">{{ s.burst.pre2Text }}</span>
+                </sc-if>
               </div>
               <sc-for list="{{ s.burst.seqs }}" as="sq" hint-placeholder-count="1">
               <div style="display:flex;align-items:flex-start;flex-wrap:wrap;row-gap:16px;column-gap:6px;">
@@ -4206,7 +4210,7 @@ const MAINSKILL = {
 const BUFFFAV = { '레테': [
   [['솔 헤카테', 'bfav-lethe-1'], ['오버로드 마나', 'bfav-lethe-2'], ['퍼미에이션', 'bfav-lethe-3'], ['스캐터', 'bfav-lethe-4'], ['포티튜드', 'bfav-lethe-5'], ['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9'], ['팩트 매니페스트', 'bfav-lethe-18']],
   [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]] };
-const BURST = { '레테': { pre: ['입장 후 컨버지 묻히기', 'converge'], label: '오리진 극딜', steps: [
+const BURST = { '레테': { pre: ['입장 후 컨버지 묻히기', 'converge'], pre2: ['드라이브(임펠) 묻히기', 'drive'], label: '오리진 극딜', steps: [
   [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['오버로드 아즈라스', 'azras']]],
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '전부 털기'], [[['오리진', 'origin']]],
@@ -5593,7 +5597,7 @@ class Component extends DCLogic {
             return { left: ((x + 8) / L.w * 100).toFixed(2) + '%', top: ((y - 34) / L.h * 100).toFixed(2) + '%', val: v, show: !admin && !!v,
               onChange: e => { const t = e.target.value.replace(/\D/g, '').slice(0, 2); upd(n => { n.vmN = { ...(n.vmN || {}), [key]: t }; if (!t) delete n.vmN[key]; }); } }; }); })() : [],
         hasBfav: s.title === '버프즐겨찾기' && !!BUFFFAV[job], bfavRows: s.title === '버프즐겨찾기' && BUFFFAV[job] ? BUFFFAV[job].map(r => ({ items: r.map(([n, f, note]) => ({ n, src: 'img/' + f + '.png', note: note || '', hasNote: !!note })) })) : [],
-        hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { preText: b.pre[0], preSrc: 'img/skill-lethe-' + b.pre[1] + '.png', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag], k) => ({ first: k === 0, notFirst: k > 0, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? 'img/skill-lethe-' + f + '.png' : '', arrow: !!ar })) })) })) }; })() : {},
+        hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { preText: b.pre[0], preSrc: 'img/skill-lethe-' + b.pre[1] + '.png', hasPre2: !!b.pre2, pre2Text: b.pre2 ? b.pre2[0] : '', pre2Src: b.pre2 ? 'img/skill-lethe-' + b.pre2[1] + '.png' : '', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag], k) => ({ first: k === 0, notFirst: k > 0, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? 'img/skill-lethe-' + f + '.png' : '', arrow: !!ar })) })) })) }; })() : {},
         hasKeyset: s.title === '추천키세팅' && !!KEYSET[job], keysetImg: s.title === '추천키세팅' ? KEYSET[job] || '' : '',
         keyTags: s.title === '추천키세팅' && KEYNAMES[job] ? KEYNAMES[job].map(([n, lx, ly, note]) => ({ n, note: note || '', hasNote: !!note, l: (lx * 0.5786 / 891 * 100).toFixed(2) + '%', t: (((ly - 148) * 0.5786 + 70) / 573 * 100).toFixed(2) + '%' })) : [], hasKeyNames: s.title === '추천키세팅' && !!KEYNAMES[job],
         hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', src: f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
@@ -8285,7 +8289,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 137,
+      isAdmin: admin, appVer: 138,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
