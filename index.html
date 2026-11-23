@@ -1997,6 +1997,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
         <sc-if value="{{ guideView }}" hint-placeholder-val="{{ true }}">
           <sc-if value="{{ s.hasBurst }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:14px;">
+              <sc-if value="{{ s.burst.hasPre }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;align-items:center;gap:10px;">
                 <img src="{{ s.burst.preSrc }}" alt="" style="width:48px;height:48px;border-radius:8px;"></img>
                 <span style="padding:6px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fafaf8;font-size:15px;font-weight:800;color:#1d1e22;">{{ s.burst.preText }}</span>
@@ -2005,12 +2006,14 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   <span style="padding:6px 12px;border-radius:8px;border:1px solid #e3e3e0;background:#fafaf8;font-size:15px;font-weight:800;color:#1d1e22;">{{ s.burst.pre2Text }}</span>
                 </sc-if>
               </div>
+              </sc-if>
               <sc-for list="{{ s.burst.seqs }}" as="sq" hint-placeholder-count="1">
               <div style="display:flex;align-items:flex-start;flex-wrap:wrap;row-gap:16px;column-gap:6px;">
                 <span style="align-self:flex-start;flex:none;box-sizing:border-box;width:112px;margin-top:12px;margin-right:8px;padding:5px 8px;border-radius:8px;background:#2a2b2f;font-size:15px;font-weight:800;color:#fff;white-space:nowrap;text-align:center;">{{ sq.label }}</span>
                 <sc-for list="{{ sq.steps }}" as="st" hint-placeholder-count="10">
                   <div style="display:flex;align-items:flex-start;gap:6px;">
                     <sc-if value="{{ st.notFirst }}" hint-placeholder-val="{{ true }}"><span style="margin-top:15px;font-size:16px;color:oklch(0.58 0.21 27);line-height:1;">▶</span></sc-if>
+                    <sc-if value="{{ st.isSep }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="align-self:stretch;width:2px;margin:0 14px;border-radius:2px;background:#c9ccd1;"></span></sc-if>
                     <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
                       <div style="display:flex;align-items:flex-start;gap:0;">
                         <sc-for list="{{ st.items }}" as="it" hint-placeholder-count="1">
@@ -2038,8 +2041,8 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               </div>
               <div style="display:flex;flex-direction:column;gap:14px;min-width:0;">
                 <sc-for list="{{ s.bfavRows }}" as="br" hint-placeholder-count="2">
-                  <div style="display:flex;flex-direction:column;">
-                    <div style="display:flex;gap:4px;padding:6px;border-radius:10px;background:#d6d9de;align-self:flex-start;">
+                  <div style="display:flex;flex-direction:column;align-self:flex-start;">
+                    <div style="display:flex;gap:4px;padding:6px;border-radius:10px;background:#d6d9de;">
                       <sc-for list="{{ br.items }}" as="bi" hint-placeholder-count="9">
                         <img src="{{ bi.src }}" alt="{{ bi.n }}" style="width:52px;height:52px;flex:none;border-radius:8px;"></img>
                       </sc-for>
@@ -2058,12 +2061,12 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
             </div>
           </sc-if>
           <sc-if value="{{ s.hasKeyset }}" hint-placeholder-val="{{ false }}">
-            <div style="position:relative;width:100%;max-width:1000px;margin:0 auto 14px;container-type:inline-size;">
-              <img src="{{ s.keysetImg }}" alt="추천 키세팅" style="display:block;width:100%;height:auto;border-radius:8px;"></img>
+            <div style="position:relative;width:100%;max-width:{{ s.keysetMw }};margin:0 auto 14px;container-type:inline-size;">
+              <img src="{{ s.keysetImg }}" alt="추천 키세팅" style="display:block;width:100%;height:auto;border-radius:8px;image-rendering:{{ s.keysetPx }};"></img>
               <sc-if value="{{ s.hasKeyNames }}" hint-placeholder-val="{{ false }}">
                 <sc-for list="{{ s.keyTags }}" as="kk" hint-placeholder-count="0">
-                  <div style="position:absolute;left:{{ kk.l }};top:{{ kk.t }};transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;padding:0.25cqw 0.55cqw;border-radius:0.45cqw;background:rgba(20,18,26,0.88);pointer-events:none;">
-                    <span style="font-size:1.3cqw;font-weight:800;color:#fff;white-space:nowrap;line-height:1.25;">{{ kk.n }}</span>
+                  <div style="position:absolute;left:{{ kk.l }};top:{{ kk.t }};transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;padding:{{ kk.pd }};border-radius:0.45cqw;background:rgba(20,18,26,0.88);pointer-events:none;">
+                    <span style="font-size:{{ kk.fs }};font-weight:800;color:#fff;white-space:nowrap;line-height:1.25;letter-spacing:-0.02em;">{{ kk.n }}</span>
                     <sc-if value="{{ kk.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:1.1cqw;font-weight:800;color:#ffb3a8;white-space:nowrap;line-height:1.25;">{{ kk.note }}</span></sc-if>
                   </div>
                 </sc-for>
@@ -2116,7 +2119,8 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                 <sc-if value="{{ q.hasSides }}" hint-placeholder-val="{{ false }}">
                   <sc-for list="{{ q.sides }}" as="k" hint-placeholder-count="1">
                     <div style="display:flex;flex-direction:column;align-items:center;">
-                      <div style="padding:6px;border-radius:10px;background:#d6d9de;"><img src="{{ k.src }}" alt="{{ k.name }}" style="width:64px;height:64px;display:block;border-radius:8px;"></img></div>
+                      <div style="padding-bottom:4px;"><span aria-hidden="true" style="visibility:hidden;padding:2px 3px;font-size:{{ q.topFs }};font-weight:800;white-space:nowrap;">·</span></div>
+                      <div style="padding:6px;border-radius:10px;background:#d6d9de;"><img src="{{ k.src }}" alt="{{ k.name }}" style="width:{{ q.w }};height:{{ q.w }};display:block;border-radius:8px;"></img></div>
                       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:6px;">
                         <span style="font-size:12px;font-weight:800;color:#1d1e22;text-align:center;line-height:1.25;word-break:keep-all;max-width:76px;">{{ k.name }}</span>
                         <sc-if value="{{ k.hasNote }}" hint-placeholder-val="{{ false }}"><span style="padding:3px 8px;border-radius:6px;background:oklch(0.94 0.05 25);font-size:11px;font-weight:700;color:oklch(0.45 0.15 25);text-align:center;">{{ k.note }}</span></sc-if>
@@ -2150,7 +2154,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                 <span style="font-size:17px;font-weight:800;color:#1d1e22;">{{ mx.title }}</span>
                 <span style="font-size:13px;font-weight:600;color:#6b6d73;">{{ mx.note }}</span>
               </div>
-              <img src="{{ mx.src }}" alt="{{ mx.title }}" style="display:block;width:100%;max-width:1000px;height:auto;border-radius:8px;"></img>
+              <img src="{{ mx.src }}" alt="{{ mx.title }}" style="display:block;width:100%;max-width:{{ mx.mw }};height:auto;border-radius:8px;"></img>
             </div>
           </sc-for>
           <sc-if value="{{ s.hasCs }}" hint-placeholder-val="{{ false }}">
@@ -4220,7 +4224,10 @@ const MAINSKILL = {
 };
 const BUFFFAV = { '레테': [
   [['솔 헤카테', 'bfav-lethe-1'], ['오버로드 마나', 'bfav-lethe-2'], ['퍼미에이션', 'bfav-lethe-3'], ['스캐터', 'bfav-lethe-4'], ['포티튜드', 'bfav-lethe-5'], ['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9'], ['팩트 매니페스트', 'bfav-lethe-18']],
-  [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]] };
+  [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]],
+  '나이트로드': [
+  [['솔 헤카테', 'bfav-lethe-1'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9']],
+  [['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버'], '|', ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], '|', ['일격필살', 'bfav-lethe-14']]] };
 // 중간전환 이미지 글자 색(oklch 색상각) — 직업별 배경 색과 맞춤
 const TRANS_HUE = {"hero": 43, "paladin": 95, "darkknight": 25, "archmagefp": 54, "archmageil": 234, "bishop": 100, "bowmaster": 144, "sniper": 187, "pathfinder": 166, "nightlord": 300, "shadower": 15, "dualblade": 2, "viper": 251, "captain": 264, "cannonmaster": 63, "soulmaster": 85, "mihile": 257, "flamewizard": 46, "windbreaker": 150, "nightwalker": 295, "striker": 230, "blaster": 67, "battlemage": 320, "wildhunter": 137, "mechanic": 243, "xenon": 131, "demonslayer": 13, "demonavenger": 26, "aran": 214, "evan": 332, "luminous": 301, "mercedes": 147, "phantom": 349, "eunwol": 269, "kaiser": 38, "kain": 176, "cadena": 20, "angelicbuster": 352, "adele": 88, "illium": 206, "khali": 327, "ark": 31, "lara": 141, "hoyoung": 243, "ren": 10, "zero": 254, "kinesis": 308, "lethe": 300};
 // 제목만 이미지: 직업별 상징 아이콘(24칸 기준 SVG 경로, star4/star6/sun 은 코드로 그림)
@@ -4272,6 +4279,14 @@ BURST['레테'].seqs = [{ label: BURST['레테'].label, steps: BURST['레테'].s
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }, { label: '1분 준극딜', steps: [
   [[['엔버링크 (일반서버)', 'soulcontract']]], [[['오버로드 템플러', 'oltemplar']]], [[['오버로드 바르가르', 'olvargar']]],
   [[['이딕트 템플러', 'edtemplar'], ['이딕트 램페이지', 'edrampage']], '쿨마다 전부사용'], [[['드라이브 (임펠)', 'drive']]]] }];
+BURST['나이트로드'] = { label: '오리진 극딜', steps: [
+  [[['극딜', '']]], [[['풍마수리검', 'img/bfav-nightlord-shurikenburst.png']]], [[['강화 포 시즌', 'img/skill-nightlord-fourseasons.png']]], [[['쉐도우 리츄얼', 'img/skill-nightlord-shadowritual.png']]], [[['생사여탈', 'img/skill-nightlord-origin.png']]],
+  [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png']]], [[['에르다 노바', 'erdanova']]], [[['풍마수리검', 'img/bfav-nightlord-shurikenburst.png']], '쿨마다'], [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png']]]] };
+BURST['나이트로드'].seqs = [{ label: BURST['나이트로드'].label, steps: BURST['나이트로드'].steps }, { label: '2분 극딜', steps: [
+  [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['풍마수리검', 'img/bfav-nightlord-shurikenburst.png'], ['강화 포 시즌', 'img/skill-nightlord-fourseasons.png', 1]], '쿨 맞으면 사용하기'], [[['쉐도우 리츄얼', 'img/skill-nightlord-shadowritual.png']]],
+  [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png']]], [[['풍마수리검', 'img/bfav-nightlord-shurikenburst.png']], '쿨마다'], [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png']]]] }, { label: '준극딜', steps: [
+  [[['준극딜', '']]], [[['풍마수리검', 'img/bfav-nightlord-shurikenburst.png'], ['강화 포 시즌', 'img/skill-nightlord-fourseasons.png', 1]], '쿨 맞으면 사용하기'], [[['쉐도우 리츄얼', 'img/skill-nightlord-shadowritual.png']]], [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png']]]]  }, { label: '평딜', steps: [
+  [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png'], ['풍마수리검', 'img/bfav-nightlord-shurikenburst.png', 1], ['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png', 1]], '스프레드 스로우 활성화 동안'], [[['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png'], ['풍마수리검', 'img/bfav-nightlord-shurikenburst.png', 1], ['포 시즌', 'img/skill-nightlord-fourseasons.png', 1], ['쿼드러플 스로우 VI', 'img/skill-nightlord-quadruple6.png', 1]], '스프레드 스로우 끝나면', 1]] }];
 const HUNTHOW = { '레테': { groups: [['스캐터 켜기', [['스캐터', 'skill-lethe-scatter']]], ['소환하기', [['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['드라이브/임펠', 'skill-lethe-drive']]], ['설치기', [['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9']]]],
   lv: [['260Lv 이전', '소환수 뽑고', '에르다 파운틴 쓰고 임펠 쓰면서 돌기'], ['260Lv 이후', '소환수 뽑고', '에르다 파운틴 / 솔 야누스 설치 후', '임펠 쓰면서 제자리 사냥하기']] } };
 // 쿨뚝 순서(직업별, 숫자 순서대로) · 시드링은 전 직업 공통(리레4 + 컨티4)
@@ -4279,7 +4294,10 @@ const COOL_ORDER = {"히어로": "0 2", "팔라딘": "0 2", "다크나이트": "
 const COOL_SUB = {};
 const SEED_ALL = [['리스트레인트 링', '4레벨', 'ring-restraint'], ['컨티뉴어스 링', '4레벨', 'ring-continuous']];
 const COOLSEED = Object.fromEntries(Object.entries(COOL_ORDER).map(([j, o]) => [j, { cool: o.split(' ').filter(Boolean).map(n => [n + '초', COOL_SUB[n] || '']), seed: SEED_ALL }]));
-const KEYSET = { '레테': 'img/keyset-lethe.png' };
+const KEYSET = { '레테': 'img/keyset-lethe.png', '나이트로드': 'img/keyset-nightlord.png?v=6' };
+const KEYSET_W = {};
+// 키세팅 이름표(레테처럼 키 아래): [짧은 이름, 키 가운데 x, 키 아래 y] — 그림 픽셀 기준
+const KEYTAGS2 = { '나이트로드': { w: 630, h: 362, list: [['에르다의지', 96, 54], ['용사의지', 129, 54], ['해방무적', 30, 92], ['시그넛', 63, 92], ['홀리파운틴', 128, 92], ['다크사이트', 162, 92], ['퍼미에이션', 195, 92], ['에르다노바', 78, 125], ['풍마', 111, 125], ['포시즌', 145, 125], ['리츄얼', 178, 125], ['생사여탈', 211, 125], ['쿼드러플', 95, 158], ['쉐도우리프', 128, 158], ['쇼다운', 161, 158], ['다크플레어', 194, 158], ['솔야누스', 227, 158], ['파운틴', 260, 158], ['쉐도우블링크', 53, 191], ['로프커넥트', 111, 191], ['쉐도우러쉬', 144, 191], ['블링크', 210, 191], ['쉐도우블링크', 465, 191], ['크루셜어썰트', 38, 224], ['크루셜어썰트', 483, 224]] } };
 const KEYNAMES = { '레테': [
   ['에르다의지', 275, 148], ['포티튜드', 372, 148], ['니게이트', 470, 148], ['소환시퀀스', 567, 148], ['스캐터', 720, 148], ['오버로드마나', 820, 148], ['퍼미에이션', 918, 148], ['보스시퀀스', 1016, 148],
   ['에테리얼폼', 175, 262], ['해방무적', 272, 262], ['홀리파운틴', 370, 262], ['아즈라스', 468, 262], ['오버로드', 568, 262], ['오버로드', 667, 262], ['솔헤카테', 768, 262], ['챔피언의가호', 968, 262, '일반서버'],
@@ -4290,7 +4308,7 @@ const SEQUENCE = {
   '레테': [{ name: '보스', head: '버프 시퀀스', skills: [['', 'img/buff-lethe-b01.png'], ['', 'img/buff-lethe-b02.png'], ['', 'img/buff-lethe-b03.png'], ['', 'img/buff-lethe-b04.png'], ['', 'img/buff-lethe-b05.png'],
     ['익스트림 블루', 'img/buff-lethe-extremeblue.png', '', 0, '몬파상점'], ['반짝이는 빨간별물약', 'img/buff-lethe-redstar.png', '', 0, '', ['반짝이는 파란별물약', 'img/buff-lethe-bluestar.png', '가성비']], ['VIP버프 (능력치)', 'img/buff-lethe-vip.png'],
     ['10단계 지능의 물약', 'img/buff-lethe-int10.png'], ['전설의 영웅비약', 'img/buff-lethe-heroelixir.png', '', 0, '', ['장비명장버프', 'img/buff-lethe-guildwar.png', '최소컷도전']], ['유니온의 힘', 'img/buff-lethe-unionpower.png', '', 0, '일반서버'],
-    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]]] },
+    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]], ['세이람의 영약', 'img/buff-seiram.png', '따로사용 (15분)', 1]] },
     { name: '경치', skills: [['', 'img/buff-lethe-b01.png'], ['', 'img/buff-lethe-b02.png'], ['', 'img/buff-lethe-b03.png'], ['', 'img/buff-lethe-b04.png'], ['', 'img/buff-lethe-b05.png'],
     ['익스트림 골드', 'img/buff-lethe-extremegold.png', '', 0, '몬파상점'], ['VIP버프 (경험치)', 'img/buff-lethe-vipexp.png'], ['추가경험치 50%쿠폰', 'img/buff-lethe-exp50.png'], ['소형 경축비', 'img/buff-lethe-smallexp.png', '', 0, '효율낮음'],
     ['소형 재획비', 'img/buff-lethe-smallwealth.png'], ['경험치 3배쿠폰', 'img/buff-lethe-exp3x.png'], ['유니온의 부', 'img/buff-lethe-unionwealth.png', '', 0, '일반서버']] },
@@ -4303,11 +4321,18 @@ const seqFor = (st, j) => { const B = ECHO_JOBS.includes(j) ? ['', 'img/buff-her
   return [{ name: '보스', head: '버프 시퀀스', skills: [B, C, D, E, F,
     mag ? ['익스트림 블루', 'img/buff-lethe-extremeblue.png', '', 0, '몬파상점'] : ['익스트림 레드', 'img/buff-extremered.png', '', 0, '몬파상점'], ['반짝이는 빨간별물약', 'img/buff-lethe-redstar.png', '', 0, '', ['반짝이는 파란별물약', 'img/buff-lethe-bluestar.png', '가성비']], ['VIP버프 (능력치)', 'img/buff-lethe-vip.png'],
     ['10단계 ' + st + '의 물약', 'img/buff-lethe-int10.png'], ['전설의 영웅비약', 'img/buff-lethe-heroelixir.png', '', 0, '', ['장비명장버프', 'img/buff-lethe-guildwar.png', '최소컷도전']], ['유니온의 힘', 'img/buff-lethe-unionpower.png', '', 0, '일반서버'],
-    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', mag ? ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비'] : ['아기용의 이유식', 'img/buff-babydragonfood.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]]] },
+    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', mag ? ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비'] : ['아기용의 이유식', 'img/buff-babydragonfood.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]], ['세이람의 영약', 'img/buff-seiram.png', '따로사용 (15분)', 1]] },
     { name: '경치', skills: [X, C, D, E, F,
     ['익스트림 골드', 'img/buff-lethe-extremegold.png', '', 0, '몬파상점'], ['VIP버프 (경험치)', 'img/buff-lethe-vipexp.png'], ['추가경험치 50%쿠폰', 'img/buff-lethe-exp50.png'], ['소형 경축비', 'img/buff-lethe-smallexp.png', '', 0, '효율낮음'],
     ['소형 재획비', 'img/buff-lethe-smallwealth.png'], ['경험치 3배쿠폰', 'img/buff-lethe-exp3x.png'], ['유니온의 부', 'img/buff-lethe-unionwealth.png', '', 0, '일반서버']] }]; };
 Object.entries(SEQ_STAT).forEach(([j, st]) => { if (!SEQUENCE[j]) SEQUENCE[j] = seqFor(st, j); });
+// 버프즐겨찾기: 레테 외 전 직업은 나이트로드와 같은 공통 스킬
+Object.keys(SEQ_STAT).forEach(j => { if (j !== '레테' && !BUFFFAV[j]) BUFFFAV[j] = BUFFFAV['나이트로드']; });
+// 주요스킬 온오프: 레테 외 전 직업 공통(솔 헤카테 6차 · 에르다 퍼미에이션 5차)
+Object.keys(SEQ_STAT).forEach(j => { if (j !== '레테' && !MAINSKILL[j]) MAINSKILL[j] = { onoff: [['솔 헤카테', '6차', 'skill-lethe-solhecate.png'], ['에르다 퍼미에이션', '5차', 'skill-lethe-erdapermeation.png']] }; });
+MAINSKILL['나이트로드'] = { ...MAINSKILL['나이트로드'], extras: [{ title: '솔 헤카테 · 감응 스킬', note: '감응 스킬을 다크로드의 비전서로 설정', src: 'img/mainskill-nightlord-hecate.png?v=2' }] };
+BUFFFAV['나이트로드'] = [BUFFFAV['나이트로드'][0].concat([['여신의 축복', 'bfav-goddess-maple'], ['다크로드의 비전서', 'bfav-nightlord-darklordsecret'], ['스프레드 스로우', 'bfav-nightlord-spreadthrow'], ['다크 플레어', 'bfav-nightlord-darkflare']]), BUFFFAV['나이트로드'][1].concat([['스로우 블래스팅', 'bfav-nightlord-throwblasting'], ['나이트폴 시그넛', 'bfav-nightlord-nightfallsignet'], ['레디 투 다이', 'bfav-nightlord-readytodie']])];
+SEQUENCE['나이트로드'] = SEQUENCE['나이트로드'].concat([{ name: '극딜', head: '스킬 시퀀스', skills: [['퍼지 에어리어', 'img/skill-nightlord-fuzzyarea.png'], ['스로우 블래스팅', 'img/skill-nightlord-throwblasting.png'], ['에픽 어드벤쳐', 'img/skill-nightlord-epicadventure.png'], ['여신의 축복', 'img/skill-nightlord-goddess.png'], ['링 액티베이션', 'img/skill-nightlord-ringactivation.png'], ['스프레드 스로우', 'img/skill-nightlord-spreadthrow.png'], ['얼티밋 다크사이트', 'img/skill-nightlord-ultimatedarksight.png'], ['다크로드의 비전서', 'img/skill-nightlord-darklordsecret.png'], ['레디 투 다이', 'img/skill-nightlord-readytodie.png'], ['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버']] }, { name: '준극딜', skills: [['퍼지 에어리어', 'img/skill-nightlord-fuzzyarea.png'], ['다크로드의 비전서', 'img/skill-nightlord-darklordsecret.png'], ['레디 투 다이', 'img/skill-nightlord-readytodie.png'], ['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버']] }]);
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -5663,12 +5688,12 @@ class Component extends DCLogic {
           return P.map(([key, x, y]) => { const v = String((g.vmN || {})[key] || '');
             return { left: ((x + 8) / L.w * 100).toFixed(2) + '%', top: ((y - 34) / L.h * 100).toFixed(2) + '%', val: v, show: !admin && !!v,
               onChange: e => { const t = e.target.value.replace(/\D/g, '').slice(0, 2); upd(n => { n.vmN = { ...(n.vmN || {}), [key]: t }; if (!t) delete n.vmN[key]; }); } }; }); })() : [],
-        hasBfav: s.title === '버프즐겨찾기' && !!BUFFFAV[job], bfavRows: s.title === '버프즐겨찾기' && BUFFFAV[job] ? BUFFFAV[job].map(r => ({ items: r.map(([n, f, note]) => ({ n, src: 'img/' + f + '.png', note: note || '', hasNote: !!note })) })) : [],
-        hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { preText: b.pre[0], preSrc: 'img/skill-lethe-' + b.pre[1] + '.png', hasPre2: !!b.pre2, pre2Text: b.pre2 ? b.pre2[0] : '', pre2Src: b.pre2 ? 'img/skill-lethe-' + b.pre2[1] + '.png' : '', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag], k) => ({ first: k === 0, notFirst: k > 0, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? 'img/skill-lethe-' + f + '.png' : '', arrow: !!ar })) })) })) }; })() : {},
-        hasKeyset: s.title === '추천키세팅' && !!KEYSET[job], keysetImg: s.title === '추천키세팅' ? KEYSET[job] || '' : '',
-        keyTags: s.title === '추천키세팅' && KEYNAMES[job] ? KEYNAMES[job].map(([n, lx, ly, note]) => ({ n, note: note || '', hasNote: !!note, l: (lx * 0.5786 / 891 * 100).toFixed(2) + '%', t: (((ly - 148) * 0.5786 + 70) / 573 * 100).toFixed(2) + '%' })) : [], hasKeyNames: s.title === '추천키세팅' && !!KEYNAMES[job],
+        hasBfav: s.title === '버프즐겨찾기', bfavRows: s.title === '버프즐겨찾기' && BUFFFAV[job] ? BUFFFAV[job].map(r => ({ items: r.filter(x => x !== '|').map(([n, f, note]) => ({ n, src: 'img/' + f + '.png', note: note || '', hasNote: !!note })) })) : [],
+        hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { hasPre: !!b.pre, preText: b.pre ? b.pre[0] : '', preSrc: b.pre ? 'img/skill-lethe-' + b.pre[1] + '.png' : '', hasPre2: !!b.pre2, pre2Text: b.pre2 ? b.pre2[0] : '', pre2Src: b.pre2 ? 'img/skill-lethe-' + b.pre2[1] + '.png' : '', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag, sep], k) => ({ first: k === 0, notFirst: k > 0 && !sep, isSep: k > 0 && !!sep, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? (f.includes('/') ? f : 'img/skill-lethe-' + f + '.png') : '', arrow: !!ar })) })) })) }; })() : {},
+        hasKeyset: s.title === '추천키세팅' && !!KEYSET[job], keysetImg: s.title === '추천키세팅' ? KEYSET[job] || '' : '', keysetMw: KEYSET_W[job] || '1000px', keysetPx: 'auto',
+        keyTags: s.title === '추천키세팅' && KEYTAGS2[job] ? KEYTAGS2[job].list.map(([n, x, y]) => ({ n, note: '', hasNote: false, fs: '1.05cqw', pd: '0.2cqw 0.4cqw', l: (x / KEYTAGS2[job].w * 100).toFixed(2) + '%', t: ((y - 2) / KEYTAGS2[job].h * 100).toFixed(2) + '%' })) : s.title === '추천키세팅' && KEYNAMES[job] ? KEYNAMES[job].map(([n, lx, ly, note]) => ({ n, note: note || '', hasNote: !!note, fs: '1.3cqw', pd: '0.25cqw 0.55cqw', l: (lx * 0.5786 / 891 * 100).toFixed(2) + '%', t: (((ly - 148) * 0.5786 + 70) / 573 * 100).toFixed(2) + '%' })) : [], hasKeyNames: s.title === '추천키세팅' && !!(KEYNAMES[job] || KEYTAGS2[job]),
         hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', hasImg: !!f, noImg: !f, src: !f ? '' : f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
-        msExtras: s.title === '주요스킬' && MAINSKILL[job] ? MAINSKILL[job].extras || [] : [],
+        msExtras: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].extras || []).map(x => ({ ...x, mw: x.mw || '1000px' })) : [],
         hasOnoff: s.title === '주요스킬' && !!(MAINSKILL[job] && MAINSKILL[job].onoff), onoff: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].onoff || []).map(([name, grade, f], k) => { const hunt = grade === '사냥', boss = grade === '보스'; return { no: String(k + 1).padStart(2, '0'), name, grade: hunt ? '사냥 ON · 보스 OFF' : boss ? '보스 ON · 사냥 OFF' : grade + ' 스킬', src: 'img/' + f, gBg: hunt ? 'oklch(0.94 0.06 145)' : boss ? 'oklch(0.94 0.05 25)' : 'oklch(0.94 0.035 255)', gC: hunt ? 'oklch(0.4 0.12 150)' : boss ? 'oklch(0.45 0.15 25)' : 'oklch(0.4 0.12 255)' }; }) : [],
         hasHow: s.title === '사냥방법' && !!HUNTHOW[job], howGroups: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].groups.map(([label, its], k) => ({ no: String(k + 1), label, items: its.map(([n, f]) => ({ n, src: 'img/' + f + '.png' })) })) : [], howLv: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].lv.map(([lv, ...ls]) => ({ lv, lines: ls.map(t => ({ t })) })) : [],
         hasCs: s.title === '쿨뚝 | 시드링' && !!COOLSEED[job], csCool: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].cool.map(([t, sub], k) => ({ t, sub, no: String(k + 1), notLast: k < COOLSEED[job].cool.length - 1 })) : [], csSeed: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].seed.map(([n, lv, f], k) => ({ n, lv, src: 'img/' + f + '.png', notFirst: k > 0 })) : [],
@@ -5708,7 +5733,7 @@ class Component extends DCLogic {
         hasAbil: s.title === '어빌리티' && !!ABILITY[job],
         abilHow: s.title === '어빌리티' && job === '레테',
         abilSets: s.title === '어빌리티' && ABILITY[job] ? ABILITY[job].map(a => ({ name: a.name, lines: a.lines.map(([g, t]) => ({ text: t, jc: g === 'O' ? 'center' : 'flex-start', grade: g === 'L' ? '레전드리' : '유니크', bg: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.95 0.06 145)' : 'oklch(0.96 0.07 85)', bd: g === 'O' ? 'transparent' : g === 'L' ? 'oklch(0.72 0.17 145)' : 'oklch(0.8 0.16 80)', fg: g === 'L' ? 'oklch(0.4 0.13 145)' : 'oklch(0.45 0.12 70)' })) })) : [],
-        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '사냥방법' && HUNTHOW[job]) && !(s.title === '쿨뚝 | 시드링' && COOLSEED[job]) && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && !(s.title === '버프즐겨찾기' && BUFFFAV[job]) && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
+        isEmpty: s.type !== 'video' && !String(s.text || '').trim() && !(s.title === '사냥방법' && HUNTHOW[job]) && !(s.title === '쿨뚝 | 시드링' && COOLSEED[job]) && !(s.title === '주요스킬' && MAINSKILL[job]) && !(s.title === '극딜순서' && BURST[job]) && s.title !== '버프즐겨찾기' && !(s.title === '추천키세팅' && KEYSET[job]) && !(s.title === '시퀀스' && SEQUENCE[job]) && !(s.title === '펫버프' && pb) && !(s.title === '링크' && lk && lk.boss) && !(s.title === '하이퍼패시브' && hpRows.length) && !(s.title === '유니온' && UNION[job]) && !(s.title === 'V매트릭스' && (VMATRIX[job] || VMX[job])) && !(s.title === '필수퀘스트' && QUEST[job]) && !(s.title === '사냥터정보' && HUNTSPOT[job]) && !(s.title === '어빌리티' && ABILITY[job]) && !(s.title === '하이퍼스탯' && HYPERSTAT[job]) && !(s.title === '헥사스킬' && HEXA[job]) && s.title !== '아티팩트' && s.title !== '헥사스탯', hasText: s.type !== 'video' && !!String(s.text || '').split('\n').filter(l => !yt(l.trim()) || l.trim().length > 120).join('').trim(), isVideo: s.type === 'video' || String(s.text || '').split('\n').some(l => yt(l.trim()) && l.trim().length <= 120), isText: s.type !== 'video',
         onTitle: e => { const v = e.target.value; upd(n => { n.sections[i].title = v; }); },
         onText: e => { const v = e.target.value; upd(n => { n.sections[i].text = v; }); },
         videos: String(s.text || '').split('\n').filter(l => s.type === 'video' || l.trim().length <= 120).map(l => yt(l.trim())).filter(Boolean).map((src, vi) => { const pst = (VPOSTER[job] || {})[s.title] || '', key = job + '|' + i + '|' + vi, play = !pst || !!(this.state.vidPlay || {})[key];
@@ -8392,7 +8417,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 153,
+      isAdmin: admin, appVer: 194,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
