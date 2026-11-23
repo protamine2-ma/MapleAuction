@@ -2091,7 +2091,8 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
                   <div style="display:flex;gap:{{ q.gap }};padding:6px;border-radius:10px;background:#d6d9de;">
                     <span style="width:{{ q.w }};height:{{ q.w }};flex:none;display:flex;align-items:center;justify-content:center;border-radius:10px;background:{{ q.tileBg }};font-size:{{ q.tfs }};font-weight:800;color:#fff;">{{ q.name }}</span>
                     <sc-for list="{{ q.skills }}" as="k" hint-placeholder-count="7">
-                      <img src="{{ k.src }}" alt="{{ k.name }}" style="width:{{ q.w }};height:{{ q.w }};flex:none;border-radius:8px;"></img>
+                      <sc-if value="{{ k.hasImg }}" hint-placeholder-val="{{ true }}"><img src="{{ k.src }}" alt="{{ k.name }}" style="width:{{ q.w }};height:{{ q.w }};flex:none;border-radius:8px;"></img></sc-if>
+                      <sc-if value="{{ k.noImg }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width:{{ q.w }};height:{{ q.w }};flex:none;box-sizing:border-box;border-radius:8px;border:2px dashed #aeb3bb;background:rgba(255,255,255,0.35);"></span></sc-if>
                     </sc-for>
                   </div>
                   <div style="display:flex;gap:{{ q.gap }};padding:6px 6px 0;">
@@ -4220,6 +4221,45 @@ const MAINSKILL = {
 const BUFFFAV = { '레테': [
   [['솔 헤카테', 'bfav-lethe-1'], ['오버로드 마나', 'bfav-lethe-2'], ['퍼미에이션', 'bfav-lethe-3'], ['스캐터', 'bfav-lethe-4'], ['포티튜드', 'bfav-lethe-5'], ['바르가르', 'bfav-lethe-6'], ['템플러', 'bfav-lethe-7'], ['에르다 파운틴', 'bfav-lethe-8'], ['솔 야누스', 'bfav-lethe-9'], ['팩트 매니페스트', 'bfav-lethe-18']],
   [['여신의 축복', 'bfav-lethe-10'], ['에테리얼 폼', 'bfav-lethe-11'], ['블링크', 'bfav-lethe-12'], ['홀리 파운틴', 'bfav-lethe-13'], ['일격필살', 'bfav-lethe-14'], ['보이드 오리진', 'skill-lethe-voidorigin'], ['프라이멀 퓨리', 'skill-lethe-primalfury'], ['링 액티베이션', 'bfav-lethe-15'], ['해방무적', 'bfav-lethe-16'], ['엔버링크', 'bfav-lethe-17', '일반서버']]] };
+// 중간전환 이미지 글자 색(oklch 색상각) — 직업별 배경 색과 맞춤
+const TRANS_HUE = {"hero": 43, "paladin": 95, "darkknight": 25, "archmagefp": 54, "archmageil": 234, "bishop": 100, "bowmaster": 144, "sniper": 187, "pathfinder": 166, "nightlord": 300, "shadower": 15, "dualblade": 2, "viper": 251, "captain": 264, "cannonmaster": 63, "soulmaster": 85, "mihile": 257, "flamewizard": 46, "windbreaker": 150, "nightwalker": 295, "striker": 230, "blaster": 67, "battlemage": 320, "wildhunter": 137, "mechanic": 243, "xenon": 131, "demonslayer": 13, "demonavenger": 26, "aran": 214, "evan": 332, "luminous": 301, "mercedes": 147, "phantom": 349, "eunwol": 269, "kaiser": 38, "kain": 176, "cadena": 20, "angelicbuster": 352, "adele": 88, "illium": 206, "khali": 327, "ark": 31, "lara": 141, "hoyoung": 243, "ren": 10, "zero": 254, "kinesis": 308, "lethe": 300};
+// 제목만 이미지: 직업별 상징 아이콘(24칸 기준 SVG 경로, star4/star6/sun 은 코드로 그림)
+const JOB_ICON_PATH = {
+  sword: 'M22.8 1.2l-1 5L11.5 16.3l-3.8-3.8L17.8 2.2zM5 11l8 8-1.4 1.4-8-8zM6.2 15.6l2.2 2.2-4 4-2.2-2.2z',
+  spear: 'M22.5 1.5l-1.2 6.2-2.4-2.4L5 19.2 3.8 18 17.7 4.1l-2.4-2.4zM3.8 16.8l3.4 3.4-3.7 2.3-2-2z',
+  hammer: 'M7 2h11l3 3v5l-3 3H7zM11 13h3.5v9H11z',
+  fire: 'M12 1c1.2 4.2 6.5 6.3 6.5 12.5a6.5 6.5 0 0 1-13 0c0-3.2 2-4.5 2.2-7.3 1.9 1 3.1 3.2 3.1 5.3 1.2-3.3 0-7.3 1.2-10.5z',
+  cross: 'M10 1h4v6h6v4h-6v12h-4V11H4V7h6z',
+  bow: 'M6 1.5Q22 12 6 22.5v-2.6Q18.5 12 6 4.1zM5.4 2.6h1.2v18.8H5.4zM2.5 11.4H18v1.2H2.5zM17.5 9.6l4.5 2.4-4.5 2.4zM1 9.8l2.6 2.2L1 14.2h2.4l2.4-2.2-2.4-2.2z',
+  daggers: 'M21.5 2.5l-.8 4.2-7.6 7.6-3.4-3.4 7.6-7.6zM7.2 10.2l6.6 6.6-1.3 1.3-6.6-6.6zM8.2 14.8l1 1-4.7 4.7-1-1zM2.5 19.5l2 2-1.2 1.2-2-2zM2.5 2.5l.8 4.2 7.6 7.6 3.4-3.4-7.6-7.6zM16.8 10.2l-6.6 6.6 1.3 1.3 6.6-6.6zM15.8 14.8l-1 1 4.7 4.7 1-1zM21.5 19.5l-2 2 1.2 1.2 2-2z',
+  lightning: 'M14.5 1L4 14h6.5l-2 9L19 10h-6.5z',
+  gun: 'M2 6h16l2-2h2v6h-6l-2 2v2h-3l-1.5 7H5.5L7 13H2z',
+  bomb: 'M10 7a8 8 0 1 0 .01 0zM14 6l3-3 2 2-3 3zM19 1h2v3h-2zM21 4h3v2h-3z',
+  leaf: 'M21 2C11 2 4 8 4 16.5L2 21l1.6.8 2-4.2C14 17.5 21 11 21 2zM6 16c3-5 7-8 11-10-3 3-6 6-9 11z',
+  moon: 'M15 1.5A10.5 10.5 0 1 0 22.5 17 8.5 8.5 0 1 1 15 1.5z',
+  gear: 'M10 1h4l.7 3 2.6 1.1 2.6-1.7 2.8 2.8-1.7 2.6L22 11.4l1 .6v4l-3 .7-1.1 2.6 1.7 2.6-2.8 2.8-2.6-1.7L13 23h-4l-.7-3-2.6-1.1-2.6 1.7-2.8-2.8 1.7-2.6L1 13.4V10l3-.7 1.1-2.6L3.4 4.1l2.8-2.8 2.6 1.7L10 1zM12 8a4 4 0 1 0 .01 0z',
+  wing: 'M2 21C3.5 11 10 4 22.5 2c-2.6 2.6-3.6 5.2-3.6 5.2 1.8 0 3-.8 3-.8-1 3-3.2 5-5.2 5 .9.8 2 .9 2 .9-2.2 2.2-5.4 3.2-8.6 3.2z',
+  horns: 'M2 2c-.5 7 3 11.5 8 11.5l1.2-3.3C6.8 10 4 7.3 2 2zM22 2c.5 7-3 11.5-8 11.5l-1.2-3.3C17.2 10 20 7.3 22 2zM7 15h10l-2 7H9z',
+  card: 'M7 1.5l12 3-4.5 18-12-3zM11.5 7.5l3 4.5-4.5 3-3-4.5z',
+  crystal: 'M12 1l6.5 7.5L12 23 5.5 8.5zM12 4.5L8.5 8.5 12 19l3.5-10.5z',
+  eye: 'M1 12c5-8 17-8 22 0-5 8-17 8-22 0zM12 7.5a4.5 4.5 0 1 0 .01 0zM12 10a2 2 0 1 1-.01 0z',
+  fan: 'M12 21L1.5 9.5a15 15 0 0 1 21 0zM12 21L5 6.5M12 21V4.5M12 21L19 6.5',
+  heart: 'M12 21.5L3 12.5a5.3 5.3 0 0 1 9-6.6 5.3 5.3 0 0 1 9 6.6z',
+  shield: 'M12 1l9.5 4v6.5c0 6-4.2 10-9.5 12-5.3-2-9.5-6-9.5-12V5zM12 5L7 7.5v4c0 3.5 2 6 5 7.5z',
+  rocket: 'M22.5 1.5c-.2 5.5-2.6 10-7 13.5L9 8.5c3.5-4.4 8-6.8 13.5-7zM16 5.5a2.5 2.5 0 1 0 .01 0zM8 9.5l6.5 6.5-1.8 1.8-6.5-6.5zM4 11l3-1.5 7.5 7.5L13 20zM6.8 15.2l2 2-5.3 5.3-1-1z',
+  chip: 'M6 6h12v12H6zM9.5 9.5h5v5h-5zM8 1.5h2V5H8zM14 1.5h2V5h-2zM8 19h2v3.5H8zM14 19h2v3.5h-2zM1.5 8H5v2H1.5zM1.5 14H5v2H1.5zM19 8h3.5v2H19zM19 14h3.5v2H19z',
+  claw: 'M1.5 4.5L4.3 2.5c5 4.8 8 10.8 8.6 19.5l-2.2.8C9.6 14.6 6.4 9.2 1.5 4.5zM8 2.3L10.8 1c4.6 4.8 7 10.6 7 19.5l-2.2.5C15.2 12.6 12.4 7 8 2.3zM14.8 3.2l2.6-1c3.6 4 5.4 8.6 5.3 15.6l-2 .4C20.4 11.6 18.4 7.2 14.8 3.2z',
+  orb: 'M12 2a10 10 0 1 0 .01 0zM12 5.5a6.5 6.5 0 1 0 .01 0zM12 8.5a3.5 3.5 0 1 0 .01 0z',
+  diamond: 'M12 1.5l9 10.5-9 10.5-9-10.5z',
+  hex: 'M12 1.5l9.1 5.25v10.5L12 22.5l-9.1-5.25V6.75z',
+  polearm: 'M3.2 19.6L16.6 6.2l1.2 1.2L4.4 20.8zM22.8 1.2l-1.8 6-4.2-4.2zM9.8 8.2C9.2 4.6 11.4 1.6 14.8 1c-1.2 1.6-1.6 3.6-1 5.6L11.6 8.8c-.6-.3-1.2-.5-1.8-.6zM15.8 14.2c3.6.6 6.6-1.6 7.2-5-1.6 1.2-3.6 1.6-5.6 1L15.2 12.4c.3.6.5 1.2.6 1.8zM1.8 20.2l2 2-1.6 1.2-1.6-1.6z',
+  cloud: 'M6.5 19.5a4.6 4.6 0 0 1-.7-9.1 6.2 6.2 0 0 1 11.8-1.7 5.4 5.4 0 1 1 .6 10.8z',
+  demon: 'M2.5 1.5c-.3 5.4 1.8 8.4 5 9.6L9.3 8.7C6.6 7.7 4.4 5.2 2.5 1.5zM21.5 1.5c.3 5.4-1.8 8.4-5 9.6l-1.8-2.4c2.7-1 4.9-3.5 6.8-7.2zM12 6.5c5 0 8.2 3.6 8.2 8.1s-3.6 8-8.2 8-8.2-3.5-8.2-8 3.2-8.1 8.2-8.1z',
+  ship: 'M1.5 15h21l-3.6 6.8H5.1zM11.3 1.5h1.4V15h-1.4zM13.2 3.6c4.2 2 6.4 5.4 6.8 9.9h-6.8zM10.8 5.2c-3.2 2-5.2 4.6-5.7 8.3h5.7zM12.7 1.5h4.6l-1.1 1.3 1.1 1.3h-4.6z',
+};
+const JOB_ICON = { hero: 'sword', paladin: 'hammer', darkknight: 'spear', archmagefp: 'fire', archmageil: 'star6', bishop: 'cross', bowmaster: 'bow', sniper: 'bow', pathfinder: 'bow', nightlord: 'star4', shadower: 'daggers', dualblade: 'daggers', viper: 'lightning', captain: 'ship', cannonmaster: 'bomb',
+  soulmaster: 'sun', mihile: 'shield', flamewizard: 'fire', windbreaker: 'leaf', nightwalker: 'moon', striker: 'lightning', blaster: 'bomb', battlemage: 'crystal', wildhunter: 'bow', mechanic: 'rocket', xenon: 'hex', demonslayer: 'demon', demonavenger: 'demon',
+  aran: 'polearm', evan: 'wing', luminous: 'sun', mercedes: 'bow', phantom: 'card', eunwol: 'moon', kaiser: 'wing', kain: 'bow', cadena: 'daggers', angelicbuster: 'heart', adele: 'sword', illium: 'crystal', khali: 'daggers', ark: 'diamond', lara: 'leaf', hoyoung: 'cloud', ren: 'sword', zero: 'sword', kinesis: 'orb', lethe: 'wing' };
 const VPOSTER = { '레테': { '주요스킬': 'img/vposter-lethe-mainskill.jpg', '극딜순서': 'img/vposter-lethe-burst.jpg' } };
 const BURST = { '레테': { pre: ['입장 후 컨버지 묻히기', 'converge'], pre2: ['드라이브(임펠) 묻히기', 'drive'], label: '오리진 극딜', steps: [
   [[['에르다 노바', 'erdanova']]], [[['극딜', '']]], [[['오버로드 아즈라스', 'azras']]],
@@ -4256,6 +4296,18 @@ const SEQUENCE = {
     ['소형 재획비', 'img/buff-lethe-smallwealth.png'], ['경험치 3배쿠폰', 'img/buff-lethe-exp3x.png'], ['유니온의 부', 'img/buff-lethe-unionwealth.png', '', 0, '일반서버']] },
     { name: '극딜', head: '스킬 시퀀스', skills: [['마스테리안 그릿', 'grit'], ['펠 템페스트', 'feltempest'], ['이계 여신의 축복', 'goddess'], ['프라이멀 퓨리', 'primalfury'], ['체인 커맨드', 'chaincommand'], ['보이드 오리진', 'voidorigin'], ['링 액티베이션', 'ringactivation'], ['소울 컨트랙션', 'soulcontract', '일반서버', 1]] }, { name: '소환', skills: [['인보크 바르가르', 'invokevargar'], ['인보크 템플러', 'invoketemplar'], ['아케인 부스트', 'arcaneboost']] }],
 };
+// 버프 시퀀스(레테 외 전 직업): 맨 앞 1칸은 직업 스킬 빈칸(나머지 4칸 공통), 붕어빵 대체: 지능 마법사 알약 · 그 외 아기용의 이유식, 마력 직업(지능)은 익스트림 블루 · 공격력 직업은 익스트림 레드, 10단계 물약은 주스탯 이름
+const SEQ_STAT = { '히어로': '힘', '렌': '힘', '팔라딘': '힘', '다크나이트': '힘', '바이퍼': '힘', '캐논마스터': '힘', '소울마스터': '힘', '미하일': '힘', '스트라이커': '힘', '블래스터': '힘', '데몬슬레이어': '힘', '아란': '힘', '은월': '힘', '카이저': '힘', '아델': '힘', '아크': '힘', '제로': '힘', '보우마스터': '민첩', '신궁': '민첩', '패스파인더': '민첩', '캡틴': '민첩', '윈드브레이커': '민첩', '와일드헌터': '민첩', '메카닉': '민첩', '메르세데스': '민첩', '카인': '민첩', '엔젤릭버스터': '민첩', '아크메이지(불,독)': '지능', '아크메이지(썬,콜)': '지능', '비숍': '지능', '플레임위자드': '지능', '배틀메이지': '지능', '에반': '지능', '루미너스': '지능', '일리움': '지능', '라라': '지능', '키네시스': '지능', '레테': '지능', '나이트로드': '행운', '섀도어': '행운', '듀얼블레이드': '행운', '나이트워커': '행운', '팬텀': '행운', '카데나': '행운', '칼리': '행운', '호영': '행운', '제논': '행운', '데몬어벤져': '체력' };
+const ECHO_JOBS = ['히어로', '팔라딘', '다크나이트', '아크메이지(불,독)', '아크메이지(썬,콜)', '비숍', '보우마스터', '신궁', '패스파인더', '나이트로드', '섀도어', '듀얼블레이드', '바이퍼', '캡틴', '캐논마스터'];
+const seqFor = (st, j) => { const B = ECHO_JOBS.includes(j) ? ['', 'img/buff-heroecho.png'] : ['', ''], X = B, C = ['', 'img/buff-lethe-b02.png'], D = ['', 'img/buff-lethe-b03.png'], E = ['', 'img/buff-lethe-b04.png'], F = ['', 'img/buff-lethe-b05.png'], mag = st === '지능';
+  return [{ name: '보스', head: '버프 시퀀스', skills: [B, C, D, E, F,
+    mag ? ['익스트림 블루', 'img/buff-lethe-extremeblue.png', '', 0, '몬파상점'] : ['익스트림 레드', 'img/buff-extremered.png', '', 0, '몬파상점'], ['반짝이는 빨간별물약', 'img/buff-lethe-redstar.png', '', 0, '', ['반짝이는 파란별물약', 'img/buff-lethe-bluestar.png', '가성비']], ['VIP버프 (능력치)', 'img/buff-lethe-vip.png'],
+    ['10단계 ' + st + '의 물약', 'img/buff-lethe-int10.png'], ['전설의 영웅비약', 'img/buff-lethe-heroelixir.png', '', 0, '', ['장비명장버프', 'img/buff-lethe-guildwar.png', '최소컷도전']], ['유니온의 힘', 'img/buff-lethe-unionpower.png', '', 0, '일반서버'],
+    ['마슈르 기상효과', 'img/buff-lethe-b12.png', '', 0, '탐험코인'], ['MVP 슈퍼파워', 'img/buff-lethe-b13.png', '', 0, '탐험코인'], ['달콤한 붕어빵', 'img/buff-lethe-b14.png', '', 0, '탐험코인', mag ? ['마법사 알약', 'img/buff-lethe-mageppill.png', '가성비'] : ['아기용의 이유식', 'img/buff-babydragonfood.png', '가성비']], ['명예의 영약', 'img/buff-lethe-b15.png', '', 0, '', ['의자 인기도', 'img/buff-lethe-chair.png', '가성비', 1]]] },
+    { name: '경치', skills: [X, C, D, E, F,
+    ['익스트림 골드', 'img/buff-lethe-extremegold.png', '', 0, '몬파상점'], ['VIP버프 (경험치)', 'img/buff-lethe-vipexp.png'], ['추가경험치 50%쿠폰', 'img/buff-lethe-exp50.png'], ['소형 경축비', 'img/buff-lethe-smallexp.png', '', 0, '효율낮음'],
+    ['소형 재획비', 'img/buff-lethe-smallwealth.png'], ['경험치 3배쿠폰', 'img/buff-lethe-exp3x.png'], ['유니온의 부', 'img/buff-lethe-unionwealth.png', '', 0, '일반서버']] }]; };
+Object.entries(SEQ_STAT).forEach(([j, st]) => { if (!SEQUENCE[j]) SEQUENCE[j] = seqFor(st, j); });
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -5615,7 +5667,7 @@ class Component extends DCLogic {
         hasBurst: s.title === '극딜순서' && !!BURST[job], burst: s.title === '극딜순서' && BURST[job] ? (() => { const b = BURST[job]; return { preText: b.pre[0], preSrc: 'img/skill-lethe-' + b.pre[1] + '.png', hasPre2: !!b.pre2, pre2Text: b.pre2 ? b.pre2[0] : '', pre2Src: b.pre2 ? 'img/skill-lethe-' + b.pre2[1] + '.png' : '', seqs: (b.seqs || [{ label: b.label, steps: b.steps }]).map(sq => ({ label: sq.label, steps: sq.steps.map(([items, tag], k) => ({ first: k === 0, notFirst: k > 0, tag: tag || '', hasTag: !!tag, items: items.map(([n, f, ar]) => ({ n, isTile: !f, isImg: !!f, src: f ? 'img/skill-lethe-' + f + '.png' : '', arrow: !!ar })) })) })) }; })() : {},
         hasKeyset: s.title === '추천키세팅' && !!KEYSET[job], keysetImg: s.title === '추천키세팅' ? KEYSET[job] || '' : '',
         keyTags: s.title === '추천키세팅' && KEYNAMES[job] ? KEYNAMES[job].map(([n, lx, ly, note]) => ({ n, note: note || '', hasNote: !!note, l: (lx * 0.5786 / 891 * 100).toFixed(2) + '%', t: (((ly - 148) * 0.5786 + 70) / 573 * 100).toFixed(2) + '%' })) : [], hasKeyNames: s.title === '추천키세팅' && !!KEYNAMES[job],
-        hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', src: f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
+        hasSeq: s.title === '시퀀스' && !!SEQUENCE[job], seqs: s.title === '시퀀스' && SEQUENCE[job] ? SEQUENCE[job].map(q => { const mk = ([nm, f, note, side, top, alt]) => ({ name: nm || '', hasImg: !!f, noImg: !f, src: !f ? '' : f.includes('/') ? f : 'img/skill-lethe-' + f + '.png', note: note || '', hasNote: !!note, top: top || '', hasTop: !!top, hasAlt: !!alt, altName: alt ? alt[0] : '', altSrc: alt ? alt[1] : '', altWhy: alt ? alt[2] || '' : '', hasWhy: !!(alt && alt[2]), altTall: alt && alt[3] ? 'auto' : '64px' }); return { name: q.name, head: q.head, skills: q.skills.filter(x => !x[3]).map(mk), sides: q.skills.filter(x => x[3]).map(mk), hasSides: q.skills.some(x => x[3]) }; }).map((q, qi, qa) => { const big = q.skills.length > 9; return { ...q, grp: String(qa.slice(0, qi + 1).filter(x => x.head).length - 1), head: q.head || '', hasHead: !!q.head, headMt: q.head && q.name !== '보스' ? '18px' : '0', tileBg: 'oklch(0.62 0.17 0)', w: big ? '46px' : '64px', gap: big ? '3px' : '4px', fs: big ? '10px' : '12px', tfs: big ? '15px' : '19px', topFs: big ? '9px' : '11px' }; }) : [],
         msExtras: s.title === '주요스킬' && MAINSKILL[job] ? MAINSKILL[job].extras || [] : [],
         hasOnoff: s.title === '주요스킬' && !!(MAINSKILL[job] && MAINSKILL[job].onoff), onoff: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].onoff || []).map(([name, grade, f], k) => { const hunt = grade === '사냥', boss = grade === '보스'; return { no: String(k + 1).padStart(2, '0'), name, grade: hunt ? '사냥 ON · 보스 OFF' : boss ? '보스 ON · 사냥 OFF' : grade + ' 스킬', src: 'img/' + f, gBg: hunt ? 'oklch(0.94 0.06 145)' : boss ? 'oklch(0.94 0.05 25)' : 'oklch(0.94 0.035 255)', gC: hunt ? 'oklch(0.4 0.12 150)' : boss ? 'oklch(0.45 0.15 25)' : 'oklch(0.4 0.12 255)' }; }) : [],
         hasHow: s.title === '사냥방법' && !!HUNTHOW[job], howGroups: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].groups.map(([label, its], k) => ({ no: String(k + 1), label, items: its.map(([n, f]) => ({ n, src: 'img/' + f + '.png' })) })) : [], howLv: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].lv.map(([lv, ...ls]) => ({ lv, lines: ls.map(t => ({ t })) })) : [],
@@ -7615,7 +7667,7 @@ class Component extends DCLogic {
   async saveTransImg(job) {
     const t = (window.prompt('중간전환 화면 제목을 입력하세요', '주요스킬') || '').trim(); if (!t) return;
     const h = (HEXA[job] || [])[0], slug = h ? h.replace(/^img\/hexa-|\.png$/g, '') : '';
-    const src = 'img/transition-' + slug + '.jpg', label = job + ' · 직업가이드';
+    const src = 'img/transition-' + slug + '.jpg', label = job + ' · 직업가이드', hu = TRANS_HUE[slug] ?? 300, hA = hu - 5, hB = hu + 20;
     try {
       await Promise.all([document.fonts.load('900 220px Pretendard', t), document.fonts.load('700 34px Pretendard', label)]);
       const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
@@ -7624,25 +7676,25 @@ class Component extends DCLogic {
       c.fillStyle = '#0d0a18'; c.fillRect(0, 0, W, H);
       const iw = 1080 * img.naturalWidth / img.naturalHeight; c.drawImage(img, W + 420 - iw, 0, iw, 1080);
       let g = c.createLinearGradient(0, 0, W, 0);
-      [[0, '#0d0a18'], [0.22, '#0d0a18'], [0.42, 'oklch(0.14 0.04 300 / 0.85)'], [0.62, 'oklch(0.14 0.04 300 / 0.2)'], [0.75, 'oklch(0.14 0.04 300 / 0)']].forEach(([p, col]) => g.addColorStop(p, col));
+      [[0, '#0d0a18'], [0.22, '#0d0a18'], [0.42, 'oklch(0.14 0.04 ' + hu + ' / 0.85)'], [0.62, 'oklch(0.14 0.04 ' + hu + ' / 0.2)'], [0.75, 'oklch(0.14 0.04 ' + hu + ' / 0)']].forEach(([p, col]) => g.addColorStop(p, col));
       c.fillStyle = g; c.fillRect(0, 0, W, H);
-      g = c.createLinearGradient(0, H, 0, H * 0.7); g.addColorStop(0, 'oklch(0.1 0.03 300 / 0.6)'); g.addColorStop(1, 'oklch(0.1 0.03 300 / 0)');
+      g = c.createLinearGradient(0, H, 0, H * 0.7); g.addColorStop(0, 'oklch(0.1 0.03 ' + hu + ' / 0.6)'); g.addColorStop(1, 'oklch(0.1 0.03 ' + hu + ' / 0)');
       c.fillStyle = g; c.fillRect(0, 0, W, H);
       const top = Math.round((H - 323) / 2), ly = top + 20;
       c.save(); c.translate(163, ly); c.rotate(Math.PI / 4);
-      g = c.createLinearGradient(-13, -13, 13, 13); g.addColorStop(0, 'oklch(0.85 0.12 300)'); g.addColorStop(1, 'oklch(0.5 0.22 295)');
-      c.shadowColor = 'oklch(0.7 0.2 300)'; c.shadowBlur = 18; c.fillStyle = g; c.fillRect(-13, -13, 26, 26); c.restore();
+      g = c.createLinearGradient(-13, -13, 13, 13); g.addColorStop(0, 'oklch(0.85 0.12 ' + hu + ')'); g.addColorStop(1, 'oklch(0.5 0.22 ' + hA + ')');
+      c.shadowColor = 'oklch(0.7 0.2 ' + hu + ')'; c.shadowBlur = 18; c.fillStyle = g; c.fillRect(-13, -13, 26, 26); c.restore();
       c.textBaseline = 'middle';
-      c.font = '700 34px Pretendard'; c.letterSpacing = '4px'; c.fillStyle = 'oklch(0.82 0.1 300)'; c.fillText(label, 194, ly + 2);
+      c.font = '700 34px Pretendard'; c.letterSpacing = '4px'; c.fillStyle = 'oklch(0.82 0.1 ' + hu + ')'; c.fillText(label, 194, ly + 2);
       const ty = top + 185;
       c.font = '900 220px Pretendard'; c.letterSpacing = '-6.6px';
-      c.fillStyle = 'oklch(0.4 0.18 295)'; c.fillText(t, 150, ty + 6);
-      c.save(); c.shadowColor = 'oklch(0.6 0.22 300 / 0.5)'; c.shadowBlur = 40; c.fillStyle = '#fff'; c.fillText(t, 150, ty); c.restore();
+      c.fillStyle = 'oklch(0.4 0.18 ' + hA + ')'; c.fillText(t, 150, ty + 6);
+      c.save(); c.shadowColor = 'oklch(0.6 0.22 ' + hu + ' / 0.5)'; c.shadowBlur = 40; c.fillStyle = '#fff'; c.fillText(t, 150, ty); c.restore();
       c.letterSpacing = '0px';
       const lineY = top + 317;
-      g = c.createLinearGradient(150, 0, 570, 0); g.addColorStop(0, 'oklch(0.75 0.18 300)'); g.addColorStop(1, 'oklch(0.75 0.18 300 / 0)');
+      g = c.createLinearGradient(150, 0, 570, 0); g.addColorStop(0, 'oklch(0.75 0.18 ' + hu + ')'); g.addColorStop(1, 'oklch(0.75 0.18 ' + hu + ' / 0)');
       c.fillStyle = g; c.beginPath(); c.roundRect(150, lineY, 420, 6, 3); c.fill();
-      g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'oklch(0.55 0.22 295)'); g.addColorStop(0.5, 'oklch(0.8 0.14 320)'); g.addColorStop(1, 'oklch(0.55 0.22 295)');
+      g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'oklch(0.55 0.22 ' + hA + ')'); g.addColorStop(0.5, 'oklch(0.8 0.14 ' + hB + ')'); g.addColorStop(1, 'oklch(0.55 0.22 ' + hA + ')');
       c.fillStyle = g; c.fillRect(0, H - 10, W, 10);
       const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = job + '_중간전환_' + t + '.png';
@@ -7650,15 +7702,49 @@ class Component extends DCLogic {
     } catch (e) { alert(job + ' 중간전환 그림이 없어요 (' + src + ')'); }
   }
   async saveTitleImg(job) {
+    // 제목만 이미지: 배경 투명 · 글자 크기에 맞춤 · 직업 색(TRANS_HUE) 별 아이콘 + 직업 이름표 + 흰 테두리 제목
     const t = (window.prompt('이미지에 넣을 제목을 입력하세요', '') || '').trim(); if (!t) return;
-    try { await document.fonts.load("800 80px Pretendard"); await document.fonts.load("700 30px Pretendard"); } catch (e) {}
-    const W = 1920, H = 1080, PAD = 90, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
-    x.fillStyle = '#f1eef6'; x.fillRect(0, 0, W, H); x.textBaseline = 'alphabetic'; x.textAlign = 'left';
-    const gem = (X, Y, w, h, k, col) => { x.beginPath(); x.moveTo(X + w / 2, Y); x.lineTo(X + w, Y + h * k); x.lineTo(X + w / 2, Y + h); x.lineTo(X, Y + h * k); x.closePath(); x.fillStyle = col; x.fill(); };
-    gem(PAD, 88, 44, 96, 0.4, '#7d4fc0'); gem(PAD + 11, 100, 22, 44, 0.45, '#c9b0f0');
-    x.font = "700 30px Pretendard, sans-serif"; x.fillStyle = '#7d4fc0'; x.fillText(job + ' · 직업가이드', PAD + 72, 104);
-    x.font = "800 80px Pretendard, sans-serif"; x.fillStyle = '#1c1626'; x.fillText(t, PAD + 68, 186);
-    const a = document.createElement('a'); a.download = job + '_' + t.replace(/[\\/:*?"<>|\s]+/g, '') + '_제목만.png'; a.href = c.toDataURL('image/png'); a.click();
+    const h0 = (HEXA[job] || [])[0], slug = h0 ? h0.replace(/^img\/hexa-|\.png$/g, '') : '', hu = TRANS_HUE[slug] ?? 300;
+    const F = 'Pretendard, "Noto Sans KR", sans-serif';
+    try { await document.fonts.load('900 104px Pretendard', t); await document.fonts.load('900 30px Pretendard', job); } catch (e) {}
+    const S = 2, m = document.createElement('canvas').getContext('2d');
+    m.font = '900 30px ' + F; const tagW = m.measureText(job).width + 28;
+    m.font = '900 104px ' + F; m.letterSpacing = '-2px'; const tw = m.measureText(t).width;
+    const PL = 30, PT = 26, ICON = 46, tagX = PL + 8 + ICON + 10, tagH = 46, tagY = PT + 4, baseY = tagY + tagH + 106;
+    const W = Math.ceil(Math.max(tagX + tagW + 30, PL + 14 + tw + 30)), H = Math.ceil(baseY + 36);
+    const cv = document.createElement('canvas'); cv.width = W * S; cv.height = H * S; const c = cv.getContext('2d'); c.scale(S, S);
+    const col = (l, ch, a) => 'oklch(' + l + ' ' + ch + ' ' + hu + (a != null ? ' / ' + a : '') + ')';
+    // 직업 상징 아이콘
+    const ix = PL + 8 + ICON / 2, iy = tagY + tagH / 2, kind = JOB_ICON[slug] || 'star4';
+    c.save(); c.translate(ix, iy); const r = ICON / 2; let pth = new Path2D();
+    if (kind === 'star4' || kind === 'star6' || kind === 'sun') {
+      const n = kind === 'star4' ? 4 : kind === 'star6' ? 6 : 8, k = kind === 'star4' ? r * 0.17 : kind === 'star6' ? r * 0.22 : r * 0.62, R = kind === 'sun' ? r * 0.98 : r;
+      c.rotate(kind === 'star4' ? 20 * Math.PI / 180 : 0);
+      for (let i = 0; i < n * 2; i++) { const an = Math.PI * i / n - Math.PI / 2, rr = i % 2 ? k : R; i ? pth.lineTo(Math.cos(an) * rr, Math.sin(an) * rr) : pth.moveTo(Math.cos(an) * rr, Math.sin(an) * rr); }
+      pth.closePath();
+    } else { const P = new Path2D(JOB_ICON_PATH[kind]), M = new DOMMatrix().translate(-r, -r).scale(ICON / 24); pth.addPath(P, M); }
+    let g = c.createLinearGradient(-r, -r, r, r); g.addColorStop(0, col(0.95, 0.04)); g.addColorStop(0.5, col(0.68, 0.18)); g.addColorStop(1, col(0.45, 0.2));
+    c.shadowColor = col(0.7, 0.2, 0.9); c.shadowBlur = 10; c.fillStyle = g; c.fill(pth, ['gear', 'eye', 'crystal', 'shield', 'card', 'rocket', 'chip', 'orb'].includes(kind) ? 'evenodd' : 'nonzero'); c.shadowBlur = 0;
+    c.lineWidth = 1.6; c.lineJoin = 'round'; c.strokeStyle = col(0.25, 0.1); c.stroke(pth);
+    if (kind === 'demon') { const E = new Path2D(); E.addPath(new Path2D('M7 12.6l4 1.6-.6 1.8-3.4-1.2zM17 12.6l-4 1.6.6 1.8 3.4-1.2zM9.5 18.5h5l-.8 1.4h-3.4z'), new DOMMatrix().translate(-r, -r).scale(ICON / 24)); c.fillStyle = col(0.2, 0.08); c.fill(E); }
+    if (kind === 'star4' || kind === 'star6' || kind === 'sun') { c.beginPath(); c.arc(0, 0, r * (kind === 'sun' ? 0.42 : 0.2), 0, Math.PI * 2); c.fillStyle = kind === 'sun' ? col(0.92, 0.08) : col(0.2, 0.06); c.fill(); c.lineWidth = 2; c.strokeStyle = kind === 'sun' ? col(0.3, 0.1) : col(0.93, 0.05); c.stroke(); }
+    c.restore();
+    // 직업 이름표
+    c.save(); c.shadowColor = col(0.65, 0.2, 0.55); c.shadowBlur = 12;
+    g = c.createLinearGradient(0, tagY, 0, tagY + tagH); g.addColorStop(0, col(0.5, 0.2)); g.addColorStop(1, col(0.3, 0.12));
+    c.beginPath(); c.roundRect(tagX, tagY, tagW, tagH, 10); c.fillStyle = g; c.fill(); c.restore();
+    c.beginPath(); c.roundRect(tagX + 1, tagY + 1, tagW - 2, tagH - 2, 9); c.lineWidth = 2; c.strokeStyle = col(0.8, 0.1); c.stroke();
+    c.font = '900 30px ' + F; c.fillStyle = '#fff'; c.textBaseline = 'middle'; c.letterSpacing = '1px'; c.fillText(job, tagX + 14, tagY + tagH / 2 + 1);
+    // 반짝이
+    c.font = '22px ' + F; c.shadowColor = col(0.7, 0.2); c.shadowBlur = 8; c.fillStyle = col(0.88, 0.07); c.fillText('✦', PL - 4, tagY - 4);
+    c.font = '16px ' + F; c.fillText('✦', tagX + tagW + 8, tagY - 2); c.shadowBlur = 0;
+    // 제목: 연한 직업색 그림자 + 흰 테두리
+    c.textBaseline = 'alphabetic'; c.font = '900 104px ' + F; c.letterSpacing = '-2px'; c.lineJoin = 'round';
+    const tx = PL + 14;
+    c.save(); c.globalAlpha = 0.85; c.lineWidth = 8; c.strokeStyle = col(0.55, 0.18); c.fillStyle = col(0.55, 0.18);
+    c.strokeText(t, tx + 3, baseY + 5); c.fillText(t, tx + 3, baseY + 5); c.restore();
+    c.lineWidth = 8; c.strokeStyle = '#fff'; c.strokeText(t, tx, baseY); c.fillStyle = '#1b1530'; c.fillText(t, tx, baseY);
+    const a = document.createElement('a'); a.download = job + '_' + t.replace(/[\\/:*?"<>|\s]+/g, '') + '_제목만.png'; a.href = cv.toDataURL('image/png'); a.click();
   }
   async saveGuideImgs(job, list, mode) {
     if (this._gShotBusy) return;
@@ -8306,7 +8392,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 142,
+      isAdmin: admin, appVer: 153,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
