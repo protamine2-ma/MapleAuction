@@ -2195,9 +2195,13 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
               <sc-if value="{{ s.hasSpecial }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;flex-direction:column;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e3e3e0;border-radius:10px;">
                 <span style="align-self:flex-start;padding:4px 12px;border-radius:999px;background:oklch(0.95 0.04 290);color:oklch(0.42 0.17 290);font-size:15px;font-weight:800;">특수장비</span>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;justify-content:center;">
-                  <img src="{{ s.spImg }}" alt="특수장비" style="display:block;width:100%;max-width:300px;height:auto;border-radius:8px;"></img>
-                  <span style="font-size:17px;font-weight:800;color:#1d1e22;text-align:center;">{{ s.spText }}</span>
+                <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:16px;flex:1;">
+                  <sc-for list="{{ s.spItems }}" as="sp" hint-placeholder-count="2">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;flex:1 1 220px;max-width:300px;">
+                      <img src="{{ sp.src }}" alt="특수장비" style="display:block;width:100%;height:auto;border-radius:8px;"></img>
+                      <span style="font-size:17px;font-weight:800;color:#1d1e22;text-align:center;word-break:keep-all;">{{ sp.t }}</span>
+                    </div>
+                  </sc-for>
                 </div>
               </div>
               </sc-if>
@@ -2825,7 +2829,7 @@ main[data-dk="1"] [data-m="rng"] > span:nth-child(3){color:#8d8c88!important;}
   <span style="font-size:11px;font-weight:800;letter-spacing:0.06em;color:oklch(0.48 0.17 255);padding:2px 8px 4px;">목차</span>
   <sc-for list="{{ guideSections }}" as="s" hint-placeholder-count="8">
     <button onClick="{{ s.goTo }}" style="display:flex;align-items:baseline;gap:5px;padding:4px 8px;border:none;border-radius:6px;background:{{ s.navBg }};color:{{ s.navColor }};font-family:inherit;font-size:13px;font-weight:{{ s.navWeight }};text-align:left;white-space:nowrap;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">
-      <span style="font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.no }}</span>{{ s.viewTitle }}
+      <span style="font-size:11px;font-weight:700;color:#9a9ca1;font-variant-numeric:tabular-nums;">{{ s.no }}</span>{{ s.title }}
     </button>
   </sc-for>
   <button onClick="{{ guideTop }}" style="margin:4px 4px 0;padding:4px 6px;border:1px solid #e3e3e0;border-radius:6px;background:#fff;color:#6b6d73;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;" style-hover="background:rgba(120,140,200,0.12);">↑ 맨 위로</button>
@@ -4399,8 +4403,8 @@ const HUNTHOW = { '레테': { groups: [[null, [['켜기', [['스캐터', 'skill-
 const COOL_ORDER = {"히어로": "0 2", "팔라딘": "0 2", "다크나이트": "2 3 4 5", "아크메이지(불,독)": "2 3 4 5", "아크메이지(썬,콜)": "2", "비숍": "0 2", "보우마스터": "0", "신궁": "0", "패스파인더": "0 2", "나이트로드": "0 2", "섀도어": "0 2", "듀얼블레이드": "2", "바이퍼": "0", "캡틴": "0 2", "캐논마스터": "0 2", "소울마스터": "0 2", "미하일": "0 2", "플레임위자드": "2 5", "윈드브레이커": "2 3 5", "나이트워커": "0", "스트라이커": "0 2", "블래스터": "0 2", "배틀메이지": "0 2", "와일드헌터": "2 3 4 5", "메카닉": "2 3 4 5", "제논": "2 3 4 5", "데몬슬레이어": "0 2", "데몬어벤져": "2", "아란": "0", "에반": "2 5", "루미너스": "2 5", "메르세데스": "2", "팬텀": "2 3 4 5", "은월": "2", "카이저": "0 2", "카인": "0 2", "카데나": "2 3 4 5", "엔젤릭버스터": "0 2", "아델": "0 2", "일리움": "0 2", "칼리": "2 4", "아크": "2", "라라": "0 2", "호영": "0 2", "렌": "2", "제로": "2 3 5", "키네시스": "0 2", "레테": "2 3 5"};
 const COOL_SUB = {};
 const SEED_ALL = [['리스트레인트 링', '4레벨', 'ring-restraint'], ['컨티뉴어스 링', '4레벨', 'ring-continuous']];
-// 특수장비(쿨뚝·시드링 칸 오른쪽): [그림, 설명]
-const SPECIAL = { '나이트로드': ['img/special-nightlord.png', '옥션에서 구매 후 아이템창에 놔두기'] };
+// 특수장비(쿨뚝·시드링 칸 오른쪽): [[그림, 설명], ...] 나란히
+const SPECIAL = { '나이트로드': [['img/special-nightlord.png', '옥션에서 구매 후 아이템창에 놔두기'], ['img/special-nightlord-2.png', '메소 부족할 경우 화비 사용하기']] };
 const COOLSEED = Object.fromEntries(Object.entries(COOL_ORDER).map(([j, o]) => [j, { cool: o.split(' ').filter(Boolean).map(n => [n + '초', COOL_SUB[n] || '']), seed: SEED_ALL }]));
 const KEYSET = { '레테': 'img/keyset-lethe.png', '나이트로드': 'img/keyset-nightlord.png?v=6' };
 const KEYSET_W = {};
@@ -5804,7 +5808,7 @@ class Component extends DCLogic {
         msExtras: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].extras || []).map(x => ({ ...x, mw: x.mw || '1000px' })) : [],
         hasOnoff: s.title === '주요스킬' && !!(MAINSKILL[job] && MAINSKILL[job].onoff), onoff: s.title === '주요스킬' && MAINSKILL[job] ? (MAINSKILL[job].onoff || []).map(([name, grade, f], k) => { const hunt = grade === '사냥', boss = grade === '보스'; return { no: String(k + 1).padStart(2, '0'), name, grade: hunt ? '사냥 ON · 보스 OFF' : boss ? '보스 ON · 사냥 OFF' : grade + ' 스킬', src: 'img/' + f, gBg: hunt ? 'oklch(0.94 0.06 145)' : boss ? 'oklch(0.94 0.05 25)' : 'oklch(0.94 0.035 255)', gC: hunt ? 'oklch(0.4 0.12 150)' : boss ? 'oklch(0.45 0.15 25)' : 'oklch(0.4 0.12 255)' }; }) : [],
         hasHow: s.title === '사냥방법' && !!HUNTHOW[job], howGroups: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].groups.map(([label, its, lvt], k) => label === null ? ({ isNorm: false, isSec: true, no: '', label: '', lvt: lvt || '', hasLvt: !!lvt, lvLines: ((HUNTHOW[job].lv.find(x => x[0] === lvt) || []).slice(1)).map(t => ({ t })), hasLvLines: !!(lvt && HUNTHOW[job].lv.some(x => x[0] === lvt)), items: [], secs: its.map(([t, xs], i) => ({ t, notFirst: i > 0, items: xs.map(([n, f]) => ({ n, src: 'img/' + f + '.png' })) })) }) : ({ isNorm: true, isSec: false, secs: [], no: String(k + 1), label, items: its.map(([n, f]) => ({ n, src: 'img/' + f + '.png' })) })) : [], hasHowLv: s.title === '사냥방법' && !!HUNTHOW[job] && HUNTHOW[job].lv.some(x => !HUNTHOW[job].groups.some(g => g[0] === null && g[2] === x[0])), howLv: s.title === '사냥방법' && HUNTHOW[job] ? HUNTHOW[job].lv.filter(x => !HUNTHOW[job].groups.some(g => g[0] === null && g[2] === x[0])).map(([lv, ...ls]) => ({ lv, lines: ls.map(t => ({ t })) })) : [],
-        hasCs: s.title === '쿨뚝 | 시드링' && !!COOLSEED[job], hasSpecial: s.title === '쿨뚝 | 시드링' && !!SPECIAL[job], spImg: SPECIAL[job] ? SPECIAL[job][0] : '', spText: SPECIAL[job] ? SPECIAL[job][1] : '', csCool: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].cool.map(([t, sub], k) => ({ t, sub, no: String(k + 1), notLast: k < COOLSEED[job].cool.length - 1 })) : [], csSeed: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].seed.map(([n, lv, f], k) => ({ n, lv, src: 'img/' + f + '.png', notFirst: k > 0 })) : [],
+        hasCs: s.title === '쿨뚝 | 시드링' && !!COOLSEED[job], hasSpecial: s.title === '쿨뚝 | 시드링' && !!SPECIAL[job], spItems: SPECIAL[job] ? SPECIAL[job].map(([src, t]) => ({ src, t })) : [], csCool: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].cool.map(([t, sub], k) => ({ t, sub, no: String(k + 1), notLast: k < COOLSEED[job].cool.length - 1 })) : [], csSeed: s.title === '쿨뚝 | 시드링' && COOLSEED[job] ? COOLSEED[job].seed.map(([n, lv, f], k) => ({ n, lv, src: 'img/' + f + '.png', notFirst: k > 0 })) : [],
         hasSpot: s.title === '사냥터정보' && !!HUNTSPOT[job], spots: s.title === '사냥터정보' && HUNTSPOT[job] ? HUNTSPOT[job].map(([lv, area, maps]) => ({ lv: 'Lv.' + lv, area, maps })) : [],
         hasQuest: s.title === '필수퀘스트' && !!QUEST[job], quest: QUEST[job] || {}, questImgs: ((QUEST[job] || {}).imgs || []).map(([f, alt, w]) => ({ src: 'img/' + f, alt, mw: w + 'px' })),
         hasUnion: s.title === '유니온' && !!UNION[job],
@@ -8525,7 +8529,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 197,
+      isAdmin: admin, appVer: 198,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
