@@ -4496,6 +4496,10 @@ SEQUENCE['나이트로드'] = SEQUENCE['나이트로드'].concat([{ name: '극�
 SEQUENCE['히어로'] = SEQUENCE['히어로'].concat([{ name: '극딜', head: '스킬 시퀀스', skills: [['에픽 어드벤쳐', 'img/skill-hero-seq1.png'], ['여신의 축복', 'img/skill-nightlord-goddess.png'], ['소드 오브 버닝 소울', 'img/skill-hero-seq3.png'], ['발할라', 'img/skill-hero-seq4.png'], ['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버'], ['링 액티베이션', 'img/skill-nightlord-ringactivation.png'], ['콤보 인스팅트', 'img/skill-hero-seq7.png']] }, { name: '블리츠실드', skills: [['스피릿 블레이드', 'img/skill-hero-spiritblade.png'], ['스카링 소드', 'img/skill-hero-scarringsword.png'], ['블리츠 실드', 'img/skill-hero-blitzshield.png']] }]);
 SEQUENCE['듀얼블레이드'] = SEQUENCE['듀얼블레이드'].concat([{ name: '극딜', head: '스킬 시퀀스', skills: [['에픽 어드벤쳐', 'img/skill-nightlord-epicadventure.png'], ['여신의 축복', 'img/skill-nightlord-goddess.png'], ['얼티밋 다크 사이트', 'img/skill-dualblade-ultimatedarksight.png'], ['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버'], ['링 액티베이션', 'img/skill-nightlord-ringactivation.png'], ['레디 투 다이', 'img/skill-nightlord-readytodie.png']] }, { name: '준극딜', skills: [['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버'], ['레디 투 다이', 'img/skill-nightlord-readytodie.png'], ['히든 블레이드', 'img/skill-dualblade-hiddenblade.png']] }]);
 MAINSKILL['히어로'] = { ...MAINSKILL['히어로'], extras: [{ title: '솔 헤카테 · 감응 스킬', note: '챌린저스 서버: 감응 스킬을 레이지 익스플로전으로 설정', alt: ['소울 컨트랙션', 'img/skill-nightlord-soulcontract.png', '일반서버'], src: 'img/mainskill-hero-hecate.png' }] };
+// 탭별 페이지 주소(실제 사이트에서만): 옥션 / · 사냥 /hunt/ · 육성 /grow/ · 강화 /enhance/ — 각 폴더 index.html은 같은 파일 복사본(tools/build_pages.py)
+const AREA_PATH = { '옥션': '/', '사냥': '/hunt/', '육성': '/grow/', '강화': '/enhance/' };
+const PATH_AREA = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? ({ '/hunt/': '사냥', '/grow/': '육성', '/enhance/': '강화' }[location.pathname.replace(/index\.html$/, '').replace(/([^/])$/, '$1/')] || '옥션') : null;
+const goPath = (area, tab) => { if (!PATH_AREA || !AREA_PATH[area] || area === PATH_AREA) return false; try { localStorage.setItem(KEY + ':area', area); if (tab) localStorage.setItem(KEY + ':tab', tab); } catch (e) {} location.href = AREA_PATH[area] + (tab === '문의' ? '#contact' : ''); return true; };
 const GUIDE_DRAFT = {
   '아델': { v: 2, tagline: '', meta: '', img: '', sections: ['직업소개', '펫버프', '어빌리티', '하이퍼스탯', 'V매트릭스', '하이퍼패시브', '추천키세팅', '헥사스킬', '헥사스탯', '주요스킬', '버프즐겨찾기', '시퀀스', '극딜순서', '링크', '유니온', '아티팩트', '사냥방법', '사냥터정보'].map(t => ({ title: t, text: '' })) },
 };
@@ -5353,6 +5357,7 @@ class Component extends DCLogic {
     this._onResize = () => { const wide = window.innerWidth >= 1700; if (wide !== this.state.wide) this.setState({ wide }); };
     window.addEventListener('resize', this._onResize); this._onResize();
     this.fetchRemote();
+    if (location.hash === '#contact') { setTimeout(() => this.switchTab('문의'), 0); try { history.replaceState(null, '', location.pathname); } catch (e) {} }
     const sBase = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? '' : 'https://mapleauction.kr/';
     fetch(sBase + 'sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
     if (this.state.tab === '인구수') this.loadPop();
@@ -5733,7 +5738,7 @@ class Component extends DCLogic {
     return {
       liveShow: true,
       isLive: this.state.tab === '방송' && this._area === '옥션',
-      goLive: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); setTimeout(() => this.refreshLive(), 50); },
+      goLive: () => { if (goPath('옥션', '방송')) return; try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }); this.switchTab('방송'); setTimeout(() => this.refreshLive(), 50); },
       liveN: n, liveAny: n > 0, liveNone: n === 0, liveBtnLabel: n > 0 ? '재획반찬 LIVE ' + n : '재획반찬',
       liveRows: rows.slice().sort((a, b) => (b.live - a.live) || (b.vn - a.vn) || (a.i - b.i)).map(r => ({ ...r, up: () => mv(r.i, -1), down: () => mv(r.i, 1), del: () => { if (confirm(r.name + ' 삭제할까요?')) this.saveStreamers({ ...S, list: list.filter((_, k) => k !== r.i) }); } })),
       liveEmpty: rows.length === 0, liveErr: this.state.liveErr || '', liveHasErr: !!this.state.liveErr, liveAdmin: admin,
@@ -8066,7 +8071,7 @@ class Component extends DCLogic {
       isSunday,
       ...(() => {
         const adm = !!this.state.admin, AREAS = adm ? ['옥션', '사냥', '육성', '강화', '나의매애기', '편집'] : ['옥션', '사냥', '육성', '강화'];
-        let area = this.state.area || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
+        let area = this.state.area || PATH_AREA || (() => { try { return localStorage.getItem(KEY + ':area'); } catch (e) { return null; } })() || '옥션';
         if (area === '스타포스') area = '강화';
         if (!AREAS.includes(area)) area = '옥션';
         this._area = area;
@@ -8324,12 +8329,12 @@ class Component extends DCLogic {
               onClick: () => { try { localStorage.setItem(KEY + ':growTab', l); } catch (e) {} this.setState({ growTab: l }); } })) };
           })(),
           areas: AREAS.map(l => ({ label: l, beta: false, soon: false, bg: l === area ? 'oklch(0.55 0.17 255)' : 'transparent', color: l === area ? '#fff' : 'oklch(0.85 0.03 260)', fw: l === area ? 800 : 700,
-            onClick: () => { try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
-          goHome: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션', selected: null }); if (this.state.tab !== '메소') this.switchTab('메소'); window.scrollTo(0, 0); },
+            onClick: () => { if (goPath(l)) return; try { localStorage.setItem(KEY + ':area', l); } catch (e) {} this.setState({ area: l, selected: null }); if (l !== area && l !== '옥션') this.logVisit('tab', l); } })),
+          goHome: () => { if (goPath('옥션', '메소')) return; try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션', selected: null }); if (this.state.tab !== '메소') this.switchTab('메소'); window.scrollTo(0, 0); },
         };
       })(),
       sundayTab: { onClick: () => this.switchTab('썬데이'), color: isSunday ? '#fff' : '#3a3b3f', weight: 800, border: isSunday ? 'oklch(0.42 0.09 262)' : '#e3e3e0', bg: isSunday ? 'oklch(0.42 0.09 262)' : '#fff' },
-      goContact: () => { try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }, () => { this.switchTab('문의'); window.scrollTo(0, 0); }); },
+      goContact: () => { if (goPath('옥션', '문의')) return; try { localStorage.setItem(KEY + ':area', '옥션'); } catch (e) {} this.setState({ area: '옥션' }, () => { this.switchTab('문의'); window.scrollTo(0, 0); }); },
       contactTab: { onClick: () => this.switchTab('문의'), color: isContact ? '#fff' : '#3a3b3f', weight: 800, border: isContact ? 'oklch(0.42 0.09 262)' : '#e3e3e0', bg: isContact ? 'oklch(0.42 0.09 262)' : '#fff' },
       contact: { name: contact.name || '', email: contact.email || '', body: contact.body || '' },
       contactTypes: ['버그', '시세 오류', '건의', '기타'].map(t => { const on = t === cType; return { label: t, onClick: () => setC('type', t), bg: on ? 'oklch(0.3 0.09 255)' : '#fff', color: on ? '#fff' : '#3a3c41', border: on ? 'oklch(0.3 0.09 255)' : '#d6d6d2' }; }),
@@ -8582,7 +8587,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 213,
+      isAdmin: admin, appVer: 214,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
