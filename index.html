@@ -14,7 +14,6 @@
 <meta name="google-site-verification" content="pj_pOtf7Lvvwk_36sjs84ZsvfNtZSn1RR3sAVocxfVw">
 <meta name="naver-site-verification" content="a8f36ba8f5f782f78b855c224e8308bdc430fb83">
 <meta name="google-adsense-account" content="ca-pub-2498294774607074">
-<script async id="adsbygoogle-js" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2498294774607074" crossorigin="anonymous"></script>
 <link rel="canonical" href="https://mapleauction.kr/">
 <meta property="og:url" content="https://mapleauction.kr/">
 <script src="./support.js"></script>
@@ -5328,6 +5327,7 @@ class Component extends DCLogic {
   adRef = el => {
     if (!el || el.getAttribute('data-pushed')) return;
     el.setAttribute('data-pushed', '1');
+    this.loadAdsense();
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
   };
   adClientId() { return (this.props.adsenseClient || 'ca-pub-2498294774607074').trim(); }
@@ -5352,7 +5352,6 @@ class Component extends DCLogic {
     window.addEventListener('scroll', this._topScroll, { passive: true }); this._topScroll();
     this._onResize = () => { const wide = window.innerWidth >= 1700; if (wide !== this.state.wide) this.setState({ wide }); };
     window.addEventListener('resize', this._onResize); this._onResize();
-    this.loadAdsense();
     this.fetchRemote();
     const sBase = /(^|\.)mapleauction\.kr$/.test(location.hostname) ? '' : 'https://mapleauction.kr/';
     fetch(sBase + 'sunday.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.start) this.setState({ sundayData: j }); }).catch(() => {});
@@ -8499,7 +8498,7 @@ class Component extends DCLogic {
           ...(() => {
             const t = this.state.tab, ar = this._area || '옥션';
             const emptyData = ar === '옥션' && !['메소', '인구수', '썬데이', '방송', '문의'].includes(t) && !(data && data.items.length);
-            const ok = ar !== '사냥' && ar !== '편집' && ar !== '나의매애기' && !['방송', '문의'].includes(t) && !emptyData;
+            const ok = ar !== '사냥' && ar !== '편집' && ar !== '나의매애기' && !['방송', '문의', '방문자', '검토', '챌린저스'].includes(t) && !emptyData;
             const DESC = { '기타아이템': '재료·소비 아이템과 주문서처럼 자주 거래되는 기타 아이템', '자석펫': '자석 기능이 있는 펫', '캐시아이템': '코디·캐시 아이템', '드메아이템': '드롭률·메소 획득량 옵션이 붙은 사냥용 장비', '여명장신구': '여명의 보스 세트 장신구', '보스장신구': '보스 장신구 세트', '칠흑장신구': '칠흑의 보스 세트 장신구', '미트라': '미트라의 분노 엠블렘', '보조무기': '직업별 보조무기' };
             let note = [];
             if (ar === '옥션' && t === '메소') note = ['메소 시세는 메이플포인트로 메소를 살 때의 가격 흐름을 기록한 것입니다. 그래프는 주 단위 기록이며, 기간 최고·평균·최저 가격과 현재 시세를 함께 보여줍니다.', '오른쪽 \'변동 TOP 10\'은 옥션 전체 아이템 중 지난주보다 가격이 가장 크게 오르거나 내린 10개입니다. 누르면 그 아이템이 있는 탭으로 이동합니다.', '시세는 매주 운영자가 게임 안에서 직접 확인해 기록하며, 실제 거래 가격과 조금 다를 수 있습니다.'];
@@ -8583,7 +8582,7 @@ class Component extends DCLogic {
       huntNoteAt: (() => { const s = this.state.huntNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(),
       huntNoteHas: !!(this.state.huntNote || '').trim(), aucNoteShow: !!admin || !!(this.state.aucNote || '').trim(), aucNoteView: !admin && !!(this.state.aucNote || '').trim(), aucNote: this.state.aucNote || '', aucNoteMsg: this.state.aucNoteMsg || '자동 저장돼요', onAucNote: e => this.saveHuntNote(e.target.value, 'auc'),
       aucNoteAt: (() => { const s = this.state.aucNoteAtIso; if (!s) return ''; const d = new Date(s); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ' 업데이트'; })(), huntNoteEmpty: !(this.state.huntNote || '').trim(),
-      isAdmin: admin, appVer: 211,
+      isAdmin: admin, appVer: 213,
       goAbilBoss: () => { const el = document.getElementById('abilboss'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); },
       toggleEdit: () => { const on = !this.state.editing; this.setState({ editing: on }, () => { window.scrollTo(0, 0); if (!on) return; requestAnimationFrame(() => { const el = document.querySelector('[data-edit-tab="' + tab + '"]'), st = document.querySelector('[data-edit-sticky]'); if (!el) return; window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - (st ? st.offsetHeight : 0) - 12); }); }); },
       dateEditors: refDates.map((d, i) => ({ value: d, onChange: e => { const v = e.target.value; this.updateAll(x => { const j = x.dates.length - refDates.length + i; if (j >= 0) x.dates[j] = v; }); } })),
